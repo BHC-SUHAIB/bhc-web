@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
 import { getPayloadClient } from '@/lib/payload'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
@@ -75,9 +76,9 @@ export default async function ProjectPage({ params }: Args) {
       </Container>
 
       {/* Hero image */}
-      {hero?.url ? (
-        <Container size="xl">
-          <div className="relative aspect-[16/9] rounded-[var(--radius-xl)] overflow-hidden border border-[var(--color-border)] my-4">
+      <Container size="xl">
+        <div className="relative aspect-[16/9] rounded-[var(--radius-xl)] overflow-hidden border border-[var(--color-border)] my-4">
+          {hero?.url ? (
             <Image
               src={hero.url as string}
               alt={(hero.alt as string) ?? p.title}
@@ -86,9 +87,11 @@ export default async function ProjectPage({ params }: Args) {
               sizes="100vw"
               priority
             />
-          </div>
-        </Container>
-      ) : null}
+          ) : (
+            <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="hero" />
+          )}
+        </div>
+      </Container>
 
       {/* Meta sidebar + content */}
       <Container size="xl" className="mt-12">
@@ -164,11 +167,14 @@ export default async function ProjectPage({ params }: Args) {
               <div className="space-y-6">
                 {p.gallery.map((g, i) => {
                   const img = typeof g.image === 'object' ? (g.image as Media | null) : null
-                  if (!img?.url) return null
                   return (
                     <figure key={i} className="rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)]">
                       <div className="relative aspect-video bg-[var(--color-surface)]">
-                        <Image src={img.url as string} alt={(img.alt as string) ?? ''} fill className="object-cover" sizes="100vw" />
+                        {img?.url ? (
+                          <Image src={img.url as string} alt={(img.alt as string) ?? ''} fill className="object-cover" sizes="100vw" />
+                        ) : (
+                          <Placeholder seed={`${p.slug ?? p.title}-${i}`} label={`${p.title} — ${i + 1}`} aspect="video" />
+                        )}
                       </div>
                       {g.caption ? (
                         <figcaption className="px-5 py-3 text-[13px] text-[var(--color-fg-muted)] border-t border-[var(--color-border)]">{g.caption}</figcaption>

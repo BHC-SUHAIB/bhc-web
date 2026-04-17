@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { Placeholder } from '@/components/Placeholder'
 import { ArrowUpRight } from 'lucide-react'
 import { getPayloadClient } from '@/lib/payload'
 import type { FeaturedProjectsBlock, Project, Media } from '@/payload-types'
@@ -68,7 +69,11 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                       sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
                     />
-                  ) : null}
+                  ) : (
+                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.03]">
+                      <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="video" />
+                    </div>
+                  )}
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-3">

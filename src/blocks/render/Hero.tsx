@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { Placeholder } from '@/components/Placeholder'
 import type { HeroBlock, Media } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
@@ -55,6 +56,10 @@ export function Hero(b: HeroBlock) {
                 sizes="(min-width:768px) 45vw, 100vw"
                 priority
               />
+            </div>
+          ) : img === null && b.image ? (
+            <div className="relative aspect-[4/5] rounded-[var(--radius-xl)] overflow-hidden border border-[var(--color-border)]">
+              <Placeholder seed={b.headline} label={b.eyebrow ?? 'Hero'} aspect="tall" />
             </div>
           ) : null}
         </div>

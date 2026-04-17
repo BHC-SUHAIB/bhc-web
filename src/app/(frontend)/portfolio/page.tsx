@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
+import { Placeholder } from '@/components/Placeholder'
 import { getPayloadClient } from '@/lib/payload'
 import { ArrowUpRight } from 'lucide-react'
 import type { Project, Media } from '@/payload-types'
@@ -59,7 +60,11 @@ export default async function PortfolioPage() {
                           className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                           sizes="(min-width:768px) 50vw, 100vw"
                         />
-                      ) : null}
+                      ) : (
+                        <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.02]">
+                          <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="wide" />
+                        </div>
+                      )}
                     </div>
                     <div className="p-7">
                       <div className="flex items-center gap-3 mb-3 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-fg-muted)]">

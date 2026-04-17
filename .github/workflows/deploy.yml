@@ -15,7 +15,7 @@ jobs:
   deploy:
     name: SSH + deploy.sh
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     steps:
       - name: Deploy over SSH
@@ -30,7 +30,10 @@ jobs:
           # updated, not the workflow.
           fingerprint: ${{ secrets.DROPLET_SSH_FINGERPRINT }}
           script_stop: true
-          command_timeout: 10m
+          # Cold builds (new dep added -> cache miss) run 8-10 min end-to-end.
+          # Warm builds finish in <1 min. Set ceiling well above cold so we
+          # don't time out in the middle of a successful build.
+          command_timeout: 20m
           script: |
             set -e
             cd /opt/bhc-web

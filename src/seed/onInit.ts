@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* Seed initial content via Payload's onInit hook. Runs once on server boot; idempotent (updates instead of duplicates). */
 import type { Payload } from 'payload'
+import { pushDevSchema } from '@payloadcms/drizzle'
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@blackhartconsulting.com'
 const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'changeme123!'
@@ -22,6 +23,21 @@ const rt = (text: string) => ({
 
 export async function seedOnInit(payload: Payload): Promise<void> {
   if (!SEED_ON_BOOT) return
+
+  // Payload's Postgres adapter explicitly skips schema push when
+  // NODE_ENV=production (see @payloadcms/db-postgres/connect.js). Without
+  // pre-generated migration files, tables won't exist on a fresh DB. Force
+  // a schema push here \u2014 pushDevSchema is idempotent and works against any
+  // Drizzle-based adapter. Safe at this stage; revisit when real data exists.
+  const adapterName = (payload.db as any)?.name
+  if (adapterName === 'postgres' || adapterName === 'sqlite') {
+    try {
+      await pushDevSchema(payload.db as any)
+      payload.logger.info('[seed] schema push complete')
+    } catch (e) {
+      payload.logger.warn({ err: e }, '[seed] schema push failed (may already be in sync)')
+    }
+  }
 
   try {
     const users = await payload.find({ collection: 'users', limit: 1 })

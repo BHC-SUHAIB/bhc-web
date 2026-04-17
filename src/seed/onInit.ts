@@ -24,13 +24,17 @@ const rt = (text: string) => ({
 export async function seedOnInit(payload: Payload): Promise<void> {
   if (!SEED_ON_BOOT) return
 
-  // Payload's Postgres adapter explicitly skips schema push when
-  // NODE_ENV=production (see @payloadcms/db-postgres/connect.js). Without
-  // pre-generated migration files, tables won't exist on a fresh DB. Force
-  // a schema push here \u2014 pushDevSchema is idempotent and works against any
-  // Drizzle-based adapter. Safe at this stage; revisit when real data exists.
+  // Payload's Drizzle adapters hard-skip push when NODE_ENV=production
+  // (see @payloadcms/db-postgres/connect.js line ~110). That means fresh
+  // production deploys have no tables unless we force the push ourselves.
+  // In dev, Payload already handles push inside adapter.connect() \u2014 calling
+  // it again here causes "index already exists" errors on SQLite, so only
+  // run in production.
   const adapterName = (payload.db as any)?.name
-  if (adapterName === 'postgres' || adapterName === 'sqlite') {
+  if (
+    (adapterName === 'postgres' || adapterName === 'sqlite') &&
+    process.env.NODE_ENV === 'production'
+  ) {
     try {
       await pushDevSchema(payload.db as any)
       payload.logger.info('[seed] schema push complete')
@@ -41,12 +45,12 @@ export async function seedOnInit(payload: Payload): Promise<void> {
 
   try {
     const users = await payload.find({ collection: 'users', limit: 1 })
-    const pages = await payload.find({ collection: 'pages', limit: 1 })
-    const projects = await payload.find({ collection: 'projects', limit: 1 })
-    if (users.totalDocs > 0 && pages.totalDocs > 0 && projects.totalDocs > 0) return
 
-    payload.logger.info('[seed] Empty database detected \u2014 seeding default content...')
-
+    // No early-return guard. Every create below is individually guarded
+    // with `if (existing.totalDocs === 0) create(...)`, so re-running is a
+    // no-op for already-seeded content. Globals are always upserted. The
+    // contact page is upserted so layout upgrades (e.g. adding the contact
+    // form block) propagate to installations that were seeded before.
     if (users.totalDocs === 0) {
       await payload.create({
         collection: 'users',
@@ -249,16 +253,36 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       title: 'Contact', slug: 'contact', publishedAt: new Date().toISOString(),
       layout: [
         { blockType: 'hero', eyebrow: 'Get in touch', headline: 'Let\u2019s figure out if we\u2019re a fit.',
-          subheadline: 'Send us a note with a sentence or two about what you\u2019re building. We\u2019ll reply within one business day.', align: 'left',
-          ctas: [{ label: 'hello@blackhartconsulting.com', href: 'mailto:hello@blackhartconsulting.com', variant: 'primary' }] },
-        { blockType: 'faq', headline: 'Before you write:', items: [
+          subheadline: 'Send a note with a sentence or two about what you\u2019re building. We\u2019ll reply within one business day.', align: 'left' },
+        { blockType: 'contactForm',
+          headline: 'Tell us about your project.',
+          description: 'No boilerplate, no hard sell. A short note is enough \u2014 we\u2019ll follow up with a proper conversation.',
+          successMessage: 'Thanks \u2014 your note is in. We\u2019ll reply within one business day from suhaib@blackhartconsulting.com.',
+          showCompanyField: true,
+          showProjectTypeField: true,
+          showBudgetField: true,
+          submitLabel: 'Send inquiry' },
+        { blockType: 'faq', headline: 'Common questions before you write', items: [
           { question: 'What should I include in my first note?', answer: 'A sentence on your company, a sentence on what you\u2019re trying to build or fix, and a rough budget range if you have one. We\u2019ll take it from there.' },
           { question: 'What\u2019s the engagement process?', answer: '1) 30-min intro call. 2) We send a scoped proposal within 48 hours. 3) You review, we iterate. 4) Signed contract, 50% deposit, kickoff within a week.' },
+          { question: 'Do you take projects outside North America?', answer: 'Yes. Most of our clients are remote. We\u2019ve shipped work across the US, UK, and Australia. Time zones are rarely an issue.' },
         ] },
       ],
     }
     const existingContact = await payload.find({ collection: 'pages', where: { slug: { equals: 'contact' } }, limit: 1 })
-    if (existingContact.totalDocs === 0) { await payload.create({ collection: 'pages', data: contactData }); payload.logger.info('[seed] contact page created') }
+    if (existingContact.totalDocs === 0) {
+      await payload.create({ collection: 'pages', data: contactData })
+      payload.logger.info('[seed] contact page created')
+    } else {
+      // Upgrade the existing contact page to the new layout (fresh deploys
+      // may already have the old mailto-hero version seeded).
+      await payload.update({
+        collection: 'pages',
+        id: existingContact.docs[0].id,
+        data: contactData,
+      })
+      payload.logger.info('[seed] contact page updated to include contact form')
+    }
 
     // Services page
     const servicesData: any = {

@@ -8,6 +8,7 @@ import { CTA } from './CTA'
 import { RichText } from './RichText'
 import { MediaBlock } from './MediaBlock'
 import { Faq } from './Faq'
+import { ContactForm } from './ContactForm'
 import type { Page } from '@/payload-types'
 
 type Block = NonNullable<Page['layout']>[number]
@@ -30,6 +31,7 @@ export function RenderBlocks({ blocks }: { blocks: Block[] }) {
           case 'richText':        return <RichText key={key} {...b} />
           case 'mediaBlock':      return <MediaBlock key={key} {...b} />
           case 'faq':             return <Faq key={key} {...b} />
+          case 'contactForm':     return <ContactForm key={key} {...b} />
           default:                return null
         }
       })}

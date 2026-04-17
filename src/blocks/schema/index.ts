@@ -177,6 +177,22 @@ export const MediaBlock: Block = {
   ],
 }
 
+export const ContactFormBlock: Block = {
+  slug: 'contactForm',
+  labels: { singular: 'Contact form', plural: 'Contact forms' },
+  interfaceName: 'ContactFormBlockBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text' },
+    { name: 'headline', type: 'text', required: true, defaultValue: 'Tell us about your project.' },
+    { name: 'description', type: 'textarea' },
+    { name: 'successMessage', type: 'textarea', defaultValue: 'Thanks \u2014 we\u2019ll reply within one business day.' },
+    { name: 'showCompanyField', type: 'checkbox', defaultValue: true },
+    { name: 'showProjectTypeField', type: 'checkbox', defaultValue: true },
+    { name: 'showBudgetField', type: 'checkbox', defaultValue: true },
+    { name: 'submitLabel', type: 'text', defaultValue: 'Send inquiry' },
+  ],
+}
+
 export const Faq: Block = {
   slug: 'faq',
   labels: { singular: 'FAQ', plural: 'FAQs' },
@@ -202,4 +218,5 @@ export const allBlocks = [
   RichTextBlock,
   MediaBlock,
   Faq,
+  ContactFormBlock,
 ]

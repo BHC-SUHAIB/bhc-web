@@ -28,6 +28,7 @@ import { InlineCodeFeatureClient as InlineCodeFeatureClient_0 } from '@payloadcm
 import { SubscriptFeatureClient as SubscriptFeatureClient_0 } from '@payloadcms/richtext-lexical/client'
 import { SuperscriptFeatureClient as SuperscriptFeatureClient_0 } from '@payloadcms/richtext-lexical/client'
 import { StrikethroughFeatureClient as StrikethroughFeatureClient_0 } from '@payloadcms/richtext-lexical/client'
+import { S3ClientUploadHandler as S3ClientUploadHandler_0 } from '@payloadcms/storage-s3/client'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -55,4 +56,5 @@ export const importMap = {
   '@payloadcms/richtext-lexical/client#SubscriptFeatureClient': SubscriptFeatureClient_0,
   '@payloadcms/richtext-lexical/client#SuperscriptFeatureClient': SuperscriptFeatureClient_0,
   '@payloadcms/richtext-lexical/client#StrikethroughFeatureClient': StrikethroughFeatureClient_0,
+  '@payloadcms/storage-s3/client#S3ClientUploadHandler': S3ClientUploadHandler_0,
 }

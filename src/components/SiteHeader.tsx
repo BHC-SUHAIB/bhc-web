@@ -31,11 +31,12 @@ export function SiteHeader({ header }: HeaderProps) {
     <>
       <header className="sticky top-0 z-40 backdrop-blur-lg bg-[color-mix(in_srgb,var(--color-bg)_82%,transparent)] border-b border-[var(--color-border)]">
         <Container size="xl" className="flex items-center justify-between gap-6 py-4">
-          <Link href="/" aria-label="Black Hart Consulting home" className="flex items-center gap-3 shrink-0">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
             <Logo variant="primary" height={36} className="text-[var(--color-fg)]" />
             <span className="hidden sm:block font-serif text-[18px] font-semibold tracking-[-0.015em]">
               Black Hart
             </span>
+            <span className="sr-only">Consulting home</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-7" aria-label="Primary">

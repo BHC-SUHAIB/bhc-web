@@ -32,9 +32,9 @@ export function SiteFooter({ footer }: { footer: FooterGlobal | null }) {
         <div className="grid gap-10 grid-cols-2 md:grid-cols-3">
           {columns.map((col, i) => (
             <div key={i}>
-              <h4 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-4">
+              <h2 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-4">
                 {col.heading}
-              </h4>
+              </h2>
               <ul className="space-y-2.5">
                 {col.links?.map((l, j) => (
                   <li key={j}>

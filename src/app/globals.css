@@ -13,7 +13,9 @@
   /* Semantic tokens (light mode defaults) */
   --color-bg: var(--color-ivory);
   --color-fg: var(--color-ink);
-  --color-fg-muted: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  /* WCAG AA requires 4.5:1 against surface. Solid mix (not transparent)
+     guarantees the same contrast on both body bg and card surface. */
+  --color-fg-muted: color-mix(in srgb, var(--color-ink) 70%, var(--color-ivory));
   --color-surface: color-mix(in srgb, var(--color-ink) 5%, var(--color-ivory));
   --color-surface-raised: color-mix(in srgb, var(--color-ink) 9%, var(--color-ivory));
   --color-border: color-mix(in srgb, var(--color-ink) 14%, transparent);
@@ -40,7 +42,7 @@
   :root {
     --color-bg: var(--color-ink);
     --color-fg: var(--color-ivory);
-    --color-fg-muted: color-mix(in srgb, var(--color-ivory) 65%, transparent);
+    --color-fg-muted: color-mix(in srgb, var(--color-ivory) 72%, var(--color-ink));
     --color-surface: color-mix(in srgb, var(--color-ivory) 6%, var(--color-ink));
     --color-surface-raised: color-mix(in srgb, var(--color-ivory) 10%, var(--color-ink));
     --color-border: color-mix(in srgb, var(--color-ivory) 16%, transparent);

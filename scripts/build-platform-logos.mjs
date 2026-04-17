@@ -34,7 +34,37 @@ const COLORS = {
   parchment: '#D6D0C2',
 }
 
-/* ---------------- Layout: hart + horizontal wordmark (e.g. Google Admin) ---------------- */
+/* ---------------- Layout: hart + big "BHC" monogram (Google Admin, small contexts) ---------------- */
+// The full "BLACK HART / CONSULTING" wordmark is illegible at 320x132 and below.
+// This layout swaps in a large "BHC" where the "C" is coloured with the accent,
+// preserving the brand split without needing readable sub-pixel typography.
+function bhcLockup({ w, h, ink, accent, bg = null, pad = 18 }) {
+  const markH = h * 0.78
+  const scale = markH / HART_H
+  const markW = HART_W * scale
+  const markX = pad
+  const markY = (h - markH) / 2
+
+  const textX = pad + markW + 18
+  const fontSize = Math.round(h * 0.58)
+  // No dominant-baseline support in some SVG renderers; compute baseline manually.
+  // Manrope 800 cap-height ~= 0.72 * fontSize, so visual centring = h/2 + cap/2.
+  const baselineY = h / 2 + fontSize * 0.36
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+  ${bg ? `<rect width="${w}" height="${h}" fill="${bg}"/>` : ''}
+  <g transform="translate(${markX}, ${markY}) scale(${scale.toFixed(4)}) translate(-600, -200)" fill="${ink}">
+    <path d="${hartPath}"/>
+  </g>
+  <text x="${textX}" y="${baselineY.toFixed(2)}"
+        font-family="'Manrope','Helvetica Neue',Helvetica,Arial,sans-serif"
+        font-weight="800" font-size="${fontSize}" letter-spacing="2"
+        fill="${ink}">BH<tspan fill="${accent}">C</tspan></text>
+</svg>`
+}
+
+/* ---------------- Layout: hart + horizontal wordmark (larger contexts, letterheads) ---------------- */
 function horizontalLockup({ w, h, ink, forest, bg = null, markHeightPct = 0.72, pad = 14 }) {
   const markH = Math.round(h * markHeightPct)
   const scale = markH / HART_H
@@ -201,13 +231,15 @@ async function emit(name, svg) {
 const PLATFORMS = [
   {
     name: 'black-hart-google-admin',
-    // 320x132, dark logo on transparent \u2014 Google Admin / Google Sites services logo
-    svg: horizontalLockup({ w: 320, h: 132, ink: COLORS.ink, forest: COLORS.forest }),
+    // 320x132: hart + large "BHC" where the "C" is forest green. Readable at
+    // the actual size Google Admin shows it; full "BLACK HART / CONSULTING"
+    // wordmark becomes sub-pixel at this display size.
+    svg: bhcLockup({ w: 320, h: 132, ink: COLORS.ink, accent: COLORS.forest }),
   },
   {
     name: 'black-hart-google-admin-reversed',
-    // Same but ivory on ink for dark-themed contexts
-    svg: horizontalLockup({ w: 320, h: 132, ink: COLORS.ivory, forest: COLORS.parchment, bg: COLORS.ink }),
+    // Same layout but ivory + brass on ink for dark-themed surfaces
+    svg: bhcLockup({ w: 320, h: 132, ink: COLORS.ivory, accent: '#B08D57', bg: COLORS.ink }),
   },
   {
     name: 'black-hart-exclaimer',

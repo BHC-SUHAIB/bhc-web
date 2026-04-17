@@ -42,6 +42,22 @@ ufw --force enable
 log "Ensuring Docker is running"
 systemctl enable --now docker
 
+# The 2GB droplet has no swap by default. Next.js 16's TypeScript check
+# during `next build` can spike memory and get OOM-killed. Add a 2GB swap
+# file so the build completes; runtime stays fast in real RAM.
+if ! swapon --show | grep -q '/swapfile'; then
+  log "Adding 2GB swap file"
+  fallocate -l 2G /swapfile
+  chmod 600 /swapfile
+  mkswap /swapfile
+  swapon /swapfile
+  if ! grep -q '/swapfile' /etc/fstab; then
+    echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  fi
+  echo 'vm.swappiness=10' > /etc/sysctl.d/99-swappiness.conf
+  sysctl -p /etc/sysctl.d/99-swappiness.conf
+fi
+
 # When this script is invoked with `sudo`, $SUDO_USER is the original user
 # (typically `deploy`). We chown the app dir to that user so git + docker can
 # run without sudo afterwards. When invoked directly as root, we leave it

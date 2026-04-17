@@ -6,33 +6,13 @@ import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
 import { getPayloadClient } from '@/lib/payload'
+import { articleCategoryLabel, formatArticleDate } from '@/lib/articles'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
 type Args = { params: Promise<{ slug: string }> }
-
-const categoryLabel = (v?: string | null) => {
-  switch (v) {
-    case 'strategy': return 'Strategy'
-    case 'engineering': return 'Engineering'
-    case 'seo': return 'SEO'
-    case 'design': return 'Design'
-    case 'hosting': return 'Hosting'
-    case 'performance': return 'Performance'
-    default: return null
-  }
-}
-
-const formatDate = (iso?: string | null) => {
-  if (!iso) return null
-  try {
-    return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  } catch {
-    return null
-  }
-}
 
 async function loadArticle(slug: string): Promise<Article | null> {
   const payload = await getPayloadClient()
@@ -62,8 +42,8 @@ export default async function ArticlePage({ params }: Args) {
   if (!a) notFound()
 
   const hero = typeof a.heroImage === 'object' ? (a.heroImage as Media | null) : null
-  const cat = categoryLabel(a.category)
-  const date = formatDate(a.publishedAt)
+  const cat = articleCategoryLabel(a.category)
+  const date = formatArticleDate(a.publishedAt)
 
   const payload = await getPayloadClient()
   const moreRes = await payload.find({
@@ -151,7 +131,7 @@ export default async function ArticlePage({ params }: Args) {
             <ul className="grid gap-6 md:grid-cols-3">
               {more.map((m) => {
                 const mHero = typeof m.heroImage === 'object' ? (m.heroImage as Media | null) : null
-                const mCat = categoryLabel(m.category)
+                const mCat = articleCategoryLabel(m.category)
                 return (
                   <li key={m.id}>
                     <Link href={`/articles/${m.slug}`} className="group block rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden hover:border-[var(--color-fg-muted)] transition-colors h-full">

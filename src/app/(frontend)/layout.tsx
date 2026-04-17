@@ -39,8 +39,14 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       className={`${manrope.variable} ${fraunces.variable} ${jetbrains.variable}`}
     >
       <body className="min-h-dvh flex flex-col">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:rounded-full focus:bg-[var(--color-fg)] focus:text-[var(--color-bg)] focus:font-medium focus:text-[14px] focus:outline-2 focus:outline-[var(--color-brass)]"
+        >
+          Skip to content
+        </a>
         <SiteHeader header={header} />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">{children}</main>
         <SiteFooter footer={footer} />
       </body>
     </html>

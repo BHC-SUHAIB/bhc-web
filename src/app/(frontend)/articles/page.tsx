@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
 import { getPayloadClient } from '@/lib/payload'
+import { articleCategoryLabel, formatArticleDate } from '@/lib/articles'
 import { ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
 
@@ -12,27 +13,6 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Articles',
   description: 'Field notes and essays from Black Hart Consulting — strategy, engineering, SEO, and design.',
-}
-
-const categoryLabel = (v?: string | null) => {
-  switch (v) {
-    case 'strategy': return 'Strategy'
-    case 'engineering': return 'Engineering'
-    case 'seo': return 'SEO'
-    case 'design': return 'Design'
-    case 'hosting': return 'Hosting'
-    case 'performance': return 'Performance'
-    default: return null
-  }
-}
-
-const formatDate = (iso?: string | null) => {
-  if (!iso) return null
-  try {
-    return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  } catch {
-    return null
-  }
 }
 
 export default async function ArticlesPage() {
@@ -81,8 +61,8 @@ export default async function ArticlesPage() {
 
 function FeaturedCard({ a }: { a: Article }) {
   const hero = typeof a.heroImage === 'object' ? (a.heroImage as Media | null) : null
-  const cat = categoryLabel(a.category)
-  const date = formatDate(a.publishedAt)
+  const cat = articleCategoryLabel(a.category)
+  const date = formatArticleDate(a.publishedAt)
   return (
     <Link
       href={`/articles/${a.slug}`}
@@ -132,8 +112,8 @@ function FeaturedCard({ a }: { a: Article }) {
 
 function ArticleCard({ a }: { a: Article }) {
   const hero = typeof a.heroImage === 'object' ? (a.heroImage as Media | null) : null
-  const cat = categoryLabel(a.category)
-  const date = formatDate(a.publishedAt)
+  const cat = articleCategoryLabel(a.category)
+  const date = formatArticleDate(a.publishedAt)
   return (
     <li>
       <Link

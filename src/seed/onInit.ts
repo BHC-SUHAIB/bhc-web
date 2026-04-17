@@ -104,7 +104,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         collection: 'users',
         data: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD, name: 'Admin' as any },
       })
-      payload.logger.info(`[seed] admin user created: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`)
+      payload.logger.info(`[seed] admin user created: ${ADMIN_EMAIL} (password read from SEED_ADMIN_PASSWORD env; change at first login)`)
     }
 
     await payload.updateGlobal({

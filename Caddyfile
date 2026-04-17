@@ -1,0 +1,41 @@
+# Caddy reverse proxy config.
+#
+# SITE_DOMAIN is set in .env on the server. If it's empty, Caddy binds to
+# :80 and serves HTTP only (fine for initial IP-based testing). When you
+# point a domain at the droplet and set SITE_DOMAIN, Caddy automatically
+# requests a Let's Encrypt cert and serves HTTPS.
+#
+# Redeploy Caddy after changing SITE_DOMAIN:
+#   docker compose up -d caddy
+
+{$SITE_DOMAIN::80} {
+	encode gzip zstd
+
+	# Forward everything to the Next.js app
+	reverse_proxy web:3000 {
+		header_up Host {host}
+		header_up X-Real-IP {remote}
+		header_up X-Forwarded-For {remote}
+		header_up X-Forwarded-Proto {scheme}
+	}
+
+	# Sensible security headers
+	header {
+		# Prevent iframe embedding of the admin panel from other origins
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(), microphone=(), camera=()"
+		# Only emit HSTS when we're actually on HTTPS
+		@https {
+			protocol https
+		}
+		Strict-Transport-Security "max-age=31536000; includeSubDomains" @https
+	}
+
+	# Access log to stdout
+	log {
+		output stdout
+		format json
+	}
+}

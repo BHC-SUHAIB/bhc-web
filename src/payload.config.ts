@@ -12,6 +12,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Projects } from './collections/Projects'
+import { Articles } from './collections/Articles'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
@@ -121,7 +122,7 @@ export default buildConfig({
 
   onInit: seedOnInit,
 
-  collections: [Users, Media, Pages, Projects, ContactSubmissions],
+  collections: [Users, Media, Pages, Projects, Articles, ContactSubmissions],
   globals: [Header, Footer, SiteSettings],
 
   plugins,

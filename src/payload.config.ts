@@ -41,7 +41,13 @@ export default buildConfig({
   globals: [Header, Footer, SiteSettings],
 
   db: isPostgres
-    ? postgresAdapter({ pool: { connectionString: dbUri } })
+    ? postgresAdapter({
+        pool: { connectionString: dbUri },
+        // Schema push on boot instead of requiring pre-generated migrations.
+        // Safe at this stage (no real data yet). For established sites, flip
+        // to false and run `payload migrate:create` / `payload migrate` in CI.
+        push: true,
+      })
     : sqliteAdapter({ client: { url: dbUri } }),
 
   typescript: {

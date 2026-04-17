@@ -3,6 +3,7 @@ import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { resendAdapter } from '@payloadcms/email-resend'
 import sharp from 'sharp'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -104,6 +105,19 @@ export default buildConfig({
   },
 
   editor: lexicalEditor({}),
+
+  // Real transactional email via Resend. When RESEND_API_KEY is unset we
+  // omit the adapter entirely and Payload's default "console log" sink
+  // fires \u2014 keeps local dev frictionless.
+  ...(process.env.RESEND_API_KEY
+    ? {
+        email: resendAdapter({
+          apiKey: process.env.RESEND_API_KEY,
+          defaultFromName: 'Black Hart Consulting',
+          defaultFromAddress: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+        }),
+      }
+    : {}),
 
   onInit: seedOnInit,
 

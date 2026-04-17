@@ -43,13 +43,6 @@ const s3Configured = Boolean(
   process.env.S3_SECRET_ACCESS_KEY,
 )
 
-// eslint-disable-next-line no-console
-console.log('[payload-config] s3Configured =', s3Configured,
-  '| S3_BUCKET present:', Boolean(process.env.S3_BUCKET),
-  '| S3_ENDPOINT present:', Boolean(process.env.S3_ENDPOINT),
-  '| S3_ACCESS_KEY_ID present:', Boolean(process.env.S3_ACCESS_KEY_ID),
-  '| S3_SECRET_ACCESS_KEY present:', Boolean(process.env.S3_SECRET_ACCESS_KEY))
-
 // Optional CDN base URL for public file access. When set, Media records
 // return e.g. https://bhc-media.nyc3.cdn.digitaloceanspaces.com/<file>
 // \u2014 delivered from the CDN edge, bypassing the droplet. If unset we fall

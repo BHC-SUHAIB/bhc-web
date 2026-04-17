@@ -7,6 +7,11 @@
 
 set -euo pipefail
 
+# Ensure BuildKit is active so the Dockerfile's `--mount=type=cache` directives
+# work. Default on Docker 23+ but explicit here so cache mounts persist.
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+
 log() { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 
 cd "$(dirname "$0")/.."
@@ -19,7 +24,7 @@ fi
 log "Pulling latest code"
 git pull --ff-only
 
-log "Building web image"
+log "Building web image (Turbopack cache persists via BuildKit cache mounts)"
 docker compose build web
 
 log "Bringing the stack up"

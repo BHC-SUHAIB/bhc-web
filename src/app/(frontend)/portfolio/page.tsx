@@ -7,7 +7,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { ArrowUpRight } from 'lucide-react'
 import type { Project, Media } from '@/payload-types'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Portfolio',

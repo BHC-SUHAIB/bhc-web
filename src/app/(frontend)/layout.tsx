@@ -31,6 +31,12 @@ export default async function FrontendLayout({ children }: { children: React.Rea
     payload.findGlobal({ slug: 'footer' }).catch(() => null),
   ])
 
+  // Preconnect hints: CDN hosts image content (Spaces) and the Placeholder
+  // component pulls from picsum.photos. Doing DNS + TLS handshake upfront
+  // shaves ~150-300ms off the first image paint on mobile.
+  const s3Public = process.env.S3_PUBLIC_URL
+  const cdnOrigin = s3Public ? new URL(s3Public).origin : null
+
   // No data-theme attribute \u2014 theme follows OS preference via the
   // `@media (prefers-color-scheme: dark)` block in globals.css.
   return (
@@ -38,6 +44,17 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       lang="en"
       className={`${manrope.variable} ${fraunces.variable} ${jetbrains.variable}`}
     >
+      <head>
+        {cdnOrigin ? (
+          <>
+            <link rel="preconnect" href={cdnOrigin} crossOrigin="" />
+            <link rel="dns-prefetch" href={cdnOrigin} />
+          </>
+        ) : null}
+        <link rel="preconnect" href="https://picsum.photos" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://picsum.photos" />
+        <link rel="preconnect" href="https://fastly.picsum.photos" crossOrigin="" />
+      </head>
       <body className="min-h-dvh flex flex-col">
         <a
           href="#main-content"

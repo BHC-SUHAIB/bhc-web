@@ -10,7 +10,7 @@ import { articleCategoryLabel, formatArticleDate } from '@/lib/articles'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 type Args = { params: Promise<{ slug: string }> }
 

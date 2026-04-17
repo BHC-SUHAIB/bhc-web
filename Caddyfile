@@ -13,6 +13,26 @@
 blackhartconsulting.com, www.blackhartconsulting.com {
 	encode gzip zstd
 
+	# Long-lived cache on Next's hashed static chunks. Filenames include a
+	# build hash, so busting on deploy is automatic. This is the single
+	# biggest lever for repeat-visit PSI scores.
+	@nextStatic path /_next/static/*
+	header @nextStatic {
+		Cache-Control "public, max-age=31536000, immutable"
+	}
+
+	# Self-hosted Google fonts land under /_next/static/media/*; same cache.
+	@nextMedia path /_next/static/media/*
+	header @nextMedia {
+		Cache-Control "public, max-age=31536000, immutable"
+	}
+
+	# Public brand assets (logos, favicons) change rarely.
+	@brand path /brand/*
+	header @brand {
+		Cache-Control "public, max-age=604800"
+	}
+
 	reverse_proxy web:3000 {
 		header_up Host {host}
 		header_up X-Real-IP {remote}

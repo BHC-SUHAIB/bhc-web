@@ -17,12 +17,25 @@ type PlaceholderProps = {
   className?: string
 }
 
+// Picsum is fetched at these sizes (down from 2400x as of the perf pass:
+// most card slots render at 400-800 CSS pixels, so 1200px is plenty even
+// on 2x DPR screens). Pairs with the srcset below to serve mobile-sized
+// images on small viewports.
 const aspects: Record<AspectKey, { w: number; h: number }> = {
-  video:  { w: 1600, h: 900 },
-  square: { w: 1000, h: 1000 },
-  wide:   { w: 2400, h: 900 },
-  tall:   { w: 900,  h: 1200 },
-  hero:   { w: 2400, h: 1350 },
+  video:  { w: 1200, h: 675 },
+  square: { w: 900,  h: 900 },
+  wide:   { w: 1400, h: 525 },
+  tall:   { w: 700,  h: 933 },
+  hero:   { w: 1800, h: 1012 },
+}
+
+// Smaller srcset variant for phones. Keeps the same aspect ratio.
+const mobileAspects: Record<AspectKey, { w: number; h: number }> = {
+  video:  { w: 640,  h: 360 },
+  square: { w: 540,  h: 540 },
+  wide:   { w: 720,  h: 270 },
+  tall:   { w: 480,  h: 640 },
+  hero:   { w: 900,  h: 506 },
 }
 
 const tones = {
@@ -50,20 +63,26 @@ export function Placeholder({
   className,
 }: PlaceholderProps) {
   const { w, h } = aspects[aspect]
+  const mobile = mobileAspects[aspect]
   const seedHash = hash(seed)
   const chosenTone = tone ?? toneKeys[seedHash % toneKeys.length]
   const t = tones[chosenTone]
 
-  // Picsum picture URL — static "id" param keeps the same photo across renders per seed.
-  // Using seed/ path for readable URLs; grayscale=0 keeps color; blur=1 softens for overlay legibility.
-  const imgSrc = `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`
+  const encoded = encodeURIComponent(seed)
+  const desktopSrc = `https://picsum.photos/seed/${encoded}/${w}/${h}`
+  const mobileSrc  = `https://picsum.photos/seed/${encoded}/${mobile.w}/${mobile.h}`
 
   return (
     <div className={cn('relative overflow-hidden w-full h-full bg-[var(--color-surface)]', className)}>
-      {/* The picsum photo */}
+      {/* Picsum photo. srcset serves a phone-sized image (~50KB) on narrow
+          viewports instead of the ~200KB desktop variant. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={imgSrc}
+        src={desktopSrc}
+        srcSet={`${mobileSrc} ${mobile.w}w, ${desktopSrc} ${w}w`}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        width={w}
+        height={h}
         alt={label ? `Placeholder image for ${label}` : 'Placeholder image'}
         className="absolute inset-0 w-full h-full object-cover select-none"
         loading="lazy"

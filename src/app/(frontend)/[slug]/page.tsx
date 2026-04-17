@@ -4,7 +4,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 import type { Page, Media } from '@/payload-types'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 type Args = { params: Promise<{ slug: string }> }
 

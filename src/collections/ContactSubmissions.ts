@@ -45,6 +45,9 @@ export const ContactSubmissions: CollectionConfig = {
           await req.payload.sendEmail({
             to: notifyTo,
             from,
+            // Reply-To points at the submitter so hitting "Reply" in your
+            // inbox opens a draft to them, not to the no-reply sender.
+            replyTo: doc.email,
             subject: `New inquiry from ${doc.name}`,
             html: [
               `<h2 style="font-family:Georgia,serif;">New contact inquiry</h2>`,

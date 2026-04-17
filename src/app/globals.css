@@ -8,18 +8,22 @@
   --color-parchment: #D6D0C2;
   --color-ivory: #EFE9D9;
   --color-brass: #B08D57;
+  --color-brass-dark: #8E6E3F;
 
   /* Semantic tokens (light mode defaults) */
   --color-bg: var(--color-ivory);
   --color-fg: var(--color-ink);
-  --color-fg-muted: color-mix(in srgb, var(--color-ink) 55%, transparent);
-  --color-surface: color-mix(in srgb, var(--color-ink) 4%, var(--color-ivory));
-  --color-border: color-mix(in srgb, var(--color-ink) 12%, transparent);
+  --color-fg-muted: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  --color-surface: color-mix(in srgb, var(--color-ink) 5%, var(--color-ivory));
+  --color-surface-raised: color-mix(in srgb, var(--color-ink) 9%, var(--color-ivory));
+  --color-border: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  --color-border-strong: color-mix(in srgb, var(--color-ink) 28%, transparent);
   --color-accent: var(--color-forest);
   --color-accent-fg: var(--color-ivory);
   --color-highlight: var(--color-brass);
+  --color-link: var(--color-forest);
 
-  /* Fonts (wired via next/font) */
+  /* Fonts */
   --font-sans: var(--font-sans, 'Manrope'), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-serif, 'Fraunces'), Georgia, 'Times New Roman', serif;
   --font-mono: var(--font-mono, 'JetBrains Mono'), ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -31,15 +35,18 @@
   --radius-xl: 24px;
 }
 
-/* Dark mode via data attribute (default = dark for marketing feel; users can override) */
+/* Dark mode */
 [data-theme="dark"] {
   --color-bg: var(--color-ink);
   --color-fg: var(--color-ivory);
-  --color-fg-muted: color-mix(in srgb, var(--color-ivory) 55%, transparent);
-  --color-surface: color-mix(in srgb, var(--color-ivory) 5%, var(--color-ink));
-  --color-border: color-mix(in srgb, var(--color-ivory) 14%, transparent);
-  --color-accent: var(--color-lichen);
+  --color-fg-muted: color-mix(in srgb, var(--color-ivory) 65%, transparent);
+  --color-surface: color-mix(in srgb, var(--color-ivory) 6%, var(--color-ink));
+  --color-surface-raised: color-mix(in srgb, var(--color-ivory) 10%, var(--color-ink));
+  --color-border: color-mix(in srgb, var(--color-ivory) 16%, transparent);
+  --color-border-strong: color-mix(in srgb, var(--color-ivory) 32%, transparent);
+  --color-accent: var(--color-brass);
   --color-accent-fg: var(--color-ink);
+  --color-link: var(--color-brass);
 }
 
 [data-theme="light"] {
@@ -84,5 +91,16 @@ body {
 
 h1, h2, h3, h4, h5, h6 { letter-spacing: -0.02em; line-height: 1.1; }
 
-a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-a:hover { color: var(--color-highlight); }
+/* Link color rule is scoped — it applies only to prose content, NOT every anchor.
+   Buttons, nav items, and cards handle their own colors. This prevents the global
+   rule from overriding Tailwind text color utilities on <a>-based buttons. */
+.prose-content a,
+.rich-text a {
+  color: var(--color-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.prose-content a:hover,
+.rich-text a:hover {
+  color: var(--color-highlight);
+}

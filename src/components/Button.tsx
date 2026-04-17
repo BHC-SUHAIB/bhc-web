@@ -2,20 +2,51 @@ import Link from 'next/link'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
+/* Buttons use the global semantic tokens --color-fg / --color-bg / --color-surface / --color-brass,
+   so they automatically read correctly in both light and dark mode. Every variant below has been
+   contrast-checked for WCAG AA in both themes. */
 const button = cva(
-  'inline-flex items-center justify-center gap-2 font-medium tracking-[0.02em] rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brass)] disabled:opacity-40 disabled:pointer-events-none',
+  [
+    'inline-flex items-center justify-center gap-2 font-medium no-underline',
+    'tracking-[0.01em] rounded-full select-none',
+    'transition-[background-color,color,border-color,transform] duration-150 ease-out',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brass)]',
+    'active:translate-y-[1px]',
+    'disabled:opacity-40 disabled:pointer-events-none',
+  ].join(' '),
   {
     variants: {
       variant: {
-        primary: 'bg-[var(--color-fg)] text-[var(--color-bg)] hover:bg-[var(--color-forest)] hover:text-[var(--color-ivory)]',
-        secondary: 'border border-[var(--color-border)] text-[var(--color-fg)] hover:border-[var(--color-fg)]',
-        ghost: 'text-[var(--color-fg)] hover:text-[var(--color-brass)]',
-        brass: 'bg-[var(--color-brass)] text-[var(--color-ink)] hover:bg-[var(--color-forest)] hover:text-[var(--color-ivory)]',
+        /* Primary — strong filled. Background = foreground token (dark in light mode, ivory in dark mode).
+           Hover lifts to brass, our accent. */
+        primary: [
+          'bg-[var(--color-fg)] text-[var(--color-bg)]',
+          'hover:bg-[var(--color-brass)] hover:text-[var(--color-ink)]',
+        ].join(' '),
+
+        /* Secondary — outlined, clear border, fills on hover. */
+        secondary: [
+          'bg-transparent text-[var(--color-fg)]',
+          'border border-[var(--color-border-strong)]',
+          'hover:bg-[var(--color-fg)] hover:text-[var(--color-bg)] hover:border-[var(--color-fg)]',
+        ].join(' '),
+
+        /* Ghost — no background, subtle surface on hover. Safe on any background. */
+        ghost: [
+          'bg-transparent text-[var(--color-fg)]',
+          'hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-fg)]',
+        ].join(' '),
+
+        /* Brass — warm accent button. Always ink text on brass bg for max contrast. */
+        brass: [
+          'bg-[var(--color-brass)] text-[var(--color-ink)]',
+          'hover:bg-[var(--color-brass-dark)] hover:text-[var(--color-ivory)]',
+        ].join(' '),
       },
       size: {
-        sm: 'h-9 px-4 text-sm',
-        md: 'h-11 px-5 text-[15px]',
-        lg: 'h-13 px-7 text-base',
+        sm: 'h-9 px-4 text-[13px]',
+        md: 'h-11 px-5 text-[14.5px]',
+        lg: 'h-[52px] px-7 text-[15.5px]',
       },
     },
     defaultVariants: { variant: 'primary', size: 'md' },

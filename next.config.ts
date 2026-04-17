@@ -11,11 +11,29 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: dirname,
   },
-  // Payload generates src/payload-types.ts via its CLI, which is gitignored
-  // and not part of the Docker build context. All our imports from
-  // '@/payload-types' are `import type` and erased at runtime; only the
-  // build-time type check fails. Skip that check here. Type errors still
-  // surface in the IDE and `npm run dev`.
+  // Payload's pushDevSchema dynamically requires drizzle-kit at runtime.
+  // Turbopack's static analysis doesn't see this require, so drizzle-kit
+  // (and its peer deps) aren't traced into the standalone output. Force
+  // them to be included so first-boot schema push works in production.
+  outputFileTracingIncludes: {
+    '/**/*': [
+      './node_modules/drizzle-kit/**/*',
+      './node_modules/drizzle-orm/**/*',
+      './node_modules/@drizzle-team/**/*',
+      './node_modules/esbuild/**/*',
+      './node_modules/@esbuild/**/*',
+      './node_modules/@payloadcms/drizzle/**/*',
+      './node_modules/@payloadcms/db-postgres/**/*',
+      './node_modules/@payloadcms/db-sqlite/**/*',
+    ],
+  },
+  serverExternalPackages: [
+    'drizzle-kit',
+    'drizzle-orm',
+    '@payloadcms/drizzle',
+    '@payloadcms/db-postgres',
+    '@payloadcms/db-sqlite',
+  ],
   typescript: {
     ignoreBuildErrors: true,
   },

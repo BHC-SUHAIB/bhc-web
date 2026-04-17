@@ -42,9 +42,16 @@ ufw --force enable
 log "Ensuring Docker is running"
 systemctl enable --now docker
 
-log "Preparing app directory at $APP_DIR"
+# When this script is invoked with `sudo`, $SUDO_USER is the original user
+# (typically `deploy`). We chown the app dir to that user so git + docker can
+# run without sudo afterwards. When invoked directly as root, we leave it
+# root-owned.
+OWNER_USER="${SUDO_USER:-root}"
+OWNER_GROUP="$(id -gn "$OWNER_USER")"
+
+log "Preparing app directory at $APP_DIR (owner: $OWNER_USER:$OWNER_GROUP)"
 mkdir -p "$APP_DIR"
-chown -R root:root "$APP_DIR"
+chown -R "$OWNER_USER:$OWNER_GROUP" "$APP_DIR"
 
 if [[ -d "$APP_DIR/.git" ]]; then
   log "Repo already cloned, pulling latest"

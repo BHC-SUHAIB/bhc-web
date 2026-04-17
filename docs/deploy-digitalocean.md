@@ -387,3 +387,9 @@ so they persist across code rollbacks.
 - Add an uptime monitor (UptimeRobot free tier is fine).
 
 Ask me and I'll do any of these.
+
+# Deploy speed
+
+- Cold build (fresh Dockerfile or clean cache): ~5 min
+- Warm build (code-only changes): ~30-90 s after BuildKit cache populates
+- Config-only change (docker-compose / Caddyfile): instant (layer cache hit)

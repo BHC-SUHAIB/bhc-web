@@ -1,0 +1,37 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+  # Manual trigger from the Actions tab, useful for retrying a failed deploy
+  workflow_dispatch:
+
+# Never run two deploys at once; queue them.
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: SSH + deploy.sh
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          port: 22
+          # Match the droplet's host key to avoid MitM; the fingerprint is
+          # injected at runtime so a rotated droplet key needs the secret
+          # updated, not the workflow.
+          fingerprint: ${{ secrets.DROPLET_SSH_FINGERPRINT }}
+          script_stop: true
+          command_timeout: 10m
+          script: |
+            set -e
+            cd /opt/bhc-web
+            bash scripts/deploy.sh

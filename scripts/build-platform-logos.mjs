@@ -88,6 +88,84 @@ function squareMark({ size, ink, bg = null, padPct = 0.12 }) {
 </svg>`
 }
 
+/* ---------------- Layout: wide banner (e.g. Exclaimer signature banner, headers) ---------------- */
+function wideBanner({ w, h, ink, ivory, brass, parchment, bg }) {
+  const markH = Math.round(h * 0.78)
+  const scale = markH / HART_H
+  const markW = HART_W * scale
+  const markX = 36
+  const markY = Math.round((h - markH) / 2)
+
+  const textX = markX + markW + 20
+  const wordmarkSize = Math.round(h * 0.38)
+  const taglineSize = Math.round(h * 0.13)
+  const servicesSize = Math.round(h * 0.095)
+
+  const centerY = h / 2
+  const wordmarkY = centerY - 8
+  const ruleY = centerY + 6
+  const servicesY = centerY + 22
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+  <rect width="${w}" height="${h}" fill="${bg}"/>
+  <g transform="translate(${markX}, ${markY}) scale(${scale.toFixed(4)}) translate(-600, -200)" fill="${ivory}">
+    <path d="${hartPath}"/>
+  </g>
+  <text x="${textX}" y="${wordmarkY}"
+        font-family="'Manrope','Helvetica Neue',Helvetica,Arial,sans-serif"
+        font-weight="800" font-size="${wordmarkSize}" letter-spacing="3"
+        fill="${ivory}">BLACK HART</text>
+  <line x1="${textX}" y1="${ruleY}" x2="${w - 36}" y2="${ruleY}"
+        stroke="${parchment}" stroke-width="1" opacity="0.5" stroke-linecap="round"/>
+  <text x="${textX}" y="${servicesY}"
+        font-family="'Manrope','Helvetica Neue',Helvetica,Arial,sans-serif"
+        font-weight="500" font-size="${servicesSize}" letter-spacing="8"
+        fill="${brass}">WEB &#8226; SEO &#8226; APPS &#8226; HOSTING</text>
+</svg>`
+}
+
+/* ---------------- Layout: meeting background (1920x1080, minimal, corner mark only) ---------------- */
+function meetingBackground({ w, h, ink, ivory, brass }) {
+  // Hart mark in bottom-right corner. Small, tasteful watermark that
+  // doesn't compete with the speaker's face in the centre of frame.
+  const markH = Math.round(h * 0.22)
+  const scale = markH / HART_H
+  const markW = HART_W * scale
+  const cornerMargin = Math.round(h * 0.06)
+  const markX = w - markW - cornerMargin
+  const markY = h - markH - cornerMargin
+
+  // Wordmark in bottom-left, balanced against the hart in bottom-right
+  const wordmarkSize = Math.round(h * 0.042)
+  const taglineSize = Math.round(h * 0.019)
+  const textX = cornerMargin
+  const textY = h - cornerMargin - 12
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+  <defs>
+    <radialGradient id="vignette" cx="0.5" cy="0.5" r="0.9">
+      <stop offset="45%" stop-color="${ink}" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.55"/>
+    </radialGradient>
+  </defs>
+  <rect width="${w}" height="${h}" fill="${ink}"/>
+  <rect width="${w}" height="${h}" fill="url(#vignette)"/>
+  <g transform="translate(${markX.toFixed(2)}, ${markY.toFixed(2)}) scale(${scale.toFixed(4)}) translate(-600, -200)" fill="${ivory}" opacity="0.22">
+    <path d="${hartPath}"/>
+  </g>
+  <text x="${textX}" y="${textY - wordmarkSize - 6}"
+        font-family="'Manrope','Helvetica Neue',Helvetica,Arial,sans-serif"
+        font-weight="700" font-size="${wordmarkSize}" letter-spacing="4"
+        fill="${ivory}">BLACK HART</text>
+  <text x="${textX}" y="${textY}"
+        font-family="'Manrope','Helvetica Neue',Helvetica,Arial,sans-serif"
+        font-weight="500" font-size="${taglineSize}" letter-spacing="7"
+        fill="${brass}">CONSULTING</text>
+</svg>`
+}
+
 /* ---------------- Rasterize helper ---------------- */
 async function renderPng(svg, outPath) {
   // Extract declared width/height from the SVG so the PNG is exactly that size.
@@ -145,6 +223,40 @@ const PLATFORMS = [
     name: 'black-hart-avatar-512',
     // 512x512 generic square avatar (LinkedIn, GitHub org, social)
     svg: squareMark({ size: 512, ink: COLORS.ink }),
+  },
+
+  /* ---- Exclaimer brand kit ---- */
+  {
+    name: 'exclaimer-logo',
+    // "Logo" field \u2014 main brand image (horizontal lockup). Min 200x150;
+    // rendering at 600x200 so it scales crisply in retina email clients.
+    svg: horizontalLockup({ w: 600, h: 200, ink: COLORS.ink, forest: COLORS.forest, pad: 24, markHeightPct: 0.7 }),
+  },
+  {
+    name: 'exclaimer-icon',
+    // "Icon" field \u2014 square mark. Min 150x150; rendering at 400x400.
+    // Also used for Meeting Branding per Exclaimer's note.
+    svg: squareMark({ size: 400, ink: COLORS.ink }),
+  },
+  {
+    name: 'exclaimer-banner',
+    // "Banner" field \u2014 signature header/footer banner. Min 600x100;
+    // rendering at 1200x200 (2x for crisp retina scaling).
+    svg: wideBanner({
+      w: 1200, h: 200,
+      ink: COLORS.ink, ivory: COLORS.ivory,
+      brass: '#B08D57', parchment: COLORS.parchment,
+      bg: COLORS.ink,
+    }),
+  },
+  {
+    name: 'exclaimer-meeting-background',
+    // "Meeting Background" field \u2014 video call background. Min 1920x1080;
+    // rendering at exact size. Dark, low-distraction, watermark hart.
+    svg: meetingBackground({
+      w: 1920, h: 1080,
+      ink: COLORS.ink, ivory: COLORS.ivory, brass: '#B08D57',
+    }),
   },
 ]
 

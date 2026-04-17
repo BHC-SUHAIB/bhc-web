@@ -33,6 +33,14 @@ services:
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost}
       SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@blackhartconsulting.com}
       SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-changeme123!}
+      # S3-compatible media storage (DigitalOcean Spaces). When all four are
+      # set, Payload's storage-s3 plugin sends uploads to the bucket instead
+      # of the local /app/media volume. Missing \u2192 falls back to local.
+      S3_BUCKET: ${S3_BUCKET:-}
+      S3_ENDPOINT: ${S3_ENDPOINT:-}
+      S3_REGION: ${S3_REGION:-}
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-}
     volumes:
       - media:/app/media
 

@@ -21,9 +21,23 @@ const dirname = path.dirname(filename)
 const dbUri = process.env.DATABASE_URI || 'file:./payload.db'
 const isPostgres = /^postgres(ql)?:\/\//.test(dbUri)
 
+// Trusted origins for Payload's CSRF check. Covers the public site URL,
+// the droplet IP (during pre-DNS HTTP access), and both production domains
+// so admin logins succeed from any of them.
+const csrfOrigins = [
+  process.env.NEXT_PUBLIC_SITE_URL,
+  'http://104.131.82.31',
+  'https://blackhartconsulting.com',
+  'https://www.blackhartconsulting.com',
+  'http://localhost:3000',
+].filter(Boolean) as string[]
+
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   secret: process.env.PAYLOAD_SECRET || '',
+
+  csrf: csrfOrigins,
+  cors: csrfOrigins,
 
   admin: {
     user: Users.slug,

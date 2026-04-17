@@ -26,19 +26,17 @@ export const metadata: Metadata = {
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   const payload = await getPayloadClient()
-  const [header, footer, settings] = await Promise.all([
+  const [header, footer] = await Promise.all([
     payload.findGlobal({ slug: 'header' }).catch(() => null),
     payload.findGlobal({ slug: 'footer' }).catch(() => null),
-    payload.findGlobal({ slug: 'siteSettings' }).catch(() => null),
   ])
-  const theme = (settings?.defaultTheme as string) || 'dark'
 
+  // No data-theme attribute \u2014 theme follows OS preference via the
+  // `@media (prefers-color-scheme: dark)` block in globals.css.
   return (
     <html
       lang="en"
-      data-theme={theme === 'system' ? undefined : theme}
       className={`${manrope.variable} ${fraunces.variable} ${jetbrains.variable}`}
-      suppressHydrationWarning
     >
       <body className="min-h-dvh flex flex-col">
         <SiteHeader header={header} />

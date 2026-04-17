@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Container } from './Container'
 import { Logo } from './Logo'
 import { Button } from './Button'
-import { ThemeToggle } from './ThemeToggle'
 import type { Header as HeaderGlobal } from '@/payload-types'
 
 type HeaderProps = { header: HeaderGlobal | null }
@@ -36,7 +35,6 @@ export function SiteHeader({ header }: HeaderProps) {
         </nav>
 
         <div className="flex items-center gap-3 shrink-0">
-          <ThemeToggle />
           {cta?.show && cta.label && cta.href ? (
             <Button href={cta.href} variant="primary" size="sm" className="hidden sm:inline-flex">
               {cta.label}

@@ -35,23 +35,20 @@
   --radius-xl: 24px;
 }
 
-/* Dark mode */
-[data-theme="dark"] {
-  --color-bg: var(--color-ink);
-  --color-fg: var(--color-ivory);
-  --color-fg-muted: color-mix(in srgb, var(--color-ivory) 65%, transparent);
-  --color-surface: color-mix(in srgb, var(--color-ivory) 6%, var(--color-ink));
-  --color-surface-raised: color-mix(in srgb, var(--color-ivory) 10%, var(--color-ink));
-  --color-border: color-mix(in srgb, var(--color-ivory) 16%, transparent);
-  --color-border-strong: color-mix(in srgb, var(--color-ivory) 32%, transparent);
-  --color-accent: var(--color-brass);
-  --color-accent-fg: var(--color-ink);
-  --color-link: var(--color-brass);
-}
-
-[data-theme="light"] {
-  --color-bg: var(--color-ivory);
-  --color-fg: var(--color-ink);
+/* Dark mode \u2014 follows OS preference automatically. No toggle, no JS. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: var(--color-ink);
+    --color-fg: var(--color-ivory);
+    --color-fg-muted: color-mix(in srgb, var(--color-ivory) 65%, transparent);
+    --color-surface: color-mix(in srgb, var(--color-ivory) 6%, var(--color-ink));
+    --color-surface-raised: color-mix(in srgb, var(--color-ivory) 10%, var(--color-ink));
+    --color-border: color-mix(in srgb, var(--color-ivory) 16%, transparent);
+    --color-border-strong: color-mix(in srgb, var(--color-ivory) 32%, transparent);
+    --color-accent: var(--color-brass);
+    --color-accent-fg: var(--color-ink);
+    --color-link: var(--color-brass);
+  }
 }
 
 /* Base */

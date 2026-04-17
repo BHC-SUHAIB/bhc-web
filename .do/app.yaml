@@ -1,0 +1,45 @@
+# DigitalOcean App Platform spec
+# Apply with: doctl apps create --spec .do/app.yaml (or auto-detected on repo connect)
+
+name: black-hart-consulting
+region: nyc
+
+services:
+  - name: web
+    github:
+      repo: YOUR-GITHUB-USER/bhc-web
+      branch: main
+      deploy_on_push: true
+
+    dockerfile_path: Dockerfile
+
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    http_port: 3000
+
+    health_check:
+      http_path: /
+
+    envs:
+      - key: NODE_ENV
+        value: production
+        scope: RUN_TIME
+
+      - key: PAYLOAD_SECRET
+        value: ${_self.PAYLOAD_SECRET}
+        scope: RUN_TIME
+        type: SECRET
+
+      - key: DATABASE_URI
+        value: ${bhc-db.DATABASE_URL}
+        scope: RUN_TIME
+
+      - key: NEXT_PUBLIC_SITE_URL
+        value: ${APP_URL}
+        scope: RUN_AND_BUILD_TIME
+
+databases:
+  - name: bhc-db
+    engine: PG
+    version: "16"
+    production: false

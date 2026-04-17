@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Black Hart Consulting — Web
 
-## Getting Started
+The marketing site + admin CMS for **Black Hart Consulting LLC**, built on Next.js 16, Payload CMS 3, and SQLite/Postgres. Deploys to DigitalOcean App Platform or any Node host.
 
-First, run the development server:
+Companion to the brand kit at `../BHC_BRAND/`.
+
+---
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | [Next.js 16](https://nextjs.org) (App Router, Turbopack) |
+| Language | TypeScript |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com) (CSS-first `@theme`) |
+| CMS | [Payload 3](https://payloadcms.com) (admin at `/admin`) |
+| Database | SQLite (dev) / Postgres (prod) |
+| Fonts | Manrope + Fraunces + JetBrains Mono via `next/font/google` |
+| Icons | [Lucide](https://lucide.dev) |
+
+---
+
+## Quick start
 
 ```bash
+npm install --legacy-peer-deps
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
+- **Public site:** http://localhost:3000
+- **Admin CMS:** http://localhost:3000/admin
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+On first boot, a default admin is seeded:
+- Email: `admin@blackhartconsulting.com`
+- Password: `changeme123!` — **change immediately after logging in.**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Editing content
 
-To learn more about Next.js, take a look at the following resources:
+1. Log in at `/admin`.
+2. Edit any **Page** (e.g. "Home"):
+   - Click **Layout** to see all sections as blocks
+   - **Drag to reorder** sections
+   - **Click + Add Block** to insert a new section
+   - **Click the trash icon** on a block to remove it
+   - Save → publish
+3. Edit **Projects** the same way. Set `featured` to show on the home "Recent work" block.
+4. Edit **Header / Footer / Site Settings** under "Globals".
+5. Upload media under **Media** (add alt text — required).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project structure
 
-## Deploy on Vercel
+```
+BHC_WEB/
+├── public/brand/             # Logo SVGs (from BHC_BRAND/logos/final)
+├── src/
+│   ├── app/
+│   │   ├── (frontend)/       # Public routes + site shell
+│   │   └── (payload)/        # Admin UI + REST/GraphQL API
+│   ├── blocks/
+│   │   ├── schema/           # Payload block definitions
+│   │   └── render/           # Frontend React components
+│   ├── collections/          # Pages, Projects, Media, Users
+│   ├── globals/              # Header, Footer, SiteSettings
+│   ├── components/           # UI primitives
+│   ├── lib/                  # fonts, utils, payload client
+│   ├── seed/                 # onInit content seeding
+│   └── payload.config.ts
+└── .do/app.yaml              # DigitalOcean deploy spec
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Scripts
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start dev server on :3000 |
+| `npm run build` | Production build |
+| `npm start` | Run production build |
+| `npm run generate:types` | Regenerate TypeScript types from Payload schema |
+
+---
+
+## Deployment
+
+See [`docs/deploy-digitalocean.md`](./docs/deploy-digitalocean.md).
+
+TL;DR for App Platform:
+1. Push to GitHub (private).
+2. Connect the repo in DigitalOcean (auto-detects `.do/app.yaml`).
+3. Set `PAYLOAD_SECRET` in App env vars (generate with `openssl rand -hex 32`).
+4. Deploy. Database provisions automatically.
+
+---
+
+## Switching SQLite → Postgres
+
+For production, swap the adapter in `src/payload.config.ts`:
+
+```ts
+import { postgresAdapter } from '@payloadcms/db-postgres'
+
+db: postgresAdapter({
+  pool: { connectionString: process.env.DATABASE_URI },
+}),
+```
+
+`npm install --legacy-peer-deps @payloadcms/db-postgres pg`
+
+`DATABASE_URI` = your Postgres connection string.
+
+---
+
+## Brand tokens
+
+Colors in `src/app/globals.css` under `@theme`. The **Heritage** palette:
+
+| Token | Hex | Role |
+|---|---|---|
+| `--color-ink` | `#1A1713` | Dark |
+| `--color-forest` | `#2F4A35` | Primary brand |
+| `--color-lichen` | `#8A9A7B` | Secondary surface |
+| `--color-parchment` | `#D6D0C2` | Muted text / border |
+| `--color-ivory` | `#EFE9D9` | Light |
+| `--color-brass` | `#B08D57` | Accent / CTA hover |
+
+Full rules in `../BHC_BRAND/guidelines/brand-guidelines.md`.
+
+---
+
+## Gotchas
+
+- **`--legacy-peer-deps` required** because Payload's peer deps haven't caught up with React 19 yet.
+- **Variable fonts:** Manrope and Fraunces are variable fonts — don't pass `weight: [...]`.
+- **Ephemeral containers:** App Platform wipes `/app/media` on redeploy. Use external object storage (Spaces / S3 / Supabase) for production uploads — see deploy doc.
+- **Fresh-start reseed:** delete `payload.db` to wipe the database; content reseeds on next boot.
+
+---
+
+## License
+
+Proprietary — Black Hart Consulting LLC.

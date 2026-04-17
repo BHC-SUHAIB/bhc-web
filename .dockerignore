@@ -1,0 +1,17 @@
+**/node_modules
+**/.next
+**/.turbo
+**/.git
+**/.gitignore
+**/.env*
+!**/.env.example
+**/npm-debug.log*
+**/Dockerfile
+**/.dockerignore
+**/docker-compose.yml
+**/docs
+**/payload.db
+**/payload.db-journal
+**/media
+**/.DS_Store
+**/README.md

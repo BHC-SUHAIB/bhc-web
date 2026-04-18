@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedAllPages, getCachedAllProjects, getCachedAllArticles } from '@/lib/payload-cache'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://blackhartconsulting.com').replace(/\/$/, '')
 
@@ -20,15 +20,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
   try {
-    const payload = await getPayloadClient()
-
-    const [pagesRes, projectsRes, articlesRes] = await Promise.all([
-      payload.find({ collection: 'pages', limit: 200, depth: 0 }),
-      payload.find({ collection: 'projects', limit: 500, depth: 0 }),
-      payload.find({ collection: 'articles', limit: 500, depth: 0 }),
+    const [pageDocs, projectDocs, articleDocs] = await Promise.all([
+      getCachedAllPages(),
+      getCachedAllProjects(),
+      getCachedAllArticles(),
     ])
 
-    for (const doc of pagesRes.docs as Array<{ slug?: string | null; updatedAt?: string | null }>) {
+    for (const doc of pageDocs as Array<{ slug?: string | null; updatedAt?: string | null }>) {
       const slug = doc.slug ?? ''
       if (!slug) continue
       const path = slug === 'home' ? '' : slug
@@ -40,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })
     }
 
-    for (const doc of projectsRes.docs as Array<{ slug?: string | null; updatedAt?: string | null }>) {
+    for (const doc of projectDocs as Array<{ slug?: string | null; updatedAt?: string | null }>) {
       if (!doc.slug) continue
       entries.push({
         url: `${SITE_URL}/portfolio/${doc.slug}`,
@@ -57,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     })
 
-    for (const doc of articlesRes.docs as Array<{ slug?: string | null; updatedAt?: string | null; publishedAt?: string | null }>) {
+    for (const doc of articleDocs as Array<{ slug?: string | null; updatedAt?: string | null; publishedAt?: string | null }>) {
       if (!doc.slug) continue
       entries.push({
         url: `${SITE_URL}/articles/${doc.slug}`,

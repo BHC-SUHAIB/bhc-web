@@ -9,7 +9,7 @@ import { RichText } from './RichText'
 import { MediaBlock } from './MediaBlock'
 import { Faq } from './Faq'
 import { ContactForm } from './ContactForm'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedSiteSettings } from '@/lib/payload-cache'
 import type { Page, SiteSetting } from '@/payload-types'
 
 type Block = NonNullable<Page['layout']>[number]
@@ -20,11 +20,7 @@ export async function RenderBlocks({ blocks }: { blocks: Block[] }) {
   // Only fetch siteSettings if a block on the page actually needs it.
   // Keeps simple pages from paying for a DB read they don't use.
   const needsSiteSettings = blocks.some((b) => b.blockType === 'contactForm')
-  let siteSettings: SiteSetting | null = null
-  if (needsSiteSettings) {
-    const payload = await getPayloadClient()
-    siteSettings = await payload.findGlobal({ slug: 'siteSettings' }).catch(() => null) as SiteSetting | null
-  }
+  const siteSettings: SiteSetting | null = needsSiteSettings ? await getCachedSiteSettings() : null
 
   return (
     <>

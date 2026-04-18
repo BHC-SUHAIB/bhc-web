@@ -3,7 +3,7 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedArticlesList } from '@/lib/payload-cache'
 import { articleCategoryLabel, formatArticleDate } from '@/lib/articles'
 import { ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
@@ -16,13 +16,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ArticlesPage() {
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'articles',
-    limit: 100,
-    sort: '-publishedAt',
-  })
-  const articles = res.docs as Article[]
+  const articles = await getCachedArticlesList()
   const featured = articles.find((a) => a.featured) ?? articles[0]
   const rest = articles.filter((a) => a.id !== featured?.id)
 

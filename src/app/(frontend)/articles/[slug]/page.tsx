@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedArticleBySlug, getCachedArticlesExceptSlug } from '@/lib/payload-cache'
 import { articleCategoryLabel, formatArticleDate } from '@/lib/articles'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
@@ -14,15 +14,7 @@ export const dynamic = 'force-dynamic'
 
 type Args = { params: Promise<{ slug: string }> }
 
-async function loadArticle(slug: string): Promise<Article | null> {
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'articles',
-    where: { slug: { equals: slug } },
-    limit: 1,
-  })
-  return (res.docs[0] as Article | undefined) ?? null
-}
+const loadArticle = (slug: string) => getCachedArticleBySlug(slug)
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug } = await params
@@ -45,14 +37,7 @@ export default async function ArticlePage({ params }: Args) {
   const cat = articleCategoryLabel(a.category)
   const date = formatArticleDate(a.publishedAt)
 
-  const payload = await getPayloadClient()
-  const moreRes = await payload.find({
-    collection: 'articles',
-    where: { slug: { not_equals: slug } },
-    limit: 3,
-    sort: '-publishedAt',
-  })
-  const more = moreRes.docs as Article[]
+  const more = await getCachedArticlesExceptSlug(slug, 3)
 
   return (
     <article className="pb-24">

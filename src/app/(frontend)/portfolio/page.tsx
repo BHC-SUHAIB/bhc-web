@@ -3,7 +3,7 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedProjectsList } from '@/lib/payload-cache'
 import { ArrowUpRight } from 'lucide-react'
 import type { Project, Media } from '@/payload-types'
 
@@ -15,13 +15,7 @@ export const metadata: Metadata = {
 }
 
 export default async function PortfolioPage() {
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'projects',
-    limit: 100,
-    sort: '-publishedAt',
-  })
-  const projects = res.docs as Project[]
+  const projects = await getCachedProjectsList()
 
   return (
     <div className="pb-20">

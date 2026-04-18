@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { manrope, fraunces, jetbrains } from '@/lib/fonts'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedHeader, getCachedFooter, getCachedSiteSettings } from '@/lib/payload-cache'
 import '../globals.css'
 
 export const metadata: Metadata = {
@@ -25,11 +25,10 @@ export const metadata: Metadata = {
 }
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
-  const payload = await getPayloadClient()
   const [header, footer, siteSettings] = await Promise.all([
-    payload.findGlobal({ slug: 'header' }).catch(() => null),
-    payload.findGlobal({ slug: 'footer' }).catch(() => null),
-    payload.findGlobal({ slug: 'siteSettings' }).catch(() => null),
+    getCachedHeader(),
+    getCachedFooter(),
+    getCachedSiteSettings(),
   ])
 
   // Preconnect hints: CDN hosts image content (Spaces) and the Placeholder

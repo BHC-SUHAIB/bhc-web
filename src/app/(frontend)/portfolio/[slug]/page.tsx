@@ -6,7 +6,7 @@ import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedProjectBySlug } from '@/lib/payload-cache'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Project, Media } from '@/payload-types'
 
@@ -14,15 +14,7 @@ export const dynamic = 'force-dynamic'
 
 type Args = { params: Promise<{ slug: string }> }
 
-async function loadProject(slug: string): Promise<Project | null> {
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'projects',
-    where: { slug: { equals: slug } },
-    limit: 1,
-  })
-  return (res.docs[0] as Project | undefined) ?? null
-}
+const loadProject = (slug: string) => getCachedProjectBySlug(slug)
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug } = await params

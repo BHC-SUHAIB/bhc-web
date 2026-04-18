@@ -29,11 +29,12 @@ jobs:
           # injected at runtime so a rotated droplet key needs the secret
           # updated, not the workflow.
           fingerprint: ${{ secrets.DROPLET_SSH_FINGERPRINT }}
-          script_stop: true
           # Cold builds (new dep added -> cache miss) run 8-10 min end-to-end.
           # Warm builds finish in <1 min. Set ceiling well above cold so we
           # don't time out in the middle of a successful build.
           command_timeout: 20m
+          # `set -e` in the script body handles fail-on-first-error; the old
+          # `script_stop` input was removed in appleboy/ssh-action v1.x.
           script: |
             set -e
             cd /opt/bhc-web

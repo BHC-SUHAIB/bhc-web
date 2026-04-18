@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedPageBySlug } from '@/lib/payload-cache'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 import type { Page, Media } from '@/payload-types'
 
@@ -10,13 +10,7 @@ type Args = { params: Promise<{ slug: string }> }
 
 async function loadPage(slug: string): Promise<Page | null> {
   if (slug === 'home') return null
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'pages',
-    where: { slug: { equals: slug } },
-    limit: 1,
-  })
-  return (res.docs[0] as Page | undefined) ?? null
+  return getCachedPageBySlug(slug)
 }
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {

@@ -4,25 +4,17 @@ import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { Placeholder } from '@/components/Placeholder'
 import { ArrowUpRight } from 'lucide-react'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedFeaturedProjects } from '@/lib/payload-cache'
 import type { FeaturedProjectsBlock, Project, Media } from '@/payload-types'
 
 export async function FeaturedProjects(b: FeaturedProjectsBlock) {
-  const payload = await getPayloadClient()
-
   let projects: Project[] = []
   if (b.mode === 'manual' && Array.isArray(b.projects)) {
     projects = b.projects
       .map((p) => (typeof p === 'object' ? (p as Project) : null))
       .filter(Boolean) as Project[]
   } else {
-    const res = await payload.find({
-      collection: 'projects',
-      where: { featured: { equals: true } },
-      limit: b.limit ?? 3,
-      sort: '-publishedAt',
-    })
-    projects = res.docs as Project[]
+    projects = await getCachedFeaturedProjects(b.limit ?? 3)
   }
 
   return (

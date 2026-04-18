@@ -3,11 +3,12 @@ import { getPayloadClient } from '@/lib/payload'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 import type { Page } from '@/payload-types'
 
-// ISR: cache the rendered home page for 60s, then revalidate in the
-// background on the next request. Admin edits propagate within 60s —
-// acceptable for a marketing site, and ~100x cheaper per request than
-// force-dynamic (which re-queries Payload on every visit).
-export const revalidate = 60
+// Dynamic rendering. ISR (revalidate = N) is tempting, but Next tries to
+// prerender at build time — which fails inside Docker since PAYLOAD_SECRET
+// and DATABASE_URI are runtime-only. For a Payload-backed marketing site,
+// staying dynamic is the pragmatic choice; Payload responses are fast
+// enough (<300ms) and Caddy + Next's own fetch cache absorb repeat load.
+export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   const payload = await getPayloadClient()

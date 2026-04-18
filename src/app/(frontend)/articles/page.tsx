@@ -8,7 +8,7 @@ import { articleCategoryLabel, formatArticleDate } from '@/lib/articles'
 import { ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Articles',

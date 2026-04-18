@@ -10,7 +10,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Project, Media } from '@/payload-types'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 type Args = { params: Promise<{ slug: string }> }
 

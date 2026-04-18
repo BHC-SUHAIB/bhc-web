@@ -26,9 +26,10 @@ export const metadata: Metadata = {
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   const payload = await getPayloadClient()
-  const [header, footer] = await Promise.all([
+  const [header, footer, siteSettings] = await Promise.all([
     payload.findGlobal({ slug: 'header' }).catch(() => null),
     payload.findGlobal({ slug: 'footer' }).catch(() => null),
+    payload.findGlobal({ slug: 'siteSettings' }).catch(() => null),
   ])
 
   // Preconnect hints: CDN hosts image content (Spaces) and the Placeholder
@@ -62,9 +63,9 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         >
           Skip to content
         </a>
-        <SiteHeader header={header} />
+        <SiteHeader header={header} siteSettings={siteSettings} />
         <main id="main-content" className="flex-1">{children}</main>
-        <SiteFooter footer={footer} />
+        <SiteFooter footer={footer} siteSettings={siteSettings} />
       </body>
     </html>
   )

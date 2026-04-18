@@ -114,6 +114,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         tagline: 'Websites, SEO, apps, and hosting \u2014 done right.',
         defaultMetaDescription: 'Websites, SEO, app design, and hosting for businesses that care how their work shows up online.',
         defaultTheme: 'dark',
+        contactEmail: 'hello@blackhartconsulting.com',
+        contactPhone: '(866) 434-9777',
       } as any,
     })
 
@@ -306,7 +308,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         { blockType: 'contactForm',
           headline: 'Tell us about your project.',
           description: 'No boilerplate, no hard sell. A short note is enough \u2014 we\u2019ll follow up with a proper conversation.',
-          successMessage: 'Thanks \u2014 your note is in. We\u2019ll reply within one business day from suhaib@blackhartconsulting.com.',
+          successMessage: 'Thanks \u2014 your note is in. We\u2019ll reply within one business day from hello@blackhartconsulting.com.',
           showCompanyField: true,
           showProjectTypeField: true,
           showBudgetField: true,

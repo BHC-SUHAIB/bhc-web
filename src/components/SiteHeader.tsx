@@ -6,14 +6,17 @@ import Link from 'next/link'
 import { Container } from './Container'
 import { Logo } from './Logo'
 import { Button } from './Button'
-import { Menu, X } from 'lucide-react'
-import type { Header as HeaderGlobal } from '@/payload-types'
+import { Menu, X, Phone } from 'lucide-react'
+import { phoneHref } from '@/lib/contact'
+import type { Header as HeaderGlobal, SiteSetting } from '@/payload-types'
 
-type HeaderProps = { header: HeaderGlobal | null }
+type HeaderProps = { header: HeaderGlobal | null; siteSettings: SiteSetting | null }
 
-export function SiteHeader({ header }: HeaderProps) {
+export function SiteHeader({ header, siteSettings }: HeaderProps) {
   const nav = header?.nav ?? []
   const cta = header?.cta
+  const phoneDisplay = siteSettings?.contactPhone ?? ''
+  const phoneHrefVal = phoneHref(phoneDisplay)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
 
@@ -54,6 +57,15 @@ export function SiteHeader({ header }: HeaderProps) {
           </nav>
 
           <div className="flex items-center gap-3 shrink-0">
+            {phoneDisplay && phoneHrefVal ? (
+              <a
+                href={phoneHrefVal}
+                className="hidden lg:inline-flex items-center gap-2 font-mono text-[13px] tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
+              >
+                <Phone className="size-3.5" aria-hidden />
+                <span>{phoneDisplay}</span>
+              </a>
+            ) : null}
             {cta?.show && cta.label && cta.href ? (
               <Button href={cta.href} variant="primary" size="sm" className="hidden sm:inline-flex">
                 {cta.label}
@@ -101,6 +113,16 @@ export function SiteHeader({ header }: HeaderProps) {
                   {cta.label}
                 </Button>
               </div>
+            ) : null}
+            {phoneDisplay && phoneHrefVal ? (
+              <a
+                href={phoneHrefVal}
+                onClick={() => setOpen(false)}
+                className="mt-6 inline-flex items-center gap-3 font-mono text-[14px] tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
+              >
+                <Phone className="size-4" aria-hidden />
+                <span>{phoneDisplay}</span>
+              </a>
             ) : null}
           </Container>
         </div>

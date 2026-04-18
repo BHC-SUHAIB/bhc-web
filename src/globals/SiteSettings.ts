@@ -14,5 +14,9 @@ export const SiteSettings: GlobalConfig = {
       { label: 'Light', value: 'light' },
       { label: 'Follow system preference', value: 'system' },
     ] },
+    // Shared contact info — surfaced in header, footer, and contact page.
+    // Edit here once; changes propagate everywhere the site renders it.
+    { name: 'contactEmail', type: 'email', defaultValue: 'hello@blackhartconsulting.com', admin: { description: 'Public contact address shown on the site.' } },
+    { name: 'contactPhone', type: 'text', defaultValue: '(866) 434-9777', admin: { description: 'Public phone number in display format. tel: link is derived automatically.' } },
   ],
 }

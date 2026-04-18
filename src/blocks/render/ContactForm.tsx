@@ -1,14 +1,25 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import { Mail, Phone } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { cn } from '@/lib/utils'
+import { phoneHref, mailtoHref } from '@/lib/contact'
 import type { ContactFormBlockBlock } from '@/payload-types'
 
 type State = 'idle' | 'submitting' | 'success' | 'error'
 
-export function ContactForm(b: ContactFormBlockBlock) {
+type ContactFormProps = ContactFormBlockBlock & {
+  contactEmail?: string | null
+  contactPhone?: string | null
+}
+
+export function ContactForm(b: ContactFormProps) {
+  const contactEmail = b.contactEmail ?? ''
+  const contactPhone = b.contactPhone ?? ''
+  const emailHref = mailtoHref(contactEmail)
+  const phoneHrefVal = phoneHref(contactPhone)
   const [state, setState] = useState<State>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -78,6 +89,22 @@ export function ContactForm(b: ContactFormBlockBlock) {
           {b.description ? (
             <p className="mt-5 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">{b.description}</p>
           ) : null}
+          {(contactEmail && emailHref) || (contactPhone && phoneHrefVal) ? (
+            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-[15px]">
+              {contactEmail && emailHref ? (
+                <a href={emailHref} className="inline-flex items-center gap-2.5 text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors">
+                  <Mail className="size-4" aria-hidden />
+                  <span>{contactEmail}</span>
+                </a>
+              ) : null}
+              {contactPhone && phoneHrefVal ? (
+                <a href={phoneHrefVal} className="inline-flex items-center gap-2.5 font-mono tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors">
+                  <Phone className="size-4" aria-hidden />
+                  <span>{contactPhone}</span>
+                </a>
+              ) : null}
+            </div>
+          ) : null}
         </div>
 
         {state === 'success' ? (
@@ -140,9 +167,9 @@ export function ContactForm(b: ContactFormBlockBlock) {
                 <select id="cf-budget" name="budgetRange" defaultValue="" className={cn(inputCls, 'appearance-none pr-10 bg-no-repeat bg-[right_1rem_center] bg-[length:14px_14px]')} style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\")" }}>
                   <option value="">Prefer not to say</option>
                   <option value="under-5k">Under $5k</option>
-                  <option value="5-10k">$5k \u2013 $10k</option>
-                  <option value="10-25k">$10k \u2013 $25k</option>
-                  <option value="25-50k">$25k \u2013 $50k</option>
+                  <option value="5-10k">$5k – $10k</option>
+                  <option value="10-25k">$10k – $25k</option>
+                  <option value="25-50k">$25k – $50k</option>
                   <option value="50k-plus">$50k+</option>
                   <option value="unsure">Not sure yet</option>
                 </select>

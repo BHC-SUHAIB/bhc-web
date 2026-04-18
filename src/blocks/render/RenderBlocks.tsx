@@ -9,12 +9,22 @@ import { RichText } from './RichText'
 import { MediaBlock } from './MediaBlock'
 import { Faq } from './Faq'
 import { ContactForm } from './ContactForm'
-import type { Page } from '@/payload-types'
+import { getPayloadClient } from '@/lib/payload'
+import type { Page, SiteSetting } from '@/payload-types'
 
 type Block = NonNullable<Page['layout']>[number]
 
-export function RenderBlocks({ blocks }: { blocks: Block[] }) {
+export async function RenderBlocks({ blocks }: { blocks: Block[] }) {
   if (!blocks?.length) return null
+
+  // Only fetch siteSettings if a block on the page actually needs it.
+  // Keeps simple pages from paying for a DB read they don't use.
+  const needsSiteSettings = blocks.some((b) => b.blockType === 'contactForm')
+  let siteSettings: SiteSetting | null = null
+  if (needsSiteSettings) {
+    const payload = await getPayloadClient()
+    siteSettings = await payload.findGlobal({ slug: 'siteSettings' }).catch(() => null) as SiteSetting | null
+  }
 
   return (
     <>
@@ -31,7 +41,14 @@ export function RenderBlocks({ blocks }: { blocks: Block[] }) {
           case 'richText':        return <RichText key={key} {...b} />
           case 'mediaBlock':      return <MediaBlock key={key} {...b} />
           case 'faq':             return <Faq key={key} {...b} />
-          case 'contactForm':     return <ContactForm key={key} {...b} />
+          case 'contactForm':     return (
+            <ContactForm
+              key={key}
+              {...b}
+              contactEmail={siteSettings?.contactEmail ?? null}
+              contactPhone={siteSettings?.contactPhone ?? null}
+            />
+          )
           default:                return null
         }
       })}

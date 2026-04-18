@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { Container } from './Container'
 import { Logo } from './Logo'
-import type { Footer as FooterGlobal } from '@/payload-types'
+import { phoneHref, mailtoHref } from '@/lib/contact'
+import type { Footer as FooterGlobal, SiteSetting } from '@/payload-types'
 
 const socialLabels: Record<string, string> = {
   linkedin: 'LinkedIn',
@@ -13,11 +14,17 @@ const socialLabels: Record<string, string> = {
   email: 'Email',
 }
 
-export function SiteFooter({ footer }: { footer: FooterGlobal | null }) {
+type FooterProps = { footer: FooterGlobal | null; siteSettings: SiteSetting | null }
+
+export function SiteFooter({ footer, siteSettings }: FooterProps) {
   const columns = footer?.columns ?? []
   const social = footer?.social ?? []
   const tagline = footer?.tagline
   const copyright = footer?.copyright
+  const email = siteSettings?.contactEmail ?? ''
+  const phone = siteSettings?.contactPhone ?? ''
+  const emailHref = mailtoHref(email)
+  const phoneHrefVal = phoneHref(phone)
 
   return (
     <footer className="mt-24 border-t border-[var(--color-border)] py-16 text-[var(--color-fg)]">
@@ -27,6 +34,24 @@ export function SiteFooter({ footer }: { footer: FooterGlobal | null }) {
           <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-[var(--color-fg-muted)]">
             {tagline}
           </p>
+          {email || phone ? (
+            <ul className="mt-6 space-y-2 text-[14px]">
+              {email && emailHref ? (
+                <li>
+                  <a href={emailHref} className="hover:text-[var(--color-brass)] transition-colors">
+                    {email}
+                  </a>
+                </li>
+              ) : null}
+              {phone && phoneHrefVal ? (
+                <li>
+                  <a href={phoneHrefVal} className="font-mono tracking-[0.02em] hover:text-[var(--color-brass)] transition-colors">
+                    {phone}
+                  </a>
+                </li>
+              ) : null}
+            </ul>
+          ) : null}
         </div>
 
         <div className="grid gap-10 grid-cols-2 md:grid-cols-3">

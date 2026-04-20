@@ -152,6 +152,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           { heading: 'Resources', links: [
             { label: 'Articles', href: '/articles' },
             { label: 'Pricing', href: '/#pricing' },
+            { label: 'SMS opt-in', href: '/sms' },
+            { label: 'Privacy Policy', href: '/privacy' },
           ] },
         ],
         social: [

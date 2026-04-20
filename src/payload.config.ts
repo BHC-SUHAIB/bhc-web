@@ -14,6 +14,7 @@ import { Pages } from './collections/Pages'
 import { Projects } from './collections/Projects'
 import { Articles } from './collections/Articles'
 import { ContactSubmissions } from './collections/ContactSubmissions'
+import { SmsConsents } from './collections/SmsConsents'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { SiteSettings } from './globals/SiteSettings'
@@ -122,7 +123,7 @@ export default buildConfig({
 
   onInit: seedOnInit,
 
-  collections: [Users, Media, Pages, Projects, Articles, ContactSubmissions],
+  collections: [Users, Media, Pages, Projects, Articles, ContactSubmissions, SmsConsents],
   globals: [Header, Footer, SiteSettings],
 
   plugins,

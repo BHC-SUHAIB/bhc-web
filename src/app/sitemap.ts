@@ -71,6 +71,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.7,
     })
+
+    // Hard-coded legal / compliance routes (not Payload-backed).
+    entries.push({
+      url: `${SITE_URL}/sms`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    })
+    entries.push({
+      url: `${SITE_URL}/privacy`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    })
   } catch {
     entries.push({
       url: SITE_URL,

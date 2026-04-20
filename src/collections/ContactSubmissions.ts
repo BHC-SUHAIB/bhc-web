@@ -37,6 +37,32 @@ export const ContactSubmissions: CollectionConfig = {
       },
     ],
     afterChange: [
+      // When the submitter ticks the SMS consent box AND provides a phone,
+      // mirror that into the SmsConsents collection so the opt-in is
+      // auditable alongside standalone /sms submissions. Snapshot the
+      // exact disclaimer text they saw at submit time.
+      async ({ doc, operation, req }) => {
+        if (operation !== 'create') return
+        if (!doc.smsConsent || !doc.phone) return
+        try {
+          await req.payload.create({
+            collection: 'sms-consents',
+            data: {
+              name: doc.name,
+              phone: String(doc.phone).trim(),
+              email: doc.email,
+              source: 'contact-form',
+              status: 'active',
+              disclaimerText: doc.smsConsentDisclaimerText || '(not recorded)',
+              sourcePage: doc.sourcePage,
+              ipAddress: doc.ipAddress,
+            } as any,
+          })
+          req.payload.logger.info(`[sms-consent] mirrored from contact-form for ${doc.phone}`)
+        } catch (err) {
+          req.payload.logger.warn({ err }, '[sms-consent] failed to mirror contact-form opt-in')
+        }
+      },
       async ({ doc, operation, req }) => {
         if (operation !== 'create') return
         const notifyTo = process.env.CONTACT_NOTIFY_EMAIL || 'hello@blackhartconsulting.com'
@@ -73,6 +99,18 @@ export const ContactSubmissions: CollectionConfig = {
   fields: [
     { name: 'name', type: 'text', required: true },
     { name: 'email', type: 'email', required: true },
+    { name: 'phone', type: 'text', admin: { description: 'Optional. Only present if the submitter wanted SMS follow-up.' } },
+    {
+      name: 'smsConsent', type: 'checkbox', defaultValue: false,
+      admin: { description: 'Set by the contact form when the submitter checks the SMS opt-in box.' },
+    },
+    {
+      name: 'smsConsentDisclaimerText', type: 'textarea',
+      admin: {
+        description: 'Snapshot of the exact disclaimer the submitter saw at opt-in. Do not edit.',
+        readOnly: true,
+      },
+    },
     {
       type: 'row',
       fields: [

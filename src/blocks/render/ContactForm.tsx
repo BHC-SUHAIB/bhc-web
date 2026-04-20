@@ -1,11 +1,13 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, type FormEvent } from 'react'
 import { Mail, Phone } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { cn } from '@/lib/utils'
 import { phoneHref, mailtoHref } from '@/lib/contact'
+import { SMS_DISCLAIMER_TEXT, SMS_CHECKBOX_LABEL } from '@/lib/sms-disclaimer'
 import type { ContactFormBlockBlock } from '@/payload-types'
 
 type State = 'idle' | 'submitting' | 'success' | 'error'
@@ -22,6 +24,8 @@ export function ContactForm(b: ContactFormProps) {
   const phoneHrefVal = phoneHref(contactPhone)
   const [state, setState] = useState<State>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [phoneValue, setPhoneValue] = useState('')
+  const [smsConsent, setSmsConsent] = useState(false)
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
@@ -44,10 +48,24 @@ export function ContactForm(b: ContactFormProps) {
     if (projectType) payload.projectType = projectType
     const budgetRange = String(data.get('budgetRange') ?? '').trim()
     if (budgetRange) payload.budgetRange = budgetRange
+    const phone = String(data.get('phone') ?? '').trim()
+    if (phone) payload.phone = phone
+    // Only record SMS consent if the submitter actually provided a phone
+    // number AND ticked the box. Snapshot the exact disclaimer text they
+    // saw so the audit record matches what was on-screen.
+    if (phone && smsConsent) {
+      payload.smsConsent = 'true'
+      payload.smsConsentDisclaimerText = SMS_DISCLAIMER_TEXT
+    }
 
     if (!payload.name || !payload.email || payload.message.length < 10) {
       setState('error')
       setErrorMessage('Please fill in your name, email, and at least a sentence.')
+      return
+    }
+    if (smsConsent && !phone) {
+      setState('error')
+      setErrorMessage('Please add your phone number above, or uncheck the SMS opt-in.')
       return
     }
 
@@ -67,6 +85,8 @@ export function ContactForm(b: ContactFormProps) {
       }
       setState('success')
       form.reset()
+      setPhoneValue('')
+      setSmsConsent(false)
     } catch (err) {
       setState('error')
       setErrorMessage(err instanceof Error ? err.message : 'Something went wrong.')
@@ -177,9 +197,46 @@ export function ContactForm(b: ContactFormProps) {
             ) : null}
 
             <div>
+              <label htmlFor="cf-phone" className={labelCls}>Phone (optional)</label>
+              <input
+                id="cf-phone"
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                inputMode="tel"
+                className={inputCls}
+                placeholder="(555) 123-4567"
+                value={phoneValue}
+                onChange={(e) => setPhoneValue(e.target.value)}
+              />
+            </div>
+
+            <div>
               <label htmlFor="cf-message" className={labelCls}>What are you working on? *</label>
               <textarea id="cf-message" name="message" required minLength={10} maxLength={5000} rows={6} className={cn(inputCls, 'resize-y')} placeholder="A sentence or two about what you're building, plus any rough timeline or budget." />
             </div>
+
+            {phoneValue.trim() ? (
+              <label className="flex gap-3 items-start rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-4 cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="smsConsentUi"
+                  checked={smsConsent}
+                  onChange={(e) => setSmsConsent(e.target.checked)}
+                  className="mt-1 size-4 shrink-0 accent-[var(--color-brass)]"
+                />
+                <span className="text-[14px] leading-[1.5]">
+                  <span className="font-medium text-[var(--color-fg)]">{SMS_CHECKBOX_LABEL}</span>
+                  <span className="block mt-1.5 text-[12.5px] leading-[1.5] text-[var(--color-fg-muted)]">
+                    {SMS_DISCLAIMER_TEXT.replace('See our Privacy Policy.', '')}
+                    <Link href="/privacy" className="underline decoration-dotted underline-offset-2 hover:text-[var(--color-brass)]">
+                      See our Privacy Policy
+                    </Link>
+                    .
+                  </span>
+                </span>
+              </label>
+            ) : null}
 
             {/* Honeypot: invisible to humans, filled by bots. Label targets bots with a common field name. */}
             <div aria-hidden className="hidden" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>

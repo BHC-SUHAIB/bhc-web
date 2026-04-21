@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "bhc-web",
+      "name": "blackhartconsulting",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "/Users/mbpro/Desktop/BLACKHARTCONSULTING/BHC/BHC_WEB", "run", "dev"],
+      "runtimeArgs": ["--prefix", "/Users/mbpro/Desktop/Web Development/blackhartconsulting", "run", "dev"],
       "port": 3000
     }
   ]

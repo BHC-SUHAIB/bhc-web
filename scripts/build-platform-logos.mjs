@@ -2,19 +2,21 @@
  * Renders platform-specific PNG logos from the canonical SVG mark.
  * Add new platforms by appending to `PLATFORMS` at the bottom.
  *
- * Run from BHC_WEB directory:
+ * Run from the project directory:
  *   node scripts/build-platform-logos.mjs
  *
- * Outputs into ../BHC_BRAND/logos/final/ and BHC_WEB/public/brand/
+ * Outputs into ~/Desktop/Web Development/brand-kit/logos/final/
+ * and this project's public/brand/.
  */
 import sharp from 'sharp'
 import fs from 'node:fs'
 import path from 'node:path'
+import os from 'node:os'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
-const BRAND_DIR = path.resolve(ROOT, '../BHC_BRAND/logos/final')
+const BRAND_DIR = path.join(os.homedir(), 'Desktop/Web Development/brand-kit/logos/final')
 const PUBLIC_DIR = path.resolve(ROOT, 'public/brand')
 
 // Hart silhouette path — pulled once from the canonical primary mark.

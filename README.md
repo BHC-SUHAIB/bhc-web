@@ -2,7 +2,7 @@
 
 The marketing site + admin CMS for **Black Hart Consulting LLC**, built on Next.js 16, Payload CMS 3, and SQLite/Postgres. Deploys to DigitalOcean App Platform or any Node host.
 
-Companion to the brand kit at `../BHC_BRAND/`.
+Companion to the brand kit at `~/Desktop/Web Development/brand-kit/`.
 
 ---
 
@@ -56,8 +56,8 @@ On first boot, a default admin is seeded:
 ## Project structure
 
 ```
-BHC_WEB/
-├── public/brand/             # Logo SVGs (from BHC_BRAND/logos/final)
+blackhartconsulting/
+├── public/brand/             # Logo SVGs (from ~/Desktop/Web Development/brand-kit/logos/final)
 ├── src/
 │   ├── app/
 │   │   ├── (frontend)/       # Public routes + site shell
@@ -130,7 +130,7 @@ Colors in `src/app/globals.css` under `@theme`. The **Heritage** palette:
 | `--color-ivory` | `#EFE9D9` | Light |
 | `--color-brass` | `#B08D57` | Accent / CTA hover |
 
-Full rules in `../BHC_BRAND/guidelines/brand-guidelines.md`.
+Full rules in `~/Desktop/Web Development/brand-kit/guidelines/brand-guidelines.md`.
 
 ---
 

@@ -537,6 +537,121 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: prometheus-minds (FORCE_PM_UPSERT)')
     }
 
+    // --- WAYGFT (What Are You Grateful For Today?) media uploads ---
+    const wgtMediaHome = await ensureMedia(
+      'WAYGFT \u2014 homepage hero with rotating prompt and gradient pink palette',
+      'public/seed-assets/waygft/home.png',
+    )
+    const wgtMediaAbout = await ensureMedia(
+      'WAYGFT \u2014 about page explaining the soft-landing philosophy of the gratitude wall',
+      'public/seed-assets/waygft/about.png',
+    )
+    const wgtMediaSubmit = await ensureMedia(
+      'WAYGFT \u2014 submission form with four content types (quote, story, photo, video)',
+      'public/seed-assets/waygft/submit.png',
+    )
+    const wgtMediaLatest = await ensureMedia(
+      'WAYGFT \u2014 latest moments page showing the 3-column masonry wall with mixed media',
+      'public/seed-assets/waygft/latest.png',
+    )
+
+    // --- WAYGFT project (real client case study) ---
+    const waygftProject: any = {
+      title: 'WAYGFT \u2014 What Are You Grateful For Today?',
+      slug: 'waygft',
+      summary: 'A worldwide wall of anonymous gratitude \u2014 quotes, stories, photos, and videos, moderated by one human, delivered over a global CDN. Scaffolded, branded, and shipped to production in a single day.',
+      client: 'Kaiti (waygft)',
+      industry: 'Consumer / Community',
+      projectType: 'webapp',
+      year: 2026,
+      duration: '1 day (7 commits)',
+      teamSize: 1,
+      liveUrl: 'https://waygft.life',
+      ...(wgtMediaHome?.id ? { heroImage: wgtMediaHome.id } : {}),
+      stack: [
+        { name: 'Next.js 16 (App Router)', category: 'framework' },
+        { name: 'React 19', category: 'framework' },
+        { name: 'TypeScript', category: 'language' },
+        { name: 'Tailwind CSS v4', category: 'design' },
+        { name: 'Framer Motion', category: 'design' },
+        { name: 'Prisma', category: 'tool' },
+        { name: 'PostgreSQL', category: 'db' },
+        { name: 'DigitalOcean Spaces + CDN', category: 'hosting' },
+        { name: 'jose (JWT) + bcrypt', category: 'tool' },
+        { name: 'Zod', category: 'tool' },
+      ],
+      challenge: rtDoc([
+        ['p', 'Kaiti wanted to launch a worldwide wall of gratitude: anyone could anonymously share a quote, a story, a photo, or a video of something that made them smile. One human \u2014 her \u2014 would moderate every post with love before it appeared on the wall. The brand had to feel soft and personal, not like a SaaS product.'],
+        ['p', 'The constraints were real: every submission had to stay anonymous, but submitters needed rate-limiting so bad actors couldn\u2019t flood the queue. Photos and videos had to load fast globally without bloating the server. The admin side had to be simple enough that one person could run the whole moderation queue on a phone. And it had to go from idea to production in a weekend.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'Next.js 16 App Router with the new \u201Cproxy.ts\u201D'],
+        ['p', 'Built on the App Router to get streaming, ISR, and server-side rendering for the wall. Used Next 16\u2019s new `proxy.ts` (the successor to `middleware.ts`) to guard every /admin/* route with a JWT cookie check. The gratitude wall home page is statically rendered with ISR (60s revalidation); approving a post calls `revalidatePath(\'/\')` for instant publish.'],
+        ['h3', 'A schema that\u2019s smaller than it sounds'],
+        ['p', 'Prisma + Postgres. Two tables: `Post` (with enum fields for `PostType` \u2192 QUOTE/STORY/PHOTO/VIDEO and `PostStatus` \u2192 PENDING/APPROVED/REJECTED), and `Admin` (email + bcrypt hash + last-login timestamp). Two compound indexes on `(status, createdAt)` and `(status, approvedAt)` keep the moderation queue and the public wall snappy as the table grows.'],
+        ['h3', 'Privacy-first rate limiting'],
+        ['p', 'Six submissions per hour per IP \u2014 but the raw IP is never stored. Every submission hashes the IP with a salted SHA-256 before it touches the database. The rate limiter itself is an in-memory keyed store, so it resets on redeploy and never persists PII. Zod schemas validate every submission at the edge.'],
+        ['h3', 'Spaces + CDN for zero-drama media'],
+        ['p', 'Photos and videos upload directly to DigitalOcean Spaces via a signed S3 client (`@aws-sdk/client-s3`). Every object is served from the Spaces CDN edge, not the droplet \u2014 a 4 GB droplet can run this at scale without ever touching the media path. When an admin deletes a photo post, the object is deleted from Spaces too.'],
+        ['h3', 'A soft-landing brand'],
+        ['p', 'Three custom Google fonts layered together: Plus Jakarta Sans for body, Fraunces for serif headlines, Caveat for the script flourish. Pink/parchment palette with floating hearts animated by Framer Motion. A three-column autoscrolling wall that slows on hover. Duck emoji accents. A rotating-prompt hero that cycles through \u201Cmusic / pretty / that thing\u201D before the user finishes reading.'],
+        ['h3', 'An admin panel a non-engineer can actually run'],
+        ['p', 'Three tabs: Pending, Approved, Rejected. Each post renders inline (text, photo, or video), with approve/reject buttons and a delete confirmation. Settings page with a change-password flow. No build step, no CMS to learn \u2014 just a login and three tabs.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'Shipped in a single day. Seven commits from `create-next-app` to a moderated, multimedia, CDN-backed, mobile-ready production site live at waygft.life.'],
+        ['ul', [
+          'Public gratitude wall with 3-column autoscroll and opacity mask.',
+          'Four submission types: quote, story, photo, video \u2014 all moderated.',
+          '/latest paginated archive and per-post permalinks (/p/[id]) with social share.',
+          'Admin portal with pending/approved/rejected queues + change-password flow.',
+          'Rate limit: 6 submissions per hour per IP, stored as salted SHA-256 hashes.',
+          'Mobile-first nav and wall; reduced-motion respected.',
+          'Deployed to a $28/mo DO droplet + $5/mo Spaces bucket \u2014 ~$33/mo all-in.',
+        ]],
+        ['p', 'The brand landed in a way that matters: warm, soft, unmistakably not a product demo. The kind of site people actually want to submit to.'],
+      ]),
+      metrics: [
+        { value: '1 day', label: 'scaffold \u2192 production' },
+        { value: '4', label: 'submission types supported' },
+        { value: '100%', label: 'human-moderated posts' },
+        { value: '~$33/mo', label: 'all-in hosting cost' },
+      ],
+      gallery: [
+        ...(wgtMediaAbout?.id ? [{
+          image: wgtMediaAbout.id,
+          caption: 'The About page \u2014 a one-paragraph mission statement, framed to feel like a handwritten letter rather than a product page.',
+        }] : []),
+        ...(wgtMediaSubmit?.id ? [{
+          image: wgtMediaSubmit.id,
+          caption: 'Four submission types behind a single form: quote, story, photo, video. Optional signature, zero required PII.',
+        }] : []),
+        ...(wgtMediaLatest?.id ? [{
+          image: wgtMediaLatest.id,
+          caption: 'The /latest archive \u2014 a masonry wall with quotes, stories, and media posts interleaved, each one linkable and shareable.',
+        }] : []),
+      ],
+      featured: true,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingWAYGFT = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: waygftProject.slug } },
+      limit: 1,
+    })
+    if (existingWAYGFT.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: waygftProject })
+      payload.logger.info('[seed] project created: waygft')
+    } else if (process.env.FORCE_WAYGFT_UPSERT === 'true') {
+      await payload.update({
+        collection: 'projects',
+        id: existingWAYGFT.docs[0].id,
+        data: waygftProject,
+      })
+      payload.logger.info('[seed] project upserted: waygft (FORCE_WAYGFT_UPSERT)')
+    }
+
     // --- Sample articles ---
     const sampleArticles: any[] = [
       {

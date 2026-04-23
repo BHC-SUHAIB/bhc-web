@@ -390,6 +390,62 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       }
     }
 
+    // --- One-time aspect-ratio migration ---
+    // The first batch of seeded case-study screenshots were captured at
+    // 1440x900 (16:10), but the portfolio detail page's hero container is
+    // aspect-[16/9], so `object-cover` was clipping the top of each image.
+    // We recaptured everything at 1920x1080 (true 16:9) and rely on this
+    // migration to drop the legacy rows so the seed flow below recreates
+    // them at the correct aspect. Detection is pinned to the exact legacy
+    // dimensions so an owner's later custom upload won't trigger it; once
+    // the 16:10 rows are gone, this block is a no-op.
+    const aspectMigrationTargets: { projectSlug: string; alts: string[] }[] = [
+      {
+        projectSlug: 'prometheus-minds',
+        alts: [
+          'Prometheus Minds \u2014 new homepage hero (dark theme, gold CTA)',
+          'Prometheus Minds \u2014 legacy Squarespace homepage with all-caps headline',
+          'Prometheus Minds \u2014 new About page featuring Philip Parmar as founder',
+          'Prometheus Minds \u2014 new Neurodiverse Tutoring service page',
+          'Prometheus Minds \u2014 legacy Squarespace services page (wall-of-text caps)',
+        ],
+      },
+      {
+        projectSlug: 'waygft',
+        alts: [
+          'WAYGFT \u2014 homepage hero with rotating prompt and gradient pink palette',
+          'WAYGFT \u2014 about page explaining the soft-landing philosophy of the gratitude wall',
+          'WAYGFT \u2014 submission form with four content types (quote, story, photo, video)',
+          'WAYGFT \u2014 latest moments page showing the 3-column masonry wall with mixed media',
+        ],
+      },
+    ]
+    for (const { projectSlug, alts } of aspectMigrationTargets) {
+      let needsMigration = false
+      for (const alt of alts) {
+        const mediaRes = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
+        if (mediaRes.totalDocs > 0) {
+          const m = mediaRes.docs[0] as any
+          if (m.width === 1440 && m.height === 900) { needsMigration = true; break }
+        }
+      }
+      if (needsMigration) {
+        // Delete the project first so it doesn't dangle with stale heroImage/gallery refs.
+        const projRes = await payload.find({ collection: 'projects', where: { slug: { equals: projectSlug } }, limit: 1 })
+        if (projRes.totalDocs > 0) {
+          await payload.delete({ collection: 'projects', id: projRes.docs[0].id })
+          payload.logger.info(`[seed] aspect-ratio migration: removed ${projectSlug} project (will be recreated below)`)
+        }
+        for (const alt of alts) {
+          const mediaRes = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
+          if (mediaRes.totalDocs > 0) {
+            await payload.delete({ collection: 'media', id: mediaRes.docs[0].id })
+            payload.logger.info(`[seed] aspect-ratio migration: removed legacy 16:10 media "${alt.slice(0, 60)}..."`)
+          }
+        }
+      }
+    }
+
     // --- Media uploads for the Prometheus Minds case study ---
     const ensureMedia = async (alt: string, relPath: string) => {
       const existing = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })

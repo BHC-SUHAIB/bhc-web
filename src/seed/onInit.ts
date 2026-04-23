@@ -390,19 +390,27 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       }
     }
 
-    // --- One-time aspect-ratio migration ---
-    // The first batch of seeded case-study screenshots were captured at
-    // 1440x900 (16:10), but the portfolio detail page's hero container is
-    // aspect-[16/9], so `object-cover` was clipping the top of each image.
-    // We recaptured everything at 1920x1080 (true 16:9) and rely on this
-    // migration to drop the legacy rows so the seed flow below recreates
-    // them at the correct aspect. Detection is pinned to the exact legacy
-    // dimensions so an owner's later custom upload won't trigger it; once
-    // the 16:10 rows are gone, this block is a no-op.
-    const aspectMigrationTargets: { projectSlug: string; alts: string[] }[] = [
+    // --- One-time CDN-bust + aspect-ratio migration ---
+    // Two problems drove this migration:
+    //   1. The first seed uploaded screenshots at 1440x900 (16:10). The
+    //      portfolio detail page uses aspect-[16/9], so `object-cover` was
+    //      clipping the top of each hero image.
+    //   2. Recapturing at 1920x1080 and re-uploading under the same
+    //      filenames left the DO Spaces CDN serving the *cached* 1440x900
+    //      original at the edge (max-age=3600). The origin had the new
+    //      file, but Next/Image requests through the CDN were stale.
+    //
+    // Fix: rename the source files (new-home.png -> new-home-v2.png, etc)
+    // so uploads land on fresh CDN paths that can't be cache-hit, version
+    // the Media alt texts to "(v2)" so ensureMedia treats them as new
+    // documents, and delete any legacy v1 media + projects left over from
+    // the previous seeds. Detection: any project with the v1 slug that
+    // has v1-alt media attached triggers cleanup. Once gone, this block
+    // is a no-op on every future boot.
+    const v2MigrationTargets: { projectSlug: string; legacyAlts: string[] }[] = [
       {
         projectSlug: 'prometheus-minds',
-        alts: [
+        legacyAlts: [
           'Prometheus Minds \u2014 new homepage hero (dark theme, gold CTA)',
           'Prometheus Minds \u2014 legacy Squarespace homepage with all-caps headline',
           'Prometheus Minds \u2014 new About page featuring Philip Parmar as founder',
@@ -412,7 +420,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       },
       {
         projectSlug: 'waygft',
-        alts: [
+        legacyAlts: [
           'WAYGFT \u2014 homepage hero with rotating prompt and gradient pink palette',
           'WAYGFT \u2014 about page explaining the soft-landing philosophy of the gratitude wall',
           'WAYGFT \u2014 submission form with four content types (quote, story, photo, video)',
@@ -420,27 +428,24 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         ],
       },
     ]
-    for (const { projectSlug, alts } of aspectMigrationTargets) {
-      let needsMigration = false
-      for (const alt of alts) {
+    for (const { projectSlug, legacyAlts } of v2MigrationTargets) {
+      let anyLegacyMedia = false
+      for (const alt of legacyAlts) {
         const mediaRes = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
-        if (mediaRes.totalDocs > 0) {
-          const m = mediaRes.docs[0] as any
-          if (m.width === 1440 && m.height === 900) { needsMigration = true; break }
-        }
+        if (mediaRes.totalDocs > 0) { anyLegacyMedia = true; break }
       }
-      if (needsMigration) {
+      if (anyLegacyMedia) {
         // Delete the project first so it doesn't dangle with stale heroImage/gallery refs.
         const projRes = await payload.find({ collection: 'projects', where: { slug: { equals: projectSlug } }, limit: 1 })
         if (projRes.totalDocs > 0) {
           await payload.delete({ collection: 'projects', id: projRes.docs[0].id })
-          payload.logger.info(`[seed] aspect-ratio migration: removed ${projectSlug} project (will be recreated below)`)
+          payload.logger.info(`[seed] v2 migration: removed ${projectSlug} project (will be recreated below)`)
         }
-        for (const alt of alts) {
+        for (const alt of legacyAlts) {
           const mediaRes = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
           if (mediaRes.totalDocs > 0) {
             await payload.delete({ collection: 'media', id: mediaRes.docs[0].id })
-            payload.logger.info(`[seed] aspect-ratio migration: removed legacy 16:10 media "${alt.slice(0, 60)}..."`)
+            payload.logger.info(`[seed] v2 migration: removed legacy v1 media "${alt.slice(0, 60)}..."`)
           }
         }
       }
@@ -463,24 +468,24 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     const pmMediaNewHome = await ensureMedia(
-      'Prometheus Minds \u2014 new homepage hero (dark theme, gold CTA)',
-      'public/seed-assets/prometheus-minds/new-home.png',
+      'Prometheus Minds \u2014 new homepage hero v2 (dark theme, gold CTA)',
+      'public/seed-assets/prometheus-minds/new-home-v2.png',
     )
     const pmMediaOldHome = await ensureMedia(
-      'Prometheus Minds \u2014 legacy Squarespace homepage with all-caps headline',
-      'public/seed-assets/prometheus-minds/old-home.png',
+      'Prometheus Minds \u2014 legacy Squarespace homepage v2 (all-caps headline)',
+      'public/seed-assets/prometheus-minds/old-home-v2.png',
     )
     const pmMediaNewAbout = await ensureMedia(
-      'Prometheus Minds \u2014 new About page featuring Philip Parmar as founder',
-      'public/seed-assets/prometheus-minds/new-about.png',
+      'Prometheus Minds \u2014 new About page v2 (Philip Parmar as founder)',
+      'public/seed-assets/prometheus-minds/new-about-v2.png',
     )
     const pmMediaNewServices = await ensureMedia(
-      'Prometheus Minds \u2014 new Neurodiverse Tutoring service page',
-      'public/seed-assets/prometheus-minds/new-services.png',
+      'Prometheus Minds \u2014 new Neurodiverse Tutoring service page v2',
+      'public/seed-assets/prometheus-minds/new-services-v2.png',
     )
     const pmMediaOldServices = await ensureMedia(
-      'Prometheus Minds \u2014 legacy Squarespace services page (wall-of-text caps)',
-      'public/seed-assets/prometheus-minds/old-services.png',
+      'Prometheus Minds \u2014 legacy Squarespace services page v2 (wall-of-text caps)',
+      'public/seed-assets/prometheus-minds/old-services-v2.png',
     )
 
     // --- Prometheus Minds project (real client case study) ---
@@ -595,20 +600,20 @@ export async function seedOnInit(payload: Payload): Promise<void> {
 
     // --- WAYGFT (What Are You Grateful For Today?) media uploads ---
     const wgtMediaHome = await ensureMedia(
-      'WAYGFT \u2014 homepage hero with rotating prompt and gradient pink palette',
-      'public/seed-assets/waygft/home.png',
+      'WAYGFT \u2014 homepage hero v2 (rotating prompt and gradient pink palette)',
+      'public/seed-assets/waygft/home-v2.png',
     )
     const wgtMediaAbout = await ensureMedia(
-      'WAYGFT \u2014 about page explaining the soft-landing philosophy of the gratitude wall',
-      'public/seed-assets/waygft/about.png',
+      'WAYGFT \u2014 about page v2 (soft-landing philosophy of the gratitude wall)',
+      'public/seed-assets/waygft/about-v2.png',
     )
     const wgtMediaSubmit = await ensureMedia(
-      'WAYGFT \u2014 submission form with four content types (quote, story, photo, video)',
-      'public/seed-assets/waygft/submit.png',
+      'WAYGFT \u2014 submission form v2 (four content types: quote, story, photo, video)',
+      'public/seed-assets/waygft/submit-v2.png',
     )
     const wgtMediaLatest = await ensureMedia(
-      'WAYGFT \u2014 latest moments page showing the 3-column masonry wall with mixed media',
-      'public/seed-assets/waygft/latest.png',
+      'WAYGFT \u2014 latest moments page v2 (3-column masonry wall with mixed media)',
+      'public/seed-assets/waygft/latest-v2.png',
     )
 
     // --- WAYGFT project (real client case study) ---

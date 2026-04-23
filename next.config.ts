@@ -11,6 +11,27 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: dirname,
   },
+  // next/image requires allow-listed remote hosts. Payload returns absolute
+  // URLs for Media records based on the serverURL config, so we whitelist
+  // every origin the site may serve media from: local dev, the droplet IP,
+  // both production domains, and DigitalOcean Spaces + CDN endpoints.
+  //
+  // `unoptimized` is flipped on in development because Next.js's image
+  // optimizer refuses to fetch through private IPs (::1, 127.0.0.1) as SSRF
+  // protection. In production the Payload serverURL resolves to a public
+  // host (or the CDN), so the optimizer works normally.
+  images: {
+    unoptimized: process.env.NODE_ENV !== 'production',
+    remotePatterns: [
+      { protocol: 'http', hostname: 'localhost' },
+      { protocol: 'http', hostname: '127.0.0.1' },
+      { protocol: 'http', hostname: '104.131.82.31' },
+      { protocol: 'https', hostname: 'blackhartconsulting.com' },
+      { protocol: 'https', hostname: 'www.blackhartconsulting.com' },
+      { protocol: 'https', hostname: '**.digitaloceanspaces.com' },
+      { protocol: 'https', hostname: '**.cdn.digitaloceanspaces.com' },
+    ],
+  },
   // Payload's pushDevSchema dynamically requires drizzle-kit at runtime.
   // Turbopack's static analysis doesn't see this require, so drizzle-kit
   // (and its peer deps) aren't traced into the standalone output. Force

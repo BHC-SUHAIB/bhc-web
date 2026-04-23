@@ -444,6 +444,13 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           'WAYGFT \u2014 about page v2 (soft-landing philosophy of the gratitude wall)',
           'WAYGFT \u2014 submission form v2 (four content types: quote, story, photo, video)',
           'WAYGFT \u2014 latest moments page v2 (3-column masonry wall with mixed media)',
+          // v3 "latest" alt: superseded by v3b after a 90px white bar was found
+          // at the bottom (pink-to-white transition that my original brightness
+          // analysis missed because the jump was only ~13 gray-levels). Its
+          // presence here forces the waygft project + its legacy "latest"
+          // media to rebuild from v3b on next boot; the other v3 media
+          // (home/about/submit) are left alone and reused by alt-text match.
+          'WAYGFT \u2014 latest moments page v3 (3-column masonry wall with mixed media)',
         ],
       },
     ]
@@ -631,8 +638,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       'public/seed-assets/waygft/submit-v3.png',
     )
     const wgtMediaLatest = await ensureMedia(
-      'WAYGFT \u2014 latest moments page v3 (3-column masonry wall with mixed media)',
-      'public/seed-assets/waygft/latest-v3.png',
+      'WAYGFT \u2014 latest moments page v3b (3-column masonry wall, cropped bottom bar)',
+      'public/seed-assets/waygft/latest-v3b.png',
     )
 
     // --- WAYGFT project (real client case study) ---

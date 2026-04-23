@@ -390,45 +390,64 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       }
     }
 
-    // --- One-time CDN-bust + aspect-ratio migration ---
-    // Two problems drove this migration:
-    //   1. The first seed uploaded screenshots at 1440x900 (16:10). The
-    //      portfolio detail page uses aspect-[16/9], so `object-cover` was
-    //      clipping the top of each hero image.
-    //   2. Recapturing at 1920x1080 and re-uploading under the same
-    //      filenames left the DO Spaces CDN serving the *cached* 1440x900
-    //      original at the edge (max-age=3600). The origin had the new
-    //      file, but Next/Image requests through the CDN were stale.
+    // --- One-time migration: v1/v2 -> v3 (light-mode + no-bottom-bar) ---
+    // Earlier iterations had three problems:
+    //   1. v1 uploaded at 1440x900 (16:10) -> aspect-[16/9] clipped the top.
+    //   2. v2 re-uploaded 1920x1080 under the original filenames -> DO
+    //      Spaces CDN kept serving cached 16:10 originals at the edge.
+    //   3. v2 captured 1920x1080 full viewport -> every hero ran slightly
+    //      past the hero section, leaving a bottom bar (white for
+    //      Prometheus Minds' light mode, white for WAYGFT) showing the
+    //      start of the next section.
     //
-    // Fix: rename the source files (new-home.png -> new-home-v2.png, etc)
-    // so uploads land on fresh CDN paths that can't be cache-hit, version
-    // the Media alt texts to "(v2)" so ensureMedia treats them as new
-    // documents, and delete any legacy v1 media + projects left over from
-    // the previous seeds. Detection: any project with the v1 slug that
-    // has v1-alt media attached triggers cleanup. Once gone, this block
-    // is a no-op on every future boot.
-    const v2MigrationTargets: { projectSlug: string; legacyAlts: string[] }[] = [
+    // v3 fixes all three:
+    //   - `--force-prefers-color-scheme=light` so PM renders in light mode
+    //     to match visitors' OS preference.
+    //   - Per-page crop of the bottom bar (hero section only).
+    //   - Filenames suffixed `-v3.png` so uploads land on fresh CDN paths
+    //     that bypass the stale v1/v2 objects at the edge.
+    //   - Alt texts versioned with "v3" so ensureMedia treats them as
+    //     new documents.
+    //
+    // This migration detects any project carrying v1 OR v2 media (by any
+    // matching alt-text signature) and deletes the project + all of its
+    // case-study media. Normal seed below then recreates from v3 assets.
+    // Idempotent: once v1/v2 rows are gone, this block is a no-op.
+    const priorMigrationTargets: { projectSlug: string; legacyAlts: string[] }[] = [
       {
         projectSlug: 'prometheus-minds',
         legacyAlts: [
+          // v1 alts
           'Prometheus Minds \u2014 new homepage hero (dark theme, gold CTA)',
           'Prometheus Minds \u2014 legacy Squarespace homepage with all-caps headline',
           'Prometheus Minds \u2014 new About page featuring Philip Parmar as founder',
           'Prometheus Minds \u2014 new Neurodiverse Tutoring service page',
           'Prometheus Minds \u2014 legacy Squarespace services page (wall-of-text caps)',
+          // v2 alts
+          'Prometheus Minds \u2014 new homepage hero v2 (dark theme, gold CTA)',
+          'Prometheus Minds \u2014 legacy Squarespace homepage v2 (all-caps headline)',
+          'Prometheus Minds \u2014 new About page v2 (Philip Parmar as founder)',
+          'Prometheus Minds \u2014 new Neurodiverse Tutoring service page v2',
+          'Prometheus Minds \u2014 legacy Squarespace services page v2 (wall-of-text caps)',
         ],
       },
       {
         projectSlug: 'waygft',
         legacyAlts: [
+          // v1 alts
           'WAYGFT \u2014 homepage hero with rotating prompt and gradient pink palette',
           'WAYGFT \u2014 about page explaining the soft-landing philosophy of the gratitude wall',
           'WAYGFT \u2014 submission form with four content types (quote, story, photo, video)',
           'WAYGFT \u2014 latest moments page showing the 3-column masonry wall with mixed media',
+          // v2 alts
+          'WAYGFT \u2014 homepage hero v2 (rotating prompt and gradient pink palette)',
+          'WAYGFT \u2014 about page v2 (soft-landing philosophy of the gratitude wall)',
+          'WAYGFT \u2014 submission form v2 (four content types: quote, story, photo, video)',
+          'WAYGFT \u2014 latest moments page v2 (3-column masonry wall with mixed media)',
         ],
       },
     ]
-    for (const { projectSlug, legacyAlts } of v2MigrationTargets) {
+    for (const { projectSlug, legacyAlts } of priorMigrationTargets) {
       let anyLegacyMedia = false
       for (const alt of legacyAlts) {
         const mediaRes = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
@@ -439,13 +458,13 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         const projRes = await payload.find({ collection: 'projects', where: { slug: { equals: projectSlug } }, limit: 1 })
         if (projRes.totalDocs > 0) {
           await payload.delete({ collection: 'projects', id: projRes.docs[0].id })
-          payload.logger.info(`[seed] v2 migration: removed ${projectSlug} project (will be recreated below)`)
+          payload.logger.info(`[seed] v3 migration: removed ${projectSlug} project (will be recreated below)`)
         }
         for (const alt of legacyAlts) {
           const mediaRes = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
           if (mediaRes.totalDocs > 0) {
             await payload.delete({ collection: 'media', id: mediaRes.docs[0].id })
-            payload.logger.info(`[seed] v2 migration: removed legacy v1 media "${alt.slice(0, 60)}..."`)
+            payload.logger.info(`[seed] v3 migration: removed legacy media "${alt.slice(0, 60)}..."`)
           }
         }
       }
@@ -468,24 +487,24 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     const pmMediaNewHome = await ensureMedia(
-      'Prometheus Minds \u2014 new homepage hero v2 (dark theme, gold CTA)',
-      'public/seed-assets/prometheus-minds/new-home-v2.png',
+      'Prometheus Minds \u2014 new homepage hero v3 (light-mode capture)',
+      'public/seed-assets/prometheus-minds/new-home-v3.png',
     )
     const pmMediaOldHome = await ensureMedia(
-      'Prometheus Minds \u2014 legacy Squarespace homepage v2 (all-caps headline)',
-      'public/seed-assets/prometheus-minds/old-home-v2.png',
+      'Prometheus Minds \u2014 legacy Squarespace homepage v3 (all-caps headline)',
+      'public/seed-assets/prometheus-minds/old-home-v3.png',
     )
     const pmMediaNewAbout = await ensureMedia(
-      'Prometheus Minds \u2014 new About page v2 (Philip Parmar as founder)',
-      'public/seed-assets/prometheus-minds/new-about-v2.png',
+      'Prometheus Minds \u2014 new About page v3 (Philip Parmar as founder)',
+      'public/seed-assets/prometheus-minds/new-about-v3.png',
     )
     const pmMediaNewServices = await ensureMedia(
-      'Prometheus Minds \u2014 new Neurodiverse Tutoring service page v2',
-      'public/seed-assets/prometheus-minds/new-services-v2.png',
+      'Prometheus Minds \u2014 new Neurodiverse Tutoring service page v3',
+      'public/seed-assets/prometheus-minds/new-services-v3.png',
     )
     const pmMediaOldServices = await ensureMedia(
-      'Prometheus Minds \u2014 legacy Squarespace services page v2 (wall-of-text caps)',
-      'public/seed-assets/prometheus-minds/old-services-v2.png',
+      'Prometheus Minds \u2014 legacy Squarespace services page v3 (wall-of-text caps)',
+      'public/seed-assets/prometheus-minds/old-services-v3.png',
     )
 
     // --- Prometheus Minds project (real client case study) ---
@@ -600,20 +619,20 @@ export async function seedOnInit(payload: Payload): Promise<void> {
 
     // --- WAYGFT (What Are You Grateful For Today?) media uploads ---
     const wgtMediaHome = await ensureMedia(
-      'WAYGFT \u2014 homepage hero v2 (rotating prompt and gradient pink palette)',
-      'public/seed-assets/waygft/home-v2.png',
+      'WAYGFT \u2014 homepage hero v3 (rotating prompt, pink palette)',
+      'public/seed-assets/waygft/home-v3.png',
     )
     const wgtMediaAbout = await ensureMedia(
-      'WAYGFT \u2014 about page v2 (soft-landing philosophy of the gratitude wall)',
-      'public/seed-assets/waygft/about-v2.png',
+      'WAYGFT \u2014 about page v3 (soft-landing philosophy of the gratitude wall)',
+      'public/seed-assets/waygft/about-v3.png',
     )
     const wgtMediaSubmit = await ensureMedia(
-      'WAYGFT \u2014 submission form v2 (four content types: quote, story, photo, video)',
-      'public/seed-assets/waygft/submit-v2.png',
+      'WAYGFT \u2014 submission form v3 (four content types: quote, story, photo, video)',
+      'public/seed-assets/waygft/submit-v3.png',
     )
     const wgtMediaLatest = await ensureMedia(
-      'WAYGFT \u2014 latest moments page v2 (3-column masonry wall with mixed media)',
-      'public/seed-assets/waygft/latest-v2.png',
+      'WAYGFT \u2014 latest moments page v3 (3-column masonry wall with mixed media)',
+      'public/seed-assets/waygft/latest-v3.png',
     )
 
     // --- WAYGFT project (real client case study) ---

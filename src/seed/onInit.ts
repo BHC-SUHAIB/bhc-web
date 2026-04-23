@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* Seed initial content via Payload's onInit hook. Runs once on server boot; idempotent (updates instead of duplicates). */
+import path from 'node:path'
 import type { Payload } from 'payload'
 import { pushDevSchema } from '@payloadcms/drizzle'
 
@@ -258,9 +259,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           mode: 'latest', limit: 3, viewAllLabel: 'View all projects', viewAllHref: '/portfolio' },
         pricingBlock,
         { blockType: 'testimonials', eyebrow: 'Clients', headline: 'What they said after launch.', items: [
-          { quote: 'Six weeks from brief to production. The site loads faster than our old one even loaded its splash screen. Our bounce rate dropped 34% in the first month.', author: 'Sarah Chen', role: 'Head of Marketing', company: 'Northlake Consulting' },
-          { quote: 'They actually explained the trade-offs in plain language. We understood why we were picking Next.js over WordPress, not just that we were.', author: 'Marcus Oduya', role: 'Founder & CEO', company: 'Cairn Analytics' },
-          { quote: 'Best SEO engagement we\u2019ve run. Everything was measurable. Organic traffic is up 140% six months in, and we can point to the exact changes that moved it.', author: 'Rachel Donovan', role: 'Marketing Director', company: 'Edgewater Law' },
+          { quote: "We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.", author: 'Grace R.', role: 'Parent', company: 'Prometheus Minds (Google review)' },
         ] },
         { blockType: 'faq', eyebrow: 'Questions', headline: 'Common questions we get.', items: [
           { question: 'Do you work with clients outside your region?', answer: 'Yes. Most of our clients are remote. We\u2019ve shipped projects across North America, the UK, and Australia. Time zones are rarely an issue.' },
@@ -351,76 +350,191 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     const existingServices = await payload.find({ collection: 'pages', where: { slug: { equals: 'services' } }, limit: 1 })
     if (existingServices.totalDocs === 0) { await payload.create({ collection: 'pages', data: servicesData }); payload.logger.info('[seed] services page created') }
 
-    // --- Sample projects ---
-    const sampleProjects: any[] = [
-      { title: 'Northlake Consulting', slug: 'northlake-consulting',
-        summary: 'A 12-year-old Drupal site, rebuilt on Next.js. Load time dropped from 8s to 0.9s. Organic traffic up 140% in six months.',
-        client: 'Northlake Consulting', industry: 'Professional services', projectType: 'website',
-        year: 2025, duration: '7 weeks', teamSize: 3, liveUrl: 'https://northlake.example.com',
-        stack: [
-          { name: 'Next.js', category: 'framework' }, { name: 'TypeScript', category: 'language' },
-          { name: 'Payload CMS', category: 'cms' }, { name: 'Postgres', category: 'db' },
-          { name: 'DigitalOcean', category: 'hosting' }, { name: 'Tailwind CSS', category: 'design' },
-        ],
-        challenge: rt('Northlake\u2019s existing site was a 12-year-old Drupal 7 install on shared hosting. It took 8 seconds to load on 3G, ranked on page 4 for its primary keyword, and the marketing team couldn\u2019t edit it without filing a developer ticket.'),
-        approach: rt('We rebuilt on Next.js with Payload CMS for content management. Chose Postgres over MongoDB for transactional integrity and familiarity with the client\u2019s existing data team. Migrated all 400 existing blog posts with 301 redirects on every URL to preserve link equity. Shipped a block-based CMS so marketing can build and edit pages without us.'),
-        outcome: rt('Load time: 8.1s \u2192 0.9s. Organic sessions: +140% in the first six months. Conversion rate from organic traffic: +62%. The marketing team now publishes without tickets \u2014 we track on average 2.3 edits per week by their team.'),
-        metrics: [
-          { value: '0.9s', label: 'First-load time (was 8.1s)' },
-          { value: '+140%', label: 'Organic traffic, 6 months' },
-          { value: '+62%', label: 'Conversion from organic' },
-          { value: '100%', label: 'URL preservation' },
-        ],
-        testimonial: { quote: 'They actually explained the trade-offs in plain language. We understood why we were picking Next.js over WordPress, not just that we were.', author: 'Sarah Chen', role: 'Head of Marketing, Northlake Consulting' },
-        featured: true, publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString(),
-      },
-      { title: 'Cairn Analytics dashboard', slug: 'cairn-analytics',
-        summary: 'An internal data dashboard rebuilt from scratch. React + server-side rendering cut initial load from 12 seconds to under 1.',
-        client: 'Cairn Analytics', industry: 'Data / SaaS', projectType: 'webapp',
-        year: 2025, duration: '10 weeks', teamSize: 4, liveUrl: 'https://app.cairn.example.com',
-        stack: [
-          { name: 'Next.js', category: 'framework' }, { name: 'TypeScript', category: 'language' },
-          { name: 'tRPC', category: 'framework' }, { name: 'Postgres + Supabase', category: 'db' },
-          { name: 'Vercel', category: 'hosting' }, { name: 'shadcn/ui', category: 'design' },
-        ],
-        challenge: rt('Cairn\u2019s existing dashboard was a client-side React SPA that fetched 40MB of JSON on page load. Users were quitting the tab before the first chart rendered.'),
-        approach: rt('We rebuilt on Next.js with the App Router, moving the data-heavy work to the server. Used tRPC for type-safe API calls between server and client. Introduced incremental loading and virtualized tables for the long data views. Picked Supabase for auth and database to avoid operational overhead on a small team.'),
-        outcome: rt('Initial page load: 12s \u2192 0.8s. Time-to-first-chart: 4.5s \u2192 1.1s. Daily active users (who previously churned during load): +45%.'),
-        metrics: [
-          { value: '0.8s', label: 'Initial load (was 12s)' },
-          { value: '+45%', label: 'Daily active users' },
-          { value: '0', label: 'Errors in first month' },
-        ],
-        testimonial: { quote: 'Six weeks from brief to production. The site loads faster than our old one even loaded its splash screen.', author: 'Marcus Oduya', role: 'Founder, Cairn Analytics' },
-        featured: true, publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 40).toISOString(),
-      },
-      { title: 'Edgewater Law SEO engagement', slug: 'edgewater-law-seo',
-        summary: 'Six months of technical SEO work for a mid-sized law firm. Organic traffic up 140%. Ranked for their target practice area in-region.',
-        client: 'Edgewater Law', industry: 'Legal', projectType: 'seo',
-        year: 2024, duration: '6 months (ongoing)', teamSize: 2,
-        stack: [
-          { name: 'Screaming Frog', category: 'tool' }, { name: 'Ahrefs', category: 'tool' },
-          { name: 'Schema.org structured data', category: 'tool' }, { name: 'WordPress', category: 'cms' },
-        ],
-        challenge: rt('Edgewater had a clean WordPress site but was invisible on Google. They\u2019d never done SEO beyond installing Yoast.'),
-        approach: rt('We started with a full technical audit \u2014 Screaming Frog crawl, Core Web Vitals, indexability. Built a topic cluster strategy around their four practice areas. Rewrote meta titles and descriptions, added schema.org Attorney and LegalService markup.'),
-        outcome: rt('Organic traffic: +140% in six months. Ranked #1 locally for their primary practice area keyword. Phone inquiries from the website: +180%.'),
-        metrics: [
-          { value: '+140%', label: 'Organic traffic' },
-          { value: '#1', label: 'Local ranking' },
-          { value: '+180%', label: 'Inbound inquiries' },
-        ],
-        testimonial: { quote: 'Best SEO engagement we\u2019ve run. Everything was measurable.', author: 'Rachel Donovan', role: 'Marketing Director, Edgewater Law' },
-        featured: true, publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 90).toISOString(),
-      },
-    ]
-
-    for (const proj of sampleProjects) {
-      const existing = await payload.find({ collection: 'projects', where: { slug: { equals: proj.slug } }, limit: 1 })
-      if (existing.totalDocs === 0) {
-        await payload.create({ collection: 'projects', data: proj })
-        payload.logger.info(`[seed] project created: ${proj.slug}`)
+    // --- Legacy sample-project cleanup ---
+    // The original seed shipped three fabricated sample projects (Northlake
+    // Consulting, Cairn Analytics, Edgewater Law SEO) to give the portfolio
+    // page something to render. Those have been replaced by real client work
+    // below, so any lingering legacy rows get deleted here. Idempotent: once
+    // the rows are gone, subsequent boots find nothing to delete.
+    const legacySlugs = ['northlake-consulting', 'cairn-analytics', 'edgewater-law-seo']
+    for (const slug of legacySlugs) {
+      const legacy = await payload.find({ collection: 'projects', where: { slug: { equals: slug } }, limit: 1 })
+      if (legacy.totalDocs > 0) {
+        await payload.delete({ collection: 'projects', id: legacy.docs[0].id })
+        payload.logger.info(`[seed] legacy project removed: ${slug}`)
       }
+    }
+
+    // Also migrate the home page testimonials block if it still carries the
+    // legacy fabricated quotes. We detect by author signature (all three of
+    // Sarah Chen / Marcus Oduya / Rachel Donovan present) to avoid clobbering
+    // any testimonials the site owner has edited in the admin UI.
+    const homeDoc = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1 })
+    if (homeDoc.totalDocs > 0) {
+      const layout = ((homeDoc.docs[0] as any).layout || []) as any[]
+      const tIdx = layout.findIndex((b) => b?.blockType === 'testimonials')
+      if (tIdx !== -1) {
+        const authors = new Set<string>((layout[tIdx].items || []).map((i: any) => i?.author || ''))
+        const isLegacy = ['Sarah Chen', 'Marcus Oduya', 'Rachel Donovan'].every((a) => authors.has(a))
+        if (isLegacy) {
+          layout[tIdx] = {
+            ...layout[tIdx],
+            items: [{
+              quote: 'We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.',
+              author: 'Grace R.', role: 'Parent', company: 'Prometheus Minds (Google review)',
+            }],
+          }
+          await payload.update({ collection: 'pages', id: homeDoc.docs[0].id, data: { layout } as any })
+          payload.logger.info('[seed] home testimonials migrated: legacy \u2192 Prometheus Minds client quote')
+        }
+      }
+    }
+
+    // --- Media uploads for the Prometheus Minds case study ---
+    const ensureMedia = async (alt: string, relPath: string) => {
+      const existing = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
+      if (existing.totalDocs > 0) return existing.docs[0]
+      try {
+        return await payload.create({
+          collection: 'media',
+          data: { alt } as any,
+          filePath: path.resolve(process.cwd(), relPath),
+        })
+      } catch (err) {
+        payload.logger.warn({ err, relPath }, '[seed] media upload failed (continuing without image)')
+        return null
+      }
+    }
+
+    const pmMediaNewHome = await ensureMedia(
+      'Prometheus Minds \u2014 new homepage hero (dark theme, gold CTA)',
+      'public/seed-assets/prometheus-minds/new-home.png',
+    )
+    const pmMediaOldHome = await ensureMedia(
+      'Prometheus Minds \u2014 legacy Squarespace homepage with all-caps headline',
+      'public/seed-assets/prometheus-minds/old-home.png',
+    )
+    const pmMediaNewAbout = await ensureMedia(
+      'Prometheus Minds \u2014 new About page featuring Philip Parmar as founder',
+      'public/seed-assets/prometheus-minds/new-about.png',
+    )
+    const pmMediaNewServices = await ensureMedia(
+      'Prometheus Minds \u2014 new Neurodiverse Tutoring service page',
+      'public/seed-assets/prometheus-minds/new-services.png',
+    )
+    const pmMediaOldServices = await ensureMedia(
+      'Prometheus Minds \u2014 legacy Squarespace services page (wall-of-text caps)',
+      'public/seed-assets/prometheus-minds/old-services.png',
+    )
+
+    // --- Prometheus Minds project (real client case study) ---
+    const prometheusProject: any = {
+      title: 'Prometheus Minds',
+      slug: 'prometheus-minds',
+      summary: 'Squarespace \u2192 custom Vite/React rebuild for an ADHD tutoring practice in the Twin Cities. New brand, block-based CMS with 27 content types, scheduled publishing, and a performance budget \u2014 shipped in 56 commits over 5 days.',
+      client: 'Prometheus Minds',
+      industry: 'Education / Neurodiverse tutoring',
+      projectType: 'website',
+      year: 2026,
+      duration: '5 days (56 commits)',
+      teamSize: 1,
+      liveUrl: 'https://www.prometheusminds.com',
+      ...(pmMediaNewHome?.id ? { heroImage: pmMediaNewHome.id } : {}),
+      stack: [
+        { name: 'React 19', category: 'framework' },
+        { name: 'Vite 8', category: 'tool' },
+        { name: 'React Router 7', category: 'framework' },
+        { name: 'Tailwind CSS', category: 'design' },
+        { name: 'Express 4', category: 'framework' },
+        { name: 'SQLite', category: 'db' },
+        { name: 'JWT + bcrypt', category: 'tool' },
+        { name: 'Resend (transactional email)', category: 'tool' },
+        { name: 'DigitalOcean', category: 'hosting' },
+      ],
+      challenge: rtDoc([
+        ['p', 'Prometheus Minds had outgrown its Squarespace template. The existing site ran Squarespace 7.1 \u2014 all-caps headlines locked in by the theme, generic stock-photo layouts, and a content editor that couldn\u2019t keep pace with the practice: scheduled posts, structured service pages with per-tier pricing, a real blog, a newsletter.'],
+        ['p', 'The performance ceiling was the platform itself. Squarespace shipped 20+ vendor scripts on every page load \u2014 reCAPTCHA, CSS runtime, component definitions, universal performance bundle \u2014 with no way to trim the bundle or preload the LCP hero. Each paid monthly dollar bought less and less control.'],
+        ['p', 'The ask: a fully custom site the practice could actually run. Their own brand, their own CMS, their own hosting, and a publishing cadence that didn\u2019t require a Squarespace editor.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'A mid-build pivot: tutor portal \u2192 CMS-only'],
+        ['p', 'The original scope included a tutor portal for post-session notes and a parent login. A week in, we pivoted: Prometheus Minds already uses TutorBird for scheduling, billing, and parent communication. A second portal would have duplicated work and confused parents. We dropped ~1,200 lines of portal code and rerouted "Portal Login" to TutorBird. That time went into a services CMS and newsletter backend instead.'],
+        ['h3', 'Block-based CMS with 27 content types'],
+        ['p', 'Every public page is composed from blocks \u2014 Hero, FeatureGrid, PricingCards, Testimonials, ImageText, NumberedSteps, InlineContact, ServiceAreaBanner, and more. Philip can drag blocks into any order on any page, autosaving as he works. Each block has its own schema and its own React renderer, so the design and the CMS can never drift.'],
+        ['h3', 'Three tiers of polish'],
+        ['ul', [
+          'Tier 1 \u2014 fundamentals: dynamic sitemap, robots.txt, alt-text validation, WCAG AA contrast, silent admin fetches, dark-background auth pages.',
+          'Tier 2 \u2014 UX: drag-and-drop block reorder with auto-save, duplicate block/page, required-image warning, per-post SEO meta, error boundaries per route.',
+          'Tier 3 \u2014 advanced: RSS feed, scheduled publishing for pages and blog posts, live preview, page versioning, image focal-point editor.',
+        ]],
+        ['h3', 'A real performance budget'],
+        ['p', 'WebP logo, preload LCP hero image with matching fetchpriority, inline critical CSS, lazy-loaded admin portals and auth routes, responsive srcSets with Squarespace-CDN resize params for blog covers, and preconnect to image hosts. First paint ships <200KB of JS \u2014 down from the 1MB+ Squarespace sent on every page.'],
+        ['h3', 'Auth with Resend-based password reset'],
+        ['p', 'HMAC-signed reset tokens with a one-hour expiry, delivered through Resend for transactional email. JWT plus bcrypt for the admin session. No plaintext passwords, no reset links that live forever, and no third-party auth platform to depend on.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'Shipped in five working days \u2014 56 commits from initial scaffold to production-ready, spanning Apr 17\u201322, 2026. Full design refresh, verbatim content restoration from the old site for SEO parity, and a CMS the owner actually runs.'],
+        ['ul', [
+          'Typography rebuilt around Plus Jakarta Sans + a custom gold/parchment/ink design system (old site: Squarespace template, all-caps headlines).',
+          'Home page rebuilt with 12 sections, strict image/solid section rhythm, photo backgrounds chosen by the owner.',
+          'Four dedicated service pages (Neurodiverse Tutoring, 6-Week ADHD Reset, Online Tutoring, About) \u2014 each fully block-composed.',
+          'Blog system with per-post SEO, responsive cover images via CDN params, and a dynamic RSS feed.',
+          'Contact form with three placements site-wide, an admin inbox, and rate-limiting. Three-field inquiry routing: service, budget, notes.',
+          'Newsletter signup with admin-side subscriber list export.',
+          'Mobile sticky CTA, custom-eased smooth scroll, respect for prefers-reduced-motion.',
+        ]],
+        ['p', 'The site now runs on a $12/month DigitalOcean droplet instead of Squarespace\u2019s $36/month Business plan \u2014 and the practice owns the stack, the content, and the roadmap.'],
+      ]),
+      metrics: [
+        { value: '56', label: 'commits shipped in 5 days' },
+        { value: '27', label: 'block types in the CMS' },
+        { value: '<200KB', label: 'first-paint JS (was ~1MB)' },
+        { value: '$24/mo', label: 'saved vs. Squarespace' },
+      ],
+      gallery: [
+        ...(pmMediaOldHome?.id ? [{
+          image: pmMediaOldHome.id,
+          caption: 'Before \u2014 the original Squarespace homepage: all-caps headline, generic template hero, 1MB+ JS on every page.',
+        }] : []),
+        ...(pmMediaNewServices?.id ? [{
+          image: pmMediaNewServices.id,
+          caption: 'After \u2014 Neurodiverse Tutoring service page, one of four block-composed service pages with tier-specific pricing.',
+        }] : []),
+        ...(pmMediaNewAbout?.id ? [{
+          image: pmMediaNewAbout.id,
+          caption: 'The new About page introduces Philip Parmar as founder, leaning into the brand story rather than stock photography.',
+        }] : []),
+        ...(pmMediaOldServices?.id ? [{
+          image: pmMediaOldServices.id,
+          caption: 'Before \u2014 the old Services page: wall of all-caps copy, no visual hierarchy, no per-service imagery.',
+        }] : []),
+      ],
+      testimonial: {
+        quote: 'We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.',
+        author: 'Grace R.',
+        role: 'Parent, Prometheus Minds (Google review)',
+      },
+      featured: true,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingPM = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: prometheusProject.slug } },
+      limit: 1,
+    })
+    if (existingPM.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: prometheusProject })
+      payload.logger.info('[seed] project created: prometheus-minds')
+    } else if (process.env.FORCE_PM_UPSERT === 'true') {
+      // Opt-in refresh: re-runs overwrite the project's content when explicitly
+      // requested (used during local iteration on the case-study copy).
+      await payload.update({
+        collection: 'projects',
+        id: existingPM.docs[0].id,
+        data: prometheusProject,
+      })
+      payload.logger.info('[seed] project upserted: prometheus-minds (FORCE_PM_UPSERT)')
     }
 
     // --- Sample articles ---

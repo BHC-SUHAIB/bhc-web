@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'SMS consent',
   description:
-    'Opt in to receive text messages from Black Hart Consulting — appointment confirmations, consulting call scheduling, service updates, and occasional promotions.',
+    'Opt in to receive customer-care text messages from Black Hart Consulting — replies to your contact-form inquiry and confirmations of consulting calls you request.',
   robots: { index: true, follow: true },
 }
 
@@ -32,9 +32,10 @@ export default async function SmsConsentPage() {
             Opt in to text messages.
           </h1>
           <p className="mt-6 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">
-            We send a small number of texts — appointment confirmations, scheduling
-            follow-ups, and the occasional service update. No marketing blast,
-            no shared lists. You can opt out any time by replying STOP.
+            We send a small number of one-to-one texts tied to your active
+            inquiry — replies to your contact-form submission and confirmations
+            of consulting calls you request. No marketing, no promotions, no
+            shared lists. You can opt out any time by replying STOP.
           </p>
         </div>
 
@@ -46,9 +47,9 @@ export default async function SmsConsentPage() {
               What you&rsquo;ll receive
             </h2>
             <ul className="space-y-1.5">
-              <li>&middot; Appointment and consulting-call confirmations</li>
-              <li>&middot; One-to-one follow-ups to your contact-form inquiries</li>
-              <li>&middot; Occasional service updates and promotions</li>
+              <li>&middot; One-to-one replies to your contact-form inquiry</li>
+              <li>&middot; Confirmations of consulting calls you request</li>
+              <li>&middot; No marketing, promotional, or bulk messages</li>
             </ul>
             <p className="mt-3">Up to 10 messages per month. Message &amp; data rates may apply.</p>
           </div>
@@ -80,6 +81,10 @@ export default async function SmsConsentPage() {
 
         <p className="mt-10 text-[13px] text-[var(--color-fg-muted)]">
           By opting in you agree to our{' '}
+          <Link href="/sms-terms" className="underline decoration-dotted underline-offset-2 hover:text-[var(--color-brass)]">
+            SMS Terms
+          </Link>
+          {' '}and{' '}
           <Link href="/privacy" className="underline decoration-dotted underline-offset-2 hover:text-[var(--color-brass)]">
             Privacy Policy
           </Link>

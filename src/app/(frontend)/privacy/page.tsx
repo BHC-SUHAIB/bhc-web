@@ -90,9 +90,11 @@ export default async function PrivacyPolicyPage() {
             <ul>
               <li>To reply to your inquiries and do the work you&rsquo;ve engaged us for.</li>
               <li>
-                To send you text messages that you opted in to receive &mdash;
-                appointment confirmations, scheduling follow-ups, service
-                updates, and occasional promotions, up to 10 per month.
+                To send you customer-care text messages that you opted in to
+                receive &mdash; one-to-one replies to your contact-form
+                inquiry and confirmations of consulting calls you request, up
+                to 10 per month. We do not send marketing, promotional, or
+                bulk messages.
               </li>
               <li>To keep the site secure and operating correctly.</li>
               <li>To comply with legal obligations (tax, A2P 10DLC carrier records).</li>

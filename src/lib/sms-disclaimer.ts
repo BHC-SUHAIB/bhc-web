@@ -11,10 +11,11 @@
 export const SMS_DISCLAIMER_TEXT =
   'I confirm the phone number above belongs to me and not someone else, ' +
   'and I consent to receive recurring text messages from Black Hart Consulting ' +
-  '(appointment confirmations, consulting-call scheduling, service updates, and ' +
-  'occasional promotions). Message frequency: up to 10 per month. Message and ' +
-  'data rates may apply. Reply STOP to unsubscribe, HELP for help. Consent is ' +
-  'not a condition of purchase. See our Privacy Policy.'
+  'for customer care related to my inquiry — replies to my contact-form ' +
+  'submission and confirmations of consulting calls I have requested. ' +
+  'Message frequency: up to 10 per month. Message and data rates may apply. ' +
+  'Reply STOP to unsubscribe, HELP for help. Consent is not a condition of ' +
+  'purchase. See our SMS Terms and Privacy Policy.'
 
 export const SMS_CHECKBOX_LABEL =
   'I agree to receive text messages from Black Hart Consulting'

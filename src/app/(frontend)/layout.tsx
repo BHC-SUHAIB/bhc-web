@@ -17,11 +17,6 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'Black Hart Consulting',
   },
-  icons: {
-    icon: [
-      { url: '/brand/black-hart-icon.svg', type: 'image/svg+xml' },
-    ],
-  },
 }
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {

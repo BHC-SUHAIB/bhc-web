@@ -34,12 +34,16 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
     <>
       <header className="sticky top-0 z-40 backdrop-blur-lg bg-[color-mix(in_srgb,var(--color-bg)_82%,transparent)] border-b border-[var(--color-border)]">
         <Container size="xl" className="flex items-center justify-between gap-6 py-4">
-          <Link href="/" className="flex items-center gap-3 shrink-0">
+          <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="Black Hart Consulting home">
             <Logo variant="primary" height={36} className="text-[var(--color-fg)]" />
-            <span className="hidden sm:block font-serif text-[18px] font-semibold tracking-[-0.015em]">
-              Black Hart
+            <span className="flex flex-col leading-none">
+              <span className="font-serif text-[16px] sm:text-[18px] font-semibold tracking-[-0.015em]">
+                Black Hart
+              </span>
+              <span className="mt-1 font-mono text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)]">
+                Consulting
+              </span>
             </span>
-            <span className="sr-only">Consulting home</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-7" aria-label="Primary">

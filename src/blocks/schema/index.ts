@@ -106,12 +106,12 @@ export const Testimonials: Block = {
   fields: [
     { name: 'eyebrow', type: 'text' },
     { name: 'headline', type: 'text' },
-    { name: 'items', type: 'array', minRows: 1, fields: [
-      { name: 'quote', type: 'textarea', required: true },
-      { name: 'author', type: 'text', required: true },
-      { name: 'role', type: 'text' },
-      { name: 'company', type: 'text' },
+    { name: 'mode', type: 'select', defaultValue: 'latest', options: [
+      { label: 'Auto (latest featured)', value: 'latest' },
+      { label: 'Manual selection', value: 'manual' },
     ] },
+    { name: 'limit', type: 'number', defaultValue: 3, min: 1, max: 12, admin: { condition: (_, s: { mode?: string }) => s.mode === 'latest', description: 'How many featured testimonials to show.' } },
+    { name: 'testimonials', type: 'relationship', relationTo: 'testimonials' as const, hasMany: true, admin: { condition: (_, s: { mode?: string }) => s.mode === 'manual', description: 'Pick specific testimonials in the order they should appear.' } },
   ],
 }
 

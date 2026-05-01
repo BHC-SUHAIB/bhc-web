@@ -22,10 +22,9 @@ const PHONE_HREF = 'tel:+18664349777'
 const EMAIL_DISPLAY = 'hello@blackhartconsulting.com'
 const EMAIL_HREF = 'mailto:hello@blackhartconsulting.com'
 
-// Calendly URL — placeholder until the user finishes account setup.
-// Update this string once the live booking page exists; tracking already
-// fires on click via TrackedLink.
-const CALENDLY_URL = 'https://calendly.com/blackhartconsulting/discovery-call'
+// Live Calendly booking page. Confirmation redirects to
+// /lp/express-website/booked, which fires booking_completed.
+const CALENDLY_URL = 'https://calendly.com/suhaib-blackhartconsulting/discovery-call'
 
 const includedExpress = [
   'One conversion-focused page, fully custom-styled to your brand',

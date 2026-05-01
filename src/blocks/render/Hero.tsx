@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { Container } from '@/components/Container'
-import { Button } from '@/components/Button'
 import { Placeholder } from '@/components/Placeholder'
+import { HeroCta } from './HeroCta'
 import type { HeroBlock, Media } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
@@ -38,9 +38,7 @@ export function Hero(b: HeroBlock) {
                 align === 'center' && !hasImage && 'justify-center',
               )}>
                 {b.ctas.map((c, i) => (
-                  <Button key={i} href={c.href} variant={c.variant ?? 'primary'} size="lg">
-                    {c.label}
-                  </Button>
+                  <HeroCta key={i} href={c.href} label={c.label} variant={c.variant ?? null} position={i + 1} />
                 ))}
               </div>
             ) : null}

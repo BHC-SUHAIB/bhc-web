@@ -8,6 +8,7 @@ import { Button } from '@/components/Button'
 import { cn } from '@/lib/utils'
 import { phoneHref, mailtoHref } from '@/lib/contact'
 import { SMS_DISCLAIMER_TEXT, SMS_CHECKBOX_LABEL } from '@/lib/sms-disclaimer'
+import { pushEvent } from '@/lib/analytics'
 import type { ContactFormBlockBlock } from '@/payload-types'
 
 type State = 'idle' | 'submitting' | 'success' | 'error'
@@ -84,6 +85,15 @@ export function ContactForm(b: ContactFormProps) {
         throw new Error(msg)
       }
       setState('success')
+      // Primary Google Ads conversion. Uses GA4's recommended event name so
+      // GTM can route it without a custom mapping. Project type / budget
+      // are sent as event params so audience segmentation works downstream.
+      pushEvent('generate_lead', {
+        source_page: typeof window !== 'undefined' ? window.location.pathname : '',
+        project_type: payload.projectType || 'unspecified',
+        budget_range: payload.budgetRange || 'unspecified',
+        currency: 'USD',
+      })
       form.reset()
       setPhoneValue('')
       setSmsConsent(false)
@@ -112,13 +122,21 @@ export function ContactForm(b: ContactFormProps) {
           {(contactEmail && emailHref) || (contactPhone && phoneHrefVal) ? (
             <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-[15px]">
               {contactEmail && emailHref ? (
-                <a href={emailHref} className="inline-flex items-center gap-2.5 text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors">
+                <a
+                  href={emailHref}
+                  onClick={() => pushEvent('email_click', { source_page: typeof window !== 'undefined' ? window.location.pathname : '', location: 'contact_form' })}
+                  className="inline-flex items-center gap-2.5 text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
+                >
                   <Mail className="size-4" aria-hidden />
                   <span>{contactEmail}</span>
                 </a>
               ) : null}
               {contactPhone && phoneHrefVal ? (
-                <a href={phoneHrefVal} className="inline-flex items-center gap-2.5 font-mono tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors">
+                <a
+                  href={phoneHrefVal}
+                  onClick={() => pushEvent('phone_click', { source_page: typeof window !== 'undefined' ? window.location.pathname : '', location: 'contact_form' })}
+                  className="inline-flex items-center gap-2.5 font-mono tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
+                >
                   <Phone className="size-4" aria-hidden />
                   <span>{contactPhone}</span>
                 </a>

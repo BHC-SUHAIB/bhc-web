@@ -1,7 +1,7 @@
 import { Container } from '@/components/Container'
-import { Button } from '@/components/Button'
 import { Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { PricingCta } from './PricingCta'
 import type { PricingBlock } from '@/payload-types'
 
 /* Map an eyebrow label like "Care plans" → "care-plans" so footer/nav anchors
@@ -85,9 +85,13 @@ export function Pricing(b: PricingBlock) {
                 ))}
               </ul>
               {t.cta?.label && t.cta?.href ? (
-                <Button href={t.cta.href} variant={t.highlighted ? 'brass' : 'secondary'} className="w-full" size="lg">
-                  {t.cta.label}
-                </Button>
+                <PricingCta
+                  href={t.cta.href}
+                  label={t.cta.label}
+                  tierName={t.name ?? ''}
+                  blockEyebrow={b.eyebrow ?? ''}
+                  highlighted={!!t.highlighted}
+                />
               ) : null}
             </div>
           ))}

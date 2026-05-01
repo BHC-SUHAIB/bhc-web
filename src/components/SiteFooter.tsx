@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Container } from './Container'
 import { Logo } from './Logo'
+import { TrackedLink } from './TrackedLink'
 import { phoneHref, mailtoHref } from '@/lib/contact'
 import type { Footer as FooterGlobal, SiteSetting } from '@/payload-types'
 
@@ -38,16 +39,26 @@ export function SiteFooter({ footer, siteSettings }: FooterProps) {
             <ul className="mt-6 space-y-2 text-[14px]">
               {email && emailHref ? (
                 <li>
-                  <a href={emailHref} className="hover:text-[var(--color-brass)] transition-colors">
+                  <TrackedLink
+                    href={emailHref}
+                    trackEvent="email_click"
+                    trackLocation="footer"
+                    className="hover:text-[var(--color-brass)] transition-colors"
+                  >
                     {email}
-                  </a>
+                  </TrackedLink>
                 </li>
               ) : null}
               {phone && phoneHrefVal ? (
                 <li>
-                  <a href={phoneHrefVal} className="font-mono tracking-[0.02em] hover:text-[var(--color-brass)] transition-colors">
+                  <TrackedLink
+                    href={phoneHrefVal}
+                    trackEvent="phone_click"
+                    trackLocation="footer"
+                    className="font-mono tracking-[0.02em] hover:text-[var(--color-brass)] transition-colors"
+                  >
                     {phone}
-                  </a>
+                  </TrackedLink>
                 </li>
               ) : null}
             </ul>

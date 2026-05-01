@@ -16,7 +16,8 @@ type EventName =
   | 'email_click'          // mailto: link clicked
   | 'pricing_cta_click'    // Click on a pricing tier CTA
   | 'hero_cta_click'       // Click on a hero CTA
-  | 'booking_click'        // Click on Cal.com / Calendly link
+  | 'booking_click'        // Click on Cal.com / Calendly link (intent signal)
+  | 'booking_completed'    // Calendly redirect-back fired this — they actually booked
 
 type EventParams = {
   /** Page or section the event fired from. */

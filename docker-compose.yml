@@ -47,6 +47,19 @@ services:
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       EMAIL_FROM: ${EMAIL_FROM:-}
       CONTACT_NOTIFY_EMAIL: ${CONTACT_NOTIFY_EMAIL:-}
+      # Seed control. SEED_ON_BOOT=false skips seeding entirely; the FORCE_*
+      # flags are one-shot migration switches that re-upsert specific content
+      # from src/seed/onInit.ts when set to "true" in .env. After landing the
+      # new content, REMOVE the flags from .env and recreate the container so
+      # admin-UI edits become the source of truth again.
+      SEED_ON_BOOT: ${SEED_ON_BOOT:-true}
+      FORCE_HOME_UPSERT: ${FORCE_HOME_UPSERT:-}
+      FORCE_ABOUT_UPSERT: ${FORCE_ABOUT_UPSERT:-}
+      FORCE_SERVICES_UPSERT: ${FORCE_SERVICES_UPSERT:-}
+      FORCE_CONTACT_UPSERT: ${FORCE_CONTACT_UPSERT:-}
+      FORCE_ARTICLES_UPSERT: ${FORCE_ARTICLES_UPSERT:-}
+      FORCE_PM_UPSERT: ${FORCE_PM_UPSERT:-}
+      FORCE_WAYGFT_UPSERT: ${FORCE_WAYGFT_UPSERT:-}
     volumes:
       - media:/app/media
 

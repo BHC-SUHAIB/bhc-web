@@ -13,6 +13,7 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Projects } from './collections/Projects'
 import { Articles } from './collections/Articles'
+import { Testimonials } from './collections/Testimonials'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { SmsConsents } from './collections/SmsConsents'
 import { Header } from './globals/Header'
@@ -103,7 +104,15 @@ export default buildConfig({
     meta: {
       titleSuffix: ' \u00b7 Black Hart CMS',
     },
-    components: {},
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
+    components: {
+      graphics: {
+        Logo: '/components/admin/Logo#default',
+        Icon: '/components/admin/Icon#default',
+      },
+    },
   },
 
   editor: lexicalEditor({}),
@@ -123,7 +132,7 @@ export default buildConfig({
 
   onInit: seedOnInit,
 
-  collections: [Users, Media, Pages, Projects, Articles, ContactSubmissions, SmsConsents],
+  collections: [Users, Media, Pages, Projects, Articles, Testimonials, ContactSubmissions, SmsConsents],
   globals: [Header, Footer, SiteSettings],
 
   plugins,
@@ -135,6 +144,22 @@ export default buildConfig({
         // Safe at this stage (no real data yet). For established sites, flip
         // to false and run `payload migrate:create` / `payload migrate` in CI.
         push: true,
+        // Drizzle's schema-push prompts on stdin when it can't decide
+        // whether a new table is a rename of an old one (e.g. the
+        // `testimonials` collection vs the dropped
+        // `pages_blocks_testimonials_items` block-array table). With no
+        // TTY in the production container the prompt hangs the boot
+        // forever. Drop the legacy block-array tables here, before
+        // schema-push runs, so push has no rename ambiguity. Idempotent
+        // — DROP TABLE IF EXISTS is a no-op once the tables are gone.
+        beforeSchemaInit: [
+          async ({ adapter, schema }) => {
+            await adapter.drizzle.execute(
+              'DROP TABLE IF EXISTS pages_blocks_testimonials_items CASCADE; DROP TABLE IF EXISTS _pages_v_blocks_testimonials_items CASCADE;',
+            )
+            return schema
+          },
+        ],
       })
     : sqliteAdapter({ client: { url: dbUri } }),
 

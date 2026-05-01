@@ -459,11 +459,12 @@ async function run() {
   }
 
   // Sample testimonials — populate the new Testimonials collection so the
-  // home page block (mode: 'latest') has something to render.
+  // home page block (mode: 'latest') has something to render. Quotes are
+  // wrapped via rt(...) since the field is now richText (lexical).
   const sampleTestimonials: any[] = [
-    { quote: 'Six weeks from brief to production. The site loads faster than our old one even loaded its splash screen. Our bounce rate dropped 34% in the first month.', author: 'Sarah Chen', role: 'Head of Marketing', company: 'Northlake Consulting', featured: true, sortOrder: 10 },
-    { quote: 'They actually explained the trade-offs in plain language. We understood why we were picking Next.js over WordPress, not just that we were.', author: 'Marcus Oduya', role: 'Founder & CEO', company: 'Cairn Analytics', featured: true, sortOrder: 20 },
-    { quote: 'Best SEO engagement we’ve run. Everything was measurable. Organic traffic is up 140% six months in, and we can point to the exact changes that moved it.', author: 'Rachel Donovan', role: 'Marketing Director', company: 'Edgewater Law', featured: true, sortOrder: 30 },
+    { quote: rt('Six weeks from brief to production. The site loads faster than our old one even loaded its splash screen. Our bounce rate dropped 34% in the first month.'), author: 'Sarah Chen', role: 'Head of Marketing', company: 'Northlake Consulting', featured: true, sortOrder: 10 },
+    { quote: rt('They actually explained the trade-offs in plain language. We understood why we were picking Next.js over WordPress, not just that we were.'), author: 'Marcus Oduya', role: 'Founder & CEO', company: 'Cairn Analytics', featured: true, sortOrder: 20 },
+    { quote: rt('Best SEO engagement we’ve run. Everything was measurable. Organic traffic is up 140% six months in, and we can point to the exact changes that moved it.'), author: 'Rachel Donovan', role: 'Marketing Director', company: 'Edgewater Law', featured: true, sortOrder: 30 },
   ]
   for (const t of sampleTestimonials) {
     const existing = await payload.find({

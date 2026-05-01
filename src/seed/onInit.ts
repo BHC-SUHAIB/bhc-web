@@ -544,6 +544,22 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         featured: true,
         sortOrder: 10,
       },
+      {
+        // Multi-paragraph quote \u2014 \n\n triggers a paragraph break in
+        // the public renderer, single \n becomes a soft line break.
+        quote: [
+          'Black Hart Consulting completely transformed my website from the ground up, and I couldn\u2019t be more impressed with the result. They rebuilt everything from scratch, adding multiple pages and features that have significantly improved how my business presents itself to the public. The site now feels professional, polished, and truly aligned with the level of service I provide.',
+          'Since launching the new site, I\u2019ve noticed a clear difference in how clients engage with my business. Parents are coming in with a better understanding of what we offer, which has made conversations smoother and helped with conversions.',
+          'They didn\u2019t just design a website, they built something functional and strategic. From the structure of the pages to the overall user experience, everything was clearly thought through with the business in mind.',
+          'Beyond the quality of their work, their team was incredibly easy to work with. They were responsive, communicative, and made the entire process smooth from start to finish. I always felt confident that things were moving in the right direction.',
+          'I\u2019d highly recommend Black Hart Consulting to any business owner looking for more than just a good-looking website. They build platforms that actually help your business grow.',
+        ].join('\n\n'),
+        author: 'Philip Parmar',
+        role: 'Founder',
+        company: 'Prometheus Minds',
+        featured: true,
+        sortOrder: 20,
+      },
     ]
     for (const t of seedTestimonials) {
       const existing = await payload.find({

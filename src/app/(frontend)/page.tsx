@@ -13,7 +13,7 @@ const localBusinessJsonLd = {
   '@type': 'ProfessionalService',
   name: 'Black Hart Consulting',
   description: 'Custom websites, SEO, and managed hosting from a Houston-based digital studio.',
-  url: 'https://www.blackhartconsulting.com',
+  url: 'https://blackhartconsulting.com',
   telephone: '+1-866-434-9777',
   email: 'hello@blackhartconsulting.com',
   address: {

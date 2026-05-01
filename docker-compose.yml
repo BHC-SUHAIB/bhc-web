@@ -19,6 +19,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        # Baked into the client bundle by `next build` — must be a build arg,
+        # not a runtime env var, or the GTM snippet will render empty.
+        NEXT_PUBLIC_GTM_ID: ${NEXT_PUBLIC_GTM_ID:-}
     container_name: bhc-web
     restart: unless-stopped
     depends_on:
@@ -31,6 +35,9 @@ services:
       DATABASE_URI: postgres://${POSTGRES_USER:-bhc}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-bhc}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost}
+      # Mirrored at runtime for SSR consistency. Build-time arg above is the
+      # one Next actually inlines into the bundle.
+      NEXT_PUBLIC_GTM_ID: ${NEXT_PUBLIC_GTM_ID:-}
       SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@blackhartconsulting.com}
       SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-changeme123!}
       # S3-compatible media storage (DigitalOcean Spaces). When all four are
@@ -47,6 +54,19 @@ services:
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       EMAIL_FROM: ${EMAIL_FROM:-}
       CONTACT_NOTIFY_EMAIL: ${CONTACT_NOTIFY_EMAIL:-}
+      # Seed control. SEED_ON_BOOT=false skips seeding entirely; the FORCE_*
+      # flags are one-shot migration switches that re-upsert specific content
+      # from src/seed/onInit.ts when set to "true" in .env. After landing the
+      # new content, REMOVE the flags from .env and recreate the container so
+      # admin-UI edits become the source of truth again.
+      SEED_ON_BOOT: ${SEED_ON_BOOT:-true}
+      FORCE_HOME_UPSERT: ${FORCE_HOME_UPSERT:-}
+      FORCE_ABOUT_UPSERT: ${FORCE_ABOUT_UPSERT:-}
+      FORCE_SERVICES_UPSERT: ${FORCE_SERVICES_UPSERT:-}
+      FORCE_CONTACT_UPSERT: ${FORCE_CONTACT_UPSERT:-}
+      FORCE_ARTICLES_UPSERT: ${FORCE_ARTICLES_UPSERT:-}
+      FORCE_PM_UPSERT: ${FORCE_PM_UPSERT:-}
+      FORCE_WAYGFT_UPSERT: ${FORCE_WAYGFT_UPSERT:-}
     volumes:
       - media:/app/media
 

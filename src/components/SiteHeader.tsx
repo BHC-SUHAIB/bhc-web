@@ -8,6 +8,7 @@ import { Logo } from './Logo'
 import { Button } from './Button'
 import { Menu, X, Phone } from 'lucide-react'
 import { phoneHref } from '@/lib/contact'
+import { pushEvent } from '@/lib/analytics'
 import type { Header as HeaderGlobal, SiteSetting } from '@/payload-types'
 
 type HeaderProps = { header: HeaderGlobal | null; siteSettings: SiteSetting | null }
@@ -64,6 +65,7 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
             {phoneDisplay && phoneHrefVal ? (
               <a
                 href={phoneHrefVal}
+                onClick={() => pushEvent('phone_click', { source_page: pathname, location: 'header' })}
                 className="hidden lg:inline-flex items-center gap-2 font-mono text-[13px] tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
               >
                 <Phone className="size-3.5" aria-hidden />
@@ -121,7 +123,10 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
             {phoneDisplay && phoneHrefVal ? (
               <a
                 href={phoneHrefVal}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  pushEvent('phone_click', { source_page: pathname, location: 'mobile_menu' })
+                  setOpen(false)
+                }}
                 className="mt-6 inline-flex items-center gap-3 font-mono text-[14px] tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
               >
                 <Phone className="size-4" aria-hidden />

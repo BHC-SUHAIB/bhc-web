@@ -18,6 +18,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# NEXT_PUBLIC_* values are inlined into the client bundle by `next build`,
+# so they must be present at build time, not just runtime. docker-compose
+# passes these in via `args`, which become ARGs here, which then promote
+# to ENV so Next picks them up.
+ARG NEXT_PUBLIC_GTM_ID
+ENV NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}
 # Persist Next.js / Turbopack compilation cache across builds. The
 # `.next/cache` directory is where Turbopack memoises its module graph
 # and webpack module outputs; mounting it as a BuildKit cache cuts warm

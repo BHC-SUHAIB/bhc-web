@@ -56,19 +56,25 @@ const button = cva(
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof button> & { href?: string; openInNewTab?: boolean }
 
-export function Button({ className, variant, size, href, openInNewTab, children, ...props }: ButtonProps) {
+export function Button({ className, variant, size, href, openInNewTab, children, onClick, ...props }: ButtonProps) {
   if (href) {
     const isExternal = /^https?:\/\//.test(href)
     const target = openInNewTab || isExternal ? '_blank' : undefined
     const rel = target === '_blank' ? 'noopener noreferrer' : undefined
     return (
-      <Link href={href} target={target} rel={rel} className={cn(button({ variant, size }), className)}>
+      <Link
+        href={href}
+        target={target}
+        rel={rel}
+        className={cn(button({ variant, size }), className)}
+        onClick={onClick as unknown as React.MouseEventHandler<HTMLAnchorElement> | undefined}
+      >
         {children}
       </Link>
     )
   }
   return (
-    <button className={cn(button({ variant, size }), className)} {...props}>
+    <button className={cn(button({ variant, size }), className)} onClick={onClick} {...props}>
       {children}
     </button>
   )

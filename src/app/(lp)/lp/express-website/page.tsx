@@ -154,8 +154,6 @@ export default function ExpressWebsiteLp() {
                 href={CALENDLY_URL}
                 trackEvent="booking_click"
                 trackLocation="lp_hero"
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 h-[56px] px-7 text-[16px] font-medium rounded-full bg-[var(--color-brass)] text-[var(--color-ink)] hover:bg-[var(--color-brass-dark)] hover:text-[var(--color-ivory)] transition-colors active:translate-y-[1px]"
               >
                 Book a 15-min call
@@ -340,8 +338,6 @@ export default function ExpressWebsiteLp() {
                   href={CALENDLY_URL}
                   trackEvent="booking_click"
                   trackLocation="lp_form_intro"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="underline decoration-dotted underline-offset-2 hover:text-[var(--color-brass)] transition-colors"
                 >
                   open here
@@ -407,8 +403,6 @@ export default function ExpressWebsiteLp() {
               href={CALENDLY_URL}
               trackEvent="booking_click"
               trackLocation="lp_final_cta"
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 h-[52px] px-7 text-[15.5px] font-medium rounded-full bg-[var(--color-brass)] text-[var(--color-ink)] hover:bg-[var(--color-brass-dark)] hover:text-[var(--color-ivory)] transition-colors active:translate-y-[1px]"
             >
               Book a 15-min call

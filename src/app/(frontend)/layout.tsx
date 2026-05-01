@@ -6,6 +6,13 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { getCachedHeader, getCachedFooter, getCachedSiteSettings } from '@/lib/payload-cache'
 import '../globals.css'
 
+// Search engine ownership verification. Tokens come from each console's
+// "verify by HTML tag" flow. Stored as env vars so we don't commit them
+// (low secrecy, but no upside to leaking them either). Tokens are tied to
+// the domain — rotating the value un-verifies the property in that console.
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
@@ -17,6 +24,12 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'Black Hart Consulting',
+  },
+  verification: {
+    ...(googleSiteVerification ? { google: googleSiteVerification } : {}),
+    ...(bingSiteVerification
+      ? { other: { 'msvalidate.01': bingSiteVerification } }
+      : {}),
   },
 }
 

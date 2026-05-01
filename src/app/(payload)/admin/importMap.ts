@@ -31,7 +31,6 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_0 } from '@pay
 import { S3ClientUploadHandler as S3ClientUploadHandler_0 } from '@payloadcms/storage-s3/client'
 import AdminIcon_0 from '@/components/admin/Icon'
 import AdminLogo_0 from '@/components/admin/Logo'
-import RatingField_0 from '@/components/admin/RatingField'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -62,5 +61,4 @@ export const importMap = {
   '@payloadcms/storage-s3/client#S3ClientUploadHandler': S3ClientUploadHandler_0,
   '/components/admin/Icon#default': AdminIcon_0,
   '/components/admin/Logo#default': AdminLogo_0,
-  '/components/admin/RatingField#default': RatingField_0,
 }

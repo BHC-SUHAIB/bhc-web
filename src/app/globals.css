@@ -90,11 +90,6 @@ body {
 
 h1, h2, h3, h4, h5, h6 { letter-spacing: -0.02em; line-height: 1.1; }
 
-/* Multi-paragraph testimonial quotes: render with deliberate spacing
-   between paragraphs so Philip-style multi-paragraph reviews don't
-   collapse into one wall of text. */
-.testimonial-quote p + p { margin-top: 1em; }
-
 /* Link color rule is scoped — it applies only to prose content, NOT every anchor.
    Buttons, nav items, and cards handle their own colors. This prevents the global
    rule from overriding Tailwind text color utilities on <a>-based buttons. */

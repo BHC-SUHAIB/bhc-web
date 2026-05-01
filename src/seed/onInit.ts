@@ -530,35 +530,19 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     // --- Testimonials collection seed -------------------------------------
-    // Testimonials are now their own collection (admin can add/edit/remove)
-    // and the Testimonials block on any page pulls from it. The `quote`
-    // field is richText (lexical), so each seed builds a paragraph doc
-    // via rtDoc. Idempotent: matched by author + company so the admin can
-    // edit the body without it getting clobbered on next boot.
+    // Testimonials are now their own collection (admin can add/edit/remove),
+    // and the Testimonials block on any page pulls from it. Seed the existing
+    // Grace R. quote so a fresh install has at least one entry. Idempotent:
+    // matched by author + company so the admin can edit the body without it
+    // getting clobbered on next boot.
     const seedTestimonials: any[] = [
       {
-        quote: rtDoc([
-          ['p', 'We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.'],
-        ]),
+        quote: 'We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.',
         author: 'Grace R.',
         role: 'Parent',
         company: 'Prometheus Minds (Google review)',
         featured: true,
         sortOrder: 10,
-      },
-      {
-        quote: rtDoc([
-          ['p', 'Black Hart Consulting completely transformed my website from the ground up, and I couldn\u2019t be more impressed with the result. They rebuilt everything from scratch, adding multiple pages and features that have significantly improved how my business presents itself to the public. The site now feels professional, polished, and truly aligned with the level of service I provide.'],
-          ['p', 'Since launching the new site, I\u2019ve noticed a clear difference in how clients engage with my business. Parents are coming in with a better understanding of what we offer, which has made conversations smoother and helped with conversions.'],
-          ['p', 'They didn\u2019t just design a website, they built something functional and strategic. From the structure of the pages to the overall user experience, everything was clearly thought through with the business in mind.'],
-          ['p', 'Beyond the quality of their work, their team was incredibly easy to work with. They were responsive, communicative, and made the entire process smooth from start to finish. I always felt confident that things were moving in the right direction.'],
-          ['p', 'I\u2019d highly recommend Black Hart Consulting to any business owner looking for more than just a good-looking website. They build platforms that actually help your business grow.'],
-        ]),
-        author: 'Philip Parmar',
-        role: 'Founder',
-        company: 'Prometheus Minds',
-        featured: true,
-        sortOrder: 20,
       },
     ]
     for (const t of seedTestimonials) {
@@ -570,55 +554,6 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       if (existing.totalDocs === 0) {
         await payload.create({ collection: 'testimonials', data: t })
         payload.logger.info(`[seed] testimonial created: ${t.author} \u00b7 ${t.company}`)
-      }
-    }
-
-    // --- One-shot migration: Testimonials.quote (text -> richText) -------
-    // The `quote` column moved from a plain textarea to a lexical richText
-    // doc. Drizzle can't ALTER text -> jsonb in place (no implicit cast),
-    // so before this code lands the operator renames the column on the
-    // droplet:
-    //
-    //   docker exec bhc-postgres psql -U bhc -d bhc -c \
-    //     "ALTER TABLE testimonials RENAME COLUMN quote TO quote_legacy_text;"
-    //
-    // Drizzle's push then sees no `quote` column and creates a fresh
-    // jsonb one. This block runs on the next boot, walks every row, and
-    // copies the legacy string into a one-paragraph lexical doc. After
-    // every row is migrated, the legacy column is dropped so subsequent
-    // boots are no-ops. Idempotent throughout: skips rows whose quote is
-    // already populated, skips entirely once the legacy column is gone.
-    if ((payload.db as any)?.name === 'postgres') {
-      try {
-        const drizzle = (payload.db as any).drizzle
-        const colCheck = await drizzle.execute(
-          "SELECT 1 FROM information_schema.columns WHERE table_name = 'testimonials' AND column_name = 'quote_legacy_text';",
-        )
-        if (colCheck?.rows?.length) {
-          const legacyRows = await drizzle.execute(
-            "SELECT id, quote_legacy_text FROM testimonials WHERE quote_legacy_text IS NOT NULL;",
-          )
-          for (const row of legacyRows?.rows ?? []) {
-            const id = (row as any).id
-            const text = (row as any).quote_legacy_text as string
-            const existing = await payload.findByID({ collection: 'testimonials', id }).catch(() => null)
-            const hasQuote = existing?.quote && typeof existing.quote === 'object' && (existing.quote as any).root
-            if (!hasQuote && text) {
-              const paragraphs = text.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)
-              const blocks: RTBlock[] = (paragraphs.length ? paragraphs : [text]).map((p) => ['p', p])
-              await payload.update({
-                collection: 'testimonials',
-                id,
-                data: { quote: rtDoc(blocks) } as any,
-              })
-              payload.logger.info(`[seed] testimonial.quote migrated to richText: id=${id}`)
-            }
-          }
-          await drizzle.execute('ALTER TABLE testimonials DROP COLUMN quote_legacy_text;')
-          payload.logger.info('[seed] testimonials.quote_legacy_text dropped (migration complete)')
-        }
-      } catch (err) {
-        payload.logger.warn({ err }, '[seed] testimonials.quote migration failed (non-fatal)')
       }
     }
 

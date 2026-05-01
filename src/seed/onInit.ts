@@ -362,7 +362,9 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         websitesPricingBlock,
         carePricingBlock,
         seoPricingBlock,
-        { blockType: 'testimonials', eyebrow: 'Clients', headline: 'What they said after launch.', mode: 'latest', limit: 3 },
+        { blockType: 'testimonials', eyebrow: 'Clients', headline: 'What they said after launch.', items: [
+          { quote: "We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.", author: 'Grace R.', role: 'Parent', company: 'Prometheus Minds (Google review)' },
+        ] },
         { blockType: 'faq', eyebrow: 'Questions', headline: 'Common questions we get.', items: [
           { question: 'Do you work with clients outside your region?', answer: 'Yes. Most of our clients are remote, and time zones are rarely an issue.' },
           { question: 'Do you use AI in your workflow?', answer: 'Yes \u2014 explicitly. Modern AI tooling is part of how we ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision we deliver. You\u2019re not paying for AI to do your work; you\u2019re paying for senior consulting that uses AI to do more of it, in less time.' },
@@ -529,56 +531,27 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       }
     }
 
-    // --- Testimonials collection seed -------------------------------------
-    // Testimonials are now their own collection (admin can add/edit/remove),
-    // and the Testimonials block on any page pulls from it. Seed the existing
-    // Grace R. quote so a fresh install has at least one entry. Idempotent:
-    // matched by author + company so the admin can edit the body without it
-    // getting clobbered on next boot.
-    const seedTestimonials: any[] = [
-      {
-        quote: 'We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.',
-        author: 'Grace R.',
-        role: 'Parent',
-        company: 'Prometheus Minds (Google review)',
-        featured: true,
-        sortOrder: 10,
-      },
-    ]
-    for (const t of seedTestimonials) {
-      const existing = await payload.find({
-        collection: 'testimonials',
-        where: { and: [{ author: { equals: t.author } }, { company: { equals: t.company } }] },
-        limit: 1,
-      })
-      if (existing.totalDocs === 0) {
-        await payload.create({ collection: 'testimonials', data: t })
-        payload.logger.info(`[seed] testimonial created: ${t.author} \u00b7 ${t.company}`)
-      }
-    }
-
-    // Migrate any home page testimonials block still carrying inline `items`
-    // (the pre-collection schema) onto the new collection-backed mode. We
-    // only touch blocks that have inline items + no `mode` set, so admin
-    // edits in the new shape are preserved.
+    // Also migrate the home page testimonials block if it still carries the
+    // legacy fabricated quotes. We detect by author signature (all three of
+    // Sarah Chen / Marcus Oduya / Rachel Donovan present) to avoid clobbering
+    // any testimonials the site owner has edited in the admin UI.
     const homeDoc = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1 })
     if (homeDoc.totalDocs > 0) {
       const layout = ((homeDoc.docs[0] as any).layout || []) as any[]
       const tIdx = layout.findIndex((b) => b?.blockType === 'testimonials')
       if (tIdx !== -1) {
-        const block = layout[tIdx]
-        const hasLegacyItems = Array.isArray(block?.items) && block.items.length > 0
-        const alreadyMigrated = typeof block?.mode === 'string'
-        if (hasLegacyItems && !alreadyMigrated) {
+        const authors = new Set<string>((layout[tIdx].items || []).map((i: any) => i?.author || ''))
+        const isLegacy = ['Sarah Chen', 'Marcus Oduya', 'Rachel Donovan'].every((a) => authors.has(a))
+        if (isLegacy) {
           layout[tIdx] = {
-            blockType: 'testimonials',
-            eyebrow: block.eyebrow ?? 'Clients',
-            headline: block.headline ?? 'What they said after launch.',
-            mode: 'latest',
-            limit: 3,
+            ...layout[tIdx],
+            items: [{
+              quote: 'We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.',
+              author: 'Grace R.', role: 'Parent', company: 'Prometheus Minds (Google review)',
+            }],
           }
           await payload.update({ collection: 'pages', id: homeDoc.docs[0].id, data: { layout } as any })
-          payload.logger.info('[seed] home testimonials block migrated to collection-backed mode')
+          payload.logger.info('[seed] home testimonials migrated: legacy \u2192 Prometheus Minds client quote')
         }
       }
     }

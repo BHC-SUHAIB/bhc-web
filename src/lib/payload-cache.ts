@@ -17,7 +17,7 @@
  */
 import { unstable_cache } from 'next/cache'
 import { getPayloadClient } from './payload'
-import type { Article, Footer, Header, Page, Project, SiteSetting } from '@/payload-types'
+import type { Article, Footer, Header, Page, Project, SiteSetting, Testimonial } from '@/payload-types'
 
 const REVALIDATE = 60
 
@@ -174,6 +174,23 @@ export const getCachedArticlesExceptSlug = unstable_cache(
   },
   ['articles:except-slug'],
   { revalidate: REVALIDATE, tags: ['articles'] },
+)
+
+// --- Testimonials -----------------------------------------------------
+
+export const getCachedFeaturedTestimonials = unstable_cache(
+  async (limit: number): Promise<Testimonial[]> => {
+    const payload = await getPayloadClient()
+    const res = await payload.find({
+      collection: 'testimonials',
+      where: { featured: { equals: true } },
+      limit,
+      sort: ['sortOrder', '-updatedAt'],
+    })
+    return res.docs as Testimonial[]
+  },
+  ['testimonials:featured'],
+  { revalidate: REVALIDATE, tags: ['testimonials'] },
 )
 
 export const getCachedAllArticles = unstable_cache(

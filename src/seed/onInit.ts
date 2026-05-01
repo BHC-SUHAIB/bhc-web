@@ -70,6 +70,14 @@ const rtDoc = (blocks: RTBlock[]) => ({
   },
 })
 
+// Page seed contract:
+//   - On first boot (page doesn't exist), the page is created from this seed.
+//   - On every subsequent boot, the page is left untouched UNLESS the matching
+//     FORCE_*_UPSERT env var is set to 'true', in which case the page is
+//     overwritten from this seed (one-time migration mechanism).
+//   - Going forward, the Payload admin UI is the source of truth for the
+//     Home, About, Services, and Contact pages. Do not introduce unconditional
+//     updates here for those pages.
 export async function seedOnInit(payload: Payload): Promise<void> {
   if (!SEED_ON_BOOT) return
 
@@ -113,7 +121,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       data: {
         siteName: 'Black Hart Consulting',
         tagline: 'Websites, SEO, apps, and hosting \u2014 done right.',
-        defaultMetaDescription: 'Websites, SEO, app design, and hosting for businesses that care how their work shows up online.',
+        defaultMetaDescription: 'Custom websites, SEO, and managed hosting from a Houston-based digital studio. Fixed-price builds in days, not months.',
         defaultTheme: 'dark',
         contactEmail: 'hello@blackhartconsulting.com',
         contactPhone: '(866) 434-9777',
@@ -140,7 +148,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         tagline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
         columns: [
           { heading: 'Services', links: [
-            { label: 'Website design & build', href: '/services#web' },
+            { label: 'Care plans', href: '/services#care' },
+            { label: 'Website design & build', href: '/services#websites' },
             { label: 'SEO & search', href: '/services#seo' },
             { label: 'App design', href: '/services#apps' },
             { label: 'Hosting & infrastructure', href: '/services#hosting' },
@@ -152,7 +161,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           ] },
           { heading: 'Resources', links: [
             { label: 'Articles', href: '/articles' },
-            { label: 'Pricing', href: '/#pricing' },
+            { label: 'Pricing', href: '/services' },
             { label: 'SMS opt-in', href: '/sms' },
             { label: 'Privacy Policy', href: '/privacy' },
           ] },
@@ -165,6 +174,24 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         copyright: `\u00a9 ${new Date().getFullYear()} Black Hart Consulting LLC`,
       } as any,
     })
+
+    // ensureMedia is used by both page seeds (founder portrait, article hero
+    // images) and project seeds (case-study screenshots). Declared once up
+    // front so every callsite below resolves the same closure.
+    const ensureMedia = async (alt: string, relPath: string) => {
+      const existing = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
+      if (existing.totalDocs > 0) return existing.docs[0]
+      try {
+        return await payload.create({
+          collection: 'media',
+          data: { alt } as any,
+          filePath: path.resolve(process.cwd(), relPath),
+        })
+      } catch (err) {
+        payload.logger.warn({ err, relPath }, '[seed] media upload failed (continuing without image)')
+        return null
+      }
+    }
 
     // --- Pages ---
     const servicesBlock = {
@@ -183,10 +210,10 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           { label: 'Structured data, Core Web Vitals, crawl budget' },
           { label: 'Content architecture and internal linking' },
         ] },
-        { title: 'App design & development', icon: 'smartphone', description: 'iOS, Android, and web app UX for teams who need more than a marketing site.', bullets: [
+        { title: 'App design & development', icon: 'smartphone', description: 'Webapps and mobile experiences for teams who need more than a marketing site.', bullets: [
           { label: 'Product discovery and wireframes' },
-          { label: 'Design system tailored to your product' },
-          { label: 'React Native or native iOS/Android' },
+          { label: 'Webapps in Next.js or React' },
+          { label: 'Native iOS / Android available on a project basis' },
         ] },
         { title: 'Hosting & infrastructure', icon: 'server', description: 'Managed hosting with actual humans answering when something breaks.', bullets: [
           { label: 'Deploys to DigitalOcean, AWS, or Vercel' },
@@ -199,72 +226,150 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           { label: 'Measurable before/after in 2 weeks' },
         ] },
         { title: 'Strategy & consulting', icon: 'lightbulb', description: 'Not ready to build? Hire us for a strategic sprint.', bullets: [
-          { label: 'Architecture review for existing systems' },
-          { label: 'CMS + stack recommendations' },
-          { label: 'Vendor selection and contract review' },
+          { label: 'Stack and architecture review' },
+          { label: 'CMS recommendations' },
+          { label: 'Pre-rebuild planning and roadmapping' },
         ] },
       ],
     }
 
-    const pricingBlock = {
+    const websitesPricingBlock = {
       blockType: 'pricing',
-      eyebrow: 'Pricing',
-      headline: 'Transparent engagement tiers.',
-      description: 'Custom quotes exist \u2014 but most engagements fit one of these. All prices exclude hosting, which is billed separately.',
+      eyebrow: 'Websites',
+      headline: 'Fixed-price builds. No surprise invoices.',
+      description: 'Every website project is scoped to a fixed fee before kickoff. Hosting is included on every Care plan, or $79/mo standalone.',
       tiers: [
-        { name: 'Landing page', price: '$2,500', priceNote: 'one-time', description: 'A single polished page for a product launch, event, or campaign.', features: [
-          { label: '1 custom-designed landing page', included: true },
+        { name: 'Express Landing Page', price: '$1,495', priceNote: 'one-time', description: 'Template-driven, conversion-focused. Live in 5\u20137 days.', features: [
+          { label: '1 conversion-focused landing page', included: true },
+          { label: 'Custom-styled, on-brand', included: true },
+          { label: 'Analytics & form integration', included: true },
+          { label: 'Deployed on your hosting or ours', included: true },
+          { label: 'Ongoing content updates', included: false },
+        ], cta: { label: 'Start an express page', href: '/contact' } },
+        { name: 'Custom Landing Page', price: '$2,500', priceNote: 'one-time', description: 'A fully custom-designed landing page for a launch, event, or campaign.', features: [
+          { label: '1 fully custom-designed page', included: true },
           { label: 'CMS-ready \u2014 edit copy & images yourself', included: true },
           { label: 'Analytics & form integration', included: true },
           { label: 'Deployed on your hosting or ours', included: true },
           { label: 'Ongoing content updates', included: false },
         ], cta: { label: 'Start a landing page', href: '/contact' } },
-        { name: 'Marketing site', price: 'From $8,500', priceNote: 'typical 6-week engagement', description: 'Multi-page marketing site with full CMS, blog, and case studies. Our most common engagement.', highlighted: true, features: [
+        { name: 'Starter Site', price: '$4,500', priceNote: 'one-time', description: 'Up to 5 bespoke pages with a real CMS \u2014 for businesses that need more than a one-pager.', features: [
+          { label: 'Up to 5 bespoke pages', included: true },
+          { label: 'Block-based CMS', included: true },
+          { label: 'Technical SEO foundation', included: true },
+          { label: 'Performance budget guarantee', included: true },
+          { label: '3\u20134 week delivery', included: true },
+        ], cta: { label: 'Start a Starter Site', href: '/contact' } },
+        { name: 'Marketing Site', price: '$8,500', priceNote: 'typical 6-week engagement', description: 'Multi-page marketing site with full CMS, blog, and case studies. Our most common engagement.', highlighted: true, features: [
           { label: 'Up to 12 bespoke pages', included: true },
           { label: 'Full block-based CMS', included: true },
           { label: 'Case study and blog systems', included: true },
           { label: 'Technical SEO foundation', included: true },
           { label: 'Performance budget guarantee', included: true },
           { label: 'First 30 days of SEO work included', included: true },
-        ], cta: { label: 'Get a quote', href: '/contact' } },
-        { name: 'Managed retainer', price: 'From $1,500', priceNote: 'per month', description: 'Ongoing development, SEO, and hosting \u2014 for when you don\u2019t want to think about any of this again.', features: [
-          { label: 'Hosting + monitoring + backups', included: true },
-          { label: '8\u201316 hours of dev/SEO per month', included: true },
-          { label: 'Same-day turnaround on small changes', included: true },
-          { label: 'Monthly performance report', included: true },
-          { label: 'Direct Slack channel', included: true },
-        ], cta: { label: 'Talk to us', href: '/contact' } },
+        ], cta: { label: 'Start a Marketing Site', href: '/contact' } },
       ],
+    }
+
+    const carePricingBlock = {
+      blockType: 'pricing',
+      eyebrow: 'Care plans',
+      headline: 'Stay fast, secure, and improving \u2014 month over month.',
+      description: 'Every Care plan includes hosting, monitoring, backups, and SSL. Higher tiers add development hours and SEO work.',
+      tiers: [
+        { name: 'Care', price: '$295', priceNote: 'per month', description: 'Hands-off hosting and maintenance for a site that just needs to stay up.', features: [
+          { label: 'Managed hosting + monitoring + backups', included: true },
+          { label: 'SSL, CDN, uptime monitoring', included: true },
+          { label: '2 hrs/mo for small edits', included: true },
+          { label: 'Monthly performance report', included: true },
+          { label: 'Direct Slack channel', included: false },
+        ], cta: { label: 'Start a Care plan', href: '/contact' } },
+        { name: 'Growth', price: '$895', priceNote: 'per month', description: 'For sites that should be improving every month, not just staying online.', highlighted: true, features: [
+          { label: 'Everything in Care', included: true },
+          { label: '6 hrs/mo of dev or SEO work', included: true },
+          { label: 'Monthly strategy check-in', included: true },
+          { label: 'Same-week turnaround on changes', included: true },
+          { label: 'Direct Slack channel', included: false },
+        ], cta: { label: 'Start a Growth plan', href: '/contact' } },
+        { name: 'Scale', price: '$1,895', priceNote: 'per month', description: 'For revenue-critical sites that need a partner on call, not a vendor.', features: [
+          { label: 'Everything in Growth', included: true },
+          { label: '12 hrs/mo of dev or SEO work', included: true },
+          { label: 'Direct Slack channel', included: true },
+          { label: 'Same-day SLA on small changes', included: true },
+          { label: 'Quarterly architecture review', included: true },
+        ], cta: { label: 'Talk about Scale', href: '/contact' } },
+      ],
+    }
+
+    const seoPricingBlock = {
+      blockType: 'pricing',
+      eyebrow: 'SEO retainers',
+      headline: 'Search and AI-search visibility. Month over month.',
+      description: 'Standalone SEO work \u2014 independent of website design. Sold separately because most businesses need ongoing search work, not another rebuild.',
+      tiers: [
+        { name: 'Local SEO Starter', price: '$750', priceNote: 'per month', description: 'Aimed at single-location service businesses competing locally.', features: [
+          { label: 'Google Business Profile optimization', included: true },
+          { label: 'Local citations + schema markup', included: true },
+          { label: '1 SEO-optimized blog post / month', included: true },
+          { label: 'Monthly ranking + traffic report', included: true },
+          { label: 'Technical fixes (as needed)', included: true },
+        ], cta: { label: 'Start Local SEO', href: '/contact' } },
+        { name: 'SEO Growth', price: '$1,495', priceNote: 'per month', description: 'Full-stack SEO for businesses ready to compete in a real market.', highlighted: true, features: [
+          { label: 'Everything in Local SEO Starter', included: true },
+          { label: '2 content pieces / month', included: true },
+          { label: 'Internal linking + content architecture', included: true },
+          { label: 'GEO / AI-search optimization', included: true },
+          { label: 'Conversion tracking setup', included: true },
+        ], cta: { label: 'Start SEO Growth', href: '/contact' } },
+        { name: 'SEO Scale', price: '$2,495', priceNote: 'per month', description: 'For businesses where organic search is a primary revenue channel.', features: [
+          { label: 'Everything in SEO Growth', included: true },
+          { label: 'Outreach + digital PR', included: true },
+          { label: 'Deep technical SEO work', included: true },
+          { label: 'Custom reporting dashboard', included: true },
+          { label: 'Quarterly strategy review', included: true },
+        ], cta: { label: 'Talk about SEO Scale', href: '/contact' } },
+      ],
+    }
+
+    const foundingBannerBlock = {
+      blockType: 'cta',
+      headline: 'Founding Client pricing \u2014 30% off your first build.',
+      description: 'The first 5 paid clients receive 30% off any Websites tier in exchange for a published case study. 5 spots remaining.',
+      primaryCta: { label: 'Claim a founding spot', href: '/contact' },
+      variant: 'emphasized',
     }
 
     const homeData: any = {
       title: 'Home', slug: 'home', publishedAt: new Date().toISOString(),
       seo: { metaTitle: 'Black Hart Consulting \u2014 Websites, SEO, apps, hosting', metaDescription: 'Steady craft for businesses that care how their work shows up online.' },
       layout: [
-        { blockType: 'hero', eyebrow: 'Black Hart Consulting', headline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
+        { blockType: 'hero', eyebrow: 'Built by humans + AI', headline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
           subheadline: 'We design the site. We make it rank. We keep it online. One team, one bill, one line of accountability.', align: 'left',
           ctas: [
             { label: 'Start a project', href: '/contact', variant: 'primary' },
             { label: 'See recent work', href: '/portfolio', variant: 'ghost' },
           ] },
         { blockType: 'stats', eyebrow: 'Signal, not noise', items: [
-          { value: '0.9s', label: 'Avg. first-load time', description: 'Across every site we\u2019ve shipped in the last 18 months.' },
-          { value: '140%', label: 'Avg. organic traffic lift', description: 'After a full audit + rebuild engagement.' },
-          { value: '6', label: 'Weeks to launch', description: 'From first brief to production for a standard site.' },
-          { value: '99.99%', label: 'Uptime SLA', description: 'Redundant hosting across two regions.' },
+          { value: '5 days', label: 'Fastest production launch', description: 'Prometheus Minds, kickoff to live, including 56 commits.' },
+          { value: '<200KB', label: 'First-paint JS shipped', description: 'Down from the 1MB+ that most templates ship.' },
+          { value: '$33/mo', label: 'All-in hosting cost', description: 'WAYGFT runs on a $28 droplet + $5 Spaces bucket.' },
         ] },
         servicesBlock,
         { blockType: 'featuredProjects', eyebrow: 'Recent work', headline: 'A few projects we\u2019re proud of.',
           description: 'The short version is below. Each case study goes into the why behind the framework choices, what we shipped, and what actually changed for the client.',
           mode: 'latest', limit: 3, viewAllLabel: 'View all projects', viewAllHref: '/portfolio' },
-        pricingBlock,
+        foundingBannerBlock,
+        websitesPricingBlock,
+        carePricingBlock,
+        seoPricingBlock,
         { blockType: 'testimonials', eyebrow: 'Clients', headline: 'What they said after launch.', items: [
           { quote: "We\u2019ve seen solid progress, especially with confidence. I\u2019d definitely recommend them to other parents looking for something that\u2019s both professional and personal.", author: 'Grace R.', role: 'Parent', company: 'Prometheus Minds (Google review)' },
         ] },
         { blockType: 'faq', eyebrow: 'Questions', headline: 'Common questions we get.', items: [
-          { question: 'Do you work with clients outside your region?', answer: 'Yes. Most of our clients are remote. We\u2019ve shipped projects across North America, the UK, and Australia. Time zones are rarely an issue.' },
+          { question: 'Do you work with clients outside your region?', answer: 'Yes. Most of our clients are remote, and time zones are rarely an issue.' },
+          { question: 'Do you use AI in your workflow?', answer: 'Yes \u2014 explicitly. Modern AI tooling is part of how we ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision we deliver. You\u2019re not paying for AI to do your work; you\u2019re paying for senior consulting that uses AI to do more of it, in less time.' },
           { question: 'How do you price custom work?', answer: 'Scoped fixed-price for anything that fits a clear brief. Hourly retainers for ongoing work. We\u2019ll give you a quote within 48 hours of our initial call.' },
-          { question: 'Do you handle hosting, or just build the site?', answer: 'Both. You can host with us (managed DigitalOcean or AWS, monthly fee) or we\u2019ll deploy to your existing host. We document the deployment regardless, so you\u2019re never stuck.' },
+          { question: 'Do you handle hosting, or just build the site?', answer: 'Both. Every Care plan (Care, Growth, Scale) bundles managed hosting, monitoring, backups, and SSL \u2014 so you never see a separate hosting bill. Prefer to host elsewhere? We\u2019ll deploy to your existing host (DigitalOcean, AWS, Vercel, etc.) and document everything so you\u2019re never stuck. Standalone hosting without a Care plan is $79/mo.' },
           { question: 'What stack do you build on?', answer: 'Default is Next.js + Payload CMS + Postgres, deployed to DigitalOcean. We\u2019ll use a different stack if your situation calls for it \u2014 for example, Shopify for a commerce-first site. We pick the right tool, not the fashionable one.' },
           { question: 'Can we edit the site after launch?', answer: 'Yes. Every site ships with a full CMS \u2014 you can add, remove, and reorder sections, change copy, swap images, publish blog posts, and edit pricing without touching code.' },
         ] },
@@ -280,25 +385,75 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     if (existingHome.totalDocs === 0) {
       await payload.create({ collection: 'pages', data: homeData })
       payload.logger.info('[seed] home page created')
+    } else if (process.env.FORCE_HOME_UPSERT === 'true') {
+      await payload.update({
+        collection: 'pages',
+        id: existingHome.docs[0].id,
+        data: homeData,
+      })
+      payload.logger.info('[seed] home page upserted (FORCE_HOME_UPSERT)')
     }
 
-    // About
+    // About \u2014 founder portrait
+    const founderHeadshot = await ensureMedia(
+      'Suhaib Chaudhry \u2014 founder of Black Hart Consulting (editorial portrait)',
+      'public/seed-assets/about/suhaib-headshot.jpg',
+    )
+
     const aboutData: any = {
       title: 'About', slug: 'about', publishedAt: new Date().toISOString(),
       layout: [
-        { blockType: 'hero', eyebrow: 'About', headline: 'Mature work, from people who have done this before.',
-          subheadline: 'Black Hart Consulting was founded to give small and mid-market businesses the same level of web craft that was previously only available to enterprise.', align: 'left' },
-        { blockType: 'richText', maxWidth: 'prose', content: rt('We are a small team: senior designers, developers, and SEO specialists who got tired of watching good businesses get saddled with slow, unmaintainable websites built by the cheapest bid. We prefer slow, considered work over hype, and we\u2019d rather turn down a project than deliver one we don\u2019t believe in.') },
+        { blockType: 'hero', eyebrow: 'About', headline: 'Modern craft, modern tooling, one line of accountability.',
+          subheadline: 'Black Hart Consulting is a Houston-based digital studio. We build websites, run SEO, and keep them online \u2014 for businesses that care how their work shows up online.', align: 'left' },
+        {
+          blockType: 'richText',
+          maxWidth: 'medium',
+          variant: 'lede',
+          content: rtDoc([
+            ['p', 'We started Black Hart because most small businesses are stuck between two bad choices: a generic template site that looks like everyone else\u2019s, or an agency quote that\u2019s three times what it should cost.'],
+            ['p', 'We close that gap with modern AI tooling \u2014 used carefully, with a senior reviewer accountable for every deliverable. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.'],
+          ]),
+        },
         { blockType: 'stats', items: [
-          { value: '2021', label: 'Founded' },
-          { value: '47', label: 'Projects shipped' },
-          { value: '12', label: 'Countries served' },
+          { value: '2', label: 'Recent launches in production' },
+          { value: '5 days', label: 'Fastest project delivery' },
+          { value: '100%', label: 'Projects shipped on quoted price' },
+          { value: 'Houston, TX', label: 'Where we\u2019re based' },
         ] },
+        {
+          blockType: 'richText',
+          maxWidth: 'medium',
+          ...(founderHeadshot?.id ? { image: founderHeadshot.id, imageFocus: 'face' } : {}),
+          content: rtDoc([
+            ['h2', 'Who you\u2019ll work with'],
+            ['p', 'You\u2019ll work directly with Suhaib Chaudhry, the founder of Black Hart Consulting. There\u2019s no account manager layer, no junior handoff \u2014 every brief, every line of code, and every design decision goes through one senior reviewer. That\u2019s the whole point of the studio: agency-grade craft from a single accountable owner, not a sales team funneling you to the cheapest contractor on a roster.'],
+            ['p', 'Suhaib has been shipping production web software for over a decade \u2014 across consumer, fintech, and B2B SaaS \u2014 and started Black Hart to apply modern AI tooling to small-business work that traditional agencies overcharge for. The result: deliverables you\u2019d normally pay $20K+ for, shipped in days instead of months, at prices that make sense for a business that\u2019s still proving its model.'],
+          ]),
+        },
+        { blockType: 'richText', maxWidth: 'medium', content: rtDoc([
+          ['h2', 'How we work'],
+          ['h3', 'Scope first.'],
+          ['p', 'Every engagement starts with a 30-minute conversation, then a fixed-price proposal within 48 hours. We never bill hourly for project work \u2014 if a brief doesn\u2019t fit a clean scope, we\u2019ll tell you before you sign anything.'],
+          ['h3', 'Build in days, not months.'],
+          ['p', 'We use modern AI tooling alongside human judgment to ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision. You\u2019re not paying for AI to do your work; you\u2019re paying for senior consulting that uses AI to do more of it, in less time.'],
+          ['h3', 'Stay involved after launch.'],
+          ['p', 'Most agencies hand you a site and walk away. We host, monitor, and improve yours for as long as you\u2019d like \u2014 through Care, Growth, or Scale plans that scale up or down with your needs.'],
+        ]) },
         { blockType: 'cta', headline: 'Want to work together?', primaryCta: { label: 'Get in touch', href: '/contact' } },
       ],
     }
     const existingAbout = await payload.find({ collection: 'pages', where: { slug: { equals: 'about' } }, limit: 1 })
-    if (existingAbout.totalDocs === 0) { await payload.create({ collection: 'pages', data: aboutData }); payload.logger.info('[seed] about page created') }
+    if (existingAbout.totalDocs === 0) {
+      await payload.create({ collection: 'pages', data: aboutData })
+      payload.logger.info('[seed] about page created')
+    } else if (process.env.FORCE_ABOUT_UPSERT === 'true') {
+      await payload.update({
+        collection: 'pages',
+        id: existingAbout.docs[0].id,
+        data: aboutData,
+      })
+      payload.logger.info('[seed] about page upserted (FORCE_ABOUT_UPSERT)')
+    }
 
     // Contact
     const contactData: any = {
@@ -325,15 +480,13 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     if (existingContact.totalDocs === 0) {
       await payload.create({ collection: 'pages', data: contactData })
       payload.logger.info('[seed] contact page created')
-    } else {
-      // Upgrade the existing contact page to the new layout (fresh deploys
-      // may already have the old mailto-hero version seeded).
+    } else if (process.env.FORCE_CONTACT_UPSERT === 'true') {
       await payload.update({
         collection: 'pages',
         id: existingContact.docs[0].id,
         data: contactData,
       })
-      payload.logger.info('[seed] contact page updated to include contact form')
+      payload.logger.info('[seed] contact page upserted (FORCE_CONTACT_UPSERT)')
     }
 
     // Services page
@@ -343,12 +496,25 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         { blockType: 'hero', eyebrow: 'Services', headline: 'Four disciplines. One senior team.',
           subheadline: 'The short version is on the home page. This is the long version.', align: 'left' },
         servicesBlock,
-        pricingBlock,
+        foundingBannerBlock,
+        websitesPricingBlock,
+        carePricingBlock,
+        seoPricingBlock,
         { blockType: 'cta', headline: 'Talk to us about your project.', primaryCta: { label: 'Get in touch', href: '/contact' }, variant: 'default' },
       ],
     }
     const existingServices = await payload.find({ collection: 'pages', where: { slug: { equals: 'services' } }, limit: 1 })
-    if (existingServices.totalDocs === 0) { await payload.create({ collection: 'pages', data: servicesData }); payload.logger.info('[seed] services page created') }
+    if (existingServices.totalDocs === 0) {
+      await payload.create({ collection: 'pages', data: servicesData })
+      payload.logger.info('[seed] services page created')
+    } else if (process.env.FORCE_SERVICES_UPSERT === 'true') {
+      await payload.update({
+        collection: 'pages',
+        id: existingServices.docs[0].id,
+        data: servicesData,
+      })
+      payload.logger.info('[seed] services page upserted (FORCE_SERVICES_UPSERT)')
+    }
 
     // --- Legacy sample-project cleanup ---
     // The original seed shipped three fabricated sample projects (Northlake
@@ -478,21 +644,6 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     // --- Media uploads for the Prometheus Minds case study ---
-    const ensureMedia = async (alt: string, relPath: string) => {
-      const existing = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
-      if (existing.totalDocs > 0) return existing.docs[0]
-      try {
-        return await payload.create({
-          collection: 'media',
-          data: { alt } as any,
-          filePath: path.resolve(process.cwd(), relPath),
-        })
-      } catch (err) {
-        payload.logger.warn({ err, relPath }, '[seed] media upload failed (continuing without image)')
-        return null
-      }
-    }
-
     const pmMediaNewHome = await ensureMedia(
       'Prometheus Minds \u2014 new homepage hero v3 (light-mode capture)',
       'public/seed-assets/prometheus-minds/new-home-v3.png',
@@ -739,6 +890,24 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: waygft (FORCE_WAYGFT_UPSERT)')
     }
 
+    // --- Article hero images (Unsplash, downloaded into public/seed-assets/articles/) ---
+    const articleHeroNextjs = await ensureMedia(
+      'Why Next.js over WordPress \u2014 laptop displaying source code on a dark background',
+      'public/seed-assets/articles/why-nextjs.jpg',
+    )
+    const articleHeroSeo = await ensureMedia(
+      'A realistic SEO playbook \u2014 analytics dashboards on a laptop screen',
+      'public/seed-assets/articles/seo-playbook.jpg',
+    )
+    const articleHeroHosting = await ensureMedia(
+      'Managed hosting \u2014 server racks lit by cool blue indicator lights in a data center',
+      'public/seed-assets/articles/managed-hosting.jpg',
+    )
+    const articleHeroCwv = await ensureMedia(
+      'Core Web Vitals playbook \u2014 a developer working on a laptop with performance metrics on screen',
+      'public/seed-assets/articles/core-web-vitals.jpg',
+    )
+
     // --- Sample articles ---
     const sampleArticles: any[] = [
       {
@@ -750,7 +919,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         category: 'engineering',
         tags: [{ label: 'Next.js' }, { label: 'WordPress' }, { label: 'Architecture' }],
         featured: true,
-        publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+        ...(articleHeroNextjs?.id ? { heroImage: articleHeroNextjs.id } : {}),
+        publishedAt: '2026-04-23T09:00:00.000Z',
         content: rtDoc([
           ['p', 'WordPress powers roughly 40% of the web. For a lot of projects it\u2019s a completely reasonable choice \u2014 the ecosystem is massive, hosts are cheap, and most editorial teams already know how to use it. We don\u2019t hate it.'],
           ['p', 'But most of the work we get hired for is not a brochure site that someone\u2019s cousin is going to take over in six months. It\u2019s a marketing site that needs to rank, load fast, and be editable by a non-technical team for years. For that, Next.js plus a structured CMS wins almost every time. Here\u2019s why.'],
@@ -784,7 +954,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         category: 'seo',
         tags: [{ label: 'SEO' }, { label: 'Content' }, { label: 'Small teams' }],
         featured: false,
-        publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 18).toISOString(),
+        ...(articleHeroSeo?.id ? { heroImage: articleHeroSeo.id } : {}),
+        publishedAt: '2026-04-12T09:00:00.000Z',
         content: rtDoc([
           ['p', 'Most SEO blogs are written by people selling SEO tools. They have an interest in making the work sound bigger than it is. The truth is that for a small business, 80% of the return comes from about six things \u2014 and none of them are buying a link package.'],
           ['h2', '1. Fix the technical foundation once'],
@@ -819,7 +990,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         category: 'hosting',
         tags: [{ label: 'Hosting' }, { label: 'DevOps' }, { label: 'Reliability' }],
         featured: false,
-        publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).toISOString(),
+        ...(articleHeroHosting?.id ? { heroImage: articleHeroHosting.id } : {}),
+        publishedAt: '2026-03-29T09:00:00.000Z',
         content: rtDoc([
           ['p', 'Self-hosting has never been easier. Docker, DigitalOcean, Caddy, GitHub Actions \u2014 for about $12 a month and an afternoon of setup, you can run a production site with automatic HTTPS, continuous deployment, and a managed database.'],
           ['p', 'So why do we still charge a monthly retainer for managed hosting? Because the hard part of hosting has never been the setup. It\u2019s the 2am Saturday.'],
@@ -854,7 +1026,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         category: 'performance',
         tags: [{ label: 'Core Web Vitals' }, { label: 'Performance' }, { label: 'Optimization' }],
         featured: false,
-        publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).toISOString(),
+        ...(articleHeroCwv?.id ? { heroImage: articleHeroCwv.id } : {}),
+        publishedAt: '2026-03-16T09:00:00.000Z',
         content: rtDoc([
           ['p', 'Core Web Vitals is how Google measures whether your site feels fast. There are three numbers: Largest Contentful Paint (LCP), Cumulative Layout Shift (CLS), and Interaction to Next Paint (INP). You want them green. This is the order we fix them in.'],
           ['h2', 'Step 1: Measure from real users, not Lighthouse'],
@@ -895,6 +1068,13 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       if (existing.totalDocs === 0) {
         await payload.create({ collection: 'articles', data: art })
         payload.logger.info(`[seed] article created: ${art.slug}`)
+      } else if (process.env.FORCE_ARTICLES_UPSERT === 'true') {
+        await payload.update({
+          collection: 'articles',
+          id: existing.docs[0].id,
+          data: art,
+        })
+        payload.logger.info(`[seed] article upserted: ${art.slug} (FORCE_ARTICLES_UPSERT)`)
       }
     }
 

@@ -6,10 +6,10 @@ import type { CTABlock } from '@/payload-types'
 export function CTA(b: CTABlock) {
   const emphasized = b.variant === 'emphasized'
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-10 sm:py-14">
       <Container size="lg">
         <div className={cn(
-          'rounded-[var(--radius-xl)] border p-10 sm:p-14 text-center',
+          'rounded-[var(--radius-xl)] border p-8 sm:p-12 text-center',
           emphasized
             ? 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_12%,var(--color-bg))]'
             : 'border-[var(--color-border)] bg-[var(--color-surface)]',
@@ -18,11 +18,11 @@ export function CTA(b: CTABlock) {
             {b.headline}
           </h2>
           {b.description ? (
-            <p className="mt-5 text-[17px] leading-[1.55] text-[var(--color-fg-muted)] max-w-xl mx-auto">
+            <p className="mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)] max-w-xl mx-auto">
               {b.description}
             </p>
           ) : null}
-          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+          <div className="mt-7 flex flex-wrap gap-3 justify-center">
             {b.primaryCta?.label && b.primaryCta?.href ? (
               <Button href={b.primaryCta.href} variant={emphasized ? 'brass' : 'primary'} size="lg">
                 {b.primaryCta.label}

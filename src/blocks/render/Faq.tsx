@@ -10,10 +10,10 @@ export function Faq(b: FaqBlock) {
   const [open, setOpen] = useState<number | null>(0)
 
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-12 sm:py-16">
       <Container size="md">
         {b.eyebrow || b.headline ? (
-          <div className="mb-12">
+          <div className="mb-8">
             {b.eyebrow ? (
               <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">
                 {b.eyebrow}

@@ -6,11 +6,11 @@ const icons = { globe: Globe, search: Search, smartphone: Smartphone, server: Se
 
 export function Services(b: ServicesBlock) {
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-12 sm:py-16">
       <Container size="xl">
-        <div className="max-w-2xl mb-14">
+        <div className="max-w-2xl mb-10">
           {b.eyebrow ? (
-            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-4">
+            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">
               {b.eyebrow}
             </p>
           ) : null}
@@ -18,7 +18,7 @@ export function Services(b: ServicesBlock) {
             {b.headline}
           </h2>
           {b.description ? (
-            <p className="mt-5 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">
+            <p className="mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">
               {b.description}
             </p>
           ) : null}
@@ -30,7 +30,7 @@ export function Services(b: ServicesBlock) {
             return (
               <div
                 key={i}
-                className="p-7 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-fg-muted)] transition-colors"
+                className="group p-7 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] transition-[transform,border-color,background-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)] hover:bg-[var(--color-surface-raised)] hover:shadow-[0_14px_30px_-18px_color-mix(in_srgb,var(--color-ink)_35%,transparent)]"
               >
                 {Icon ? (
                   <div className="inline-flex p-2.5 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] mb-5">

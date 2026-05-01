@@ -163,6 +163,16 @@ export const RichTextBlock: Block = {
       { label: 'Medium (2xl — 42rem)', value: 'medium' },
       { label: 'Wide (full)', value: 'wide' },
     ] },
+    { name: 'image', type: 'upload', relationTo: 'media' as const, admin: { description: 'Optional portrait/illustration. Renders as a circular avatar above the text.' } },
+    { name: 'imageFocus', type: 'select', defaultValue: 'face', admin: { condition: (_, s: { image?: unknown }) => !!s.image, description: 'Where to anchor the crop inside the circle.' }, options: [
+      { label: 'Face (top of subject)', value: 'face' },
+      { label: 'Center', value: 'center' },
+    ] },
+    { name: 'variant', type: 'select', defaultValue: 'default', options: [
+      { label: 'Default (plain prose)', value: 'default' },
+      { label: 'Lede (oversized intro statement)', value: 'lede' },
+      { label: 'Card (bordered surface card)', value: 'card' },
+    ] },
   ],
 }
 

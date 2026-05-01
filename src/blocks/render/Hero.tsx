@@ -11,7 +11,7 @@ export function Hero(b: HeroBlock) {
   const hasImage = !!img?.url
 
   return (
-    <section className="relative py-20 sm:py-28 md:py-36">
+    <section className="relative py-14 sm:py-20 md:py-24">
       <Container size="xl">
         <div className={cn(
           'grid gap-12 items-center',

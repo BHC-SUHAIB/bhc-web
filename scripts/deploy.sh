@@ -27,6 +27,24 @@ git pull --ff-only
 log "Building web image (Turbopack cache persists via BuildKit cache mounts)"
 docker compose build web
 
+# Pre-push schema cleanup. Drizzle's schema-push does interactive
+# rename detection — when an old block-array table looks like a rename
+# of a newly-introduced collection table, it prompts on stdin and
+# hangs the web container in production (no TTY). Drop tables for
+# fields that have been removed BEFORE the web container boots, so
+# push has no ambiguity. Idempotent: DROP TABLE IF EXISTS is a no-op
+# once the table is gone, so this block is safe to keep across deploys.
+#
+# Uses `docker exec bhc-postgres` directly (not `docker compose exec`)
+# so the step doesn't depend on the compose project context being
+# inferred correctly. The container name is set via `container_name:`
+# in docker-compose.yml — fixed across deploys.
+log "Pre-push: dropping legacy testimonials items tables (idempotent)"
+docker exec -i bhc-postgres bash -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' <<'SQL'
+DROP TABLE IF EXISTS pages_blocks_testimonials_items CASCADE;
+DROP TABLE IF EXISTS _pages_v_blocks_testimonials_items CASCADE;
+SQL
+
 log "Bringing the stack up"
 docker compose up -d
 

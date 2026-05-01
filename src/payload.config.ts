@@ -13,7 +13,6 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Projects } from './collections/Projects'
 import { Articles } from './collections/Articles'
-import { Testimonials } from './collections/Testimonials'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { SmsConsents } from './collections/SmsConsents'
 import { Header } from './globals/Header'
@@ -104,15 +103,7 @@ export default buildConfig({
     meta: {
       titleSuffix: ' \u00b7 Black Hart CMS',
     },
-    importMap: {
-      baseDir: path.resolve(dirname),
-    },
-    components: {
-      graphics: {
-        Logo: '/components/admin/Logo#default',
-        Icon: '/components/admin/Icon#default',
-      },
-    },
+    components: {},
   },
 
   editor: lexicalEditor({}),
@@ -132,7 +123,7 @@ export default buildConfig({
 
   onInit: seedOnInit,
 
-  collections: [Users, Media, Pages, Projects, Articles, Testimonials, ContactSubmissions, SmsConsents],
+  collections: [Users, Media, Pages, Projects, Articles, ContactSubmissions, SmsConsents],
   globals: [Header, Footer, SiteSettings],
 
   plugins,

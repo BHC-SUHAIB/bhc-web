@@ -97,17 +97,17 @@ export function ContactForm(b: ContactFormProps) {
   const labelCls = 'block text-[12px] font-mono tracking-[0.12em] uppercase text-[var(--color-fg-muted)] mb-2'
 
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-12 sm:py-16">
       <Container size="md">
-        <div className="mb-12 max-w-2xl">
+        <div className="mb-8 max-w-2xl">
           {b.eyebrow ? (
-            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-4">{b.eyebrow}</p>
+            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">{b.eyebrow}</p>
           ) : null}
           <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em]">
             {b.headline}
           </h2>
           {b.description ? (
-            <p className="mt-5 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">{b.description}</p>
+            <p className="mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">{b.description}</p>
           ) : null}
           {(contactEmail && emailHref) || (contactPhone && phoneHrefVal) ? (
             <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-[15px]">

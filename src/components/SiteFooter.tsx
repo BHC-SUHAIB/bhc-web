@@ -27,7 +27,7 @@ export function SiteFooter({ footer, siteSettings }: FooterProps) {
   const phoneHrefVal = phoneHref(phone)
 
   return (
-    <footer className="mt-24 border-t border-[var(--color-border)] py-16 text-[var(--color-fg)]">
+    <footer className="mt-16 border-t border-[var(--color-border)] py-12 text-[var(--color-fg)]">
       <Container size="xl" className="grid gap-12 md:grid-cols-[1.3fr_2fr]">
         <div>
           <Logo variant="primary" height={48} className="text-[var(--color-fg)]" />

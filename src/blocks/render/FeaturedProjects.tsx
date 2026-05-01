@@ -18,12 +18,12 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
   }
 
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-12 sm:py-16">
       <Container size="xl">
-        <div className="flex items-end justify-between gap-6 mb-12 flex-wrap">
+        <div className="flex items-end justify-between gap-6 mb-8 flex-wrap">
           <div className="max-w-2xl">
             {b.eyebrow ? (
-              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-4">
+              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">
                 {b.eyebrow}
               </p>
             ) : null}
@@ -31,7 +31,7 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
               {b.headline}
             </h2>
             {b.description ? (
-              <p className="mt-5 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">
+              <p className="mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">
                 {b.description}
               </p>
             ) : null}
@@ -50,7 +50,7 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
               <Link
                 key={p.id}
                 href={`/portfolio/${p.slug}`}
-                className="group block rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden hover:border-[var(--color-fg-muted)] transition-colors"
+                className="group block rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)] hover:shadow-[0_14px_30px_-18px_color-mix(in_srgb,var(--color-ink)_35%,transparent)]"
               >
                 <div className="relative aspect-[4/3] bg-[var(--color-bg)] overflow-hidden">
                   {hero?.url ? (

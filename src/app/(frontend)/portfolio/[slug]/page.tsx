@@ -124,11 +124,14 @@ export default async function ProjectPage({ params }: Args) {
           <div className="space-y-14 text-[17px] leading-[1.65]">
             {/* Metrics */}
             {p.metrics && p.metrics.length > 0 ? (
-              <div className="grid gap-px bg-[var(--color-border)] rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)] grid-cols-2 md:grid-cols-4">
+              <div className="grid gap-px bg-[var(--color-brass)] rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-brass)] grid-cols-2 md:grid-cols-4 shadow-[0_18px_40px_-22px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]">
                 {p.metrics.map((m, i) => (
-                  <div key={i} className="bg-[var(--color-bg)] p-5">
-                    <div className="font-serif font-semibold text-[clamp(1.75rem,3vw,2.25rem)] tracking-[-0.02em] leading-none">{m.value}</div>
-                    <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)] leading-[1.4]">{m.label}</div>
+                  <div
+                    key={i}
+                    className="bg-[var(--color-bg)] p-6 transition-colors duration-150 ease-out hover:bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))]"
+                  >
+                    <div className="font-serif font-semibold text-[clamp(2rem,3.4vw,2.5rem)] tracking-[-0.025em] leading-none text-[var(--color-fg)]">{m.value}</div>
+                    <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-fg-muted)] leading-[1.4]">{m.label}</div>
                   </div>
                 ))}
               </div>
@@ -160,10 +163,13 @@ export default async function ProjectPage({ params }: Args) {
                 {p.gallery.map((g, i) => {
                   const img = typeof g.image === 'object' ? (g.image as Media | null) : null
                   return (
-                    <figure key={i} className="rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)]">
-                      <div className="relative aspect-video bg-[var(--color-surface)]">
+                    <figure
+                      key={i}
+                      className="rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)] transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)] hover:shadow-[0_18px_40px_-22px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]"
+                    >
+                      <div className="relative aspect-video bg-[var(--color-surface)] overflow-hidden">
                         {img?.url ? (
-                          <Image src={img.url as string} alt={(img.alt as string) ?? ''} fill className="object-cover" sizes="100vw" />
+                          <Image src={img.url as string} alt={(img.alt as string) ?? ''} fill className="object-cover transition-transform duration-500 hover:scale-[1.02]" sizes="100vw" />
                         ) : (
                           <Placeholder seed={`${p.slug ?? p.title}-${i}`} label={`${p.title} — ${i + 1}`} aspect="video" />
                         )}
@@ -178,16 +184,37 @@ export default async function ProjectPage({ params }: Args) {
             ) : null}
 
             {p.testimonial?.quote ? (
-              <figure className="border-l-2 border-[var(--color-brass)] pl-6 py-2">
-                <blockquote className="font-serif text-[22px] italic leading-[1.45] text-[var(--color-fg)]">
+              <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-8 sm:p-10">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="size-7 text-[var(--color-brass)] mb-5" aria-hidden>
+                  <path d="M7.2 18.7H3l4.2-9h2.4v9H7.2Zm9 0h-4.2l4.2-9h2.4v9h-2.4Z" />
+                </svg>
+                <blockquote className="font-serif text-[clamp(1.4rem,2.2vw,1.75rem)] italic leading-[1.4] text-[var(--color-fg)]">
                   &ldquo;{p.testimonial.quote}&rdquo;
                 </blockquote>
-                <figcaption className="mt-4 text-[14px] text-[var(--color-fg-muted)]">
-                  &mdash; {p.testimonial.author}
-                  {p.testimonial.role ? `, ${p.testimonial.role}` : ''}
+                <figcaption className="mt-6 pt-5 border-t border-[color-mix(in_srgb,var(--color-brass)_30%,transparent)] text-[14px] text-[var(--color-fg)]">
+                  <div className="font-semibold">{p.testimonial.author}</div>
+                  {p.testimonial.role ? (
+                    <div className="text-[var(--color-fg-muted)]">{p.testimonial.role}</div>
+                  ) : null}
                 </figcaption>
               </figure>
             ) : null}
+          </div>
+        </div>
+      </Container>
+
+      {/* End-of-case CTA — drives conversions on every project page */}
+      <Container size="lg" className="mt-16">
+        <div className="rounded-[var(--radius-xl)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_12%,var(--color-bg))] p-8 sm:p-12 text-center">
+          <h2 className="font-serif font-semibold text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.02em] max-w-2xl mx-auto">
+            Want a build like this for your business?
+          </h2>
+          <p className="mt-4 text-[16px] leading-[1.55] text-[var(--color-fg-muted)] max-w-xl mx-auto">
+            Founding-client pricing — 30% off your first build for the next 5 paid clients in exchange for a published case study.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3 justify-center">
+            <Button href="/contact" variant="brass" size="lg">Start a project</Button>
+            <Button href="/services" variant="ghost" size="lg">See all pricing</Button>
           </div>
         </div>
       </Container>

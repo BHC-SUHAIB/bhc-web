@@ -29,6 +29,8 @@ import { SubscriptFeatureClient as SubscriptFeatureClient_0 } from '@payloadcms/
 import { SuperscriptFeatureClient as SuperscriptFeatureClient_0 } from '@payloadcms/richtext-lexical/client'
 import { StrikethroughFeatureClient as StrikethroughFeatureClient_0 } from '@payloadcms/richtext-lexical/client'
 import { S3ClientUploadHandler as S3ClientUploadHandler_0 } from '@payloadcms/storage-s3/client'
+import AdminIcon_0 from '@/components/admin/Icon'
+import AdminLogo_0 from '@/components/admin/Logo'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -57,4 +59,6 @@ export const importMap = {
   '@payloadcms/richtext-lexical/client#SuperscriptFeatureClient': SuperscriptFeatureClient_0,
   '@payloadcms/richtext-lexical/client#StrikethroughFeatureClient': StrikethroughFeatureClient_0,
   '@payloadcms/storage-s3/client#S3ClientUploadHandler': S3ClientUploadHandler_0,
+  '/components/admin/Icon#default': AdminIcon_0,
+  '/components/admin/Logo#default': AdminLogo_0,
 }

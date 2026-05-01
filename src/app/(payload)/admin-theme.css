@@ -1,0 +1,174 @@
+/* Black Hart admin theme — overrides Payload's default tokens with the
+   site's heritage palette so /admin matches the public site. Loaded AFTER
+   '@payloadcms/next/css' so these declarations win. */
+
+@layer payload {
+  :root {
+    --color-ink: #1A1713;
+    --color-forest: #2F4A35;
+    --color-lichen: #8A9A7B;
+    --color-parchment: #D6D0C2;
+    --color-ivory: #EFE9D9;
+    --color-brass: #B08D57;
+    --color-brass-dark: #8E6E3F;
+
+    --font-body: 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --style-radius-s: 6px;
+    --style-radius-m: 12px;
+    --style-radius-l: 18px;
+
+    --theme-bg: var(--color-ivory);
+    --theme-text: var(--color-ink);
+    --theme-input-bg: #FFFFFF;
+    --theme-overlay: rgba(26, 23, 19, 0.5);
+
+    /* Surface ramp — interpolated from ivory → ink. Payload uses these for
+       cards, hovers, sidebars, table rows, etc. */
+    --theme-elevation-0:    #EFE9D9;
+    --theme-elevation-50:   #E8E1D0;
+    --theme-elevation-100:  #DFD8C5;
+    --theme-elevation-150:  #D3CBB7;
+    --theme-elevation-200:  #C2BAA5;
+    --theme-elevation-250:  #B0A892;
+    --theme-elevation-300:  #9D9580;
+    --theme-elevation-350:  #89826F;
+    --theme-elevation-400:  #767060;
+    --theme-elevation-450:  #645F52;
+    --theme-elevation-500:  #534E44;
+    --theme-elevation-550:  #46423A;
+    --theme-elevation-600:  #3B3831;
+    --theme-elevation-650:  #322F29;
+    --theme-elevation-700:  #2A2823;
+    --theme-elevation-750:  #25231F;
+    --theme-elevation-800:  #211F1B;
+    --theme-elevation-850:  #1E1C18;
+    --theme-elevation-900:  #1A1713;
+    --theme-elevation-950:  #14110E;
+    --theme-elevation-1000: #0E0C0A;
+
+    /* Map "success" (Payload's primary accent — used for the login button,
+       save buttons, toggles) to brass so the primary CTA reads correctly. */
+    --theme-success-50:  #F5EDDF;
+    --theme-success-100: #ECDFC8;
+    --theme-success-150: #E0CDA9;
+    --theme-success-200: #D5BB8C;
+    --theme-success-250: #C9A974;
+    --theme-success-300: #BE9961;
+    --theme-success-350: #B49056;
+    --theme-success-400: #B08D57;
+    --theme-success-450: #A2814F;
+    --theme-success-500: #8E6E3F;
+    --theme-success-550: #7E6238;
+    --theme-success-600: #6F5631;
+    --theme-success-650: #604A2A;
+    --theme-success-700: #523F23;
+    --theme-success-750: #44341D;
+    --theme-success-800: #372A17;
+    --theme-success-850: #2A2012;
+    --theme-success-900: #1F170D;
+    --theme-success-950: #140F09;
+
+    --theme-border-color: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  }
+
+  html[data-theme='dark'] {
+    --theme-bg: var(--color-ink);
+    --theme-text: var(--color-ivory);
+    --theme-input-bg: #25221E;
+    --theme-overlay: rgba(5, 5, 5, 0.75);
+
+    --theme-elevation-0:    #1A1713;
+    --theme-elevation-50:   #211E19;
+    --theme-elevation-100:  #28241F;
+    --theme-elevation-150:  #2F2B25;
+    --theme-elevation-200:  #38332C;
+    --theme-elevation-250:  #423D34;
+    --theme-elevation-300:  #4D473D;
+    --theme-elevation-350:  #595246;
+    --theme-elevation-400:  #665E50;
+    --theme-elevation-450:  #736B5B;
+    --theme-elevation-500:  #807766;
+    --theme-elevation-550:  #8E8472;
+    --theme-elevation-600:  #9C927F;
+    --theme-elevation-650:  #ABA08D;
+    --theme-elevation-700:  #BAAF9B;
+    --theme-elevation-750:  #C9BEA9;
+    --theme-elevation-800:  #D6CDB8;
+    --theme-elevation-850:  #E1D9C5;
+    --theme-elevation-900:  #EFE9D9;
+    --theme-elevation-950:  #F4EFE2;
+    --theme-elevation-1000: #FAF6EB;
+
+    --theme-border-color: color-mix(in srgb, var(--color-ivory) 16%, transparent);
+  }
+
+  /* Sand-down some Payload chrome and apply serif to display headings to
+     mirror the public site. Scoped under `body` so it only hits admin. */
+  body {
+    font-family: var(--font-body);
+  }
+
+  .template-default__wrap h1,
+  .template-default__wrap h2,
+  .dashboard h1,
+  .dashboard h2,
+  .login__wrap h1 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+  }
+
+  /* Login page polish — center the brand block, give the card a warm border
+     and subtle shadow, and replace the default Payload icon with our logo. */
+  .login__brand {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .login__form {
+    background: var(--theme-input-bg);
+    border: 1px solid var(--theme-border-color);
+    border-radius: var(--style-radius-l);
+    padding: 2rem;
+    box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--color-ink) 35%, transparent);
+  }
+
+  /* Custom logo block (see components/admin/Logo.tsx). */
+  .bhc-admin-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-brass);
+  }
+  .bhc-admin-logo__wordmark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+  .bhc-admin-logo__name {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--theme-text);
+  }
+  .bhc-admin-logo__sub {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--theme-text) 60%, transparent);
+    margin-top: 0.4rem;
+  }
+
+  .bhc-admin-icon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-brass);
+  }
+}

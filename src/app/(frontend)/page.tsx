@@ -8,8 +8,36 @@ import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 // src/lib/payload-cache.ts — repeat requests within 60s skip Payload.
 export const dynamic = 'force-dynamic'
 
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Black Hart Consulting',
+  description: 'Custom websites, SEO, and managed hosting from a Houston-based digital studio.',
+  url: 'https://www.blackhartconsulting.com',
+  telephone: '+1-866-434-9777',
+  email: 'hello@blackhartconsulting.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Houston',
+    addressRegion: 'TX',
+    addressCountry: 'US',
+  },
+  areaServed: 'Worldwide',
+  priceRange: '$$',
+}
+
 export default async function HomePage() {
   const page = await getCachedPageBySlug('home')
   if (!page) notFound()
-  return <RenderBlocks blocks={page.layout ?? []} />
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(localBusinessJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+      <RenderBlocks blocks={page.layout ?? []} />
+    </>
+  )
 }

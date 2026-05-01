@@ -211,11 +211,8 @@ async function run() {
         blockType: 'testimonials',
         eyebrow: 'Clients',
         headline: 'What they said after launch.',
-        items: [
-          { quote: 'Six weeks from brief to production. The site loads faster than our old one even loaded its splash screen. Our bounce rate dropped 34% in the first month.', author: 'Sarah Chen', role: 'Head of Marketing', company: 'Northlake Consulting' },
-          { quote: 'They actually explained the trade-offs in plain language. We understood why we were picking Next.js over WordPress, not just that we were.', author: 'Marcus Oduya', role: 'Founder & CEO', company: 'Cairn Analytics' },
-          { quote: 'Best SEO engagement we\u2019ve run. Everything was measurable. Organic traffic is up 140% six months in, and we can point to the exact changes that moved it.', author: 'Rachel Donovan', role: 'Marketing Director', company: 'Edgewater Law' },
-        ],
+        mode: 'latest',
+        limit: 3,
       },
       {
         blockType: 'faq',
@@ -458,6 +455,28 @@ async function run() {
     } else {
       await payload.update({ collection: 'projects', id: existing.docs[0].id, data: proj })
       console.log(`  updated project: ${proj.slug}`)
+    }
+  }
+
+  // Sample testimonials — populate the new Testimonials collection so the
+  // home page block (mode: 'latest') has something to render.
+  const sampleTestimonials: any[] = [
+    { quote: 'Six weeks from brief to production. The site loads faster than our old one even loaded its splash screen. Our bounce rate dropped 34% in the first month.', author: 'Sarah Chen', role: 'Head of Marketing', company: 'Northlake Consulting', featured: true, sortOrder: 10 },
+    { quote: 'They actually explained the trade-offs in plain language. We understood why we were picking Next.js over WordPress, not just that we were.', author: 'Marcus Oduya', role: 'Founder & CEO', company: 'Cairn Analytics', featured: true, sortOrder: 20 },
+    { quote: 'Best SEO engagement we’ve run. Everything was measurable. Organic traffic is up 140% six months in, and we can point to the exact changes that moved it.', author: 'Rachel Donovan', role: 'Marketing Director', company: 'Edgewater Law', featured: true, sortOrder: 30 },
+  ]
+  for (const t of sampleTestimonials) {
+    const existing = await payload.find({
+      collection: 'testimonials',
+      where: { and: [{ author: { equals: t.author } }, { company: { equals: t.company } }] },
+      limit: 1,
+    })
+    if (existing.totalDocs === 0) {
+      await payload.create({ collection: 'testimonials', data: t })
+      console.log(`  created testimonial: ${t.author}`)
+    } else {
+      await payload.update({ collection: 'testimonials', id: existing.docs[0].id, data: t })
+      console.log(`  updated testimonial: ${t.author}`)
     }
   }
 

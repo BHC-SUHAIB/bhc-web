@@ -144,6 +144,22 @@ export default buildConfig({
         // Safe at this stage (no real data yet). For established sites, flip
         // to false and run `payload migrate:create` / `payload migrate` in CI.
         push: true,
+        // Drizzle's schema-push prompts on stdin when it can't decide
+        // whether a new table is a rename of an old one (e.g. the
+        // `testimonials` collection vs the dropped
+        // `pages_blocks_testimonials_items` block-array table). With no
+        // TTY in the production container the prompt hangs the boot
+        // forever. Drop the legacy block-array tables here, before
+        // schema-push runs, so push has no rename ambiguity. Idempotent
+        // — DROP TABLE IF EXISTS is a no-op once the tables are gone.
+        beforeSchemaInit: [
+          async ({ adapter, schema }) => {
+            await adapter.drizzle.execute(
+              'DROP TABLE IF EXISTS pages_blocks_testimonials_items CASCADE; DROP TABLE IF EXISTS _pages_v_blocks_testimonials_items CASCADE;',
+            )
+            return schema
+          },
+        ],
       })
     : sqliteAdapter({ client: { url: dbUri } }),
 

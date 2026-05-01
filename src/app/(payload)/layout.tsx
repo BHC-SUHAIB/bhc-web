@@ -3,6 +3,8 @@
 import React from 'react'
 import config from '@payload-config'
 import '@payloadcms/next/css'
+import './admin-theme.css'
+import { manrope, fraunces, jetbrains } from '@/lib/fonts'
 import type { ServerFunctionClient } from 'payload'
 import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import { importMap } from './admin/importMap'
@@ -15,7 +17,12 @@ const serverFunction: ServerFunctionClient = async function (args) {
 type Props = { children: React.ReactNode }
 
 const Layout = ({ children }: Props) => (
-  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+  <RootLayout
+    config={config}
+    importMap={importMap}
+    serverFunction={serverFunction}
+    htmlProps={{ className: `${manrope.variable} ${fraunces.variable} ${jetbrains.variable}` }}
+  >
     {children}
   </RootLayout>
 )

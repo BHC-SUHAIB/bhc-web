@@ -64,6 +64,12 @@ services:
       FORCE_ABOUT_UPSERT: ${FORCE_ABOUT_UPSERT:-}
       FORCE_SERVICES_UPSERT: ${FORCE_SERVICES_UPSERT:-}
       FORCE_CONTACT_UPSERT: ${FORCE_CONTACT_UPSERT:-}
+      # One-shot bypass for the dev-only routes (/dev-seed-rework,
+      # /dev-schema-fix, etc). When set to "one-time-yes" in .env + the
+      # container is RECREATED (docker compose up -d, not restart), the
+      # routes accept POSTs in production. Remove from .env + recreate
+      # again to relock.
+      ALLOW_DEV_SEED: ${ALLOW_DEV_SEED:-}
       FORCE_ARTICLES_UPSERT: ${FORCE_ARTICLES_UPSERT:-}
       FORCE_PM_UPSERT: ${FORCE_PM_UPSERT:-}
       FORCE_WAYGFT_UPSERT: ${FORCE_WAYGFT_UPSERT:-}

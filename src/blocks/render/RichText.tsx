@@ -19,7 +19,11 @@ const innerWidthCls = (size: 'prose' | 'medium' | 'wide'): string => {
 export function RichText(b: RichTextBlock) {
   const size = (b.maxWidth ?? 'prose') as 'prose' | 'medium' | 'wide'
   const img = typeof b.image === 'object' ? (b.image as Media | null) : null
-  const hasImage = !!img?.url
+  // External imageUrl takes precedence over the upload field — used for
+  // CDN-hosted portraits referenced by URL without re-uploading to local
+  // Payload during dev/seeding.
+  const imageUrl = b.imageUrl ?? img?.url ?? null
+  const hasImage = !!imageUrl
   const focus = (b.imageFocus as 'face' | 'center' | undefined) ?? 'face'
   const variant = (b.variant as 'default' | 'lede' | 'card' | undefined) ?? 'default'
   // Anchor the circular crop to the top of the photo for portrait subjects so
@@ -59,10 +63,12 @@ export function RichText(b: RichTextBlock) {
         {variant === 'lede' ? (
           <div className={inner}>
             <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-7 sm:p-10 shadow-[0_18px_40px_-24px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]">
+              {/* Eyebrow defaults to "Our mission" for backward compat with the
+                  pre-eyebrow seed data on the live site, but is editor-overridable. */}
               <div className="flex items-center gap-3 mb-5">
                 <span className="h-[2px] w-8 bg-[var(--color-brass)] rounded-full" aria-hidden />
                 <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-brass-dark)]">
-                  Our mission
+                  {b.eyebrow ?? 'Our mission'}
                 </span>
               </div>
               <div className="lede-content">
@@ -73,13 +79,19 @@ export function RichText(b: RichTextBlock) {
         ) : variant === 'card' ? (
           <div className={inner}>
             <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 sm:p-9 card-content text-[16px] leading-[1.6]">
+              {b.eyebrow ? (
+                <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-fg-muted)] mb-4">{b.eyebrow}</p>
+              ) : null}
               <RichTextRenderer content={b.content} />
             </div>
           </div>
         ) : hasImage ? (
           <div className={inner}>
+            {b.eyebrow ? (
+              <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-fg-muted)] mb-6 text-center">{b.eyebrow}</p>
+            ) : null}
             <div className="relative aspect-square w-[180px] sm:w-[200px] rounded-full overflow-hidden border-2 border-[var(--color-brass)] shadow-[0_18px_40px_-22px_color-mix(in_srgb,var(--color-ink)_45%,transparent)] mx-auto mb-8">
-              <Image src={img!.url as string} alt={(img!.alt as string) ?? ''} fill className={imgObjectClass} sizes="(min-width:640px) 200px, 180px" />
+              <Image src={imageUrl as string} alt={(img?.alt as string) ?? ''} fill className={imgObjectClass} sizes="(min-width:640px) 200px, 180px" unoptimized />
             </div>
             <div className="prose-content text-[17px] leading-[1.6]">
               <RichTextRenderer content={b.content} />
@@ -87,6 +99,9 @@ export function RichText(b: RichTextBlock) {
           </div>
         ) : (
           <div className={proseCls}>
+            {b.eyebrow ? (
+              <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-fg-muted)] mb-4">{b.eyebrow}</p>
+            ) : null}
             <RichTextRenderer content={b.content} />
           </div>
         )}

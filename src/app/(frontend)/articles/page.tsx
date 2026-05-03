@@ -22,20 +22,43 @@ export default async function ArticlesPage() {
 
   return (
     <div className="pb-20">
-      <Container size="xl" className="py-20 sm:py-28">
-        <div className="max-w-3xl mb-16">
-          <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-5">
-            Articles
-          </p>
-          <h1 className="font-serif font-semibold text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.03em]">
-            Field notes.
-          </h1>
-          <p className="mt-6 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">
-            Essays, deep dives, and the reasoning behind our engagements — written for the
-            people who&apos;ll actually be hiring a studio like ours.
-          </p>
+      {/* Faint hero background — open notebook photo with a MEDIUM gradient
+          (lighter than the conversion-page heroes) since this is a blog index,
+          not a paid-traffic landing page; the visitor is already past the
+          "convince me" stage and heavy gloom would feel oppressive. */}
+      <section className="relative isolate overflow-hidden">
+        <div className="absolute inset-0 -z-20">
+          <Image
+            src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1920&q=80"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+            unoptimized
+          />
         </div>
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.35)_40%,rgba(0,0,0,0.78)_100%)]"
+          aria-hidden
+        />
+        <Container size="xl">
+          <div className="py-24 sm:py-32 md:py-40 max-w-3xl">
+            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-white/85 mb-5 [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]">
+              Articles
+            </p>
+            <h1 className="font-serif font-semibold text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.85)]">
+              Field notes.
+            </h1>
+            <p className="mt-6 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-white max-w-2xl [text-shadow:0_1px_8px_rgba(0,0,0,0.7)]">
+              Essays, deep dives, and the reasoning behind our engagements — written for the
+              people who&apos;ll actually be hiring a studio like ours.
+            </p>
+          </div>
+        </Container>
+      </section>
 
+      <Container size="xl" className="py-12 sm:py-16">
         {articles.length === 0 ? (
           <p className="text-[var(--color-fg-muted)]">No articles published yet.</p>
         ) : (

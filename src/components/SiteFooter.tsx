@@ -5,21 +5,16 @@ import { TrackedLink } from './TrackedLink'
 import { phoneHref, mailtoHref } from '@/lib/contact'
 import type { Footer as FooterGlobal, SiteSetting } from '@/payload-types'
 
-const socialLabels: Record<string, string> = {
-  linkedin: 'LinkedIn',
-  github: 'GitHub',
-  x: 'X',
-  instagram: 'Instagram',
-  dribbble: 'Dribbble',
-  mastodon: 'Mastodon',
-  email: 'Email',
-}
+// Social links (LinkedIn / GitHub / Email pseudo-link) intentionally NOT
+// rendered in the main site footer. The footer global may still hold legacy
+// social entries — we ignore them here so editors don't accidentally re-add
+// the cluttered bottom strip. Real contact (email + phone) lives in the
+// left column above and remains the single source for reaching us.
 
 type FooterProps = { footer: FooterGlobal | null; siteSettings: SiteSetting | null }
 
 export function SiteFooter({ footer, siteSettings }: FooterProps) {
   const columns = footer?.columns ?? []
-  const social = footer?.social ?? []
   const tagline = footer?.tagline
   const copyright = footer?.copyright
   const email = siteSettings?.contactEmail ?? ''
@@ -87,19 +82,7 @@ export function SiteFooter({ footer, siteSettings }: FooterProps) {
 
       <Container size="xl" className="mt-12 pt-6 border-t border-[var(--color-border)] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-[13px] text-[var(--color-fg-muted)]">
         <span>{copyright}</span>
-        <div className="flex gap-5">
-          {social.map((s, i) => (
-            <a
-              key={i}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--color-brass)] transition-colors"
-            >
-              {socialLabels[s.platform] ?? s.platform}
-            </a>
-          ))}
-        </div>
+        {/* No social links rendered. Contact lives in the left column above. */}
       </Container>
     </footer>
   )

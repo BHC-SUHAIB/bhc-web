@@ -19,20 +19,42 @@ export default async function PortfolioPage() {
 
   return (
     <div className="pb-20">
-      <Container size="xl" className="py-20 sm:py-28">
-        <div className="max-w-3xl mb-16">
-          <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-5">
-            Portfolio
-          </p>
-          <h1 className="font-serif font-semibold text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.03em]">
-            Selected work.
-          </h1>
-          <p className="mt-6 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">
-            A look at recent projects — the problem each client brought us, what we
-            built, the stack we chose, and what actually changed for them.
-          </p>
+      {/* Faint hero background — matches the pattern used on About / Services /
+          Contact / LP heroes. Workspace photo with a heavy gradient overlay so
+          the headline stays legible. */}
+      <section className="relative isolate overflow-hidden">
+        <div className="absolute inset-0 -z-20">
+          <Image
+            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&q=80"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+            unoptimized
+          />
         </div>
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.78)_0%,rgba(0,0,0,0.55)_40%,rgba(0,0,0,0.92)_100%)]"
+          aria-hidden
+        />
+        <Container size="xl">
+          <div className="py-24 sm:py-32 md:py-40 max-w-3xl">
+            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-white/85 mb-5 [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]">
+              Portfolio
+            </p>
+            <h1 className="font-serif font-semibold text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.85)]">
+              Selected work.
+            </h1>
+            <p className="mt-6 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-white max-w-2xl [text-shadow:0_1px_8px_rgba(0,0,0,0.7)]">
+              A look at recent projects — the problem each client brought us, what we
+              built, the stack we chose, and what actually changed for them.
+            </p>
+          </div>
+        </Container>
+      </section>
 
+      <Container size="xl" className="py-12 sm:py-16">
         {projects.length === 0 ? (
           <p className="text-[var(--color-fg-muted)]">No projects published yet.</p>
         ) : (

@@ -62,7 +62,11 @@ export function TestimonialsCarousel({ items }: Props) {
       <figure
         className={cn(
           'p-8 sm:p-12 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)]',
-          'min-h-[320px] flex flex-col justify-center',
+          // Fixed height — every slide occupies the same vertical slot so
+          // the surrounding page doesn't reflow as the carousel rotates
+          // between short and long quotes. Sized to comfortably fit the
+          // 400-char `maxLength` enforced on Testimonial.quote.
+          'h-[460px] sm:h-[420px] overflow-hidden flex flex-col justify-center',
         )}
         aria-roledescription="slide"
         aria-label={`${active + 1} of ${count}`}

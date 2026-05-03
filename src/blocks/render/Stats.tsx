@@ -9,8 +9,31 @@ export function Stats(b: StatsBlock) {
     count === 2 ? 'grid-cols-1 sm:grid-cols-2' :
     count === 3 ? 'grid-cols-1 sm:grid-cols-3' :
     'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4'
+  // Faint background — image at 30% opacity over a translucent bg-color tint
+  // (50% top → 65% bottom) so the photograph is visibly present but never
+  // competes with the foreground stats. The overlay is a vertical gradient
+  // so the top of the section gets a hint of texture and the bottom blends
+  // into the next section.
+  const hasBg = !!b.backgroundImageUrl
   return (
-    <section className="py-10 sm:py-14">
+    <section className="relative isolate overflow-hidden py-10 sm:py-14">
+      {hasBg ? (
+        <>
+          <div
+            aria-hidden
+            className="absolute inset-0 -z-20 bg-cover bg-center"
+            style={{ backgroundImage: `url(${b.backgroundImageUrl})`, opacity: 0.3 }}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 -z-10"
+            style={{
+              background:
+                'linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 50%, transparent) 0%, color-mix(in srgb, var(--color-bg) 65%, transparent) 100%)',
+            }}
+          />
+        </>
+      ) : null}
       <Container size="xl">
         {b.eyebrow || b.headline ? (
           <div className="max-w-2xl mb-10">
@@ -29,12 +52,19 @@ export function Stats(b: StatsBlock) {
 
         <div
           className={cn(
-            'grid gap-px bg-[var(--color-border)] rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)]',
+            'grid gap-px rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)]',
+            // When the section has a faint background image we let it bleed
+            // through the grid by making the cell separators transparent and
+            // the cells themselves a translucent bg-color tint. Without bg,
+            // we keep solid borders + cells for the original chunky look.
+            hasBg
+              ? 'gap-px bg-transparent'
+              : 'gap-px bg-[var(--color-border)]',
             gridCols,
           )}
         >
           {b.items?.map((s, i) => (
-            <div key={i} className="bg-[var(--color-bg)] p-7">
+            <div key={i} className={cn('p-7', hasBg ? 'bg-[color-mix(in_srgb,var(--color-bg)_75%,transparent)] backdrop-blur-sm border-r border-b border-[color-mix(in_srgb,var(--color-border)_50%,transparent)]' : 'bg-[var(--color-bg)]')}>
               <div className="font-serif font-semibold text-[clamp(2rem,4vw,3rem)] tracking-[-0.025em] leading-none">
                 {s.value}
               </div>

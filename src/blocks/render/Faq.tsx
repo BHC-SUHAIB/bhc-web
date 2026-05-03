@@ -1,13 +1,33 @@
-'use client'
-
-import { useState } from 'react'
 import { Container } from '@/components/Container'
-import { ChevronDown } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { getCachedFeaturedFaqs } from '@/lib/payload-cache'
+import { FaqAccordion } from './FaqAccordion'
 import type { FaqBlock } from '@/payload-types'
 
-export function Faq(b: FaqBlock) {
-  const [open, setOpen] = useState<number | null>(0)
+// FAQ block with two modes:
+//
+//   - auto (default) — pulls every featured FAQ from the FAQs collection in
+//     the admin. One source of truth: edit a question once and it propagates
+//     to every FAQ block on the site. Optional category filter narrows the
+//     pool to a single category.
+//   - manual — uses the inline `items` array on this specific block. Lets
+//     editors override the centralized list per-page when needed (rare).
+//
+// Auto mode is what 99% of pages should use.
+
+export async function Faq(b: FaqBlock) {
+  const mode = b.mode ?? 'auto'
+  let items: Array<{ question: string; answer: string }> = []
+
+  if (mode === 'manual' && Array.isArray(b.items) && b.items.length > 0) {
+    items = b.items.map((it) => ({ question: it.question, answer: it.answer }))
+  } else {
+    const all = await getCachedFeaturedFaqs()
+    const filtered = b.category && b.category.length > 0 ? all.filter((f) => f.category === b.category) : all
+    const cap = b.limit ?? 12
+    items = filtered.slice(0, cap).map((f) => ({ question: f.question, answer: f.answer }))
+  }
+
+  if (items.length === 0) return null
 
   return (
     <section className="py-12 sm:py-16">
@@ -27,29 +47,7 @@ export function Faq(b: FaqBlock) {
           </div>
         ) : null}
 
-        <div className="divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
-          {b.items?.map((it, i) => {
-            const isOpen = open === i
-            return (
-              <div key={i}>
-                <button
-                  type="button"
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className="w-full text-left flex items-center justify-between gap-4 py-5 hover:text-[var(--color-brass)] transition-colors"
-                  aria-expanded={isOpen}
-                >
-                  <span className="font-medium text-[16px] sm:text-[17px]">{it.question}</span>
-                  <ChevronDown className={cn('size-4 transition-transform shrink-0', isOpen && 'rotate-180')} />
-                </button>
-                <div className={cn('grid transition-[grid-template-rows] duration-300 ease-out', isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]')}>
-                  <div className="overflow-hidden">
-                    <p className="pb-5 pr-10 text-[15px] leading-[1.6] text-[var(--color-fg-muted)]">{it.answer}</p>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        <FaqAccordion items={items} />
       </Container>
     </section>
   )

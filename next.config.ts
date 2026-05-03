@@ -30,6 +30,14 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'www.blackhartconsulting.com' },
       { protocol: 'https', hostname: '**.digitaloceanspaces.com' },
       { protocol: 'https', hostname: '**.cdn.digitaloceanspaces.com' },
+      // Stock imagery used as backgroundImageUrl on landing-page Hero blocks.
+      // Editors can paste an Unsplash URL into the field without uploading;
+      // these patterns let next/image serve them. Hero render uses
+      // unoptimized for safety, but allow-listing here lets us toggle that
+      // off later for better Core Web Vitals.
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'plus.unsplash.com' },
+      { protocol: 'https', hostname: 'source.unsplash.com' },
     ],
   },
   // Payload's pushDevSchema dynamically requires drizzle-kit at runtime.

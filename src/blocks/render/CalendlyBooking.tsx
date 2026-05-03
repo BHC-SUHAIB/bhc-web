@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Container } from '@/components/Container'
-import { pushEvent } from '@/lib/analytics'
+import { pushEvent, pushEventThenNavigate } from '@/lib/analytics'
 import { mailtoHref } from '@/lib/contact'
 import type { CalendlyBookingBlock } from '@/payload-types'
 
@@ -26,13 +26,16 @@ export function CalendlyBooking(b: CalendlyBookingBlock) {
   const buttonLabel = b.popupButtonLabel ?? 'Book a 30-min discovery call'
   const hasBg = !!b.backgroundImageUrl
 
-  function handleClick() {
-    pushEvent('booking_click', {
-      source_page: typeof window !== 'undefined' ? window.location.pathname : '',
-      location: 'calendly_cta_link',
-    })
-    // Same-tab navigation; let the browser do the standard nav once the
-    // event has been pushed to the dataLayer.
+  function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    pushEventThenNavigate(
+      'booking_click',
+      url,
+      {
+        source_page: typeof window !== 'undefined' ? window.location.pathname : '',
+        location: 'calendly_cta_link',
+      },
+      e,
+    )
   }
 
   return (

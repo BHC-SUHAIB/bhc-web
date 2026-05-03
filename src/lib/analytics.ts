@@ -46,3 +46,35 @@ export function pushEvent(event: EventName, params: EventParams = {}): void {
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({ event, ...params })
 }
+
+type NavigationEvent = {
+  preventDefault: () => void
+  metaKey?: boolean
+  ctrlKey?: boolean
+  shiftKey?: boolean
+  button?: number
+}
+
+// Synchronous dataLayer pushes land in window.dataLayer immediately, but
+// GTM dispatches GA4's outbound HTTP request asynchronously — so when the
+// click also navigates the page, the browser cancels GA4's beacon
+// mid-flight and the event never lands. Pattern: push event → cancel
+// default nav → wait 200ms (below perception) → trigger nav manually.
+//
+// Skip the defer for tel:/mailto: (OS handlers, page doesn't navigate) and
+// modifier-clicks (open in new tab, original page stays alive).
+export function pushEventThenNavigate(
+  event: EventName,
+  href: string,
+  params: EventParams = {},
+  e: NavigationEvent,
+): void {
+  pushEvent(event, params)
+  if (typeof window === 'undefined') return
+  if (e.metaKey || e.ctrlKey || e.shiftKey || (e.button !== undefined && e.button !== 0)) return
+  if (/^(tel|mailto):/i.test(href)) return
+  e.preventDefault()
+  window.setTimeout(() => {
+    window.location.href = href
+  }, 200)
+}

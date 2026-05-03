@@ -1,21 +1,27 @@
 'use client'
 
-import { pushEvent } from '@/lib/analytics'
+import { pushEventThenNavigate } from '@/lib/analytics'
 
 type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   trackEvent: 'phone_click' | 'email_click' | 'booking_click'
   trackLocation: string
 }
 
-export function TrackedLink({ trackEvent, trackLocation, onClick, children, ...rest }: Props) {
+export function TrackedLink({ trackEvent, trackLocation, onClick, href, children, ...rest }: Props) {
   return (
     <a
       {...rest}
+      href={href}
       onClick={(ev) => {
-        pushEvent(trackEvent, {
-          source_page: typeof window !== 'undefined' ? window.location.pathname : '',
-          location: trackLocation,
-        })
+        pushEventThenNavigate(
+          trackEvent,
+          href ?? '',
+          {
+            source_page: typeof window !== 'undefined' ? window.location.pathname : '',
+            location: trackLocation,
+          },
+          ev,
+        )
         onClick?.(ev)
       }}
     >

@@ -1,7 +1,7 @@
 'use client'
 
 import { Download } from 'lucide-react'
-import { pushEvent } from '@/lib/analytics'
+import { pushEventThenNavigate } from '@/lib/analytics'
 
 // "Download the one-pager" button used in Services cards (one per service) and
 // any other lead-magnet hookpoint. Click fires a `pdf_download` dataLayer event
@@ -27,24 +27,18 @@ export function PdfDownloadLink({ href, label, slug, location, variant = 'ghost'
   return (
     <a
       href={href}
-      onClick={(e) => {
-        // Browser-initiated downloads cancel in-flight beacons before they
-        // leave the page, so a synchronous dataLayer push lands but GA4's
-        // outbound HTTP request from GTM gets killed mid-flight. Pattern:
-        // (1) cancel the default navigation, (2) push the event so GTM
-        // dispatches GA4's request, (3) wait 200ms (below perception
-        // threshold), (4) trigger the download manually. Visitor sees
-        // the same behavior; analytics actually fires.
-        e.preventDefault()
-        pushEvent('pdf_download', {
-          source_page: typeof window !== 'undefined' ? window.location.pathname : '',
-          location,
-          pdf_slug: slug,
-        })
-        window.setTimeout(() => {
-          window.location.href = href
-        }, 200)
-      }}
+      onClick={(e) =>
+        pushEventThenNavigate(
+          'pdf_download',
+          href,
+          {
+            source_page: typeof window !== 'undefined' ? window.location.pathname : '',
+            location,
+            pdf_slug: slug,
+          },
+          e,
+        )
+      }
       className={cls}
       // download attribute kept so the browser uses the URL filename hint
       // when Content-Disposition is missing or ignored (defense in depth).

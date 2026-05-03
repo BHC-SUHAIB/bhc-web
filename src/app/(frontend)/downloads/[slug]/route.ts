@@ -2,6 +2,11 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { buildPdf } from '@/lib/pdfs/builder'
 import { PDFS } from '@/lib/pdfs/content'
 
+// Force dynamic — pdf-lib's loadLogoBytes() reads from /public at runtime,
+// and Next's static-route inference can't see that. Skipping prerender keeps
+// the route working in production.
+export const dynamic = 'force-dynamic'
+
 // Generates the requested PDF on-demand from the spec in @/lib/pdfs/content.
 // Cached at the edge for 24h so Google Ads landing pages don't pay generation
 // cost per visitor; the spec lives in source so any copy update ships with

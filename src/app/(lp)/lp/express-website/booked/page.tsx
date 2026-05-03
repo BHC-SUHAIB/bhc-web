@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+// Skip static prerender — the (lp) layout fetches SiteSettings via Payload
+// at render time, and Payload init requires PAYLOAD_SECRET which isn't
+// available during the Docker build phase.
+export const dynamic = 'force-dynamic'
+
 const PHONE_DISPLAY = '(866) 434-9777'
 const PHONE_HREF = 'tel:+18664349777'
 const EMAIL_DISPLAY = 'hello@blackhartconsulting.com'

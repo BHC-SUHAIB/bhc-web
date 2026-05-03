@@ -5,14 +5,38 @@ import type { CTABlock } from '@/payload-types'
 
 export function CTA(b: CTABlock) {
   const emphasized = b.variant === 'emphasized'
+  const hasBg = !!b.backgroundImageUrl
   return (
-    <section className="py-10 sm:py-14">
+    <section className="relative isolate overflow-hidden py-10 sm:py-14">
+      {hasBg ? (
+        <>
+          <div
+            aria-hidden
+            className="absolute inset-0 -z-20 bg-cover bg-center"
+            style={{ backgroundImage: `url(${b.backgroundImageUrl})`, opacity: 0.3 }}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 -z-10"
+            style={{
+              background:
+                'linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 55%, transparent) 0%, color-mix(in srgb, var(--color-bg) 70%, transparent) 100%)',
+            }}
+          />
+        </>
+      ) : null}
       <Container size="lg">
         <div className={cn(
           'rounded-[var(--radius-xl)] border p-8 sm:p-12 text-center',
+          // Translucent backgrounds when a faint section image is set, so
+          // the photo bleeds through the card edges/shadow zone.
           emphasized
-            ? 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_12%,var(--color-bg))]'
-            : 'border-[var(--color-border)] bg-[var(--color-surface)]',
+            ? hasBg
+              ? 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_15%,color-mix(in_srgb,var(--color-bg)_80%,transparent))] backdrop-blur-sm'
+              : 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_12%,var(--color-bg))]'
+            : hasBg
+              ? 'border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg)_82%,transparent)] backdrop-blur-sm'
+              : 'border-[var(--color-border)] bg-[var(--color-surface)]',
         )}>
           <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.5vw,2.75rem)] leading-[1.1] tracking-[-0.02em] max-w-2xl mx-auto">
             {b.headline}

@@ -17,7 +17,7 @@
  */
 import { unstable_cache } from 'next/cache'
 import { getPayloadClient } from './payload'
-import type { Article, Footer, Header, Page, Project, SiteSetting, Testimonial } from '@/payload-types'
+import type { Article, Faq, Footer, Header, LandingPage, Page, Project, SiteSetting, Testimonial } from '@/payload-types'
 
 const REVALIDATE = 60
 
@@ -74,6 +74,32 @@ export const getCachedAllPages = unstable_cache(
   },
   ['pages:all'],
   { revalidate: REVALIDATE, tags: ['pages'] },
+)
+
+// --- Landing pages (paid-traffic, no-nav, noindex by default) -------
+
+export const getCachedLandingPageBySlug = unstable_cache(
+  async (slug: string): Promise<LandingPage | null> => {
+    const payload = await getPayloadClient()
+    const res = await payload.find({
+      collection: 'landingPages',
+      where: { slug: { equals: slug } },
+      limit: 1,
+    })
+    return (res.docs[0] as LandingPage | undefined) ?? null
+  },
+  ['landingPages:by-slug'],
+  { revalidate: REVALIDATE, tags: ['landingPages'] },
+)
+
+export const getCachedAllLandingPages = unstable_cache(
+  async (): Promise<Array<Pick<LandingPage, 'id' | 'slug' | 'updatedAt'>>> => {
+    const payload = await getPayloadClient()
+    const res = await payload.find({ collection: 'landingPages', limit: 200, depth: 0 })
+    return res.docs as Array<Pick<LandingPage, 'id' | 'slug' | 'updatedAt'>>
+  },
+  ['landingPages:all'],
+  { revalidate: REVALIDATE, tags: ['landingPages'] },
 )
 
 // --- Projects ---------------------------------------------------------
@@ -191,6 +217,28 @@ export const getCachedFeaturedTestimonials = unstable_cache(
   },
   ['testimonials:featured'],
   { revalidate: REVALIDATE, tags: ['testimonials'] },
+)
+
+// --- FAQs ------------------------------------------------------------
+//
+// Fetch all featured FAQs once per cache window. Block render filters by
+// category client-side from this set instead of having one cached query
+// per (category, limit) tuple — keeps the cache surface small and lets
+// every FAQ block on the site share a single backing query.
+
+export const getCachedFeaturedFaqs = unstable_cache(
+  async (): Promise<Faq[]> => {
+    const payload = await getPayloadClient()
+    const res = await payload.find({
+      collection: 'faqs',
+      where: { featured: { equals: true } },
+      limit: 200,
+      sort: ['sortOrder', '-updatedAt'],
+    })
+    return res.docs as Faq[]
+  },
+  ['faqs:featured'],
+  { revalidate: REVALIDATE, tags: ['faqs'] },
 )
 
 export const getCachedAllArticles = unstable_cache(

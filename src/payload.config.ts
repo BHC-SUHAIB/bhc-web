@@ -11,9 +11,11 @@ import { fileURLToPath } from 'node:url'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { LandingPages } from './collections/LandingPages'
 import { Projects } from './collections/Projects'
 import { Articles } from './collections/Articles'
 import { Testimonials } from './collections/Testimonials'
+import { Faqs } from './collections/Faqs'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { SmsConsents } from './collections/SmsConsents'
 import { Header } from './globals/Header'
@@ -132,7 +134,7 @@ export default buildConfig({
 
   onInit: seedOnInit,
 
-  collections: [Users, Media, Pages, Projects, Articles, Testimonials, ContactSubmissions, SmsConsents],
+  collections: [Users, Media, Pages, LandingPages, Projects, Articles, Testimonials, Faqs, ContactSubmissions, SmsConsents],
   globals: [Header, Footer, SiteSettings],
 
   plugins,

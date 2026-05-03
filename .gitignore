@@ -40,8 +40,13 @@ next-env.d.ts
 # Payload
 /payload.db
 /payload.db-journal
+/payload.db.*.bak
 /media
 /src/payload-types.ts
+
+# Local working notes (not for prod)
+/bhc-website-refresh-prompt.md
+/prospects/
 
 # IDE
 .vscode/

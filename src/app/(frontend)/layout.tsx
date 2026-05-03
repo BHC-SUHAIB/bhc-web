@@ -57,13 +57,24 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         <link rel="dns-prefetch" href="https://picsum.photos" />
         <link rel="preconnect" href="https://fastly.picsum.photos" crossOrigin="" />
         {gtmId ? (
-          <Script id="gtm-init" strategy="afterInteractive">
-            {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          <>
+            {/* Push page_type into the dataLayer BEFORE GTM loads so the
+                first pageview tag fires with page_type already set. Lets
+                you build "LP traffic only" segments in GA4 (Reports →
+                Custom dimensions → page_type) without parsing pathnames
+                in every report. The (lp) layout pushes 'landing_page';
+                this main-site layout pushes 'main_site'. */}
+            <Script id="gtm-page-type" strategy="beforeInteractive">
+              {`window.dataLayer = window.dataLayer || []; window.dataLayer.push({ page_type: 'main_site' });`}
+            </Script>
+            <Script id="gtm-init" strategy="afterInteractive">
+              {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${gtmId}');`}
-          </Script>
+            </Script>
+          </>
         ) : null}
       </head>
       <body className="min-h-dvh flex flex-col">

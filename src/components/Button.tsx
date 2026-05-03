@@ -37,6 +37,20 @@ const button = cva(
           'hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-fg)]',
         ].join(' '),
 
+        /* On-photo ghost / outlined — for use against dark photo overlays
+           (heroes with backgroundImageUrl). Always white-on-translucent so
+           they read regardless of photo content. The configured Hero CTA
+           "ghost" variant on a photo hero would be invisible (dark text on
+           dark overlay) — use this instead for any CTA pinned over media. */
+        onPhotoGhost: [
+          'bg-white/10 text-white border border-white/35 backdrop-blur-sm',
+          'hover:bg-white hover:text-[var(--color-ink)] hover:border-white',
+        ].join(' '),
+        onPhotoSecondary: [
+          'bg-transparent text-white border border-white/60',
+          'hover:bg-white hover:text-[var(--color-ink)] hover:border-white',
+        ].join(' '),
+
         /* Brass — warm accent button. Always ink text on brass bg for max contrast. */
         brass: [
           'bg-[var(--color-brass)] text-[var(--color-ink)]',
@@ -59,7 +73,17 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
 export function Button({ className, variant, size, href, openInNewTab, children, onClick, ...props }: ButtonProps) {
   if (href) {
     const isExternal = /^https?:\/\//.test(href)
-    const target = openInNewTab || isExternal ? '_blank' : undefined
+    // Calendly is a special case: redirect-back to /lp/.../booked only works
+    // when the booking happens in the SAME tab as the originating page.
+    // Force same-tab navigation for any Calendly URL even though it's
+    // technically external. Same applies if openInNewTab is explicitly false.
+    const isCalendly = /calendly\.com/i.test(href)
+    const target =
+      openInNewTab === false || isCalendly
+        ? undefined
+        : openInNewTab || isExternal
+          ? '_blank'
+          : undefined
     const rel = target === '_blank' ? 'noopener noreferrer' : undefined
     return (
       <Link

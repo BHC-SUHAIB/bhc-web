@@ -18,6 +18,7 @@ type EventName =
   | 'hero_cta_click'       // Click on a hero CTA
   | 'booking_click'        // Click on Cal.com / Calendly link (intent signal)
   | 'booking_completed'    // Calendly redirect-back fired this — they actually booked
+  | 'pdf_download'         // Click on a one-pager / lead-magnet download button
 
 type EventParams = {
   /** Page or section the event fired from. */

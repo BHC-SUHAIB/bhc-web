@@ -39,8 +39,13 @@ export const Testimonials: CollectionConfig = {
     // Quote remains a plain textarea — multi-paragraph reviews work
     // because admins can press Enter twice between paragraphs and the
     // public render splits the string on blank lines into <p> blocks.
-    { name: 'quote', type: 'textarea', required: true, admin: {
-      description: 'Press Enter twice between paragraphs. Both blank-line breaks and single line breaks are preserved on the public site.',
+    //
+    // 400-character cap keeps every quote inside the carousel's fixed
+    // height (TestimonialsCarousel renders at h-[420px]). Going over
+    // makes the slide grow vertically and pushes the surrounding page
+    // content around as the carousel rotates.
+    { name: 'quote', type: 'textarea', required: true, maxLength: 400, admin: {
+      description: 'Up to 400 characters. Press Enter twice between paragraphs. Both blank-line breaks and single line breaks are preserved on the public site. Anything past 400 chars makes the carousel grow taller than its fixed slot.',
       rows: 8,
     } },
     { name: 'author', type: 'text', required: true, admin: { description: 'Person being quoted (e.g. "Grace R.")' } },

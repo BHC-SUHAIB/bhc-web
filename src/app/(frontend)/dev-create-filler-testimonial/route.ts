@@ -4,6 +4,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { denyIfProductionLocked } from '@/lib/dev-route-guard'
 
+export const dynamic = 'force-dynamic'
+
 // Dev-only — creates a 400-character filler testimonial so the carousel's
 // fixed-height layout can be visually verified at the maxLength boundary.
 // Idempotent: looks for an existing "Quote Length Test" doc and updates it

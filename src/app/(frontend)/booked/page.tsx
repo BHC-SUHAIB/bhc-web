@@ -16,6 +16,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+// Skip static prerender — this route fetches SiteSettings via Payload at
+// render time, and Payload init requires PAYLOAD_SECRET which isn't
+// available during the Docker build phase. Same pattern every other
+// (frontend) page uses.
+export const dynamic = 'force-dynamic'
+
 // Site-level Calendly redirect target. Mirror of /lp/express-website/booked
 // but reachable from the main-site Calendly section + any non-LP funnel.
 // Pulls phone + email from CMS so the page never has stale contact info.

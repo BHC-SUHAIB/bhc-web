@@ -4,6 +4,8 @@ import { buildPdf } from '@/lib/pdfs/builder'
 import { PDFS } from '@/lib/pdfs/content'
 import { denyIfProductionLocked } from '@/lib/dev-route-guard'
 
+export const dynamic = 'force-dynamic'
+
 // Dev helper — returns page count for every registered PDF so we can verify
 // each one fits on a single page after a content/builder edit. Loads pdf-lib
 // server-side to count pages directly instead of regex-parsing the binary.

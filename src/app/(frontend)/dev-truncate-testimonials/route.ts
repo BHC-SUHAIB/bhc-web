@@ -4,6 +4,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { denyIfProductionLocked } from '@/lib/dev-route-guard'
 
+export const dynamic = 'force-dynamic'
+
 // One-shot dev helper — replaces any existing testimonial whose quote is over
 // the 400-char cap with a hand-crafted excerpt that fits inside the carousel's
 // fixed h-[420px] slot. Idempotent: safe to re-run, leaves any quote already

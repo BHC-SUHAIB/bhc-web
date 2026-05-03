@@ -12,6 +12,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { denyIfProductionLocked } from '@/lib/dev-route-guard'
 
+export const dynamic = 'force-dynamic'
+
 const ALTER_STATEMENTS: string[] = [
   // Hero (already added in prior session — repeat anyway in case the DB was
   // never migrated locally).

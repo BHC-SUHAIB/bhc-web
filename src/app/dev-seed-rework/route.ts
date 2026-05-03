@@ -13,6 +13,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { denyIfProductionLocked } from '@/lib/dev-route-guard'
 
+export const dynamic = 'force-dynamic'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // Lexical rich-text helper — single paragraph wrapped in the minimal node

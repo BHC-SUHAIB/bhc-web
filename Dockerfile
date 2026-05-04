@@ -24,6 +24,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # to ENV so Next picks them up.
 ARG NEXT_PUBLIC_GTM_ID
 ENV NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}
+ARG NEXT_PUBLIC_CLARITY_PROJECT_ID
+ENV NEXT_PUBLIC_CLARITY_PROJECT_ID=${NEXT_PUBLIC_CLARITY_PROJECT_ID}
 # Persist Next.js / Turbopack compilation cache across builds. The
 # `.next/cache` directory is where Turbopack memoises its module graph
 # and webpack module outputs; mounting it as a BuildKit cache cuts warm

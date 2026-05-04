@@ -51,6 +51,10 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   // we never double-fire pageviews. Set NEXT_PUBLIC_GTM_ID in production
   // only; dev/preview boots without the env var stay analytics-free.
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID
+  // Microsoft Clarity — session replay + heatmaps. Same env-var gating as
+  // GTM so dev/preview boots stay clean. Loaded via Next/Script after
+  // interactive so it doesn't block the initial paint.
+  const clarityId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
 
   // No data-theme attribute \u2014 theme follows OS preference via the
   // `@media (prefers-color-scheme: dark)` block in globals.css.
@@ -88,6 +92,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','${gtmId}');`}
             </Script>
           </>
+        ) : null}
+        {clarityId ? (
+          <Script id="clarity-init" strategy="afterInteractive">
+            {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
+          </Script>
         ) : null}
       </head>
       <body className="min-h-dvh flex flex-col">

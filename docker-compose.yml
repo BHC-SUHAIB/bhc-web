@@ -23,6 +23,9 @@ services:
         # Baked into the client bundle by `next build` — must be a build arg,
         # not a runtime env var, or the GTM snippet will render empty.
         NEXT_PUBLIC_GTM_ID: ${NEXT_PUBLIC_GTM_ID:-}
+        # Microsoft Clarity project ID — same constraint as GTM (build arg,
+        # not runtime), or the Clarity snippet won't get inlined.
+        NEXT_PUBLIC_CLARITY_PROJECT_ID: ${NEXT_PUBLIC_CLARITY_PROJECT_ID:-}
     container_name: bhc-web
     restart: unless-stopped
     depends_on:
@@ -38,6 +41,7 @@ services:
       # Mirrored at runtime for SSR consistency. Build-time arg above is the
       # one Next actually inlines into the bundle.
       NEXT_PUBLIC_GTM_ID: ${NEXT_PUBLIC_GTM_ID:-}
+      NEXT_PUBLIC_CLARITY_PROJECT_ID: ${NEXT_PUBLIC_CLARITY_PROJECT_ID:-}
       SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@blackhartconsulting.com}
       SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-changeme123!}
       # S3-compatible media storage (DigitalOcean Spaces). When all four are

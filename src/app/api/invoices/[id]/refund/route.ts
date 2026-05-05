@@ -4,6 +4,7 @@ import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { denyIfCrossOrigin } from '@/lib/api-guards'
 import { notifySlack } from '@/lib/slack'
+import { recordAudit } from '@/lib/audit'
 
 export const dynamic = 'force-dynamic'
 
@@ -146,6 +147,17 @@ export async function POST(req: Request, ctx: RouteContext) {
       refundedCents: requestedCents,
       isFullRefund: requestedCents === maxRefundable && refundedSoFar === 0,
     }, payload.logger)
+
+    await recordAudit(payload, {
+      action: 'invoice.refund_issued',
+      actor: auth.user.email ?? 'admin',
+      summary: `Refunded ${(requestedCents / 100).toFixed(2)} on ${inv.invoiceNumber} (${body.reason ?? 'no reason given'})`,
+      subjectType: 'invoice',
+      subjectId: id,
+      stripeId: refund.id,
+      metadata: { refundedCents: requestedCents, reason: body.reason ?? null, isPartial: requestedCents !== maxRefundable },
+      ipAddress: (req.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || null,
+    })
 
     return NextResponse.json({
       ok: true,

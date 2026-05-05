@@ -6,6 +6,7 @@ import { getStripe, isReusablePaymentMethod, isStripeConfigured } from '@/lib/st
 import { CARE_PLANS, carePlanByLookupKey, carePlanBySlug } from '@/lib/care-plans'
 import { sendBrandedInvoiceEmail, sendBrandedCarePlanSignupEmail, sendPaymentFailedAlertEmail } from '@/lib/billing-emails'
 import { notifySlack } from '@/lib/slack'
+import { recordAudit } from '@/lib/audit'
 
 // Stripe webhook signature verification needs the RAW request body — the
 // JSON parser would munge it. App Router's req.text() returns the raw
@@ -225,19 +226,29 @@ async function handleCheckoutCompleted(
         },
       })
 
-      // Slack: payment received. Resolve client name from the invoice mirror
-      // for a richer message.
+      // Slack + audit log. Resolve client name from the mirror for richer
+      // logging context.
       try {
         const inv = await payload.findByID({ collection: 'invoices', id: payloadInvoiceId, depth: 1 })
         const i = inv as { invoiceNumber?: string; client?: { displayName?: string; email?: string } }
+        const amount = pi.amount_received ?? pi.amount
         await notifySlack({
           kind: 'payment_received',
           clientName: i.client?.displayName ?? 'Client',
           clientEmail: i.client?.email ?? '',
-          amountCents: pi.amount_received ?? pi.amount,
+          amountCents: amount,
           invoiceNumber: i.invoiceNumber ?? pi.metadata?.invoice_number ?? '?',
           paymentMethod: paidWith,
         }, payload.logger)
+        await recordAudit(payload, {
+          action: 'invoice.paid',
+          actor: 'stripe-webhook',
+          summary: `${i.client?.displayName ?? 'Client'} paid ${(amount / 100).toFixed(2)} on ${i.invoiceNumber ?? '?'} via ${paidWith}`,
+          subjectType: 'invoice',
+          subjectId: payloadInvoiceId,
+          stripeId: pi.id,
+          metadata: { amountCents: amount, paidWith },
+        })
       } catch {
         // best-effort — never block the webhook response
       }
@@ -460,13 +471,21 @@ async function syncCustomer(
     { customerId: customer.id, email: customer.email },
     '[webhook] mirrored Stripe Customer into Payload',
   )
-  // Slack: new client created in Stripe → mirrored into Payload.
+  // Slack + audit: new client created in Stripe → mirrored into Payload.
   await notifySlack({
     kind: 'new_client',
     clientName: displayName,
     clientEmail: customer.email,
     stripeCustomerId: customer.id,
   }, payload.logger)
+  await recordAudit(payload, {
+    action: 'client.created',
+    actor: 'stripe-webhook',
+    summary: `Mirrored Stripe customer ${customer.id} → Payload Client ${displayName}`,
+    subjectType: 'client',
+    stripeId: customer.id,
+    metadata: { email: customer.email },
+  })
 }
 
 async function handleCustomerDeleted(
@@ -758,6 +777,15 @@ async function handleInvoicePaymentFailed(
     invoiceNumber: invoice.number ?? invoice.id ?? '?',
     subscriptionId: subscriptionId ?? null,
   }, payload.logger)
+
+  await recordAudit(payload, {
+    action: 'invoice.payment_failed',
+    actor: 'stripe-webhook',
+    summary: `Payment declined for ${clientName} on ${invoice.number ?? invoice.id} (${((invoice.amount_due ?? invoice.total ?? 0) / 100).toFixed(2)})`,
+    subjectType: subscriptionId ? 'subscription' : 'invoice',
+    stripeId: subscriptionId ?? invoice.id,
+    metadata: { clientEmail, amountCents: invoice.amount_due ?? invoice.total ?? 0 },
+  })
 }
 
 async function syncSubscription(
@@ -845,13 +873,21 @@ async function syncSubscription(
       return
     }
     await payload.create({ collection: 'subscriptions', data: data as never })
-    // Slack: brand-new subscription created.
+    // Slack + audit: brand-new subscription created.
     await notifySlack({
       kind: 'new_subscription',
       clientName,
       tierLabel,
       monthlyAmountCents: item?.price.unit_amount ?? 0,
     }, payload.logger)
+    await recordAudit(payload, {
+      action: 'subscription.created',
+      actor: 'stripe-webhook',
+      summary: `${clientName} subscribed to ${tierLabel} (${((item?.price.unit_amount ?? 0) / 100).toFixed(2)}/mo)`,
+      subjectType: 'subscription',
+      stripeId: sub.id,
+      metadata: { tier: tier?.slug, monthlyAmountCents: item?.price.unit_amount ?? 0 },
+    })
   } else {
     const existingStatus = (existing.docs[0] as { status?: string }).status
     await payload.update({
@@ -859,8 +895,8 @@ async function syncSubscription(
       id: existing.docs[0].id,
       data: data as never,
     })
-    // Slack: status transition into canceled (covers both customer.subscription.updated
-    // arriving with status='canceled' and the dedicated .deleted event).
+    // Slack + audit: status transition into canceled (covers both
+    // .updated arriving with status='canceled' and the dedicated .deleted).
     if (sub.status === 'canceled' && existingStatus !== 'canceled') {
       await notifySlack({
         kind: 'subscription_canceled',
@@ -869,6 +905,24 @@ async function syncSubscription(
         monthlyAmountCents: item?.price.unit_amount ?? 0,
         reason: sub.cancellation_details?.reason ?? null,
       }, payload.logger)
+      await recordAudit(payload, {
+        action: 'subscription.canceled',
+        actor: 'stripe-webhook',
+        summary: `${clientName} canceled ${tierLabel} (reason: ${sub.cancellation_details?.reason ?? 'not provided'})`,
+        subjectType: 'subscription',
+        stripeId: sub.id,
+        metadata: { tier: tier?.slug, reason: sub.cancellation_details?.reason ?? null },
+      })
+    } else if (existingStatus !== sub.status) {
+      // Other status transitions (active → past_due, past_due → active, etc.)
+      await recordAudit(payload, {
+        action: 'subscription.updated',
+        actor: 'stripe-webhook',
+        summary: `${clientName} subscription status: ${existingStatus} → ${sub.status}`,
+        subjectType: 'subscription',
+        stripeId: sub.id,
+        metadata: { tier: tier?.slug, fromStatus: existingStatus, toStatus: sub.status },
+      })
     }
   }
 }
@@ -929,7 +983,9 @@ async function handleChargeRefunded(
     '[webhook] applied refund to invoice',
   )
 
-  // Slack: refund issued.
+  // Slack + audit: refund applied (the webhook completes the refund flow
+  // started by either the operator-clicked refund button or a refund
+  // initiated directly in the Stripe Dashboard).
   try {
     const inv = await payload.findByID({ collection: 'invoices', id: payloadInvoiceId, depth: 1 })
     const i = inv as { invoiceNumber?: string; client?: { displayName?: string } }
@@ -940,6 +996,15 @@ async function handleChargeRefunded(
       refundedCents,
       isFullRefund,
     }, payload.logger)
+    await recordAudit(payload, {
+      action: 'invoice.refund_completed',
+      actor: 'stripe-webhook',
+      summary: `Refund of ${(refundedCents / 100).toFixed(2)} confirmed on ${i.invoiceNumber ?? '?'} (${isFullRefund ? 'full' : 'partial'})`,
+      subjectType: 'invoice',
+      subjectId: payloadInvoiceId,
+      stripeId: charge.id,
+      metadata: { refundedCents, isFullRefund },
+    })
   } catch {
     // best-effort
   }

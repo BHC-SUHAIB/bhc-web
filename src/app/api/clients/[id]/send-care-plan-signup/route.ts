@@ -4,6 +4,7 @@ import config from '@payload-config'
 import { carePlanBySlug } from '@/lib/care-plans'
 import { sendBrandedCarePlanSignupEmail } from '@/lib/billing-emails'
 import { denyIfCrossOrigin } from '@/lib/api-guards'
+import { recordAudit } from '@/lib/audit'
 
 export const dynamic = 'force-dynamic'
 
@@ -76,6 +77,17 @@ export async function POST(req: Request, ctx: RouteContext) {
     stripeCustomerId: c.stripeCustomerId,
     tier: tier.slug,
     monthlyAmountCents: tier.monthlyAmountCents,
+  })
+
+  await recordAudit(payload, {
+    action: 'care_plan.signup_sent',
+    actor: auth.user.email ?? 'admin',
+    summary: `Sent ${tier.name} Care Plan signup email to ${c.email}`,
+    subjectType: 'client',
+    subjectId: id,
+    stripeId: c.stripeCustomerId,
+    metadata: { tier: tier.slug, monthlyAmountCents: tier.monthlyAmountCents },
+    ipAddress: (req.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || null,
   })
 
   return NextResponse.json({ ok: true, sentTo: c.email, tier: tier.slug })

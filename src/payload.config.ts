@@ -22,6 +22,7 @@ import { Clients } from './collections/Clients'
 import { Invoices } from './collections/Invoices'
 import { Subscriptions } from './collections/Subscriptions'
 import { WebhookEvents } from './collections/WebhookEvents'
+import { AuditEvents } from './collections/AuditEvents'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { SiteSettings } from './globals/SiteSettings'
@@ -138,7 +139,7 @@ export default buildConfig({
 
   onInit: seedOnInit,
 
-  collections: [Users, Media, Pages, LandingPages, Projects, Articles, Testimonials, Faqs, ContactSubmissions, SmsConsents, Clients, Invoices, Subscriptions, WebhookEvents],
+  collections: [Users, Media, Pages, LandingPages, Projects, Articles, Testimonials, Faqs, ContactSubmissions, SmsConsents, Clients, Invoices, Subscriptions, WebhookEvents, AuditEvents],
   globals: [Header, Footer, SiteSettings],
 
   plugins,

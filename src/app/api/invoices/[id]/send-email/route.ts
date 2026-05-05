@@ -5,6 +5,7 @@ import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { sendBrandedInvoiceEmail } from '@/lib/billing-emails'
 import { denyIfCrossOrigin } from '@/lib/api-guards'
 import { notifySlack } from '@/lib/slack'
+import { recordAudit } from '@/lib/audit'
 
 export const dynamic = 'force-dynamic'
 
@@ -84,6 +85,18 @@ export async function POST(req: Request, ctx: RouteContext) {
     invoiceNumber: stripeInvoice.number ?? stripeInvoice.id ?? '?',
     amountCents: stripeInvoice.amount_due ?? stripeInvoice.total ?? 0,
   }, payload.logger)
+
+  // Audit log: who sent which invoice email + when. Persistent, queryable.
+  await recordAudit(payload, {
+    action: 'invoice.email_sent',
+    actor: auth.user.email ?? 'admin',
+    summary: `Sent invoice ${stripeInvoice.number ?? id} to ${inv.client.email}`,
+    subjectType: 'invoice',
+    subjectId: id,
+    stripeId: inv.stripeInvoiceId ?? null,
+    metadata: { amountCents: stripeInvoice.amount_due ?? stripeInvoice.total ?? 0 },
+    ipAddress: (req.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || null,
+  })
 
   return NextResponse.json({ ok: true, sentTo: inv.client.email })
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import type Stripe from 'stripe'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
@@ -217,12 +218,23 @@ export async function POST(req: Request) {
     'card' | 'us_bank_account' | 'klarna' | 'affirm' | 'link' | 'cashapp' | 'amazon_pay'
   >
 
+  // (Phase E #24) Stripe Tax — auto-calculates sales tax based on the
+  // customer's country/state. Toggle via STRIPE_TAX_ENABLED. Texas does
+  // not tax most pure design/dev services, but Care Plan inclusions like
+  // "managed hosting" can be taxable depending on classification, so
+  // letting Stripe Tax sort this out is much safer than guessing.
+  // Requires Stripe Tax to be enabled in the dashboard first.
+  const stripeTaxEnabled = process.env.STRIPE_TAX_ENABLED === 'true'
+
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     customer: stripeCustomerId,
     line_items: lineItems,
     // BNPL stays available because the cart contains only the one-time amount.
     payment_method_types: paymentMethodTypes,
+    ...(stripeTaxEnabled
+      ? { automatic_tax: { enabled: true } as Stripe.Checkout.SessionCreateParams.AutomaticTax }
+      : {}),
 
     // Per-method setup_future_usage: only set on PMs that support being
     // saved + charged off-session. Setting it on payment_intent_data

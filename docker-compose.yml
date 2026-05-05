@@ -99,6 +99,11 @@ services:
       # wire the integration code — env var staged early so the prod
       # deploy doesn't need a second container restart.
       SLACK_BILLING_WEBHOOK_URL: ${SLACK_BILLING_WEBHOOK_URL:-}
+      # Shared secret for /api/cron/billing-ops invocations. Set this in
+      # .env, then wire a cron entry on the host (or the droplet's
+      # crontab) that POSTs to /api/cron/billing-ops with the matching
+      # x-cron-key header. Skipping = the cron endpoint refuses all calls.
+      CRON_SECRET: ${CRON_SECRET:-}
     volumes:
       - media:/app/media
 

@@ -164,6 +164,29 @@ export async function sendBrandedInvoiceEmail(args: {
     fineprintHtml: 'Card, ACH, Klarna, Affirm, and Cash App accepted. Receipt emailed once paid. Questions? Reply to this email.',
   })
 
+  // (Phase E #22) Attach Stripe's auto-generated invoice PDF when available.
+  // Stripe exposes the PDF at invoice.invoice_pdf — we fetch the bytes,
+  // base64-encode, and attach. Failure to fetch the PDF should NOT block
+  // the email from sending, so we wrap in try/catch.
+  let attachments: Array<{ filename: string; content: string; contentType: string }> | undefined
+  if (invoice.invoice_pdf) {
+    try {
+      const pdfRes = await fetch(invoice.invoice_pdf)
+      if (pdfRes.ok) {
+        const buf = Buffer.from(await pdfRes.arrayBuffer())
+        attachments = [
+          {
+            filename: `invoice-${number}.pdf`,
+            content: buf.toString('base64'),
+            contentType: 'application/pdf',
+          },
+        ]
+      }
+    } catch (err) {
+      payload.logger.warn({ err, invoiceId: invoice.id }, '[email] PDF fetch failed; sending without attachment')
+    }
+  }
+
   try {
     await payload.sendEmail({
       to,
@@ -171,8 +194,12 @@ export async function sendBrandedInvoiceEmail(args: {
       headers: unsubscribeHeaders(),
       subject: `Invoice ${number} from Black Hart Consulting · ${total}`,
       html,
+      ...(attachments ? { attachments } : {}),
     })
-    payload.logger.info({ to, invoiceId: invoice.id }, '[email] sent branded invoice email')
+    payload.logger.info(
+      { to, invoiceId: invoice.id, hasAttachment: Boolean(attachments) },
+      '[email] sent branded invoice email',
+    )
   } catch (err) {
     payload.logger.error({ err, to, invoiceId: invoice.id }, '[email] failed to send branded invoice email')
   }

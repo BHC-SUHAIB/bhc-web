@@ -156,6 +156,29 @@ export const Clients: CollectionConfig = {
       admin: { description: 'Free-form tags for filtering (e.g. "heights", "founding-client", "referral").' },
     },
     {
+      // (Phase E #31) "At risk" flag — set by the bulk-ops cron when a
+      // client has 2+ failed payments on any of their subs in the last
+      // 90 days. Resets to false when subs return to active status.
+      name: 'isDelinquent',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Auto-flagged when 2+ payments fail in 90d. Reach out manually before churn.',
+      },
+    },
+    {
+      name: 'delinquentAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'When the at-risk flag was first raised. Cleared when sub recovers.',
+        date: { pickerAppearance: 'dayAndTime' },
+      },
+    },
+    {
       // UI-only field: renders a tier picker + "Send Care Plan signup email"
       // button. No DB column. Posts to /api/clients/[id]/send-care-plan-signup.
       name: 'sendCarePlanSignup',

@@ -4,7 +4,7 @@ export const Projects: CollectionConfig = {
   slug: 'projects',
   access: { read: () => true },
   admin: {
-    group: '▤ Content',
+    group: '❐ Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'client', 'year', 'featured', 'updatedAt'],
     description: 'Portfolio case studies. Detailed project write-ups.',

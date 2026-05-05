@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 // them so the sidebar opens cleaner. After the first run, the user's own
 // toggles persist normally (the bhcSeededV1 flag prevents re-seeding).
 
-const SEED_VERSION = 'bhcSeededV1'
+const SEED_VERSION = 'bhcSeededV2'
 
 export default function InitNavPrefs() {
   useEffect(() => {
@@ -24,8 +24,8 @@ export default function InitNavPrefs() {
         const ensureCollapsed = (label: string) => {
           if (!(label in nextGroups)) nextGroups[label] = { open: false }
         }
-        ensureCollapsed('⚙ System')
-        ensureCollapsed('◯ Site')
+        ensureCollapsed('⌬ System')
+        ensureCollapsed('⬢ Site')
 
         if (cancelled) return
         await fetch('/api/payload-preferences/nav', {

@@ -21,7 +21,7 @@ export const Invoices: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   admin: {
-    group: '$ Billing',
+    group: '❖ Billing',
     useAsTitle: 'invoiceNumber',
     defaultColumns: ['invoiceNumber', 'client', 'totalCents', 'status', 'issuedAt', 'paidAt'],
     description: 'Project invoices. Create here, push to Stripe, share /invoice/[id]?token= link.',

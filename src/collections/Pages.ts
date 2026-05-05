@@ -5,7 +5,7 @@ export const Pages: CollectionConfig = {
   slug: 'pages',
   access: { read: () => true },
   admin: {
-    group: '▤ Content',
+    group: '❐ Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'publishedAt', 'updatedAt'],
     description: 'Content pages with drag-and-drop blocks. The home page must have slug "home".',

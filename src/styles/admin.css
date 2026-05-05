@@ -42,6 +42,16 @@
   letter-spacing: 0.01em !important;
 }
 
+/* The first character of each group toggle is the icon glyph baked into
+   the group string (e.g. "❖ Billing"). Enlarge it via ::first-letter so
+   it visually anchors the row at the cap-height of the following word. */
+.nav .nav-group__toggle::first-letter {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin-right: 4px;
+  line-height: 1;
+}
+
 /* Sub-items underneath each group — slightly de-emphasised so the group
    headers read as the visual anchors. */
 .nav .nav-group__content .nav__link,

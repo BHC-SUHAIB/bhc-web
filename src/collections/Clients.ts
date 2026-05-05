@@ -92,6 +92,8 @@ export const Clients: CollectionConfig = {
                 metadata: {
                   payload_client_id: String(doc.id),
                   ...(doc.company ? { company: doc.company } : {}),
+                  ...(doc.firstName ? { first_name: doc.firstName } : {}),
+                  ...(doc.lastName ? { last_name: doc.lastName } : {}),
                   ...(doc.sourceLp ? { source_lp: doc.sourceLp } : {}),
                 },
               })
@@ -132,6 +134,8 @@ export const Clients: CollectionConfig = {
               metadata: {
                 payload_client_id: String(doc.id),
                 ...(doc.company ? { company: doc.company } : { company: '' }),
+                ...(doc.firstName ? { first_name: doc.firstName } : { first_name: '' }),
+                ...(doc.lastName ? { last_name: doc.lastName } : { last_name: '' }),
                 ...(doc.sourceLp ? { source_lp: doc.sourceLp } : { source_lp: '' }),
               },
             })
@@ -153,10 +157,34 @@ export const Clients: CollectionConfig = {
   },
   fields: [
     {
+      type: 'row',
+      fields: [
+        { name: 'firstName', type: 'text', admin: { width: '50%' } },
+        { name: 'lastName', type: 'text', admin: { width: '50%' } },
+      ],
+    },
+    {
       name: 'displayName',
       type: 'text',
       required: true,
-      admin: { description: 'How this client appears in invoices and lists. Usually their name or company.' },
+      admin: {
+        description:
+          'How this client appears in invoices and lists. Auto-fills from Company (or First + Last if no Company) — override only if you want something different.',
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value, data }) => {
+            if (value && String(value).trim()) return value
+            const company = (data?.company as string | undefined)?.trim()
+            if (company) return company
+            const first = (data?.firstName as string | undefined)?.trim()
+            const last = (data?.lastName as string | undefined)?.trim()
+            const full = [first, last].filter(Boolean).join(' ')
+            if (full) return full
+            return value
+          },
+        ],
+      },
     },
     {
       // (#9) Email is NOT marked unique. Stripe Customers don't enforce

@@ -30,6 +30,39 @@ export const Clients: CollectionConfig = {
     description: 'Clients you bill. Saving a new client auto-creates the matching Stripe Customer.',
   },
   hooks: {
+    beforeChange: [
+      // Auto-fill sourceLp from the most recent ContactSubmission with a
+      // matching email, when creating a new Client without one explicitly
+      // set. Lets the operator convert a lead → client without manually
+      // copying the LP source.
+      async ({ data, operation, req }) => {
+        if (operation !== 'create') return data
+        if (!data) return data
+        if (data.sourceLp) return data
+        if (!data.email) return data
+        try {
+          const matches = await req.payload.find({
+            collection: 'contact-submissions',
+            where: { email: { equals: data.email } },
+            sort: '-createdAt',
+            limit: 1,
+            depth: 0,
+          })
+          if (matches.totalDocs > 0) {
+            const cs = matches.docs[0] as { sourcePage?: string | null }
+            if (cs.sourcePage) {
+              data.sourceLp = cs.sourcePage
+            }
+          }
+        } catch (err) {
+          req.payload.logger.warn(
+            { err: err instanceof Error ? err.message : err, email: data.email },
+            '[clients] sourceLp auto-fill lookup failed (non-fatal)',
+          )
+        }
+        return data
+      },
+    ],
     afterChange: [
       async ({ doc, operation, req, context }) => {
         // Webhook-driven updates set context.skipStripeSync to prevent
@@ -60,6 +93,7 @@ export const Clients: CollectionConfig = {
                 metadata: {
                   payload_client_id: String(doc.id),
                   ...(doc.company ? { company: doc.company } : {}),
+                  ...(doc.sourceLp ? { source_lp: doc.sourceLp } : {}),
                 },
               })
               stripeCustomerId = created.id
@@ -99,6 +133,7 @@ export const Clients: CollectionConfig = {
               metadata: {
                 payload_client_id: String(doc.id),
                 ...(doc.company ? { company: doc.company } : { company: '' }),
+                ...(doc.sourceLp ? { source_lp: doc.sourceLp } : { source_lp: '' }),
               },
             })
             req.payload.logger.info(
@@ -156,6 +191,19 @@ export const Clients: CollectionConfig = {
       labels: { singular: 'Tag', plural: 'Tags' },
       fields: [{ name: 'value', type: 'text' }],
       admin: { description: 'Free-form tags for filtering (e.g. "heights", "founding-client", "referral").' },
+    },
+    {
+      // Attribution: which LP / page produced this client. Auto-fills from
+      // the most recent ContactSubmission with a matching email when the
+      // Client is first created. Pushed to the Stripe Customer's
+      // metadata.source_lp so reporting in Stripe Dashboard can also
+      // segment by LP.
+      name: 'sourceLp',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'LP / page that produced this client (e.g. "/lp/heights-dental"). Auto-filled from contact form on create. Editable.',
+      },
     },
     {
       // (Phase E #31) "At risk" flag — set by the bulk-ops cron when a

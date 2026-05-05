@@ -39,6 +39,7 @@ import ClientRelatedRecordsField_0 from '@/components/admin/ClientRelatedRecords
 import DelinquentBadgeCell_0 from '@/components/admin/DelinquentBadgeCell'
 import ChangeTierField_0 from '@/components/admin/ChangeTierField'
 import QuickCreateInvoiceField_0 from '@/components/admin/QuickCreateInvoiceField'
+import RevenueByLpDashboard_0 from '@/components/admin/RevenueByLpDashboard'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -77,4 +78,5 @@ export const importMap = {
   '/components/admin/DelinquentBadgeCell#default': DelinquentBadgeCell_0,
   '/components/admin/ChangeTierField#default': ChangeTierField_0,
   '/components/admin/QuickCreateInvoiceField#default': QuickCreateInvoiceField_0,
+  '/components/admin/RevenueByLpDashboard#default': RevenueByLpDashboard_0,
 }

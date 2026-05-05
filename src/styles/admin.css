@@ -1,0 +1,12 @@
+/* Custom admin overrides loaded via admin.css in payload.config.ts. */
+
+/* KPI strip — horizontal flex row. */
+.bhc-kpi {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+@media (max-width: 720px) {
+  .bhc-kpi { flex-direction: column; }
+}

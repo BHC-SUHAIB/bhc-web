@@ -114,14 +114,18 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    // Custom admin styles (KPI strip, sidebar tweaks).
+    css: path.resolve(dirname, 'styles/admin.css'),
     components: {
       graphics: {
         Logo: '/components/admin/Logo#default',
         Icon: '/components/admin/Icon#default',
       },
-      // Renders at the top of the admin dashboard. Pulls live revenue
-      // aggregated by LP source — at-a-glance attribution.
-      beforeDashboard: ['/components/admin/RevenueByLpDashboard#default'],
+      // Top-of-dashboard widgets, in render order.
+      beforeDashboard: [
+        '/components/admin/KpiStrip#default',
+        '/components/admin/RevenueByLpDashboard#default',
+      ],
     },
   },
 

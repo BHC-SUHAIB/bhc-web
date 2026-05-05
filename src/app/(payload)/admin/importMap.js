@@ -32,6 +32,7 @@ import { default as default_188afc714df0f7f38de573de358e2826 } from '../../../co
 import { default as default_dfe4008080d895d460898c3a6155e9ba } from '../../../components/admin/Icon'
 import { default as default_91a09b539d3c86b0aebf520e7564ce08 } from '../../../components/admin/Logo'
 import { default as default_39f80b2eef0a78ee0bcfd35009fdad27 } from '../../../components/admin/RevenueByLpDashboard'
+import { default as default_bhc_admin_kpistrip } from '../../../components/admin/KpiStrip'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -70,5 +71,6 @@ export const importMap = {
   "/components/admin/Icon#default": default_dfe4008080d895d460898c3a6155e9ba,
   "/components/admin/Logo#default": default_91a09b539d3c86b0aebf520e7564ce08,
   "/components/admin/RevenueByLpDashboard#default": default_39f80b2eef0a78ee0bcfd35009fdad27,
+  "/components/admin/KpiStrip#default": default_bhc_admin_kpistrip,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

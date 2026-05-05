@@ -19,6 +19,7 @@ export const Subscriptions: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   admin: {
+    group: 'Billing',
     useAsTitle: 'displayLabel',
     defaultColumns: ['displayLabel', 'client', 'tier', 'monthlyAmountCents', 'status', 'currentPeriodEnd'],
     description: 'Recurring subscriptions (Care Plans + Philip-style hosting). Stripe is source of truth.',

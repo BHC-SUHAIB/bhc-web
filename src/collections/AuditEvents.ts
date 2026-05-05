@@ -20,6 +20,7 @@ export const AuditEvents: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   admin: {
+    group: 'System',
     useAsTitle: 'summary',
     defaultColumns: ['action', 'actor', 'summary', 'createdAt'],
     description: 'Append-only audit trail of operator + webhook-driven billing actions.',

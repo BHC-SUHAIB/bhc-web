@@ -14,6 +14,7 @@ export const ContactSubmissions: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   admin: {
+    group: 'Leads',
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'company', 'projectType', 'status', 'createdAt'],
     description: 'Inquiries submitted through the /contact form.',

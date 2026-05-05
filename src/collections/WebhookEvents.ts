@@ -20,6 +20,7 @@ export const WebhookEvents: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   admin: {
+    group: 'System',
     useAsTitle: 'stripeEventId',
     defaultColumns: ['stripeEventId', 'eventType', 'status', 'createdAt'],
     description: 'Idempotency log for Stripe webhook deliveries. Read-only debug view.',

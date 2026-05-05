@@ -142,8 +142,19 @@ export default buildConfig({
 
   onInit: seedOnInit,
 
-  collections: [Users, Media, Pages, LandingPages, Projects, Articles, Testimonials, Faqs, ContactSubmissions, SmsConsents, Clients, Invoices, Subscriptions, WebhookEvents, AuditEvents],
-  globals: [Header, Footer, SiteSettings],
+  collections: [
+    // Billing
+    Clients, Invoices, Subscriptions,
+    // Leads
+    ContactSubmissions, SmsConsents,
+    // Content
+    Pages, LandingPages, Projects, Articles,
+    // Library
+    Media, Testimonials, Faqs,
+    // System
+    Users, WebhookEvents, AuditEvents,
+  ],
+  globals: [SiteSettings, Header, Footer],
 
   plugins,
 

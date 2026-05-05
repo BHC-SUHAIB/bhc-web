@@ -23,9 +23,8 @@ export const Clients: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   admin: {
+    group: 'Billing',
     useAsTitle: 'displayName',
-    // (Phase E #31) `isDelinquent` shown prominently in the list so at-risk
-    // clients surface at-a-glance.
     defaultColumns: ['displayName', 'email', 'isDelinquent', 'company', 'stripeCustomerId', 'createdAt'],
     description: 'Clients you bill. Saving a new client auto-creates the matching Stripe Customer.',
   },

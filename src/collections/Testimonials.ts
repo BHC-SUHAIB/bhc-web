@@ -11,6 +11,7 @@ export const Testimonials: CollectionConfig = {
   slug: 'testimonials',
   access: { read: () => true },
   admin: {
+    group: 'Library',
     useAsTitle: 'author',
     defaultColumns: ['author', 'company', 'role', 'rating', 'featured', 'sortOrder', 'updatedAt'],
     description: 'Client quotes shown by the Testimonials block on any page.',

@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const Footer: GlobalConfig = {
   slug: 'footer',
   access: { read: () => true },
-  admin: { description: 'Site footer' },
+  admin: { group: 'Site', description: 'Site footer' },
   fields: [
     { name: 'tagline', type: 'text', defaultValue: 'Websites, SEO, and hosting for businesses that care how their work shows up online.' },
     { name: 'columns', type: 'array', maxRows: 4, fields: [

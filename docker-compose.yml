@@ -73,6 +73,32 @@ services:
       FORCE_ARTICLES_UPSERT: ${FORCE_ARTICLES_UPSERT:-}
       FORCE_PM_UPSERT: ${FORCE_PM_UPSERT:-}
       FORCE_WAYGFT_UPSERT: ${FORCE_WAYGFT_UPSERT:-}
+      # Stripe — required for /invoice payment flow + /api/stripe/webhook.
+      # Both keys come from the Stripe dashboard:
+      #   STRIPE_SECRET_KEY  → Developers → API keys (sk_test_… / sk_live_…)
+      #   STRIPE_WEBHOOK_SECRET → Developers → Webhooks → your endpoint
+      #     → Signing secret (whsec_…). One per webhook endpoint, so prod
+      #     and dev tunnels each have their own.
+      # Missing keys → /api/checkout/start and webhook return 503 instead
+      # of crashing the whole site, so it's safe to deploy without them
+      # set during initial bring-up.
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      # Comma-separated list of payment method types to offer at checkout.
+      # Must match what's enabled in your Stripe dashboard (Settings →
+      # Payment methods). Defaults in code to card,us_bank_account,klarna,
+      # link,cashapp. Affirm is intentionally absent — Stripe blocks it for
+      # consulting categories. Re-add `,affirm` here once your account has
+      # been re-categorised to "Web design and development" and Affirm
+      # re-approves.
+      STRIPE_PAYMENT_METHOD_TYPES: ${STRIPE_PAYMENT_METHOD_TYPES:-}
+      # Billing emails — invoices/care-plan/payment-failed. Falls back to
+      # EMAIL_FROM if unset.
+      EMAIL_FROM_BILLING: ${EMAIL_FROM_BILLING:-}
+      # Slack incoming webhook for operator notifications. Phase C will
+      # wire the integration code — env var staged early so the prod
+      # deploy doesn't need a second container restart.
+      SLACK_BILLING_WEBHOOK_URL: ${SLACK_BILLING_WEBHOOK_URL:-}
     volumes:
       - media:/app/media
 

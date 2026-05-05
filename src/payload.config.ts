@@ -18,6 +18,10 @@ import { Testimonials } from './collections/Testimonials'
 import { Faqs } from './collections/Faqs'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { SmsConsents } from './collections/SmsConsents'
+import { Clients } from './collections/Clients'
+import { Invoices } from './collections/Invoices'
+import { Subscriptions } from './collections/Subscriptions'
+import { WebhookEvents } from './collections/WebhookEvents'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { SiteSettings } from './globals/SiteSettings'
@@ -134,7 +138,7 @@ export default buildConfig({
 
   onInit: seedOnInit,
 
-  collections: [Users, Media, Pages, LandingPages, Projects, Articles, Testimonials, Faqs, ContactSubmissions, SmsConsents],
+  collections: [Users, Media, Pages, LandingPages, Projects, Articles, Testimonials, Faqs, ContactSubmissions, SmsConsents, Clients, Invoices, Subscriptions, WebhookEvents],
   globals: [Header, Footer, SiteSettings],
 
   plugins,

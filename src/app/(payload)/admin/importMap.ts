@@ -32,6 +32,10 @@ import { S3ClientUploadHandler as S3ClientUploadHandler_0 } from '@payloadcms/st
 import AdminIcon_0 from '@/components/admin/Icon'
 import AdminLogo_0 from '@/components/admin/Logo'
 import RatingField_0 from '@/components/admin/RatingField'
+import CentsAsDollarsField_0 from '@/components/admin/CentsAsDollarsField'
+import CentsAsDollarsCell_0 from '@/components/admin/CentsAsDollarsCell'
+import SendCarePlanSignupField_0 from '@/components/admin/SendCarePlanSignupField'
+import ClientRelatedRecordsField_0 from '@/components/admin/ClientRelatedRecordsField'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -63,4 +67,8 @@ export const importMap = {
   '/components/admin/Icon#default': AdminIcon_0,
   '/components/admin/Logo#default': AdminLogo_0,
   '/components/admin/RatingField#default': RatingField_0,
+  '/components/admin/CentsAsDollarsField#default': CentsAsDollarsField_0,
+  '/components/admin/CentsAsDollarsCell#default': CentsAsDollarsCell_0,
+  '/components/admin/SendCarePlanSignupField#default': SendCarePlanSignupField_0,
+  '/components/admin/ClientRelatedRecordsField#default': ClientRelatedRecordsField_0,
 }

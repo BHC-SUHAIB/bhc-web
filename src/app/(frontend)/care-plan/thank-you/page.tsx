@@ -1,0 +1,61 @@
+import type { Metadata } from 'next'
+import { Container } from '@/components/Container'
+import { Button } from '@/components/Button'
+import { getStripe, isStripeConfigured } from '@/lib/stripe'
+import { carePlanByLookupKey, formatUSD } from '@/lib/care-plans'
+
+export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Care Plan activated',
+  description: 'Your Care Plan is set up.',
+  robots: { index: false, follow: false },
+}
+
+type RouteProps = { searchParams: Promise<{ session?: string }> }
+
+export default async function CarePlanThankYouPage({ searchParams }: RouteProps) {
+  const { session } = await searchParams
+
+  let tierName: string | null = null
+  let monthlyCents: number | null = null
+
+  if (session && isStripeConfigured()) {
+    try {
+      const stripe = getStripe()
+      const cs = await stripe.checkout.sessions.retrieve(session, {
+        expand: ['setup_intent'],
+      })
+      if (cs.setup_intent && typeof cs.setup_intent !== 'string') {
+        const lookupKey = cs.setup_intent.metadata?.care_plan_lookup_key
+        const tier = carePlanByLookupKey(lookupKey ?? null)
+        if (tier) {
+          tierName = tier.name
+          monthlyCents = tier.monthlyAmountCents
+        }
+      }
+    } catch {
+      // Soft-fail. Page still renders the generic confirmation copy.
+    }
+  }
+
+  return (
+    <Container size="md" className="py-20 sm:py-28">
+      <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)]">
+        Black Hart Consulting
+      </p>
+      <h1 className="font-serif font-semibold text-[clamp(2rem,4.5vw,3.25rem)] tracking-[-0.02em] leading-[1.05] mt-3">
+        {tierName ? `${tierName} Care Plan — activated.` : 'Care Plan activated.'}
+      </h1>
+      <p className="mt-4 text-[16px] leading-[1.55] text-[var(--color-fg-muted)] max-w-prose">
+        {monthlyCents
+          ? `Your card is on file. The first ${formatUSD(monthlyCents)} charge runs in 30 days. Cancel anytime from the Stripe customer portal or by emailing us.`
+          : 'Your card is on file and your subscription is active. Cancel anytime by emailing us.'}
+      </p>
+      <div className="mt-12 flex flex-wrap gap-3">
+        <Button href="/" variant="ghost">Back to site</Button>
+        <Button href="/contact" variant="secondary">Get in touch</Button>
+      </div>
+    </Container>
+  )
+}

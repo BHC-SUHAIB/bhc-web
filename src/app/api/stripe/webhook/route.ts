@@ -428,6 +428,11 @@ async function syncCustomer(
   if (typeof meta.company === 'string' && meta.company.length > 0) {
     data.company = meta.company
   }
+  // LP source attribution — set when we created the customer ourselves
+  // (auto-filled from ContactSubmission.sourcePage on Client create).
+  if (typeof meta.source_lp === 'string' && meta.source_lp.length > 0) {
+    data.sourceLp = meta.source_lp
+  }
 
   // Try to find an existing client by stripeCustomerId first; fall back
   // to email match (handles the case where you created the client in

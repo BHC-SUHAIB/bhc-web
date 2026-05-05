@@ -119,6 +119,9 @@ export default buildConfig({
         Logo: '/components/admin/Logo#default',
         Icon: '/components/admin/Icon#default',
       },
+      // Renders at the top of the admin dashboard. Pulls live revenue
+      // aggregated by LP source — at-a-glance attribution.
+      beforeDashboard: ['/components/admin/RevenueByLpDashboard#default'],
     },
   },
 

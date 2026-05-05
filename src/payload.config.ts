@@ -126,6 +126,9 @@ export default buildConfig({
         '/components/admin/KpiStrip#default',
         '/components/admin/RevenueByLpDashboard#default',
       ],
+      // Sidebar — runs a one-shot seed that default-collapses System + Site
+      // groups for new users. After first run, the user's toggles persist.
+      afterNavLinks: ['/components/admin/InitNavPrefs#default'],
     },
   },
 

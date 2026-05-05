@@ -6,9 +6,9 @@
   --bhc-brass-dark: #8E6E3F;
   --bhc-brass-deep: #735A35;
   --bhc-brass-tint: rgba(176, 141, 87, 0.18);
-  --bhc-side-bg: #B08D57;
-  --bhc-side-deep: #8E6E3F;
-  --bhc-side-hover: rgba(0, 0, 0, 0.07);
+  --bhc-side-bg: #EFE9D9;
+  --bhc-side-deep: #DDD5BD;
+  --bhc-side-hover: rgba(26, 23, 19, 0.05);
   --bhc-side-text: #1A1713;
   --bhc-side-text-muted: rgba(26, 23, 19, 0.6);
 }
@@ -97,67 +97,59 @@
   background: rgba(0, 0, 0, 0.08) !important;
 }
 
-/* Make the inner sidebar wrapper a column flex so the controls block can
-   push to the bottom regardless of how many nav groups are above it. */
-.nav,
-.nav__scroll {
-  display: flex !important;
-  flex-direction: column !important;
+/* Pin the Log Out / controls block to the absolute bottom of the sidebar.
+   .nav (an <aside>) is position: sticky already, so absolute-positioning
+   .nav__controls anchors it to the sidebar's bottom edge regardless of
+   how short the nav-group list is. */
+/* Pin the Log Out controls block to the absolute bottom of the sidebar.
+   .nav (the <aside>) is position: sticky already and acts as the
+   positioned ancestor. We override every container in between to be
+   position: static so absolute positioning on .nav__controls anchors
+   to .nav directly — flush bottom regardless of group count. */
+.nav {
+  position: sticky !important;
+  top: 0 !important;
+  height: 100vh !important;
+}
+.nav__scroll,
+.nav__wrap {
+  position: static !important;
 }
 .nav__wrap {
-  flex: 1 1 auto !important;
+  padding-bottom: 64px !important; /* reserve room for the pinned bar */
 }
 .nav__controls {
-  margin-top: auto !important;
-  background: var(--bhc-side-deep) !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: stretch !important;
-  gap: 0 !important;
-  width: 100% !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  margin: 0 !important;
 }
-/* Full-width Log Out button — pinned to the bottom-left of the sidebar,
-   text reads "Log Out" (no all-caps), no inner side padding so it
-   reaches the sidebar edges. */
+
+/* Full-width Log Out — keep edge-to-edge layout + "Log Out" label
+   (no all-caps), but inherit Payload's default visual styling for the
+   button itself. */
+.nav__controls {
+  width: 100% !important;
+  padding: 0 !important;
+}
 .nav__log-out {
   display: flex !important;
   align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 12px !important;
-  flex: 1 1 auto !important;
+  gap: 10px !important;
   width: 100% !important;
-  padding: 14px 22px !important;
+  padding: 12px 22px !important;
   margin: 0 !important;
   font-size: 14px !important;
-  font-weight: 600 !important;
   letter-spacing: 0 !important;
   text-transform: none !important;
-  color: #F4EFE6 !important;
-  background: transparent !important;
   border-radius: 0 !important;
-  border: 0 !important;
-  transition: background 120ms ease;
   text-decoration: none !important;
 }
 .nav__log-out::after {
   content: 'Log Out';
   letter-spacing: 0;
   text-transform: none;
-}
-.nav__log-out:hover {
-  background: rgba(0, 0, 0, 0.22) !important;
-}
-.nav__log-out svg {
-  width: 18px !important;
-  height: 18px !important;
-  color: #F4EFE6 !important;
-  stroke: #F4EFE6 !important;
-  fill: none !important;
-  flex-shrink: 0 !important;
-}
-.nav__log-out svg .stroke {
-  stroke: #F4EFE6 !important;
 }
 
 /* KPI strip — horizontal flex row. */
@@ -171,11 +163,11 @@
   .bhc-kpi { flex-direction: column; }
 }
 
-/* Active sidebar nav item — full-width cream pill (#e7e1d0) with ink text.
+/* Active sidebar nav item — parchment fill on ivory canvas, ink text.
    Payload signals "active" by rendering a .nav__link-indicator child,
    targeted via :has(). No left border so the bg fills edge-to-edge. */
 .nav .nav__link:has(.nav__link-indicator) {
-  background: #e7e1d0 !important;
+  background: #D6D0C2 !important;
   border-left: 0 !important;
   color: #1A1713 !important;
 }
@@ -184,7 +176,7 @@
   font-weight: 600;
 }
 .nav .nav__link:has(.nav__link-indicator):hover {
-  background: #e7e1d0 !important;
+  background: #D6D0C2 !important;
 }
 
 /* Hide Payload's default blue indicator dot once we have our own active style. */

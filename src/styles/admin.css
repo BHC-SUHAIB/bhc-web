@@ -1,5 +1,12 @@
 /* Custom admin overrides loaded via admin.css in payload.config.ts. */
 
+/* Brand brass — used for active state accents in the admin chrome. */
+:root {
+  --bhc-brass: #B08D57;
+  --bhc-brass-dark: #8E6E3F;
+  --bhc-brass-tint: rgba(176, 141, 87, 0.14);
+}
+
 /* KPI strip — horizontal flex row. */
 .bhc-kpi {
   display: flex;
@@ -9,4 +16,19 @@
 
 @media (max-width: 720px) {
   .bhc-kpi { flex-direction: column; }
+}
+
+/* Active sidebar nav item — brass tint + brass left border instead of Payload's default blue. */
+.nav .nav-group__content a.active,
+.nav .nav-group__content [aria-current="page"],
+.nav a.nav__link.active,
+.nav a.nav__link[aria-current="page"] {
+  background: var(--bhc-brass-tint) !important;
+  border-left: 2px solid var(--bhc-brass) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Tighten the indent so the brass border doesn't push text further right. */
+.nav .nav-group__content a.active {
+  padding-left: calc(var(--nav-link-padding, 12px) - 2px) !important;
 }

@@ -110,6 +110,11 @@ export default buildConfig({
     user: Users.slug,
     meta: {
       titleSuffix: ' \u00b7 Black Hart CMS',
+      icons: [
+        { rel: 'icon', type: 'image/png', sizes: '512x512', url: '/brand/black-hart-avatar-512.png' },
+        { rel: 'shortcut icon', type: 'image/png', url: '/brand/black-hart-avatar-512.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', url: '/brand/black-hart-avatar-512.png' },
+      ],
     },
     importMap: {
       baseDir: path.resolve(dirname),

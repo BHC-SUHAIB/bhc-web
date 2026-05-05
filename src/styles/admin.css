@@ -32,3 +32,22 @@
 .nav .nav-group__content a.active {
   padding-left: calc(var(--nav-link-padding, 12px) - 2px) !important;
 }
+
+/* Tighter dashboard cards — Payload's default has generous padding for very
+   wide screens; we trim it so 6 grouped sections fit without scrolling. */
+.collections .card {
+  padding: 12px 14px;
+  min-height: 0;
+}
+.collections .card__title {
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+/* Hide the "+ create" pill on read-only collections. AuditEvents is purely
+   webhook-driven; WebhookEvents is the idempotency log — the operator never
+   needs to create one by hand, and showing the icon misleads. */
+.collections .card:has(a[href*="/collections/audit-events"]) .card__actions,
+.collections .card:has(a[href*="/collections/webhook-events"]) .card__actions {
+  display: none;
+}

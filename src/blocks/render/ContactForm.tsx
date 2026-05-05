@@ -223,10 +223,19 @@ export function ContactForm(b: ContactFormProps) {
                 autoComplete="tel"
                 inputMode="tel"
                 className={inputCls}
-                placeholder="(555) 123-4567"
+                placeholder="+1 (555) 123-4567 — international welcome"
                 value={phoneValue}
                 onChange={(e) => setPhoneValue(e.target.value)}
               />
+              {/* International note. We accept any format the user types
+                  (E.164 like +44 20 1234 5678, US like (555) 123-4567,
+                  raw digits, etc.). Stripe normalizes on its side; for
+                  SMS replies we honor 10DLC restrictions which means
+                  US-only outbound texts. International clients still get
+                  email replies. */}
+              <p className="mt-1 text-[11px] text-[var(--color-fg-muted)]">
+                Include country code for non-US numbers (e.g. +44, +61, +1). SMS replies are US-only; international clients get email replies.
+              </p>
             </div>
 
             <div>

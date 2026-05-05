@@ -121,6 +121,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <Link href="/privacy" className="hover:text-[var(--color-brass)] transition-colors">
                   Privacy Policy
                 </Link>
+                <Link href="/terms" className="hover:text-[var(--color-brass)] transition-colors">
+                  Terms of Service
+                </Link>
                 <Link href="/sms-terms" className="hover:text-[var(--color-brass)] transition-colors">
                   SMS Opt-In
                 </Link>

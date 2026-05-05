@@ -39,5 +39,24 @@ export const SiteSettings: GlobalConfig = {
       max: 99,
       admin: { description: 'Spots remaining in the founding cohort. Decrement by 1 each time a founding client signs. Drives the live counter on the homepage and every LP.' },
     },
+
+    // Timezone for invoice / subscription date display in the admin dashboard
+    // and branded emails. Doesn't affect storage (always UTC ISO strings) —
+    // only the human-readable presentation. Default is America/Chicago since
+    // BHC is based in Houston.
+    {
+      name: 'displayTimezone',
+      type: 'select',
+      defaultValue: 'America/Chicago',
+      options: [
+        { label: 'America/Chicago (Houston, CT)', value: 'America/Chicago' },
+        { label: 'America/New_York (ET)', value: 'America/New_York' },
+        { label: 'America/Denver (MT)', value: 'America/Denver' },
+        { label: 'America/Los_Angeles (PT)', value: 'America/Los_Angeles' },
+        { label: 'America/Phoenix (AZ, no DST)', value: 'America/Phoenix' },
+        { label: 'UTC', value: 'UTC' },
+      ],
+      admin: { description: 'Timezone used for displaying dates in the admin dashboard + branded emails.' },
+    },
   ],
 }

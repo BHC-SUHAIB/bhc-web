@@ -71,5 +71,19 @@ export const Projects: CollectionConfig = {
 
     { name: 'featured', type: 'checkbox', defaultValue: false, admin: { position: 'sidebar', description: 'Show on the home page "featured projects" block' } },
     { name: 'publishedAt', type: 'date', admin: { position: 'sidebar' } },
+
+    {
+      // (Phase E #32) Quick-create invoice button — pre-fills with project
+      // context, lets the operator pick a Client, add line items, and
+      // finalize a Stripe invoice in one click.
+      name: 'quickCreateInvoice',
+      type: 'ui',
+      label: 'Bill this project',
+      admin: {
+        components: {
+          Field: '/components/admin/QuickCreateInvoiceField#default',
+        },
+      },
+    },
   ],
 }

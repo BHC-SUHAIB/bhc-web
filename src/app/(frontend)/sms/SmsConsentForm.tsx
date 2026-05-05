@@ -103,7 +103,7 @@ export function SmsConsentForm() {
         </div>
         <div>
           <label htmlFor="sms-phone" className={labelCls}>Phone *</label>
-          <input id="sms-phone" name="phone" type="tel" required autoComplete="tel" inputMode="tel" className={inputCls} placeholder="(555) 123-4567" />
+          <input id="sms-phone" name="phone" type="tel" required autoComplete="tel" inputMode="tel" className={inputCls} placeholder="(555) 123-4567 — US numbers only" />
         </div>
       </div>
 

@@ -26,6 +26,12 @@ const HANDLED_EVENTS = new Set<string>([
   'customer.subscription.created',
   'customer.subscription.updated',
   'customer.subscription.deleted',
+  // (#16) Refund events — keep Payload mirror in sync when you refund
+  // via Stripe Dashboard. charge.refunded fires for direct refunds;
+  // credit_note.created fires when you issue a credit note (which
+  // optionally refunds the underlying charge).
+  'charge.refunded',
+  'credit_note.created',
 ])
 
 export async function POST(req: Request) {
@@ -148,6 +154,12 @@ export async function POST(req: Request) {
         break
       case 'customer.subscription.deleted':
         await handleSubscriptionDeleted(payload, event.data.object as Stripe.Subscription)
+        break
+      case 'charge.refunded':
+        await handleChargeRefunded(payload, stripe, event.data.object as Stripe.Charge)
+        break
+      case 'credit_note.created':
+        await handleCreditNoteCreated(payload, event.data.object as Stripe.CreditNote)
         break
     }
   } catch (err) {
@@ -802,6 +814,96 @@ async function syncSubscription(
       data: data as never,
     })
   }
+}
+
+// (#16) When a charge is refunded in Stripe, update the linked Payload
+// invoice's refundedCents + status. Stripe fires this for both partial
+// and full refunds (charge.amount_refunded == charge.amount → full).
+async function handleChargeRefunded(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  stripe: Stripe,
+  charge: Stripe.Charge,
+): Promise<void> {
+  // Resolve the linked Stripe invoice: charges directly created via Invoice
+  // payment have charge.invoice set; charges from our Checkout flow link
+  // back via the invoice's metadata.payload_invoice_id (we set it at session
+  // creation time).
+  const stripeInvoiceId =
+    typeof charge.invoice === 'string' ? charge.invoice : charge.invoice?.id ?? null
+
+  // Find the Payload mirror.
+  let payloadInvoiceId: string | number | null = null
+  if (stripeInvoiceId) {
+    const rows = await payload.find({
+      collection: 'invoices',
+      where: { stripeInvoiceId: { equals: stripeInvoiceId } },
+      limit: 1,
+    })
+    if (rows.totalDocs > 0) payloadInvoiceId = rows.docs[0].id
+  }
+  if (!payloadInvoiceId && charge.payment_intent) {
+    // Fall back to PaymentIntent metadata
+    const piId = typeof charge.payment_intent === 'string' ? charge.payment_intent : charge.payment_intent.id
+    try {
+      const pi = await stripe.paymentIntents.retrieve(piId)
+      const metaInvId = pi.metadata?.payload_invoice_id
+      if (metaInvId) payloadInvoiceId = metaInvId
+    } catch {
+      // skip
+    }
+  }
+  if (!payloadInvoiceId) {
+    payload.logger.info({ chargeId: charge.id }, '[webhook] charge.refunded — no Payload invoice mirror, skipping')
+    return
+  }
+
+  const refundedCents = charge.amount_refunded ?? 0
+  const isFullRefund = refundedCents >= (charge.amount ?? 0)
+  await payload.update({
+    collection: 'invoices',
+    id: payloadInvoiceId,
+    data: {
+      refundedCents,
+      status: isFullRefund ? 'refunded' : 'partially_refunded',
+    },
+  })
+  payload.logger.info(
+    { payloadInvoiceId, refundedCents, status: isFullRefund ? 'refunded' : 'partially_refunded' },
+    '[webhook] applied refund to invoice',
+  )
+}
+
+// (#16) Credit notes are Stripe's "official document" version of a refund.
+// They can also reduce the amount due on an open invoice without an actual
+// charge refund. We mirror the credit-note amount into refundedCents.
+async function handleCreditNoteCreated(
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  creditNote: Stripe.CreditNote,
+): Promise<void> {
+  const stripeInvoiceId =
+    typeof creditNote.invoice === 'string' ? creditNote.invoice : creditNote.invoice?.id ?? null
+  if (!stripeInvoiceId) return
+  const rows = await payload.find({
+    collection: 'invoices',
+    where: { stripeInvoiceId: { equals: stripeInvoiceId } },
+    limit: 1,
+  })
+  if (rows.totalDocs === 0) return
+  const inv = rows.docs[0] as { id: string | number; refundedCents?: number; totalCents: number }
+  const newRefunded = (inv.refundedCents ?? 0) + (creditNote.amount ?? 0)
+  const isFullRefund = newRefunded >= inv.totalCents
+  await payload.update({
+    collection: 'invoices',
+    id: inv.id,
+    data: {
+      refundedCents: newRefunded,
+      status: isFullRefund ? 'refunded' : 'partially_refunded',
+    },
+  })
+  payload.logger.info(
+    { invoiceId: inv.id, refundedCents: newRefunded, isFullRefund },
+    '[webhook] applied credit note to invoice',
+  )
 }
 
 async function handleSubscriptionDeleted(

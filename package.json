@@ -10,6 +10,7 @@
     "generate:importmap": "payload generate:importmap",
     "seed": "tsx src/seed/seed.ts",
     "stripe:setup": "tsx scripts/stripe-setup.ts",
+    "dev:tunnel": "bash scripts/dev-tunnel.sh",
     "payload": "payload"
   },
   "dependencies": {

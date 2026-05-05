@@ -7,6 +7,23 @@
  *   # … or load from .env (Node 20.6+):
  *   node --env-file=.env --import tsx scripts/stripe-setup.ts
  *
+ * ── Invoice number scheme (set this in the Stripe Dashboard) ──────────
+ *
+ * Stripe auto-generates invoice numbers using the pattern:
+ *   <prefix>-<sequential>     e.g.  ABCD12345-0001, ABCD12345-0002
+ *
+ * The prefix is account-wide and configurable in:
+ *   Stripe Dashboard → Settings → Billing → Invoice template → Invoice prefix
+ *
+ * Recommended: set the prefix to "BHC" so invoices read like:
+ *   BHC-0001, BHC-0002, …, BHC-0042
+ *
+ * For year-scoped numbering ("BHC-2026-0042"), Stripe doesn't support that
+ * natively — you'd override invoice.number programmatically when calling
+ * stripe.invoices.create({ ..., number: 'BHC-2026-0042' }). For now the
+ * default scheme is fine; we display the Stripe-assigned number on the
+ * branded /invoice/[id] page exactly as Stripe issued it.
+ *
  * Run this once after creating your Stripe account, and again any time the
  * Care Plan / Build Tier catalog in src/lib/care-plans.ts changes. The
  * script:

@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useDocumentInfo } from '@payloadcms/ui'
+import React, { useState, useEffect } from 'react'
+import { useDocumentInfo, useFormFields } from '@payloadcms/ui'
 import type { UIFieldClientProps } from 'payload'
 
 // Custom admin field on the Client document — renders a tier picker and
@@ -26,8 +26,18 @@ type Status =
 
 export default function SendCarePlanSignupField(props: UIFieldClientProps) {
   const { id: clientId } = useDocumentInfo()
+  // (#20) Watch the live stripeCustomerId field on the form so the button
+  // disables itself when the Stripe customer hasn't been created yet
+  // (e.g., right after creating the client and before the afterChange
+  // hook ran, or if Stripe was unconfigured at the time).
+  const stripeCustomerId = useFormFields(([fields]) => fields?.stripeCustomerId?.value as string | undefined)
   const [tier, setTier] = useState<(typeof TIERS)[number]['slug']>('care')
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
+
+  // Reset send state if the client/tier changes.
+  useEffect(() => {
+    setStatus({ kind: 'idle' })
+  }, [clientId, tier])
 
   if (!clientId) {
     return (
@@ -35,6 +45,21 @@ export default function SendCarePlanSignupField(props: UIFieldClientProps) {
         <label className="field-label">{(props.field?.label as string) || 'Send Care Plan signup'}</label>
         <p style={{ fontSize: 13, opacity: 0.7 }}>
           Save the client first to enable this action.
+        </p>
+      </div>
+    )
+  }
+
+  // (#20) If the client has no Stripe Customer link, sending a signup email
+  // would 400 server-side. Disable + explain instead of letting the click fail.
+  if (!stripeCustomerId) {
+    return (
+      <div className="field-type">
+        <label className="field-label">{(props.field?.label as string) || 'Send Care Plan signup'}</label>
+        <p style={{ fontSize: 13, opacity: 0.7, lineHeight: 1.5 }}>
+          This client doesn&rsquo;t have a Stripe Customer linked yet. Save the client to trigger
+          the auto-create hook (or add a <code>stripeCustomerId</code> manually if it exists in
+          Stripe), then refresh.
         </p>
       </div>
     )

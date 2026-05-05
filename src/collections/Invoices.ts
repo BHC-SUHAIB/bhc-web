@@ -142,10 +142,29 @@ export const Invoices: CollectionConfig = {
         { label: 'Draft (not sent to Stripe)', value: 'draft' },
         { label: 'Open (sent, awaiting payment)', value: 'open' },
         { label: 'Paid', value: 'paid' },
+        { label: 'Refunded (full)', value: 'refunded' },
+        { label: 'Partially refunded', value: 'partially_refunded' },
         { label: 'Overdue', value: 'overdue' },
         { label: 'Void', value: 'void' },
       ],
       admin: { position: 'sidebar' },
+    },
+    {
+      // (#16) Total amount refunded across one or more refunds. Cached
+      // from `charge.refunded` and `credit_note.created` webhooks.
+      name: 'refundedCents',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        label: 'Refunded',
+        description: 'Total refunded amount. Updated by Stripe webhooks.',
+        components: {
+          Field: '/components/admin/CentsAsDollarsField#default',
+          Cell: '/components/admin/CentsAsDollarsCell#default',
+        },
+      },
     },
     {
       name: 'stripeInvoiceId',

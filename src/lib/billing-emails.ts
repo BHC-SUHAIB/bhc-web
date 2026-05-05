@@ -38,6 +38,19 @@ function billingFromAddress(): string {
   )
 }
 
+// (#19) Standard unsubscribe headers — RFC 8058 + RFC 2369. Even though
+// branded billing emails are transactional (legally exempt from CAN-SPAM
+// unsubscribe), Gmail and other big providers reward presence with better
+// deliverability. The mailto handler reaches our billing inbox so we can
+// process opt-outs manually without breaking transactional delivery.
+function unsubscribeHeaders(): { 'List-Unsubscribe': string; 'List-Unsubscribe-Post': string } {
+  const from = billingFromAddress()
+  return {
+    'List-Unsubscribe': `<mailto:${from}?subject=unsubscribe>`,
+    'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+  }
+}
+
 export async function sendBrandedInvoiceEmail(args: {
   payload: Payload
   to: string
@@ -95,6 +108,7 @@ export async function sendBrandedInvoiceEmail(args: {
     await payload.sendEmail({
       to,
       from: billingFromAddress(),
+      headers: unsubscribeHeaders(),
       subject: `Invoice ${number} from Black Hart Consulting · ${total}`,
       html,
     })
@@ -145,6 +159,7 @@ export async function sendBrandedCarePlanSignupEmail(args: {
     await payload.sendEmail({
       to,
       from: billingFromAddress(),
+      headers: unsubscribeHeaders(),
       subject: `Activate your Care Plan with Black Hart Consulting`,
       html,
     })
@@ -200,6 +215,7 @@ export async function sendPaymentFailedAlertEmail(args: {
     await payload.sendEmail({
       to: adminEmail,
       from: billingFromAddress(),
+      headers: unsubscribeHeaders(),
       replyTo: clientEmail,
       subject: `[BHC Billing] Payment failed for ${clientName} (${amount})`,
       html,

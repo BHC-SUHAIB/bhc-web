@@ -42,8 +42,19 @@ type Related = {
 const fmt$ = (cents: number) =>
   (cents / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
 
+// Renders dates in America/Chicago (BHC's home tz). The SiteSettings global
+// has a configurable displayTimezone but we don't fetch globals from a
+// client-rendered admin field for performance reasons — CT is the right
+// answer 95% of the time.
 const fmtDate = (iso?: string | null) =>
-  iso ? new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—'
+  iso
+    ? new Date(iso).toLocaleDateString('en-US', {
+        timeZone: 'America/Chicago',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+    : '—'
 
 const isInactiveSub = (status: string) =>
   ['past_due', 'unpaid', 'incomplete', 'canceled', 'paused'].includes(status)
@@ -53,6 +64,7 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
   const [data, setData] = useState<Related | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showArchived, setShowArchived] = useState(false)
   const [sendStatus, setSendStatus] = useState<Record<string, { state: 'sending' | 'sent' | 'error'; message?: string }>>({})
 
   const refresh = useCallback(async () => {
@@ -60,7 +72,8 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
     setLoading(true)
     setError(null)
     try {
-      const r = await fetch(`/api/clients/${clientId}/related`, { credentials: 'include' })
+      const qs = showArchived ? '?archived=1' : ''
+      const r = await fetch(`/api/clients/${clientId}/related${qs}`, { credentials: 'include' })
       if (!r.ok) throw new Error(`Load failed (${r.status}).`)
       setData((await r.json()) as Related)
     } catch (err) {
@@ -68,7 +81,7 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
     } finally {
       setLoading(false)
     }
-  }, [clientId])
+  }, [clientId, showArchived])
 
   useEffect(() => {
     void refresh()
@@ -181,22 +194,31 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
         <p style={{ fontSize: 13, color: 'crimson' }}>{error}</p>
       ) : null}
 
-      <button
-        type="button"
-        onClick={refresh}
-        disabled={loading}
-        style={{
-          marginTop: 8,
-          padding: '4px 10px',
-          fontSize: 12,
-          background: 'transparent',
-          border: '1px solid var(--theme-elevation-200, #ccc)',
-          borderRadius: 4,
-          cursor: loading ? 'wait' : 'pointer',
-        }}
-      >
-        {loading ? 'Refreshing…' : 'Refresh'}
-      </button>
+      <div style={{ marginTop: 8, display: 'flex', gap: 8, alignItems: 'center' }}>
+        <button
+          type="button"
+          onClick={refresh}
+          disabled={loading}
+          style={{
+            padding: '4px 10px',
+            fontSize: 12,
+            background: 'transparent',
+            border: '1px solid var(--theme-elevation-200, #ccc)',
+            borderRadius: 4,
+            cursor: loading ? 'wait' : 'pointer',
+          }}
+        >
+          {loading ? 'Refreshing…' : 'Refresh'}
+        </button>
+        <label style={{ fontSize: 12, opacity: 0.7, display: 'inline-flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={showArchived}
+            onChange={(e) => setShowArchived(e.target.checked)}
+          />
+          Show canceled subs (&gt;90 days)
+        </label>
+      </div>
     </div>
   )
 }

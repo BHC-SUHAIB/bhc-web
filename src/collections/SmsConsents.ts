@@ -22,7 +22,7 @@ export const SmsConsents: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   admin: {
-    group: '✦ Leads',
+    group: 'Leads',
     useAsTitle: 'phone',
     defaultColumns: ['phone', 'name', 'source', 'status', 'createdAt'],
     description: 'Audit trail of SMS opt-ins from the website. Keep for A2P 10DLC compliance.',

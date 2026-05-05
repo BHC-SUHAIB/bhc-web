@@ -14,7 +14,7 @@ export const Faqs: CollectionConfig = {
   slug: 'faqs',
   access: { read: () => true },
   admin: {
-    group: '❒ Library',
+    group: 'Library',
     useAsTitle: 'question',
     defaultColumns: ['question', 'category', 'featured', 'sortOrder', 'updatedAt'],
     description: 'Centralized Q&A. FAQ blocks set to "Auto (latest featured)" pull from here, so an edit propagates to every page that renders a FAQ block.',

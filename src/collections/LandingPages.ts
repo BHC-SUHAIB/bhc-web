@@ -21,7 +21,7 @@ export const LandingPages: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'campaign', 'publishedAt', 'updatedAt'],
     description: 'Paid-traffic landing pages. No nav, no footer, noindex by default. URL is /lp/{slug}. Drop in blocks like any other page — GA4/GTM/Conversion Linker fire automatically.',
-    group: '❐ Content',
+    group: 'Content',
   },
   versions: { drafts: true },
   fields: [

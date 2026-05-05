@@ -5,6 +5,7 @@ import type Stripe from 'stripe'
 import { getStripe, isReusablePaymentMethod, isStripeConfigured } from '@/lib/stripe'
 import { CARE_PLANS, carePlanByLookupKey, carePlanBySlug } from '@/lib/care-plans'
 import { sendBrandedInvoiceEmail, sendBrandedCarePlanSignupEmail, sendPaymentFailedAlertEmail } from '@/lib/billing-emails'
+import { notifySlack } from '@/lib/slack'
 
 // Stripe webhook signature verification needs the RAW request body — the
 // JSON parser would munge it. App Router's req.text() returns the raw
@@ -177,6 +178,8 @@ export async function POST(req: Request) {
   })
 
   if (handlerError) {
+    // Slack alert — best-effort, won't block the 500 response.
+    await notifySlack({ kind: 'webhook_error', eventType: event.type, eventId: event.id, errorMessage: handlerError }, payload.logger)
     // Return 500 so Stripe retries with backoff. Idempotency guards above
     // ensure we don't double-process.
     return NextResponse.json({ error: handlerError }, { status: 500 })
@@ -221,6 +224,23 @@ async function handleCheckoutCompleted(
           paidWith,
         },
       })
+
+      // Slack: payment received. Resolve client name from the invoice mirror
+      // for a richer message.
+      try {
+        const inv = await payload.findByID({ collection: 'invoices', id: payloadInvoiceId, depth: 1 })
+        const i = inv as { invoiceNumber?: string; client?: { displayName?: string; email?: string } }
+        await notifySlack({
+          kind: 'payment_received',
+          clientName: i.client?.displayName ?? 'Client',
+          clientEmail: i.client?.email ?? '',
+          amountCents: pi.amount_received ?? pi.amount,
+          invoiceNumber: i.invoiceNumber ?? pi.metadata?.invoice_number ?? '?',
+          paymentMethod: paidWith,
+        }, payload.logger)
+      } catch {
+        // best-effort — never block the webhook response
+      }
 
       // 1b. If the Payload invoice mirrors an actual Stripe Invoice (i.e.
       //     it was created in the Stripe dashboard, not as a one-off
@@ -440,6 +460,13 @@ async function syncCustomer(
     { customerId: customer.id, email: customer.email },
     '[webhook] mirrored Stripe Customer into Payload',
   )
+  // Slack: new client created in Stripe → mirrored into Payload.
+  await notifySlack({
+    kind: 'new_client',
+    clientName: displayName,
+    clientEmail: customer.email,
+    stripeCustomerId: customer.id,
+  }, payload.logger)
 }
 
 async function handleCustomerDeleted(
@@ -721,6 +748,14 @@ async function handleInvoicePaymentFailed(
     clientEmail,
     subscriptionId: subscriptionId ?? null,
   })
+  await notifySlack({
+    kind: 'payment_failed',
+    clientName,
+    clientEmail,
+    amountCents: invoice.amount_due ?? invoice.total ?? 0,
+    invoiceNumber: invoice.number ?? invoice.id ?? '?',
+    subscriptionId: subscriptionId ?? null,
+  }, payload.logger)
 }
 
 async function syncSubscription(
@@ -795,7 +830,8 @@ async function syncSubscription(
     where: { stripeSubscriptionId: { equals: sub.id } },
     limit: 1,
   })
-  if (existing.totalDocs === 0) {
+  const isNew = existing.totalDocs === 0
+  if (isNew) {
     if (!clientId) {
       // We require a client to satisfy the relationship constraint. If we
       // don't have one, log and bail — the next webhook (after a Client
@@ -807,12 +843,31 @@ async function syncSubscription(
       return
     }
     await payload.create({ collection: 'subscriptions', data: data as never })
+    // Slack: brand-new subscription created.
+    await notifySlack({
+      kind: 'new_subscription',
+      clientName,
+      tierLabel,
+      monthlyAmountCents: item?.price.unit_amount ?? 0,
+    }, payload.logger)
   } else {
+    const existingStatus = (existing.docs[0] as { status?: string }).status
     await payload.update({
       collection: 'subscriptions',
       id: existing.docs[0].id,
       data: data as never,
     })
+    // Slack: status transition into canceled (covers both customer.subscription.updated
+    // arriving with status='canceled' and the dedicated .deleted event).
+    if (sub.status === 'canceled' && existingStatus !== 'canceled') {
+      await notifySlack({
+        kind: 'subscription_canceled',
+        clientName,
+        tierLabel,
+        monthlyAmountCents: item?.price.unit_amount ?? 0,
+        reason: sub.cancellation_details?.reason ?? null,
+      }, payload.logger)
+    }
   }
 }
 
@@ -871,6 +926,21 @@ async function handleChargeRefunded(
     { payloadInvoiceId, refundedCents, status: isFullRefund ? 'refunded' : 'partially_refunded' },
     '[webhook] applied refund to invoice',
   )
+
+  // Slack: refund issued.
+  try {
+    const inv = await payload.findByID({ collection: 'invoices', id: payloadInvoiceId, depth: 1 })
+    const i = inv as { invoiceNumber?: string; client?: { displayName?: string } }
+    await notifySlack({
+      kind: 'refund',
+      clientName: i.client?.displayName ?? 'Client',
+      invoiceNumber: i.invoiceNumber ?? '?',
+      refundedCents,
+      isFullRefund,
+    }, payload.logger)
+  } catch {
+    // best-effort
+  }
 }
 
 // (#16) Credit notes are Stripe's "official document" version of a refund.
@@ -918,6 +988,35 @@ async function handleSubscriptionDeleted(
       canceledAt: new Date(sub.canceled_at ? sub.canceled_at * 1000 : Date.now()).toISOString(),
     },
   })
+
+  // Slack: post-delete confirmation. The .updated handler may have already
+  // posted a cancellation when status flipped — to avoid dupes, only post
+  // here if there's NO existing canceled-status mirror (i.e. the .deleted
+  // event arrived without a prior .updated, which can happen).
+  try {
+    const rows = await payload.find({
+      collection: 'subscriptions',
+      where: { stripeSubscriptionId: { equals: sub.id } },
+      limit: 1,
+      depth: 1,
+    })
+    if (rows.totalDocs === 0) return
+    const s = rows.docs[0] as {
+      displayLabel?: string
+      monthlyAmountCents?: number
+      tier?: string
+      client?: { displayName?: string }
+    }
+    await notifySlack({
+      kind: 'subscription_canceled',
+      clientName: s.client?.displayName ?? 'Client',
+      tierLabel: s.displayLabel ?? s.tier ?? 'Subscription',
+      monthlyAmountCents: s.monthlyAmountCents ?? 0,
+      reason: sub.cancellation_details?.reason ?? null,
+    }, payload.logger)
+  } catch {
+    // best-effort
+  }
 }
 
 // (#2) Log once per server boot, not per request, so the prefix is visible

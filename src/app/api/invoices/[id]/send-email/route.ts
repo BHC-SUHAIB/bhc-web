@@ -4,6 +4,7 @@ import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { sendBrandedInvoiceEmail } from '@/lib/billing-emails'
 import { denyIfCrossOrigin } from '@/lib/api-guards'
+import { notifySlack } from '@/lib/slack'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,6 +75,16 @@ export async function POST(req: Request, ctx: RouteContext) {
     clientName: inv.client.displayName ?? 'Client',
     invoice: stripeInvoice,
   })
+
+  // Slack: log the operator action so you have a paper trail of what
+  // got sent + when. Only surfaces in the channel; doesn't block.
+  await notifySlack({
+    kind: 'invoice_email_sent',
+    clientName: inv.client.displayName ?? 'Client',
+    clientEmail: inv.client.email,
+    invoiceNumber: stripeInvoice.number ?? stripeInvoice.id ?? '?',
+    amountCents: stripeInvoice.amount_due ?? stripeInvoice.total ?? 0,
+  }, payload.logger)
 
   return NextResponse.json({ ok: true, sentTo: inv.client.email })
 }

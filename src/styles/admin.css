@@ -1,15 +1,16 @@
 /* Custom admin overrides loaded via admin.css in payload.config.ts. */
 
-/* Brand brass — used for active state accents in the admin chrome. */
+/* Brand brass — used as the sidebar canvas + accents. */
 :root {
   --bhc-brass: #B08D57;
   --bhc-brass-dark: #8E6E3F;
+  --bhc-brass-deep: #735A35;
   --bhc-brass-tint: rgba(176, 141, 87, 0.18);
-  --bhc-side-bg: #1A1713;
-  --bhc-side-deep: #0F0D0A;
-  --bhc-side-hover: rgba(255, 255, 255, 0.05);
-  --bhc-cream-text: #F4EFE6;
-  --bhc-cream-text-muted: rgba(244, 239, 230, 0.6);
+  --bhc-side-bg: #B08D57;
+  --bhc-side-deep: #8E6E3F;
+  --bhc-side-hover: rgba(0, 0, 0, 0.07);
+  --bhc-side-text: #1A1713;
+  --bhc-side-text-muted: rgba(26, 23, 19, 0.6);
 }
 
 /* Sidebar — charcoal-ink replaces the cream/sand to break up the visual
@@ -19,7 +20,7 @@
 [class*="template-default"] .nav,
 .nav-toggler {
   background: var(--bhc-side-bg) !important;
-  color: var(--bhc-cream-text) !important;
+  color: var(--bhc-side-text) !important;
   border-right-color: var(--bhc-side-deep) !important;
 }
 
@@ -29,12 +30,12 @@
 .nav .nav__link-label,
 .nav a,
 .nav button {
-  color: var(--bhc-cream-text) !important;
+  color: var(--bhc-side-text) !important;
 }
 
 .nav .nav-group__label,
 .nav .nav-group__toggle {
-  color: var(--bhc-cream-text-muted) !important;
+  color: var(--bhc-side-text-muted) !important;
 }
 
 .nav .nav-group__toggle:hover,
@@ -59,9 +60,9 @@
 .nav__log-out a,
 .nav__controls svg,
 .nav__log-out svg {
-  color: var(--bhc-cream-text) !important;
-  stroke: var(--bhc-cream-text) !important;
-  fill: var(--bhc-cream-text) !important;
+  color: #F4EFE6 !important;
+  stroke: #F4EFE6 !important;
+  fill: #F4EFE6 !important;
 }
 
 /* KPI strip — horizontal flex row. */
@@ -75,20 +76,20 @@
   .bhc-kpi { flex-direction: column; }
 }
 
-/* Active sidebar nav item — brass background pops against the forest sidebar.
-   Payload signals "active" by rendering a .nav__link-indicator child inside the link, so we
-   target via :has() rather than a className. */
+/* Active sidebar nav item — ink background inverts on the brass sidebar
+   for the strongest possible contrast. Payload signals "active" by rendering
+   a .nav__link-indicator child, targeted via :has(). */
 .nav .nav__link:has(.nav__link-indicator) {
-  background: var(--bhc-brass) !important;
-  border-left: 2px solid var(--bhc-brass-dark) !important;
-  color: #1A1713 !important;
+  background: #1A1713 !important;
+  border-left: 2px solid #0F0D0A !important;
+  color: #F4EFE6 !important;
 }
 .nav .nav__link:has(.nav__link-indicator) .nav__link-label {
-  color: #1A1713 !important;
+  color: #F4EFE6 !important;
   font-weight: 600;
 }
 
-/* Hide Payload's default blue indicator dot once we have our own brass background. */
+/* Hide Payload's default blue indicator dot once we have our own active style. */
 .nav .nav__link .nav__link-indicator {
   display: none !important;
 }

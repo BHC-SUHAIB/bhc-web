@@ -114,6 +114,11 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    // Custom avatar component for the top-right account button. Reads the
+    // logged-in user's `avatar` upload field. Falls back to initials.
+    avatar: {
+      Component: '/components/admin/UserAvatar#default',
+    },
     components: {
       graphics: {
         Logo: '/components/admin/Logo#default',

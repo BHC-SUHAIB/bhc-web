@@ -22,5 +22,13 @@ export const Users: CollectionConfig = {
   },
   fields: [
     { name: 'name', type: 'text' },
+    {
+      name: 'avatar',
+      type: 'upload',
+      relationTo: 'media' as const,
+      admin: {
+        description: 'Profile picture shown in the admin header. Square or circular crops work best (e.g. 256×256).',
+      },
+    },
   ],
 }

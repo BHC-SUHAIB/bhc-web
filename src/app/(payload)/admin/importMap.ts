@@ -46,6 +46,7 @@ import DashboardQuickActions_0 from '@/components/admin/DashboardQuickActions'
 import RecentActivityPanel_0 from '@/components/admin/RecentActivityPanel'
 import ActionQueue_0 from '@/components/admin/ActionQueue'
 import DocActivityField_0 from '@/components/admin/DocActivityField'
+import UserAvatar_0 from '@/components/admin/UserAvatar'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -91,4 +92,5 @@ export const importMap = {
   '/components/admin/RecentActivityPanel#default': RecentActivityPanel_0,
   '/components/admin/ActionQueue#default': ActionQueue_0,
   '/components/admin/DocActivityField#default': DocActivityField_0,
+  '/components/admin/UserAvatar#default': UserAvatar_0,
 }

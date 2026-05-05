@@ -123,6 +123,7 @@ export default buildConfig({
       },
       // Top-of-dashboard widgets, in render order.
       beforeDashboard: [
+        '/components/admin/DashboardQuickActions#default',
         '/components/admin/KpiStrip#default',
         '/components/admin/RevenueByLpDashboard#default',
       ],

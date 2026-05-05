@@ -213,6 +213,33 @@ export const Invoices: CollectionConfig = {
       },
     },
     {
+      name: 'skipStripePush',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description:
+          'For Zelle / check / cash invoices. When checked, this invoice stays Payload-only — never finalized in Stripe. Set Status to Paid and add a note in Internal Notes (e.g. "Paid via Zelle 2026-05-05").',
+      },
+    },
+    {
+      name: 'paymentChannel',
+      type: 'select',
+      options: [
+        { label: 'Stripe (card / ACH / etc.)', value: 'stripe' },
+        { label: 'Zelle', value: 'zelle' },
+        { label: 'Check', value: 'check' },
+        { label: 'Cash', value: 'cash' },
+        { label: 'Wire transfer', value: 'wire' },
+        { label: 'Other / off-platform', value: 'other' },
+      ],
+      defaultValue: 'stripe',
+      admin: {
+        position: 'sidebar',
+        description: 'How the client paid (or will pay) for this invoice.',
+      },
+    },
+    {
       name: 'stripeInvoiceId',
       type: 'text',
       unique: true,
@@ -258,8 +285,8 @@ export const Invoices: CollectionConfig = {
       type: 'date',
       admin: {
         position: 'sidebar',
-        readOnly: true,
-        description: 'Set automatically by the Stripe webhook when payment confirms.',
+        description:
+          'When payment confirmed. Auto-set by Stripe webhook for Stripe invoices; editable for Payload-only (Zelle/check/cash) invoices.',
         date: { pickerAppearance: 'dayAndTime' },
       },
     },
@@ -268,8 +295,8 @@ export const Invoices: CollectionConfig = {
       type: 'select',
       admin: {
         position: 'sidebar',
-        readOnly: true,
-        description: 'Payment method used. Set by webhook.',
+        description:
+          'Payment method used. Auto-set by Stripe webhook; editable for Payload-only invoices.',
       },
       options: [
         { label: 'Card', value: 'card' },
@@ -277,6 +304,10 @@ export const Invoices: CollectionConfig = {
         { label: 'Klarna', value: 'klarna' },
         { label: 'Affirm', value: 'affirm' },
         { label: 'Link', value: 'link' },
+        { label: 'Zelle', value: 'zelle' },
+        { label: 'Check', value: 'check' },
+        { label: 'Cash', value: 'cash' },
+        { label: 'Wire transfer', value: 'wire' },
         { label: 'Other', value: 'other' },
       ],
     },

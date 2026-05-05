@@ -33,15 +33,15 @@ type Body = {
   clientId?: string | number
   lineItems?: Array<{ description: string; amountCents: number; quantity?: number }>
   description?: string
+  skipStripePush?: boolean
+  paymentChannel?: 'stripe' | 'zelle' | 'check' | 'cash' | 'wire' | 'other'
+  markPaid?: boolean
+  paidAtIso?: string
 }
 
 export async function POST(req: Request, ctx: RouteContext) {
   const csrfDeny = denyIfCrossOrigin(req)
   if (csrfDeny) return csrfDeny
-
-  if (!isStripeConfigured()) {
-    return NextResponse.json({ error: 'Stripe not configured.' }, { status: 503 })
-  }
 
   const { id: projectId } = await ctx.params
   const payload = await getPayload({ config })
@@ -65,6 +65,11 @@ export async function POST(req: Request, ctx: RouteContext) {
     return NextResponse.json({ error: 'At least one line item is required.' }, { status: 400 })
   }
 
+  const skipStripe = Boolean(body.skipStripePush)
+  if (!skipStripe && !isStripeConfigured()) {
+    return NextResponse.json({ error: 'Stripe not configured.' }, { status: 503 })
+  }
+
   const project = await payload.findByID({ collection: 'projects', id: projectId }).catch(() => null)
   if (!project) {
     return NextResponse.json({ error: 'Project not found.' }, { status: 404 })
@@ -76,8 +81,86 @@ export async function POST(req: Request, ctx: RouteContext) {
     return NextResponse.json({ error: 'Client not found.' }, { status: 404 })
   }
   const c = client as { id: string | number; stripeCustomerId?: string | null; displayName?: string }
-  if (!c.stripeCustomerId) {
+  if (!skipStripe && !c.stripeCustomerId) {
     return NextResponse.json({ error: 'Client has no Stripe customer linked.' }, { status: 400 })
+  }
+
+  // Payload-only branch (Zelle/check/cash). Creates a local Invoice record
+  // and returns immediately — no Stripe round-trip.
+  if (skipStripe) {
+    const totalCents = body.lineItems.reduce(
+      (sum, li) => sum + li.amountCents * (li.quantity ?? 1),
+      0,
+    )
+    const projectIdNum = Number(projectId)
+    const projectRef = Number.isFinite(projectIdNum) ? projectIdNum : projectId
+    const channelToPaidWith: Record<string, string> = {
+      zelle: 'zelle',
+      check: 'check',
+      cash: 'cash',
+      wire: 'wire',
+      other: 'other',
+    }
+    const channel = body.paymentChannel ?? 'other'
+    const markPaid = Boolean(body.markPaid)
+    const paidAt = markPaid ? body.paidAtIso || new Date().toISOString() : null
+
+    let created: { id: string | number; invoiceNumber?: string }
+    try {
+      created = (await payload.create({
+        collection: 'invoices',
+        data: {
+          client: c.id as never,
+          project: projectRef as never,
+          description: body.description ?? `Work for: ${projectTitle}`,
+          lineItems: body.lineItems.map((li) => ({
+            description: li.description,
+            amountCents: li.amountCents,
+            quantity: li.quantity ?? 1,
+          })) as never,
+          totalCents,
+          status: markPaid ? 'paid' : 'draft',
+          skipStripePush: true,
+          paymentChannel: channel,
+          ...(markPaid
+            ? {
+                paidAt: paidAt as string,
+                paidWith: channelToPaidWith[channel] ?? 'other',
+              }
+            : {}),
+        } as never,
+      })) as { id: string | number; invoiceNumber?: string }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Create failed.'
+      return NextResponse.json({ error: message }, { status: 400 })
+    }
+
+    await recordAudit(payload, {
+      action: 'invoice.email_sent',
+      actor: auth.user.email ?? 'admin',
+      summary: `Quick-created PAYLOAD-ONLY invoice for ${c.displayName ?? 'Client'} from project "${projectTitle}" — payment channel: ${body.paymentChannel ?? 'other'}`,
+      subjectType: 'invoice',
+      stripeId: null,
+      metadata: {
+        projectId,
+        clientId: c.id,
+        lineItemCount: body.lineItems.length,
+        totalCents,
+        paymentChannel: body.paymentChannel ?? 'other',
+        payloadOnly: true,
+      },
+      ipAddress: (req.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || null,
+    })
+
+    return NextResponse.json({
+      ok: true,
+      stripeInvoiceId: null,
+      invoiceNumber: created.invoiceNumber,
+      totalCents,
+      payloadOnly: true,
+      note:
+        'Payload-only invoice created. Set Status to Paid and add a note in Internal Notes once you confirm receipt of the off-platform payment.',
+    })
   }
 
   const stripe = getStripe()

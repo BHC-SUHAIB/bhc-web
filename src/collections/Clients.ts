@@ -208,6 +208,21 @@ export const Clients: CollectionConfig = {
       },
     },
     {
+      name: 'priceMode',
+      type: 'select',
+      defaultValue: 'standard',
+      required: true,
+      options: [
+        { label: 'Standard pricing', value: 'standard' },
+        { label: 'Friend & family (custom amounts)', value: 'friend_and_family' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description:
+          'Friend & family enables editable price overrides on the Quick-Create invoice form, with the standard tier price shown struck-through.',
+      },
+    },
+    {
       name: 'notes',
       type: 'textarea',
       admin: { description: 'Private notes — never visible to the client.' },

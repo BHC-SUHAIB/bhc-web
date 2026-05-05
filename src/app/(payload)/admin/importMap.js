@@ -35,6 +35,7 @@ import { default as default_39f80b2eef0a78ee0bcfd35009fdad27 } from '../../../co
 import { default as default_bhc_admin_kpistrip } from '../../../components/admin/KpiStrip'
 import { default as default_bhc_admin_initnavprefs } from '../../../components/admin/InitNavPrefs'
 import { default as default_bhc_admin_quickactions } from '../../../components/admin/DashboardQuickActions'
+import { default as default_bhc_admin_recentactivity } from '../../../components/admin/RecentActivityPanel'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -76,5 +77,6 @@ export const importMap = {
   "/components/admin/KpiStrip#default": default_bhc_admin_kpistrip,
   "/components/admin/InitNavPrefs#default": default_bhc_admin_initnavprefs,
   "/components/admin/DashboardQuickActions#default": default_bhc_admin_quickactions,
+  "/components/admin/RecentActivityPanel#default": default_bhc_admin_recentactivity,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

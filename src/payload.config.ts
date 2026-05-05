@@ -114,8 +114,6 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    // Custom admin styles (KPI strip, sidebar tweaks).
-    css: path.resolve(dirname, 'styles/admin.css'),
     components: {
       graphics: {
         Logo: '/components/admin/Logo#default',

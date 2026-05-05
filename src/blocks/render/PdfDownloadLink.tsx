@@ -23,7 +23,7 @@ export function PdfDownloadLink({ href, label, slug, location, variant = 'ghost'
   const cls =
     variant === 'primary'
       ? 'inline-flex items-center gap-2 rounded-full bg-[var(--color-brass)] text-[var(--color-ink)] px-6 py-3 font-semibold text-[14px] hover:bg-[var(--color-brass-dark)] transition-colors'
-      : 'inline-flex items-center gap-2 text-[13px] font-semibold text-[var(--color-brass)] hover:text-[var(--color-brass-dark)] transition-colors'
+      : 'inline-flex items-center gap-2 text-[13px] font-semibold text-[var(--color-brass-text)] hover:text-[var(--color-brass-dark)] transition-colors'
   return (
     <a
       href={href}

@@ -92,7 +92,7 @@ export default async function ProjectPage({ params }: Args) {
           <aside className="space-y-8 lg:sticky lg:top-24 self-start">
             {p.duration || p.teamSize ? (
               <div>
-                <h3 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">Engagement</h3>
+                <h2 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">Engagement</h2>
                 <dl className="space-y-1.5 text-[14px]">
                   {p.duration ? (<div className="flex justify-between gap-3"><dt className="text-[var(--color-fg-muted)]">Duration</dt><dd>{p.duration}</dd></div>) : null}
                   {p.teamSize ? (<div className="flex justify-between gap-3"><dt className="text-[var(--color-fg-muted)]">Team size</dt><dd>{p.teamSize}</dd></div>) : null}
@@ -102,7 +102,7 @@ export default async function ProjectPage({ params }: Args) {
 
             {p.stack && p.stack.length > 0 ? (
               <div>
-                <h3 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">Stack</h3>
+                <h2 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">Stack</h2>
                 <ul className="flex flex-wrap gap-1.5">
                   {p.stack.map((s, i) => (
                     <li key={i} className="px-2.5 py-1 text-[12px] rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]">

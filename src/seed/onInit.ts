@@ -456,6 +456,11 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     // Contact
     const contactData: any = {
       title: 'Contact', slug: 'contact', publishedAt: new Date().toISOString(),
+      seo: {
+        metaTitle: 'Contact — Black Hart Consulting',
+        metaDescription:
+          'Send a note about your project or book a 30-minute discovery call. We reply within one business day from hello@blackhartconsulting.com.',
+      },
       layout: [
         { blockType: 'hero', eyebrow: 'Get in touch', headline: 'Let\u2019s figure out if we\u2019re a fit.',
           subheadline: 'Send a note with a sentence or two about what you\u2019re building. We\u2019ll reply within one business day.', align: 'left' },

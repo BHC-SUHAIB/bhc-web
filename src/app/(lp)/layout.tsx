@@ -57,10 +57,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </>
         ) : null}
         {clarityId ? (
-          <Script id="clarity-init" strategy="afterInteractive">
+          // Clarity is non-essential for conversion attribution; lazy-load it
+          // after window.load so it doesn't block initial paint on mobile LP
+          // visits where Lighthouse currently measures 4.6s Speed Index.
+          <Script id="clarity-init" strategy="lazyOnload">
             {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
           </Script>
         ) : null}
+        {/* Same Unsplash preconnect as the (frontend) layout — every LP hero
+            uses an Unsplash backgroundImageUrl, so this is high-leverage. */}
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className="min-h-dvh flex flex-col">
         {gtmId ? (

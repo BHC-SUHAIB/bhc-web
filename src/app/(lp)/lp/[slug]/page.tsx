@@ -14,10 +14,13 @@ import type { LandingPage, Media } from '@/payload-types'
 // - Both route groups inject GTM identically, so analytics works on both.
 //
 // Editors create new LPs via Payload admin → Landing pages → Add new → drop
-// in blocks → publish. The new slug becomes /lp/{slug} immediately after
-// the next ISR revalidation (60s default) — no code changes needed.
-
-export const dynamic = 'force-dynamic'
+// in blocks → publish. Data is cached at the data layer via
+// getCachedLandingPageBySlug (unstable_cache in src/lib/payload-cache.ts), so
+// we don't need force-dynamic here. Removing it lets Next emit a normal
+// Cache-Control header instead of `no-store`, re-enabling bf-cache for
+// instant back-nav — Lighthouse audit 2026-05-05 flagged this site-wide.
+// `revalidate=60` is NOT used: it triggers prerender at build time, which
+// requires Payload + DATABASE_URI in the build env (per project notes).
 
 type Args = { params: Promise<{ slug: string }> }
 

@@ -73,6 +73,11 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         <link rel="preconnect" href="https://picsum.photos" crossOrigin="" />
         <link rel="dns-prefetch" href="https://picsum.photos" />
         <link rel="preconnect" href="https://fastly.picsum.photos" crossOrigin="" />
+        {/* Hero LCP images on every block-rendered page can come from Unsplash
+            via the editor-controlled `backgroundImageUrl` field. Preconnecting
+            shaves ~100-200ms off mobile LCP on the first hero load. */}
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
         {gtmId ? (
           <>
             {/* Push page_type into the dataLayer BEFORE GTM loads so the
@@ -94,7 +99,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </>
         ) : null}
         {clarityId ? (
-          <Script id="clarity-init" strategy="afterInteractive">
+          // Clarity = session replay + heatmaps. Non-essential for conversion
+          // attribution, so we lazy-load it after window.load to free the main
+          // thread during initial paint. GTM stays at afterInteractive because
+          // it carries the Google Ads conversion pixel — delaying GTM would
+          // miss pageview events from quick-bouncing visitors.
+          <Script id="clarity-init" strategy="lazyOnload">
             {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
           </Script>
         ) : null}

@@ -40,6 +40,12 @@ import DelinquentBadgeCell_0 from '@/components/admin/DelinquentBadgeCell'
 import ChangeTierField_0 from '@/components/admin/ChangeTierField'
 import QuickCreateInvoiceField_0 from '@/components/admin/QuickCreateInvoiceField'
 import RevenueByLpDashboard_0 from '@/components/admin/RevenueByLpDashboard'
+import KpiStrip_0 from '@/components/admin/KpiStrip'
+import InitNavPrefs_0 from '@/components/admin/InitNavPrefs'
+import DashboardQuickActions_0 from '@/components/admin/DashboardQuickActions'
+import RecentActivityPanel_0 from '@/components/admin/RecentActivityPanel'
+import ActionQueue_0 from '@/components/admin/ActionQueue'
+import DocActivityField_0 from '@/components/admin/DocActivityField'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -79,4 +85,10 @@ export const importMap = {
   '/components/admin/ChangeTierField#default': ChangeTierField_0,
   '/components/admin/QuickCreateInvoiceField#default': QuickCreateInvoiceField_0,
   '/components/admin/RevenueByLpDashboard#default': RevenueByLpDashboard_0,
+  '/components/admin/KpiStrip#default': KpiStrip_0,
+  '/components/admin/InitNavPrefs#default': InitNavPrefs_0,
+  '/components/admin/DashboardQuickActions#default': DashboardQuickActions_0,
+  '/components/admin/RecentActivityPanel#default': RecentActivityPanel_0,
+  '/components/admin/ActionQueue#default': ActionQueue_0,
+  '/components/admin/DocActivityField#default': DocActivityField_0,
 }

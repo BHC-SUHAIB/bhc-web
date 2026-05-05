@@ -73,7 +73,7 @@ export default async function TermsPage() {
             <ul>
               <li>
                 <strong>One-time projects</strong> &mdash; fixed-price packages
-                (e.g. Single Page, Heights Starter, Pro Site, Custom Build) or
+                (e.g. Single Page, Starter Site, Pro Site, Custom Build) or
                 quick-win add-ons. Delivered against a Statement of Work or an
                 accepted proposal.
               </li>
@@ -108,7 +108,7 @@ export default async function TermsPage() {
                 begins after payment is received.
               </li>
               <li>
-                <strong>Heights Starter, Pro Site, and most other one-time
+                <strong>Starter Site, Pro Site, and most other one-time
                 projects $1,000&ndash;$5,000</strong>: 50% deposit when the
                 Statement of Work is signed; remaining 50% due on launch.
                 The second invoice is net-15.

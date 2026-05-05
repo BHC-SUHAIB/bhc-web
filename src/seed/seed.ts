@@ -53,7 +53,7 @@ const FOUNDING_BANNER = {
   spotsTotal: 5,
   spotsRemaining: 5,
   offers: [
-    { name: 'The Heights Starter', priceFounding: '$1,495', priceRetail: '$1,950', savings: 'Save $455' },
+    { name: 'Starter Site', priceFounding: '$1,495', priceRetail: '$1,950', savings: 'Save $455' },
     { name: 'The Pro Site', priceFounding: '$3,500', priceRetail: '$4,500', savings: 'Save $1,000' },
     { name: 'Local SEO Sprint', priceFounding: '$1,195', priceRetail: '$1,495', savings: 'Save $300' },
     { name: 'All Care plans', priceFounding: 'Free', priceRetail: '$149/mo', savings: 'First month free' },
@@ -76,7 +76,7 @@ const BUNDLES = {
       price: '$1,495 + $99/mo',
       savings: 'Care drops from $149 → $99/mo for 12 months',
       includes: [
-        { label: 'The Heights Starter — 5-page site, 14-day delivery' },
+        { label: 'Starter Site — 5-page site, 14-day delivery' },
         { label: 'Care plan: hosting, monitoring, backups, 1hr/mo edits' },
         { label: 'First month of Care free' },
         { label: 'Founding-client price applied' },
@@ -134,7 +134,7 @@ type NicheLpInput = {
   heroBackgroundUrl: string
   heroPrimaryCta: { label: string; href: string }
   heroSecondaryCta?: { label: string; href: string }
-  starterFeatures: string[] // 5-7 niche-specific deliverables for the Heights Starter tier
+  starterFeatures: string[] // 5-7 niche-specific deliverables for the Starter Site tier
   faqItems: Array<{ question: string; answer: string }>
 }
 
@@ -175,7 +175,7 @@ function makeNicheLandingPage(input: NicheLpInput) {
           'No hourly bills, no scope creep. Fixed price, fixed timeline, senior-engineer sign-off on every line of code.',
         tiers: [
           {
-            name: 'The Heights Starter',
+            name: 'Starter Site',
             price: '$1,495',
             priceNote: 'founding price · was $1,950',
             description: '5-page small business website, mobile-first, live in 14 days.',
@@ -392,7 +392,7 @@ async function run() {
             cta: { label: 'Start a single page', href: '/contact?tier=single' },
           },
           {
-            name: 'The Heights Starter',
+            name: 'Starter Site',
             price: '$1,495',
             priceNote: 'founding · was $1,950 · 14-day build',
             description: 'The most-bought tier. A 5-page site that handles 90% of small business needs.',
@@ -448,9 +448,9 @@ async function run() {
         eyebrow: 'Common questions',
         headline: 'Everything you wanted to ask.',
         items: [
-          { question: 'What’s included in the Heights Starter?', answer: 'Up to 5 bespoke pages, Payload CMS so your team can edit every section, Google Business Profile setup, LocalBusiness schema markup, contact form with GA4 conversion tracking, mobile-first responsive design, and 14-day delivery guaranteed. First month of hosting is free.' },
+          { question: 'What’s included in the Starter Site?', answer: 'Up to 5 bespoke pages, Payload CMS so your team can edit every section, Google Business Profile setup, LocalBusiness schema markup, contact form with GA4 conversion tracking, mobile-first responsive design, and 14-day delivery guaranteed. First month of hosting is free.' },
           { question: 'What does “founding-client pricing” actually mean?', answer: 'For our first 5 small business clients in the Heights, every package is discounted. In exchange, you provide a Google review at launch, a written testimonial we can publish, and permission to use the work as a case study. After 5 clients, prices return to retail.' },
-          { question: 'Do you take payment plans?', answer: 'Yes. The Heights Starter splits as 50% deposit + 50% on launch, or 3 monthly payments of $695. The Pro Site splits as 50% deposit + 50% on launch, or 4 monthly payments of $1,200. All via Stripe.' },
+          { question: 'Do you take payment plans?', answer: 'Yes. Starter Site splits as 50% deposit + 50% on launch, or 3 monthly payments of $695. The Pro Site splits as 50% deposit + 50% on launch, or 4 monthly payments of $1,200. All via Stripe.' },
           { question: 'What if I need more than 5 pages?', answer: 'The Pro Site handles up to 12. Beyond that we quote custom — most clients don’t need more than 12 pages, but we’ll tell you up front if your scope is bigger.' },
           { question: 'Can I edit the site after launch?', answer: 'Yes. Every site ships with a full Payload CMS — you can add, remove, and reorder sections, change copy, swap images, publish blog posts, and edit pricing without touching code.' },
           { question: 'Where are you based?', answer: 'Houston Heights. Most clients are local Heights businesses; some are remote and we’ve shipped projects across Texas, the US, and a few internationally. Time zones are rarely an issue.' },
@@ -550,8 +550,8 @@ async function run() {
         headline: 'Before you write:',
         items: [
           { question: 'What should I include in my first note?', answer: 'A sentence on your business, a sentence on what you’re trying to build or fix, and a rough budget range if you have one. We’ll take it from there.' },
-          { question: 'What’s the engagement process?', answer: '1) 30-min intro call. 2) We send a scoped proposal within 48 hours. 3) You review, we iterate. 4) Signed contract, 50% deposit (or first monthly payment), kickoff within a week. 5) Site live in 14 days for the Heights Starter, 21 days for Pro Site.' },
-          { question: 'Do you take payment plans?', answer: 'Yes. The Heights Starter splits as 50% / 50% or 3 monthly payments. The Pro Site splits the same way over 4 months. SEO Sprints split 50% / 50%. All via Stripe.' },
+          { question: 'What’s the engagement process?', answer: '1) 30-min intro call. 2) We send a scoped proposal within 48 hours. 3) You review, we iterate. 4) Signed contract, 50% deposit (or first monthly payment), kickoff within a week. 5) Site live in 14 days for the Starter Site, 21 days for Pro Site.' },
+          { question: 'Do you take payment plans?', answer: 'Yes. Starter Site splits as 50% / 50% or 3 monthly payments. The Pro Site splits the same way over 4 months. SEO Sprints split 50% / 50%. All via Stripe.' },
         ],
       },
     ],
@@ -912,7 +912,7 @@ async function run() {
         { question: 'Which IDX provider do you use?', answer: 'Whichever one your MLS supports. Realtyna and IDX Broker are the most flexible for design customization. iHomeFinder works fine but constrains design more. We’ll recommend based on your MLS.' },
         { question: 'Can the site capture leads into our existing CRM?', answer: 'Yes. We webhook leads into Follow Up Boss, kvCORE, Boomtown, Salesforce, or any CRM with a webhook endpoint. Lead alerts also go to email + SMS so the team can respond fast.' },
         { question: 'Will the neighborhood pages actually rank?', answer: 'Yes — usually within 2-4 months for Heights sub-area searches like “Woodland Heights homes for sale” or “Norhill bungalows”. Each neighborhood page targets one specific micro-search and includes neighborhood-specific content + schema.' },
-        { question: 'Can each agent on the team have their own profile page?', answer: 'Yes. Up to 5 agent profile pages on the Heights Starter (each with photo, bio, listings, contact, booking link). The Pro Site supports unlimited agent profiles.' },
+        { question: 'Can each agent on the team have their own profile page?', answer: 'Yes. Up to 5 agent profile pages on the Starter Site (each with photo, bio, listings, contact, booking link). The Pro Site supports unlimited agent profiles.' },
       ],
     },
   ]

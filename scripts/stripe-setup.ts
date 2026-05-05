@@ -43,7 +43,7 @@
 /* eslint-disable no-console */
 
 import Stripe from 'stripe'
-import { CARE_PLANS, BUILD_TIERS } from '../src/lib/care-plans'
+import { CARE_PLANS, BUILD_TIERS, ADDONS, SEO_RETAINERS } from '../src/lib/care-plans'
 
 type CatalogItem = {
   lookupKey: string
@@ -67,6 +67,22 @@ const items: CatalogItem[] = [
     productDescription: t.blurb,
     amountCents: t.amountCents,
     recurring: null,
+  })),
+  // Quick-win add-ons / productized fixes (one-time)
+  ...ADDONS.map((a) => ({
+    lookupKey: a.lookupKey,
+    productName: a.name,
+    productDescription: a.blurb,
+    amountCents: a.amountCents,
+    recurring: null,
+  })),
+  // SEO retainers (recurring monthly)
+  ...SEO_RETAINERS.map((r) => ({
+    lookupKey: r.lookupKey,
+    productName: r.name,
+    productDescription: r.blurb,
+    amountCents: r.monthlyAmountCents,
+    recurring: 'monthly' as const,
   })),
 ]
 

@@ -58,3 +58,12 @@
 body:has(.dashboard) .step-nav {
   display: none;
 }
+
+/* Demote System + Site groups from the dashboard card grid. The sidebar
+   entries are unchanged — these groups just don't deserve top-of-home
+   real estate. Identified by collection slugs that are exclusive to each
+   group (users → System, siteSettings → Site). */
+.collections__group:has(a[href$="/collections/users"]),
+.collections__group:has(a[href$="/globals/siteSettings"]) {
+  display: none;
+}

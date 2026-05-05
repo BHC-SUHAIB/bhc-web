@@ -69,6 +69,35 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Override the framework's default `Cache-Control: no-store` on dynamic
+  // routes so browsers can use bf-cache for instant back/forward navigation
+  // (Lighthouse audit 2026-05-05). The page is still revalidated on each
+  // request via Next's data cache (unstable_cache in src/lib/payload-cache.ts);
+  // we're only telling the BROWSER it can restore the page from its memory
+  // cache during a back-nav — not telling the CDN to serve a stale copy.
+  //
+  // `must-revalidate` keeps freshness guarantees on actual reloads. Scoped to
+  // public marketing pages only; admin/portal/invoice/etc. keep no-store.
+  async headers() {
+    const bfCacheHeaders = [
+      { key: 'Cache-Control', value: 'private, max-age=0, must-revalidate' },
+    ]
+    return [
+      { source: '/', headers: bfCacheHeaders },
+      { source: '/lp/:slug*', headers: bfCacheHeaders },
+      { source: '/services', headers: bfCacheHeaders },
+      { source: '/about', headers: bfCacheHeaders },
+      { source: '/contact', headers: bfCacheHeaders },
+      { source: '/portfolio', headers: bfCacheHeaders },
+      { source: '/portfolio/:slug*', headers: bfCacheHeaders },
+      { source: '/articles', headers: bfCacheHeaders },
+      { source: '/articles/:slug*', headers: bfCacheHeaders },
+      { source: '/privacy', headers: bfCacheHeaders },
+      { source: '/sms', headers: bfCacheHeaders },
+      { source: '/sms-terms', headers: bfCacheHeaders },
+      { source: '/terms', headers: bfCacheHeaders },
+    ]
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

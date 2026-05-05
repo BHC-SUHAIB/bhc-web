@@ -4,7 +4,7 @@ export const Articles: CollectionConfig = {
   slug: 'articles',
   access: { read: () => true },
   admin: {
-    group: 'Content',
+    group: '▤ Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'author', 'publishedAt', 'featured'],
     description: 'Long-form writing — essays, field notes, deep dives.',

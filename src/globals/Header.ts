@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const Header: GlobalConfig = {
   slug: 'header',
   access: { read: () => true },
-  admin: { group: 'Site', description: 'Site header / top navigation' },
+  admin: { group: '◯ Site', description: 'Site header / top navigation' },
   fields: [
     { name: 'nav', type: 'array', minRows: 0, maxRows: 8, fields: [
       { name: 'label', type: 'text', required: true },

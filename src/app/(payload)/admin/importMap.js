@@ -30,6 +30,7 @@ import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_08c268e9ce60b46280742b631929d015 } from '../../../components/admin/QuickCreateInvoiceField'
 import { default as default_eb17e30e93e23a0ce33adb1e3397640d } from '../../../components/admin/RatingField'
+import { default as default_47861655001cbf48e6259b36cb95a68a } from '../../../components/admin/UserAvatar'
 import { default as default_dfe4008080d895d460898c3a6155e9ba } from '../../../components/admin/Icon'
 import { default as default_91a09b539d3c86b0aebf520e7564ce08 } from '../../../components/admin/Logo'
 import { default as default_dc335a09432dbc426fa4f59ba0b40bbf } from '../../../components/admin/InitNavPrefs'
@@ -74,6 +75,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "/components/admin/QuickCreateInvoiceField#default": default_08c268e9ce60b46280742b631929d015,
   "/components/admin/RatingField#default": default_eb17e30e93e23a0ce33adb1e3397640d,
+  "/components/admin/UserAvatar#default": default_47861655001cbf48e6259b36cb95a68a,
   "/components/admin/Icon#default": default_dfe4008080d895d460898c3a6155e9ba,
   "/components/admin/Logo#default": default_91a09b539d3c86b0aebf520e7564ce08,
   "/components/admin/InitNavPrefs#default": default_dc335a09432dbc426fa4f59ba0b40bbf,

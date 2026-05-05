@@ -624,17 +624,19 @@ async function createCarePlanSubscription(args: {
   }
   const price = prices.data[0]
 
-  // First charge anchored to 30 days out so we don't double-bill the client
-  // who just paid the invoice today. Adjust to `now` if you want immediate
-  // first-month billing instead.
-  const billingCycleAnchor = Math.floor(Date.now() / 1000) + 30 * 86_400
-
+  // Pre-pay billing: charge today, then every month on this same calendar
+  // day going forward. Matches the industry standard (Notion, Linear, GitHub,
+  // every agency Care Plan we've seen) and how clients mentally frame the
+  // purchase ("$495/mo, billed monthly").
+  //
+  // Stripe defaults to pre-pay when you omit billing_cycle_anchor — first
+  // invoice fires immediately, sub becomes active on payment, future
+  // invoices fire on the same calendar day each month.
   await stripe.subscriptions.create(
     {
       customer: customerId,
       items: [{ price: price.id }],
       default_payment_method: paymentMethodId,
-      billing_cycle_anchor: billingCycleAnchor,
       proration_behavior: 'none',
       metadata: {
         care_plan_lookup_key: carePlanLookupKey,

@@ -58,8 +58,8 @@ export default async function CarePlanThankYouPage({ searchParams }: RouteProps)
       </h1>
       <p className="mt-4 text-[16px] leading-[1.55] text-[var(--color-fg-muted)] max-w-prose">
         {monthlyCents
-          ? `Your card is on file. The first ${formatUSD(monthlyCents)} charge runs in 30 days. Cancel anytime from the Stripe customer portal or by emailing us.`
-          : 'Your card is on file and your subscription is active. Cancel anytime by emailing us.'}
+          ? `${formatUSD(monthlyCents)} was charged today. The next ${formatUSD(monthlyCents)} charge runs in 30 days, and the same amount every 30 days after. Cancel anytime from your customer portal or by emailing us.`
+          : 'Your subscription is active. Cancel anytime by emailing us.'}
       </p>
       <div className="mt-12 flex flex-wrap gap-3">
         {portalUrl ? (

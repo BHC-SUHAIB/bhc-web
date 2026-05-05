@@ -202,10 +202,11 @@ export async function sendBrandedCarePlanSignupEmail(args: {
     pageTitle: 'Activate your Care Plan',
     preheader: `Activate your ${tierName} Care Plan with Black Hart Consulting`,
     title: 'Activate your Care Plan',
-    bodyHtml: `Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(tierName)} Care Plan</strong> is ready to start. Add a card or U.S. bank account to begin — first charge of <strong>${monthly}</strong> runs in 30 days, and you can cancel anytime.`,
+    bodyHtml: `Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(tierName)} Care Plan</strong> is ready to start. Add a card or U.S. bank account — you&rsquo;ll be charged <strong>${monthly}</strong> today and the same amount every 30 days going forward. Cancel anytime.`,
     rows: [
       { label: `${tierName} Care Plan`, value: `${monthly} / month` },
-      { label: 'First charge', value: 'In 30 days' },
+      { label: 'First charge', value: 'Today' },
+      { label: 'Then', value: 'Every 30 days' },
       { label: 'Cancellation', value: 'Anytime, no fees' },
     ],
     cta: { label: 'Add a payment method', href: url },

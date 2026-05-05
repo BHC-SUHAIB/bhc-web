@@ -18,19 +18,18 @@
   .bhc-kpi { flex-direction: column; }
 }
 
-/* Active sidebar nav item — brass tint + brass left border instead of Payload's default blue. */
-.nav .nav-group__content a.active,
-.nav .nav-group__content [aria-current="page"],
-.nav a.nav__link.active,
-.nav a.nav__link[aria-current="page"] {
+/* Active sidebar nav item — brass tint + brass left border instead of Payload's default blue.
+   Payload signals "active" by rendering a .nav__link-indicator child inside the link, so we
+   target via :has() rather than a className. */
+.nav .nav__link:has(.nav__link-indicator) {
   background: var(--bhc-brass-tint) !important;
   border-left: 2px solid var(--bhc-brass) !important;
   color: var(--theme-text) !important;
 }
 
-/* Tighten the indent so the brass border doesn't push text further right. */
-.nav .nav-group__content a.active {
-  padding-left: calc(var(--nav-link-padding, 12px) - 2px) !important;
+/* Hide Payload's default blue indicator dot once we have our own brass border. */
+.nav .nav__link .nav__link-indicator {
+  display: none !important;
 }
 
 /* Tighter dashboard cards — Payload's default has generous padding for very

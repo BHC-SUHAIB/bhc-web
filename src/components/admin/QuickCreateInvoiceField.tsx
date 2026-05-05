@@ -56,9 +56,7 @@ export default function QuickCreateInvoiceField(props: UIFieldClientProps) {
     { description: '', amountDollars: '', quantity: '1', standardCents: null },
   ])
   const [skipStripePush, setSkipStripePush] = useState(false)
-  const [paymentChannel, setPaymentChannel] = useState<
-    'stripe' | 'zelle' | 'check' | 'cash' | 'wire' | 'other'
-  >('zelle')
+  const [paidWith, setPaidWith] = useState<'zelle' | 'check' | 'cash' | 'wire' | 'other'>('zelle')
   const [markPaid, setMarkPaid] = useState(true)
   const [paidAtIso, setPaidAtIso] = useState(() => new Date().toISOString().slice(0, 10))
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
@@ -85,6 +83,15 @@ export default function QuickCreateInvoiceField(props: UIFieldClientProps) {
 
   const selectedClient = clients?.find((c) => String(c.id) === String(clientId)) ?? null
   const friendMode = selectedClient?.priceMode === 'friend_and_family'
+
+  // Auto-flip Skip-Stripe-push on when the operator picks a friend client.
+  // Only fires when the operator hasn't manually overridden — stops watching
+  // once they've toggled the checkbox themselves.
+  const [skipUserOverride, setSkipUserOverride] = useState(false)
+  useEffect(() => {
+    if (skipUserOverride) return
+    setSkipStripePush(friendMode)
+  }, [friendMode, skipUserOverride])
 
   function setLineItem(i: number, patch: Partial<LineItem>) {
     setLineItems((prev) => prev.map((li, idx) => (idx === i ? { ...li, ...patch } : li)))
@@ -147,7 +154,7 @@ export default function QuickCreateInvoiceField(props: UIFieldClientProps) {
           description: description.trim() || undefined,
           lineItems: sanitized,
           skipStripePush,
-          paymentChannel: skipStripePush ? paymentChannel : 'stripe',
+          paidWith: skipStripePush ? paidWith : undefined,
           markPaid: skipStripePush ? markPaid : false,
           paidAtIso:
             skipStripePush && markPaid
@@ -385,19 +392,23 @@ export default function QuickCreateInvoiceField(props: UIFieldClientProps) {
             <input
               type="checkbox"
               checked={skipStripePush}
-              onChange={(e) => setSkipStripePush(e.target.checked)}
+              onChange={(e) => {
+                setSkipUserOverride(true)
+                setSkipStripePush(e.target.checked)
+              }}
             />
             <span>
               <strong>Skip Stripe push</strong> — Zelle / check / cash invoices stay Payload-only.
+              {friendMode ? ' (Auto-checked for friend clients.)' : ''}
             </span>
           </label>
           {skipStripePush ? (
             <div style={{ marginTop: 8, paddingLeft: 24 }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
-                <label style={{ fontSize: 12, opacity: 0.7 }}>Payment channel:</label>
+                <label style={{ fontSize: 12, opacity: 0.7 }}>Paid with:</label>
                 <select
-                  value={paymentChannel}
-                  onChange={(e) => setPaymentChannel(e.target.value as typeof paymentChannel)}
+                  value={paidWith}
+                  onChange={(e) => setPaidWith(e.target.value as typeof paidWith)}
                   style={{ padding: '4px 8px', borderRadius: 4, fontSize: 12 }}
                 >
                   <option value="zelle">Zelle</option>
@@ -440,8 +451,8 @@ export default function QuickCreateInvoiceField(props: UIFieldClientProps) {
               ) : null}
               <p style={{ marginTop: 8, fontSize: 11, opacity: 0.7, lineHeight: 1.4 }}>
                 {markPaid
-                  ? 'Invoice will save as Paid with the date above. It will appear in the MTD revenue tile and revenue-by-LP dashboard right away.'
-                  : 'Invoice will save as a draft. Open it later and set Status = Paid + paidAt manually when payment lands.'}
+                  ? 'Invoice saves as Paid with the date + payment method above. Counts toward MTD revenue and revenue-by-LP dashboard immediately. No need to write anything in Internal Notes — Paid With captures the payment method.'
+                  : 'Invoice saves as a draft. Open it later and set Status = Paid + Paid With + Paid On when payment lands.'}
               </p>
             </div>
           ) : null}

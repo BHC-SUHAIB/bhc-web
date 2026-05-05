@@ -34,7 +34,7 @@ type Body = {
   lineItems?: Array<{ description: string; amountCents: number; quantity?: number }>
   description?: string
   skipStripePush?: boolean
-  paymentChannel?: 'stripe' | 'zelle' | 'check' | 'cash' | 'wire' | 'other'
+  paidWith?: 'zelle' | 'check' | 'cash' | 'wire' | 'other'
   markPaid?: boolean
   paidAtIso?: string
 }
@@ -94,14 +94,7 @@ export async function POST(req: Request, ctx: RouteContext) {
     )
     const projectIdNum = Number(projectId)
     const projectRef = Number.isFinite(projectIdNum) ? projectIdNum : projectId
-    const channelToPaidWith: Record<string, string> = {
-      zelle: 'zelle',
-      check: 'check',
-      cash: 'cash',
-      wire: 'wire',
-      other: 'other',
-    }
-    const channel = body.paymentChannel ?? 'other'
+    const paidWith = body.paidWith ?? 'other'
     const markPaid = Boolean(body.markPaid)
     const paidAt = markPaid ? body.paidAtIso || new Date().toISOString() : null
 
@@ -121,11 +114,10 @@ export async function POST(req: Request, ctx: RouteContext) {
           totalCents,
           status: markPaid ? 'paid' : 'draft',
           skipStripePush: true,
-          paymentChannel: channel,
           ...(markPaid
             ? {
                 paidAt: paidAt as string,
-                paidWith: channelToPaidWith[channel] ?? 'other',
+                paidWith,
               }
             : {}),
         } as never,
@@ -138,7 +130,7 @@ export async function POST(req: Request, ctx: RouteContext) {
     await recordAudit(payload, {
       action: 'invoice.email_sent',
       actor: auth.user.email ?? 'admin',
-      summary: `Quick-created PAYLOAD-ONLY invoice for ${c.displayName ?? 'Client'} from project "${projectTitle}" — payment channel: ${body.paymentChannel ?? 'other'}`,
+      summary: `Quick-created PAYLOAD-ONLY invoice for ${c.displayName ?? 'Client'} from project "${projectTitle}" — paid with: ${paidWith}`,
       subjectType: 'invoice',
       stripeId: null,
       metadata: {
@@ -146,7 +138,7 @@ export async function POST(req: Request, ctx: RouteContext) {
         clientId: c.id,
         lineItemCount: body.lineItems.length,
         totalCents,
-        paymentChannel: body.paymentChannel ?? 'other',
+        paidWith,
         payloadOnly: true,
       },
       ipAddress: (req.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || null,
@@ -158,8 +150,9 @@ export async function POST(req: Request, ctx: RouteContext) {
       invoiceNumber: created.invoiceNumber,
       totalCents,
       payloadOnly: true,
-      note:
-        'Payload-only invoice created. Set Status to Paid and add a note in Internal Notes once you confirm receipt of the off-platform payment.',
+      note: markPaid
+        ? 'Payload-only invoice created and marked paid. Counts toward MTD revenue immediately.'
+        : 'Payload-only invoice created as draft. Edit it later to set Status = Paid + Paid With + Paid On when payment lands.',
     })
   }
 

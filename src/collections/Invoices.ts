@@ -28,7 +28,7 @@ export const Invoices: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      async ({ data, req }) => {
+      async ({ data, req, operation }) => {
         if (!data) return data
         // Auto-compute totalCents from lineItems on every save so the admin
         // never needs to keep them in sync manually.
@@ -42,19 +42,29 @@ export const Invoices: CollectionConfig = {
           data.totalCents = sum
         }
 
+        // Resolve the client once, lazily — used for invoice numbering AND
+        // friend-mode defaults below.
+        let client: { displayName?: string; priceMode?: string } | null = null
+        if (data.client) {
+          try {
+            client = (await req.payload.findByID({
+              collection: 'clients',
+              id: data.client as string | number,
+              depth: 0,
+            })) as { displayName?: string; priceMode?: string } | null
+          } catch {
+            client = null
+          }
+        }
+
         // Auto-generate invoiceNumber when left blank.
         // Format: INV-<DISPLAYNAME>-NNN, where DISPLAYNAME is the client's
         // displayName uppercased and stripped to A-Z/0-9, and NNN is the
         // next sequential number across that client's invoices.
         const blank = !data.invoiceNumber || !String(data.invoiceNumber).trim()
-        if (blank && data.client) {
+        if (blank && client) {
           try {
-            const client = (await req.payload.findByID({
-              collection: 'clients',
-              id: data.client as string | number,
-              depth: 0,
-            })) as { displayName?: string } | null
-            const display = (client?.displayName || '').toString()
+            const display = (client.displayName || '').toString()
             const slug = display.toUpperCase().replace(/[^A-Z0-9]+/g, '').slice(0, 40) || 'CLIENT'
             const prefix = `INV-${slug}-`
 
@@ -82,6 +92,15 @@ export const Invoices: CollectionConfig = {
               '[invoices] auto-generate invoice number failed (non-fatal)',
             )
           }
+        }
+
+        // Friend-mode defaults: when creating an invoice for a friend &
+        // family client, default to off-platform (skipStripePush=true) and
+        // hide the Care Plan upsell. Operator can still un-check skipStripePush
+        // or re-enable the upsell after save by editing the invoice.
+        if (operation === 'create' && client?.priceMode === 'friend_and_family') {
+          data.skipStripePush = true
+          data.allowCarePlanUpsell = false
         }
 
         return data
@@ -219,25 +238,25 @@ export const Invoices: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description:
-          'For Zelle / check / cash invoices. When checked, this invoice stays Payload-only — never finalized in Stripe. Set Status to Paid and add a note in Internal Notes (e.g. "Paid via Zelle 2026-05-05").',
+          'Off-platform invoice (Zelle / check / cash). When checked, this invoice stays Payload-only — never finalized in Stripe. Set Status to Paid and Paid With for the receipt to count toward MTD revenue.',
       },
     },
     {
+      // Deprecated. Superseded by `paidWith` to avoid two redundant fields.
+      // Kept here so an existing column in prod doesn't get dropped (and
+      // doesn't trigger a destructive schema-push prompt). Don't write to
+      // it from new code; remove in a follow-up after data is migrated.
       name: 'paymentChannel',
       type: 'select',
       options: [
-        { label: 'Stripe (card / ACH / etc.)', value: 'stripe' },
+        { label: 'Stripe', value: 'stripe' },
         { label: 'Zelle', value: 'zelle' },
         { label: 'Check', value: 'check' },
         { label: 'Cash', value: 'cash' },
         { label: 'Wire transfer', value: 'wire' },
-        { label: 'Other / off-platform', value: 'other' },
+        { label: 'Other', value: 'other' },
       ],
-      defaultValue: 'stripe',
-      admin: {
-        position: 'sidebar',
-        description: 'How the client paid (or will pay) for this invoice.',
-      },
+      admin: { hidden: true },
     },
     {
       name: 'stripeInvoiceId',

@@ -84,7 +84,7 @@ export const FoundingClient: Block = {
       maxRows: 4,
       admin: { description: 'Discounted offers available to founding clients.' },
       fields: [
-        { name: 'name', type: 'text', required: true, admin: { description: 'e.g. "The Heights Starter"' } },
+        { name: 'name', type: 'text', required: true, admin: { description: 'e.g. "Starter Site"' } },
         { name: 'priceFounding', type: 'text', required: true, admin: { description: 'e.g. "$1,495"' } },
         { name: 'priceRetail', type: 'text', required: true, admin: { description: 'e.g. "$1,950"' } },
         { name: 'savings', type: 'text', admin: { description: 'e.g. "Save $455"' } },

@@ -41,10 +41,10 @@ const FIXTURE_INVOICE: Stripe.Invoice = {
   customer_email: 'joe@joescoffee.com',
   due_date: Math.floor(Date.now() / 1000) + 14 * 86_400,
   hosted_invoice_url: 'https://invoice.stripe.com/sample',
-  description: 'Heights Starter site rebuild + 30-day SEO content kickoff.',
+  description: 'Starter Site rebuild + 30-day SEO content kickoff.',
   lines: {
     data: [
-      { description: 'Heights Starter Site (5-page custom build, 14-day delivery)', amount: 149_500 },
+      { description: 'Starter Site (5-page custom build, 14-day delivery)', amount: 149_500 },
       { description: 'Founding-client discount applied', amount: 0 },
     ],
   },

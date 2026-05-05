@@ -80,7 +80,7 @@ export function carePlanByLookupKey(key: string | null | undefined): CarePlanTie
 
 // One-time build tiers — kept here so Payment Links + the /pay routes can
 // resolve a slug to a Stripe price the same way Care Plans do.
-export type BuildTierSlug = 'single-page' | 'heights-starter' | 'pro-site'
+export type BuildTierSlug = 'single-page' | 'starter-site' | 'pro-site'
 
 export type BuildTier = {
   slug: BuildTierSlug
@@ -99,9 +99,9 @@ export const BUILD_TIERS: readonly BuildTier[] = [
     blurb: 'One conversion-focused page, 5-day build.',
   },
   {
-    slug: 'heights-starter',
-    name: 'The Heights Starter',
-    lookupKey: 'bhc_heights_starter',
+    slug: 'starter-site',
+    name: 'Starter Site',
+    lookupKey: 'bhc_starter_site',
     amountCents: 149_500,
     blurb: 'Up to 5 bespoke pages, 14-day build.',
   },

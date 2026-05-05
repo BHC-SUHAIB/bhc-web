@@ -173,7 +173,7 @@ export default function QuickCreateInvoiceField(props: UIFieldClientProps) {
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="e.g., Joe's Coffee — Heights Starter site rebuild"
+            placeholder="e.g., Joe's Coffee — Starter Site rebuild"
             style={{ padding: '8px 10px', borderRadius: 6, width: '100%' }}
           />
         </div>

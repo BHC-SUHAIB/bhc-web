@@ -25,6 +25,8 @@ export const AuditEvents: CollectionConfig = {
     defaultColumns: ['action', 'actor', 'summary', 'createdAt'],
     description: 'Append-only audit trail of operator + webhook-driven billing actions.',
     listSearchableFields: ['summary', 'actor', 'action', 'subjectId'],
+    // Hide from sidebar nav — events surface inline on each Client/Invoice/Subscription doc via the DocActivityField. List view still reachable at /admin/collections/audit-events.
+    hidden: true,
   },
   fields: [
     {

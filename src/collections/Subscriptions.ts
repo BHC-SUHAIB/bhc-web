@@ -160,6 +160,20 @@ export const Subscriptions: CollectionConfig = {
         },
       },
     },
+    {
+      // Activity timeline — audit + webhook events scoped to this sub.
+      name: 'activity',
+      type: 'ui',
+      label: 'Activity',
+      admin: {
+        components: {
+          Field: {
+            path: '/components/admin/DocActivityField#default',
+            clientProps: { subjectType: 'subscription' },
+          },
+        },
+      },
+    },
   ],
   timestamps: true,
 }

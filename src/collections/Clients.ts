@@ -256,6 +256,22 @@ export const Clients: CollectionConfig = {
         },
       },
     },
+    {
+      // Activity timeline — audit + Stripe webhook events scoped to this
+      // client. Replaces flipping between AuditEvents/WebhookEvents in
+      // the sidebar.
+      name: 'activity',
+      type: 'ui',
+      label: 'Activity',
+      admin: {
+        components: {
+          Field: {
+            path: '/components/admin/DocActivityField#default',
+            clientProps: { subjectType: 'client' },
+          },
+        },
+      },
+    },
   ],
   timestamps: true,
 }

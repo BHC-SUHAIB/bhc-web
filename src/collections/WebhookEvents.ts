@@ -24,6 +24,8 @@ export const WebhookEvents: CollectionConfig = {
     useAsTitle: 'stripeEventId',
     defaultColumns: ['stripeEventId', 'eventType', 'status', 'createdAt'],
     description: 'Idempotency log for Stripe webhook deliveries. Read-only debug view.',
+    // Hide from sidebar nav — surfaces inline on doc activity feeds.
+    hidden: true,
   },
   fields: [
     {

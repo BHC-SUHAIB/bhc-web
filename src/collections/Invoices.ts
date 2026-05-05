@@ -240,6 +240,20 @@ export const Invoices: CollectionConfig = {
       type: 'textarea',
       admin: { description: 'Private notes — never visible to the client.' },
     },
+    {
+      // Activity timeline — audit + webhook events scoped to this invoice.
+      name: 'activity',
+      type: 'ui',
+      label: 'Activity',
+      admin: {
+        components: {
+          Field: {
+            path: '/components/admin/DocActivityField#default',
+            clientProps: { subjectType: 'invoice' },
+          },
+        },
+      },
+    },
   ],
   timestamps: true,
 }

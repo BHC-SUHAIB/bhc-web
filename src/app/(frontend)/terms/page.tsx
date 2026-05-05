@@ -16,7 +16,10 @@ export const metadata: Metadata = {
 // Update LAST_UPDATED whenever the terms materially change. The date is
 // shown at the top of the page so visitors / clients can tell at a glance
 // when the terms last changed.
-const LAST_UPDATED = 'May 5, 2026'
+// Bump this whenever the Terms materially change. Per the "Changes to these
+// Terms" section, material changes also require 14 days' email notice to
+// active clients before they take effect.
+const LAST_UPDATED = 'May 5, 2026 (revised)'
 
 export default async function TermsPage() {
   const siteSettings = await getCachedSiteSettings()
@@ -100,15 +103,26 @@ export default async function TermsPage() {
             </p>
             <ul>
               <li>
-                <strong>One-time projects</strong>: invoiced via Stripe and
-                payable on receipt unless a written payment plan is agreed.
-                Work begins after payment (or first installment) is received.
+                <strong>Single Page Site, SEO Sprints, and quick-win add-ons
+                under $1,000</strong>: payable in full when invoiced. Work
+                begins after payment is received.
+              </li>
+              <li>
+                <strong>Heights Starter, Pro Site, and most other one-time
+                projects $1,000&ndash;$5,000</strong>: 50% deposit when the
+                Statement of Work is signed; remaining 50% due on launch.
+                The second invoice is net-15.
+              </li>
+              <li>
+                <strong>Custom Build and projects over $5,000</strong>: 50%
+                deposit at signature, 25% on approved design milestone, 25%
+                on launch. Optional installment plans available on request.
               </li>
               <li>
                 <strong>Care Plans and SEO retainers</strong>: pre-pay
                 monthly. The first charge runs the day you activate the
-                subscription, with the same amount charged automatically every
-                30 days thereafter to your saved payment method.
+                subscription, with the same amount charged automatically
+                every 30 days thereafter to your saved payment method.
               </li>
               <li>
                 <strong>Late payment</strong>: invoices unpaid for 14 days
@@ -118,6 +132,38 @@ export default async function TermsPage() {
               <li>
                 <strong>Refund policy</strong>: see the dedicated section
                 below.
+              </li>
+            </ul>
+            <p>
+              These are defaults. Your specific Statement of Work or invoice
+              may set different terms by mutual agreement.
+            </p>
+          </Section>
+
+          <Section title="Project timelines and dependencies">
+            <p>
+              Project timelines committed in your Statement of Work assume
+              timely client cooperation: prompt approvals, content delivery,
+              access credentials (logos, brand assets, hosting/domain
+              access, third-party platform logins), and design feedback
+              within 5 business days of request.
+            </p>
+            <ul>
+              <li>
+                <strong>Delays on your side</strong> &mdash; if we&rsquo;re
+                blocked waiting on you (content, approvals, credentials), the
+                committed timeline pauses. We don&rsquo;t pro-rate or refund
+                fees for client-caused delay, and the project may be
+                rescheduled or paused if a client goes unresponsive for more
+                than 14 days.
+              </li>
+              <li>
+                <strong>Delays on our side</strong> &mdash; if we slip a
+                deadline for any reason on our end, we&rsquo;ll keep you
+                informed and reasonable about deadline impact. We
+                don&rsquo;t apply penalty fees to ourselves, but we make
+                every reasonable effort to recover the schedule and never
+                let a delay become a billing issue for you.
               </li>
             </ul>
           </Section>

@@ -5,22 +5,22 @@
   --bhc-brass: #B08D57;
   --bhc-brass-dark: #8E6E3F;
   --bhc-brass-tint: rgba(176, 141, 87, 0.18);
-  --bhc-forest: #2F4A35;
-  --bhc-forest-deep: #243A2A;
-  --bhc-forest-hover: rgba(255, 255, 255, 0.06);
+  --bhc-side-bg: #1A1713;
+  --bhc-side-deep: #0F0D0A;
+  --bhc-side-hover: rgba(255, 255, 255, 0.05);
   --bhc-cream-text: #F4EFE6;
-  --bhc-cream-text-muted: rgba(244, 239, 230, 0.65);
+  --bhc-cream-text-muted: rgba(244, 239, 230, 0.6);
 }
 
-/* Sidebar — forest green replaces the cream/sand to break up the visual
+/* Sidebar — charcoal-ink replaces the cream/sand to break up the visual
    monotony and create a clear vertical hierarchy on every page. */
 .nav,
 .template-default__nav,
 [class*="template-default"] .nav,
 .nav-toggler {
-  background: var(--bhc-forest) !important;
+  background: var(--bhc-side-bg) !important;
   color: var(--bhc-cream-text) !important;
-  border-right-color: var(--bhc-forest-deep) !important;
+  border-right-color: var(--bhc-side-deep) !important;
 }
 
 .nav .nav-group__toggle,
@@ -39,7 +39,7 @@
 
 .nav .nav-group__toggle:hover,
 .nav .nav__link:hover {
-  background: var(--bhc-forest-hover) !important;
+  background: var(--bhc-side-hover) !important;
 }
 
 .nav hr,
@@ -52,7 +52,7 @@
 /* "Log out" / account link footer at bottom of sidebar */
 .nav__controls,
 .nav__log-out {
-  background: var(--bhc-forest-deep) !important;
+  background: var(--bhc-side-deep) !important;
   border-top-color: rgba(255, 255, 255, 0.08) !important;
 }
 .nav__controls a,
@@ -112,11 +112,14 @@
   display: none;
 }
 
-/* Suppress the "/ Dashboard" breadcrumb on the home view — there's nothing
-   to navigate back to and the text duplicates the page title. Uses :has()
-   to scope to pages that contain the dashboard root. */
-body:has(.dashboard) .step-nav {
-  display: none;
+/* Suppress just the "/ Dashboard" breadcrumb crumbs on the home view —
+   there's nothing to navigate back to and the text duplicates the page title.
+   Crucially, leave .step-nav__home (the hart logo + home link) visible so
+   the brand mark still anchors the header. */
+body:has(.dashboard) .step-nav > *:not(.step-nav__home),
+body:has(.dashboard) .step-nav__step,
+body:has(.dashboard) .step-nav__last {
+  display: none !important;
 }
 
 /* Demote System + Site groups from the dashboard card grid. The sidebar

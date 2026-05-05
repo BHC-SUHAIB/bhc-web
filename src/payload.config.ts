@@ -125,6 +125,7 @@ export default buildConfig({
       beforeDashboard: [
         '/components/admin/DashboardQuickActions#default',
         '/components/admin/KpiStrip#default',
+        '/components/admin/ActionQueue#default',
         '/components/admin/RecentActivityPanel#default',
         '/components/admin/RevenueByLpDashboard#default',
       ],

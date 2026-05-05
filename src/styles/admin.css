@@ -75,3 +75,10 @@ body:has(.dashboard) .step-nav {
 .collections .card:has(a[href*="/collections/audit-events"]) {
   display: none;
 }
+
+/* Operator Home — replace the default card grid with our ActionQueue
+   widget. The card grid still renders in the DOM (so reverting this
+   stylesheet brings it back) but it's hidden visually. */
+body:has(.dashboard) .collections {
+  display: none;
+}

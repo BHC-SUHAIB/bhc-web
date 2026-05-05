@@ -38,31 +38,88 @@
   color: var(--bhc-side-text-muted) !important;
 }
 
+/* Make sidebar items span the full sidebar width.
+   Payload puts padding: 0 20px on .nav__scroll which prevents items from
+   reaching the edges. Strip that and reapply the indent on each item so
+   the active/hover backgrounds fill edge-to-edge with the brass canvas. */
+.nav .nav__scroll {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.nav .nav-group {
+  padding: 0 !important;
+}
+.nav .nav-group__toggle {
+  padding: 8px 18px !important;
+  margin-bottom: 4px !important;
+  border-radius: 0 !important;
+  transition: background 100ms ease;
+}
+.nav .nav__link {
+  padding: 7px 18px 7px 28px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  transition: background 100ms ease;
+}
+
 .nav .nav-group__toggle:hover,
 .nav .nav__link:hover {
-  background: var(--bhc-side-hover) !important;
+  background: rgba(231, 225, 208, 0.4) !important;
 }
 
 .nav hr,
 .nav .nav-separator,
 .nav__divider {
-  border-color: rgba(255, 255, 255, 0.08) !important;
-  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  background: rgba(0, 0, 0, 0.08) !important;
 }
 
-/* "Log out" / account link footer at bottom of sidebar */
-.nav__controls,
-.nav__log-out {
+/* Account / log-out controls at the bottom-left of the sidebar.
+   Payload renders these as a small icon-only block; we redesign as a
+   full-width button bar that matches the sidebar's edge-to-edge feel. */
+.nav__controls {
   background: var(--bhc-side-deep) !important;
-  border-top-color: rgba(255, 255, 255, 0.08) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 0 !important;
 }
-.nav__controls a,
-.nav__log-out a,
-.nav__controls svg,
+.nav__log-out {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  flex: 1 !important;
+  padding: 12px 16px !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #F4EFE6 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  transition: background 120ms ease;
+  text-decoration: none !important;
+}
+.nav__log-out::after {
+  content: 'Log out';
+  letter-spacing: 0.04em;
+}
+.nav__log-out:hover {
+  background: rgba(0, 0, 0, 0.18) !important;
+}
 .nav__log-out svg {
+  width: 16px !important;
+  height: 16px !important;
   color: #F4EFE6 !important;
   stroke: #F4EFE6 !important;
-  fill: #F4EFE6 !important;
+  fill: none !important;
+  flex-shrink: 0 !important;
+}
+.nav__log-out svg .stroke {
+  stroke: #F4EFE6 !important;
 }
 
 /* KPI strip — horizontal flex row. */
@@ -76,17 +133,20 @@
   .bhc-kpi { flex-direction: column; }
 }
 
-/* Active sidebar nav item — ink background inverts on the brass sidebar
-   for the strongest possible contrast. Payload signals "active" by rendering
-   a .nav__link-indicator child, targeted via :has(). */
+/* Active sidebar nav item — full-width cream pill (#e7e1d0) with ink text.
+   Payload signals "active" by rendering a .nav__link-indicator child,
+   targeted via :has(). No left border so the bg fills edge-to-edge. */
 .nav .nav__link:has(.nav__link-indicator) {
-  background: #1A1713 !important;
-  border-left: 2px solid #0F0D0A !important;
-  color: #F4EFE6 !important;
+  background: #e7e1d0 !important;
+  border-left: 0 !important;
+  color: #1A1713 !important;
 }
 .nav .nav__link:has(.nav__link-indicator) .nav__link-label {
-  color: #F4EFE6 !important;
+  color: #1A1713 !important;
   font-weight: 600;
+}
+.nav .nav__link:has(.nav__link-indicator):hover {
+  background: #e7e1d0 !important;
 }
 
 /* Hide Payload's default blue indicator dot once we have our own active style. */

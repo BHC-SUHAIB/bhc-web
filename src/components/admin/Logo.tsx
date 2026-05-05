@@ -9,10 +9,10 @@ export default function AdminLogo() {
       style={{ display: 'flex', alignItems: 'center', gap: 14 }}
     >
       <img
-        src="/brand/black-hart-icon.svg"
+        src="/brand/black-hart-avatar-512.png"
         alt="Black Hart"
-        width={56}
-        height={56}
+        width={64}
+        height={64}
         style={{ display: 'block', objectFit: 'contain' }}
       />
       <div className="bhc-admin-logo__wordmark" style={{ display: 'flex', flexDirection: 'column' }}>

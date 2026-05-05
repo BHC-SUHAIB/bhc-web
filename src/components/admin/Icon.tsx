@@ -7,13 +7,13 @@ export default function AdminIcon() {
   return (
     <span
       className="bhc-admin-icon"
-      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32 }}
+      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36 }}
     >
       <img
-        src="/brand/black-hart-icon.svg"
+        src="/brand/black-hart-avatar-512.png"
         alt="Black Hart"
-        width={28}
-        height={28}
+        width={32}
+        height={32}
         style={{ display: 'block', objectFit: 'contain' }}
       />
     </span>

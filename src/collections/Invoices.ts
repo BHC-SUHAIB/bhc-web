@@ -28,7 +28,7 @@ export const Invoices: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      ({ data }) => {
+      async ({ data, req }) => {
         if (!data) return data
         // Auto-compute totalCents from lineItems on every save so the admin
         // never needs to keep them in sync manually.
@@ -41,6 +41,49 @@ export const Invoices: CollectionConfig = {
           }
           data.totalCents = sum
         }
+
+        // Auto-generate invoiceNumber when left blank.
+        // Format: INV-<DISPLAYNAME>-NNN, where DISPLAYNAME is the client's
+        // displayName uppercased and stripped to A-Z/0-9, and NNN is the
+        // next sequential number across that client's invoices.
+        const blank = !data.invoiceNumber || !String(data.invoiceNumber).trim()
+        if (blank && data.client) {
+          try {
+            const client = (await req.payload.findByID({
+              collection: 'clients',
+              id: data.client as string | number,
+              depth: 0,
+            })) as { displayName?: string } | null
+            const display = (client?.displayName || '').toString()
+            const slug = display.toUpperCase().replace(/[^A-Z0-9]+/g, '').slice(0, 40) || 'CLIENT'
+            const prefix = `INV-${slug}-`
+
+            const existing = await req.payload.find({
+              collection: 'invoices',
+              where: { invoiceNumber: { like: prefix } },
+              limit: 1000,
+              depth: 0,
+            })
+            const tail = new RegExp(`^${prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\d+)$`)
+            let maxN = 0
+            for (const inv of existing.docs) {
+              const num = (inv as { invoiceNumber?: string }).invoiceNumber || ''
+              const m = num.match(tail)
+              if (m) {
+                const n = parseInt(m[1], 10)
+                if (n > maxN) maxN = n
+              }
+            }
+            const padded = String(maxN + 1).padStart(3, '0')
+            data.invoiceNumber = `${prefix}${padded}`
+          } catch (err) {
+            req.payload.logger.warn(
+              { err: err instanceof Error ? err.message : err, clientId: data.client },
+              '[invoices] auto-generate invoice number failed (non-fatal)',
+            )
+          }
+        }
+
         return data
       },
     ],
@@ -49,9 +92,11 @@ export const Invoices: CollectionConfig = {
     {
       name: 'invoiceNumber',
       type: 'text',
-      required: true,
       unique: true,
-      admin: { description: 'Human-friendly invoice number (e.g. INV-0042). Shown on the invoice page.' },
+      admin: {
+        description:
+          'Leave blank to auto-generate (INV-<CLIENT>-001, incremented per-client). Override only if you need a custom number.',
+      },
     },
     {
       name: 'client',

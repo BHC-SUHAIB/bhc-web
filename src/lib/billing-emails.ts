@@ -3,9 +3,10 @@ import type Stripe from 'stripe'
 import { signInvoiceToken } from '@/lib/invoice-token'
 import { formatUSD, type CarePlanSlug } from '@/lib/care-plans'
 
-// Branded transactional emails for the Stripe→BHC integration. These
-// replace what Stripe's default invoice/subscription emails would send,
-// so the client sees the BHC branding throughout the payment flow.
+// Branded transactional emails for the Stripe→BHC integration. All three
+// templates (invoice, care-plan signup, payment-failed alert) share a
+// single layout function so the styling stays in lockstep — change the
+// shell once and all emails update together.
 //
 // Sent via Payload's configured email adapter (Resend in production,
 // console-log in dev when RESEND_API_KEY is unset).
@@ -26,10 +27,6 @@ function fromAddress(): string {
   return process.env.EMAIL_FROM || 'hello@blackhartconsulting.com'
 }
 
-// (#17) Billing-specific from-address for invoice / care-plan / payment-failed
-// emails. Falls back to EMAIL_FROM if unset, then to a sensible default.
-// Set EMAIL_FROM_BILLING=invoicing@blackhartconsulting.com in .env once the
-// Google Workspace alias is created.
 function billingFromAddress(): string {
   return (
     process.env.EMAIL_FROM_BILLING ||
@@ -38,11 +35,6 @@ function billingFromAddress(): string {
   )
 }
 
-// (#19) Standard unsubscribe headers — RFC 8058 + RFC 2369. Even though
-// branded billing emails are transactional (legally exempt from CAN-SPAM
-// unsubscribe), Gmail and other big providers reward presence with better
-// deliverability. The mailto handler reaches our billing inbox so we can
-// process opt-outs manually without breaking transactional delivery.
 function unsubscribeHeaders(): { 'List-Unsubscribe': string; 'List-Unsubscribe-Post': string } {
   const from = billingFromAddress()
   return {
@@ -50,6 +42,93 @@ function unsubscribeHeaders(): { 'List-Unsubscribe': string; 'List-Unsubscribe-P
     'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
   }
 }
+
+// ────────────────── shared layout ──────────────────
+
+type EmailLayoutOptions = {
+  /** <title>; also surfaces in some clients' preview pane. */
+  pageTitle: string
+  /** Pre-header text shown in inbox preview (hidden in body). */
+  preheader?: string
+  /** Top eyebrow above the headline (always "Black Hart Consulting"). */
+  eyebrow?: string
+  /** H1. */
+  title: string
+  /** Body paragraphs (HTML allowed; caller must escape user input). */
+  bodyHtml: string
+  /** Optional table of label/value rows rendered as line items. */
+  rows?: Array<{ label: string; value: string; isTotal?: boolean }>
+  /** Primary call-to-action — black button. */
+  cta?: { label: string; href: string }
+  /** Optional fineprint after the CTA. */
+  fineprintHtml?: string
+}
+
+const COLOR_BG = '#F4EFE6'        // cream/sand outer
+const COLOR_CARD = '#FAF7F2'      // ivory card
+const COLOR_FG = '#1a1a1a'        // body fg
+const COLOR_FG_MUTED = '#666'     // captions, eyebrows
+const COLOR_FG_BODY = '#444'      // body paragraph
+const COLOR_BORDER = '#e5e5e5'    // hairlines
+const COLOR_FAINT = '#999'        // fallback URL
+
+const SERIF = `Georgia,'Times New Roman',serif`
+const SANS = `'Manrope',sans-serif`
+
+function renderEmailLayout(opts: EmailLayoutOptions): string {
+  const eyebrow = opts.eyebrow ?? 'Black Hart Consulting'
+  const preheader = opts.preheader ? `<div style="display:none;max-height:0;overflow:hidden;color:transparent;mso-hide:all;">${escapeHtml(opts.preheader)}</div>` : ''
+
+  const tableRowsHtml =
+    opts.rows && opts.rows.length > 0
+      ? `<table role="presentation" style="width:100%;border-collapse:collapse;font-family:${SANS};font-size:14px;color:#333;margin:0 0 24px;">
+${opts.rows
+  .map((r) => {
+    if (r.isTotal) {
+      return `<tr><td style="padding:12px 0 0;font-weight:600;color:${COLOR_FG};">${escapeHtml(r.label)}</td><td style="padding:12px 0 0;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:${COLOR_FG};">${escapeHtml(r.value)}</td></tr>`
+    }
+    return `<tr><td style="padding:8px 0;border-bottom:1px solid ${COLOR_BORDER};">${escapeHtml(r.label)}</td><td style="padding:8px 0;text-align:right;border-bottom:1px solid ${COLOR_BORDER};font-variant-numeric:tabular-nums;">${escapeHtml(r.value)}</td></tr>`
+  })
+  .join('\n')}
+</table>`
+      : ''
+
+  const ctaHtml = opts.cta
+    ? `<a href="${escapeHtml(opts.cta.href)}" style="display:inline-block;background:${COLOR_FG};color:${COLOR_CARD};padding:14px 24px;border-radius:999px;text-decoration:none;font-family:${SANS};font-size:15px;font-weight:500;letter-spacing:0.01em;">${escapeHtml(opts.cta.label)}</a>`
+    : ''
+
+  const fineprintHtml = opts.fineprintHtml
+    ? `<p style="font-family:${SANS};font-size:13px;line-height:1.5;color:${COLOR_FG_MUTED};margin:24px 0 0;">${opts.fineprintHtml}</p>`
+    : ''
+
+  const fallbackUrlHtml = opts.cta
+    ? `<p style="font-family:${SANS};font-size:11px;color:${COLOR_FAINT};margin:24px 0 0;">If the button does not work, copy and paste this URL into your browser:<br><span style="word-break:break-all;">${escapeHtml(opts.cta.href)}</span></p>`
+    : ''
+
+  return `<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>${escapeHtml(opts.pageTitle)}</title>
+</head><body style="font-family:${SERIF};background:${COLOR_BG};margin:0;padding:32px 16px;color:${COLOR_FG};">
+${preheader}
+  <table role="presentation" style="max-width:560px;margin:0 auto;background:${COLOR_CARD};border-radius:14px;padding:32px;">
+    <tr><td>
+      <p style="font-family:${SANS};font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:${COLOR_FG_MUTED};margin:0 0 16px;">${escapeHtml(eyebrow)}</p>
+      <h1 style="font-size:28px;line-height:1.1;margin:0 0 16px;letter-spacing:-0.02em;color:${COLOR_FG};">${escapeHtml(opts.title)}</h1>
+      <div style="font-size:16px;line-height:1.5;color:${COLOR_FG_BODY};margin:0 0 24px;">${opts.bodyHtml}</div>
+      ${tableRowsHtml}
+      ${ctaHtml}
+      ${fineprintHtml}
+      ${fallbackUrlHtml}
+    </td></tr>
+  </table>
+</body></html>`
+}
+
+// ────────────────── public senders ──────────────────
 
 export async function sendBrandedInvoiceEmail(args: {
   payload: Payload
@@ -69,40 +148,21 @@ export async function sendBrandedInvoiceEmail(args: {
     ? `Due by ${dueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.`
     : ''
 
-  const lineItemsHtml = (invoice.lines.data ?? [])
-    .map((li) => {
-      const desc = li.description || (li.price?.product as Stripe.Product | string)?.toString() || 'Item'
-      const amount = formatUSD(li.amount ?? 0)
-      return `<tr><td style="padding:8px 0;border-bottom:1px solid #e5e5e5;">${escapeHtml(desc)}</td><td style="padding:8px 0;text-align:right;border-bottom:1px solid #e5e5e5;font-variant-numeric:tabular-nums;">${amount}</td></tr>`
-    })
-    .join('')
+  const rows: NonNullable<EmailLayoutOptions['rows']> = (invoice.lines.data ?? []).map((li) => ({
+    label: li.description || (li.price?.product as Stripe.Product | string)?.toString() || 'Item',
+    value: formatUSD(li.amount ?? 0),
+  }))
+  rows.push({ label: 'Total due', value: total, isTotal: true })
 
-  const html = `<!doctype html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="supported-color-schemes" content="light">
-  <title>Invoice ${escapeHtml(number)}</title>
-</head><body style="font-family:Georgia,'Times New Roman',serif;background:#F4EFE6;margin:0;padding:32px 16px;color:#1a1a1a;">
-  <table role="presentation" style="max-width:560px;margin:0 auto;background:#FAF7F2;border-radius:14px;padding:32px;">
-    <tr><td>
-      <p style="font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#666;margin:0 0 16px;">Black Hart Consulting</p>
-      <h1 style="font-size:28px;line-height:1.1;margin:0 0 16px;letter-spacing:-0.02em;color:#1a1a1a;">Your invoice is ready</h1>
-      <p style="font-size:16px;line-height:1.5;color:#444;margin:0 0 24px;">Hi ${escapeHtml(clientName)}, your invoice <strong>${escapeHtml(number)}</strong> for <strong>${total}</strong> is ready to pay. ${escapeHtml(dueLine)}</p>
-
-      <table role="presentation" style="width:100%;border-collapse:collapse;font-family:'Manrope',sans-serif;font-size:14px;color:#333;margin:0 0 24px;">
-        ${lineItemsHtml}
-        <tr><td style="padding:12px 0 0;font-weight:600;">Total due</td><td style="padding:12px 0 0;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;">${total}</td></tr>
-      </table>
-
-      <a href="${url}" style="display:inline-block;background:#1a1a1a;color:#FAF7F2;padding:14px 24px;border-radius:999px;text-decoration:none;font-family:'Manrope',sans-serif;font-size:15px;font-weight:500;letter-spacing:0.01em;">Review &amp; pay invoice</a>
-
-      <p style="font-family:'Manrope',sans-serif;font-size:13px;line-height:1.5;color:#666;margin:24px 0 0;">Card, ACH, Klarna, Affirm, and Cash App accepted. Receipt emailed once paid. Questions? Reply to this email.</p>
-      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#999;margin:24px 0 0;">If the button does not work, copy and paste this URL into your browser:<br><span style="word-break:break-all;">${url}</span></p>
-    </td></tr>
-  </table>
-</body></html>`
+  const html = renderEmailLayout({
+    pageTitle: `Invoice ${number}`,
+    preheader: `Invoice ${number} for ${total} from Black Hart Consulting`,
+    title: 'Your invoice is ready',
+    bodyHtml: `Hi ${escapeHtml(clientName)}, your invoice <strong>${escapeHtml(number)}</strong> for <strong>${total}</strong> is ready to pay. ${escapeHtml(dueLine)}`,
+    rows,
+    cta: { label: 'Review & pay invoice', href: url },
+    fineprintHtml: 'Card, ACH, Klarna, Affirm, and Cash App accepted. Receipt emailed once paid. Questions? Reply to this email.',
+  })
 
   try {
     await payload.sendEmail({
@@ -127,33 +187,30 @@ export async function sendBrandedCarePlanSignupEmail(args: {
   monthlyAmountCents: number
 }): Promise<void> {
   const { payload, to, clientName, stripeCustomerId, tier, monthlyAmountCents } = args
-  // For the care plan signup, the URL is bound to the Stripe Customer ID
-  // (signed via the same invoice-token machinery — the token's `iid` field
-  // doubles as the Customer ID here since it's a stable, sub-secret key).
   const token = signInvoiceToken(stripeCustomerId)
   const url = `${siteUrl()}/care-plan/setup?customer=${encodeURIComponent(stripeCustomerId)}&tier=${tier}&token=${encodeURIComponent(token)}`
   const monthly = formatUSD(monthlyAmountCents)
+  const tierName = tier[0].toUpperCase() + tier.slice(1)
 
-  const html = `<!doctype html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="supported-color-schemes" content="light">
-</head><body style="font-family:Georgia,'Times New Roman',serif;background:#F4EFE6;margin:0;padding:32px 16px;color:#1a1a1a;">
-  <table role="presentation" style="max-width:560px;margin:0 auto;background:#FAF7F2;border-radius:14px;padding:32px;">
-    <tr><td>
-      <p style="font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#666;margin:0 0 16px;">Black Hart Consulting</p>
-      <h1 style="font-size:28px;line-height:1.1;margin:0 0 16px;letter-spacing:-0.02em;">Activate your Care Plan</h1>
-      <p style="font-size:16px;line-height:1.5;color:#444;margin:0 0 24px;">Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(tier[0].toUpperCase() + tier.slice(1))} Care Plan</strong> is ready to start. Add a card or U.S. bank account to begin — first charge of <strong>${monthly}</strong> runs in 30 days, and you can cancel anytime.</p>
+  // (Phase D / #21) Stripe Customer Portal link — clients can manage
+  // their payment method + cancel from there once the sub is active. URL
+  // points at our /portal/[customer] redirector since the actual Stripe
+  // portal session URL expires after ~5 min.
+  const portalUrl = `${siteUrl()}/portal/${encodeURIComponent(stripeCustomerId)}?token=${encodeURIComponent(token)}`
 
-      <a href="${url}" style="display:inline-block;background:#B08D57;color:#1a1a1a;padding:14px 24px;border-radius:999px;text-decoration:none;font-family:'Manrope',sans-serif;font-size:15px;font-weight:500;letter-spacing:0.01em;">Add a payment method</a>
-
-      <p style="font-family:'Manrope',sans-serif;font-size:13px;line-height:1.5;color:#666;margin:24px 0 0;">Secure checkout via Stripe. We never see or store your card details. Cancel anytime by replying to this email or from your customer portal.</p>
-      <p style="font-family:'Manrope',sans-serif;font-size:11px;color:#999;margin:24px 0 0;">If the button does not work, copy and paste this URL into your browser:<br><span style="word-break:break-all;">${url}</span></p>
-    </td></tr>
-  </table>
-</body></html>`
+  const html = renderEmailLayout({
+    pageTitle: 'Activate your Care Plan',
+    preheader: `Activate your ${tierName} Care Plan with Black Hart Consulting`,
+    title: 'Activate your Care Plan',
+    bodyHtml: `Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(tierName)} Care Plan</strong> is ready to start. Add a card or U.S. bank account to begin — first charge of <strong>${monthly}</strong> runs in 30 days, and you can cancel anytime.`,
+    rows: [
+      { label: `${tierName} Care Plan`, value: `${monthly} / month` },
+      { label: 'First charge', value: 'In 30 days' },
+      { label: 'Cancellation', value: 'Anytime, no fees' },
+    ],
+    cta: { label: 'Add a payment method', href: url },
+    fineprintHtml: `Secure checkout via Stripe. We never see or store your card details. Once your plan is active, you can <a href="${portalUrl}" style="color:${COLOR_FG};">manage payment method or cancel</a> anytime.`,
+  })
 
   try {
     await payload.sendEmail({
@@ -171,8 +228,7 @@ export async function sendBrandedCarePlanSignupEmail(args: {
 
 // Admin-only alert sent when a Stripe invoice payment fails (e.g. card
 // expired, insufficient funds, hard decline). Goes to your CONTACT_NOTIFY_EMAIL
-// inbox — NOT to the client. The client gets Stripe's automatic dunning
-// emails (configurable in Stripe Settings → Email).
+// inbox — NOT to the client.
 
 export async function sendPaymentFailedAlertEmail(args: {
   payload: Payload
@@ -184,39 +240,33 @@ export async function sendPaymentFailedAlertEmail(args: {
   const { payload, invoice, clientName, clientEmail, subscriptionId } = args
   const adminEmail = process.env.CONTACT_NOTIFY_EMAIL || process.env.EMAIL_FROM || 'hello@blackhartconsulting.com'
   const amount = formatUSD(invoice.amount_due ?? invoice.total ?? 0)
-  const number = invoice.number || invoice.id
+  const number = invoice.number || invoice.id || '?'
+  const stripeUrl = `https://dashboard.stripe.com/customers/search?query=${encodeURIComponent(clientEmail)}`
 
-  const html = `<!doctype html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="supported-color-schemes" content="light">
-  <title>Payment failed alert</title>
-</head><body style="font-family:Georgia,'Times New Roman',serif;background:#FAF7F2;margin:0;padding:32px 16px;color:#1a1a1a;">
-  <table role="presentation" style="max-width:560px;margin:0 auto;background:#fff;border-radius:14px;padding:32px;border:1px solid #e5e5e5;">
-    <tr><td>
-      <p style="font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#c0392b;margin:0 0 16px;">Action needed · Payment failed</p>
-      <h1 style="font-size:24px;line-height:1.2;margin:0 0 16px;">A subscription payment was declined</h1>
-      <table role="presentation" style="width:100%;border-collapse:collapse;font-family:'Manrope',sans-serif;font-size:14px;color:#333;margin:0 0 24px;">
-        <tr><td style="padding:6px 0;color:#666;">Client</td><td style="padding:6px 0;text-align:right;">${escapeHtml(clientName)} · ${escapeHtml(clientEmail)}</td></tr>
-        <tr><td style="padding:6px 0;color:#666;">Invoice</td><td style="padding:6px 0;text-align:right;">${escapeHtml(number)}</td></tr>
-        <tr><td style="padding:6px 0;color:#666;">Amount</td><td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;">${amount}</td></tr>
-        ${subscriptionId ? `<tr><td style="padding:6px 0;color:#666;">Subscription</td><td style="padding:6px 0;text-align:right;font-family:monospace;font-size:12px;">${escapeHtml(subscriptionId)}</td></tr>` : ''}
-      </table>
-      <p style="font-size:14px;line-height:1.5;color:#444;margin:0 0 16px;">The Payload <strong>Subscriptions</strong> record has been flagged as <code>past_due</code>. Stripe will automatically retry the charge per its Smart Retry settings. If retries fail, the subscription will move to <code>unpaid</code> or <code>canceled</code>.</p>
-      <p style="font-size:14px;line-height:1.5;color:#444;margin:0 0 16px;">Reach out to the client if you want to handle this manually — typically a card update fixes it.</p>
-      <p style="font-family:'Manrope',sans-serif;font-size:13px;color:#666;margin:24px 0 0;">View in Stripe Dashboard → Customers → ${escapeHtml(clientEmail)}.</p>
-    </td></tr>
-  </table>
-</body></html>`
+  const rows: NonNullable<EmailLayoutOptions['rows']> = [
+    { label: 'Client', value: `${clientName} · ${clientEmail}` },
+    { label: 'Invoice', value: number },
+    { label: 'Amount', value: amount },
+  ]
+  if (subscriptionId) rows.push({ label: 'Subscription', value: subscriptionId })
+
+  const html = renderEmailLayout({
+    pageTitle: 'Payment failed',
+    preheader: `Action needed: payment failed for ${clientName} (${amount})`,
+    eyebrow: 'Action needed · Payment failed',
+    title: 'A subscription payment was declined',
+    bodyHtml: `The Payload <strong>Subscriptions</strong> record has been flagged as <code style="background:#f0e9dc;padding:2px 6px;border-radius:4px;">past_due</code>. Stripe will automatically retry the charge per its Smart Retry settings. If retries fail, the subscription will move to <code style="background:#f0e9dc;padding:2px 6px;border-radius:4px;">unpaid</code> or <code style="background:#f0e9dc;padding:2px 6px;border-radius:4px;">canceled</code>.<br><br>Reach out to the client if you want to handle this manually — typically a card update fixes it.`,
+    rows,
+    cta: { label: 'Open in Stripe Dashboard', href: stripeUrl },
+    fineprintHtml: `This alert is sent to ${escapeHtml(adminEmail)}. The client receives Stripe's standard dunning emails separately (configurable in Stripe Settings → Email).`,
+  })
 
   try {
     await payload.sendEmail({
       to: adminEmail,
       from: billingFromAddress(),
-      headers: unsubscribeHeaders(),
       replyTo: clientEmail,
+      headers: unsubscribeHeaders(),
       subject: `[BHC Billing] Payment failed for ${clientName} (${amount})`,
       html,
     })

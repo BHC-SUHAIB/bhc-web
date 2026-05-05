@@ -66,6 +66,7 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
   const [error, setError] = useState<string | null>(null)
   const [showArchived, setShowArchived] = useState(false)
   const [sendStatus, setSendStatus] = useState<Record<string, { state: 'sending' | 'sent' | 'error'; message?: string }>>({})
+  const [refundConfirm, setRefundConfirm] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     if (!clientId) return
@@ -114,6 +115,28 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
     }
   }
 
+  async function refundInvoice(invoiceId: string | number, key: string) {
+    setSendStatus((s) => ({ ...s, [key]: { state: 'sending' } }))
+    try {
+      const r = await fetch(`/api/invoices/${invoiceId}/refund`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ reason: 'requested_by_customer' }),
+      })
+      const json = (await r.json()) as { ok?: boolean; error?: string }
+      if (!r.ok) throw new Error(json.error ?? `Refund failed (${r.status}).`)
+      setSendStatus((s) => ({ ...s, [key]: { state: 'sent' } }))
+      // Refresh after webhook lands (~3s).
+      setTimeout(() => {
+        void refresh()
+      }, 3500)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Refund failed.'
+      setSendStatus((s) => ({ ...s, [key]: { state: 'error', message } }))
+    }
+  }
+
   return (
     <div className="field-type" style={{ marginTop: 12 }}>
       <label className="field-label" style={{ marginBottom: 8 }}>Invoices &amp; subscriptions</label>
@@ -127,25 +150,76 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
           <Table
             head={['#', 'Issued', 'Total', 'Status', '']}
             rows={data.invoices.map((inv) => {
-              const k = `inv-${inv.id}`
-              const sent = sendStatus[k]
+              const sendK = `inv-send-${inv.id}`
+              const refundK = `inv-refund-${inv.id}`
+              const sent = sendStatus[sendK]
+              const refunding = sendStatus[refundK]
               const unpaid = inv.status === 'open' || inv.status === 'overdue'
+              const paid = inv.status === 'paid' || inv.status === 'partially_refunded'
+
+              const actionCell =
+                unpaid ? (
+                  <ActionButton
+                    key="act"
+                    onClick={() => sendInvoiceEmail(inv.id, sendK)}
+                    state={sent}
+                  />
+                ) : paid ? (
+                  // Paid invoices get TWO actions: resend (receipt copy) + refund.
+                  <div key="act" style={{ display: 'inline-flex', gap: 6, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                    <ActionButton
+                      label="Resend"
+                      onClick={() => sendInvoiceEmail(inv.id, sendK)}
+                      state={sent}
+                    />
+                    {refundConfirm === refundK ? (
+                      <ActionButton
+                        label="Confirm refund?"
+                        onClick={() => {
+                          setRefundConfirm(null)
+                          void refundInvoice(inv.id, refundK)
+                        }}
+                        state={refunding}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setRefundConfirm(refundK)}
+                        disabled={refunding?.state === 'sending'}
+                        style={{
+                          padding: '4px 10px',
+                          fontSize: 12,
+                          background: 'transparent',
+                          color: 'crimson',
+                          border: '1px solid crimson',
+                          borderRadius: 999,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {refunding?.state === 'sending' ? 'Refunding…' : refunding?.state === 'sent' ? '✓ Refunded' : 'Refund'}
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <span key="act" style={{ opacity: 0.4, fontSize: 12 }}>—</span>
+                )
+
               return [
                 <Mono key="num">{inv.invoiceNumber}</Mono>,
                 <span key="iss">{fmtDate(inv.issuedAt)}</span>,
                 <Mono key="tot">{fmt$(inv.totalCents)}</Mono>,
-                <Pill key="st" tone={inv.status === 'paid' ? 'good' : unpaid ? 'warn' : 'mute'}>
+                <Pill
+                  key="st"
+                  tone={
+                    inv.status === 'paid' ? 'good'
+                    : inv.status === 'refunded' ? 'mute'
+                    : inv.status === 'partially_refunded' ? 'warn'
+                    : unpaid ? 'warn' : 'mute'
+                  }
+                >
                   {inv.status}
                 </Pill>,
-                unpaid ? (
-                  <ActionButton
-                    key="act"
-                    onClick={() => sendInvoiceEmail(inv.id, k)}
-                    state={sent}
-                  />
-                ) : (
-                  <span key="act" style={{ opacity: 0.4, fontSize: 12 }}>—</span>
-                ),
+                actionCell,
               ]
             })}
           />

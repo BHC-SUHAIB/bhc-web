@@ -56,9 +56,8 @@ export async function POST(req: Request, ctx: RouteContext) {
       { status: 400 },
     )
   }
-  if (inv.status === 'paid') {
-    return NextResponse.json({ error: 'Invoice is already paid.' }, { status: 409 })
-  }
+  // Allow resending the email for paid invoices too — the operator might
+  // need to send a receipt copy. Only block voided ones.
   if (inv.status === 'void') {
     return NextResponse.json({ error: 'Invoice is voided.' }, { status: 409 })
   }

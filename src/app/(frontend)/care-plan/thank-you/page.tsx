@@ -3,6 +3,7 @@ import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { carePlanByLookupKey, formatUSD } from '@/lib/care-plans'
+import { signInvoiceToken } from '@/lib/invoice-token'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +20,7 @@ export default async function CarePlanThankYouPage({ searchParams }: RouteProps)
 
   let tierName: string | null = null
   let monthlyCents: number | null = null
+  let portalUrl: string | null = null
 
   if (session && isStripeConfigured()) {
     try {
@@ -33,6 +35,13 @@ export default async function CarePlanThankYouPage({ searchParams }: RouteProps)
           tierName = tier.name
           monthlyCents = tier.monthlyAmountCents
         }
+      }
+      // (Phase D / #21) Build a customer-portal link so the client can
+      // self-serve manage payment methods, cancel, view invoices.
+      const customerId = typeof cs.customer === 'string' ? cs.customer : cs.customer?.id ?? null
+      if (customerId) {
+        const token = signInvoiceToken(customerId)
+        portalUrl = `/portal/${encodeURIComponent(customerId)}?token=${encodeURIComponent(token)}`
       }
     } catch {
       // Soft-fail. Page still renders the generic confirmation copy.
@@ -53,6 +62,9 @@ export default async function CarePlanThankYouPage({ searchParams }: RouteProps)
           : 'Your card is on file and your subscription is active. Cancel anytime by emailing us.'}
       </p>
       <div className="mt-12 flex flex-wrap gap-3">
+        {portalUrl ? (
+          <Button href={portalUrl} variant="primary">Manage payment method</Button>
+        ) : null}
         <Button href="/" variant="ghost">Back to site</Button>
         <Button href="/contact" variant="secondary">Get in touch</Button>
       </div>

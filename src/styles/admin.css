@@ -67,3 +67,11 @@ body:has(.dashboard) .step-nav {
 .collections__group:has(a[href$="/globals/siteSettings"]) {
   display: none;
 }
+
+/* Hide the AuditEvents card specifically. This is redundant with the
+   System-group rule above, but keeping the card-level rule means reverting
+   the group rule (Users + Webhook events back on dashboard) still keeps
+   the audit-log card off the home view — nobody manually browses it. */
+.collections .card:has(a[href*="/collections/audit-events"]) {
+  display: none;
+}

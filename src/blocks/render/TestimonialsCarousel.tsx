@@ -90,7 +90,7 @@ export function TestimonialsCarousel({ items }: Props) {
       {count > 1 ? (
         <div
           className="mt-6 flex items-center justify-center gap-2"
-          aria-label="Testimonial selector"
+          role="presentation"
         >
           {items.map((_, i) => (
             <span

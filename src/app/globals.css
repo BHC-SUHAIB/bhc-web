@@ -9,6 +9,11 @@
   --color-ivory: #EFE9D9;
   --color-brass: #B08D57;
   --color-brass-dark: #8E6E3F;
+  /* Body-text variant of brass that meets WCAG AA (4.5:1) on the cream
+     ivory/parchment surfaces. Use this for any sub-18pt brass-colored copy
+     (e.g. "Download the one-pager" links). Lighthouse 2026-05-05 flagged
+     `text-[var(--color-brass)]` as failing contrast on small text. */
+  --color-brass-text: #7A5F33;
 
   /* Semantic tokens (light mode defaults) */
   --color-bg: var(--color-ivory);
@@ -50,6 +55,9 @@
     --color-accent: var(--color-brass);
     --color-accent-fg: var(--color-ink);
     --color-link: var(--color-brass);
+    /* On the dark ink background, the regular brass already meets AA;
+       restore it so brass-text bodies don't look needlessly muddy. */
+    --color-brass-text: var(--color-brass);
   }
 }
 

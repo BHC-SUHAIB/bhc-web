@@ -35,7 +35,7 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
     <>
       <header className="sticky top-0 z-40 backdrop-blur-lg bg-[color-mix(in_srgb,var(--color-bg)_82%,transparent)] border-b border-[var(--color-border)]">
         <Container size="xl" className="flex items-center justify-between gap-6 py-4">
-          <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="Black Hart Consulting home">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
             <Logo variant="primary" height={36} className="text-[var(--color-fg)]" />
             <span className="flex flex-col leading-none">
               <span className="font-serif text-[16px] sm:text-[18px] font-semibold tracking-[-0.015em]">

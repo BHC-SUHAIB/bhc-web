@@ -45,48 +45,57 @@ export async function Hero(b: HeroBlock) {
             ? 'bg-[linear-gradient(180deg,rgba(0,0,0,0.88)_0%,rgba(0,0,0,0.7)_40%,rgba(0,0,0,0.95)_100%)]'
             : 'bg-[linear-gradient(180deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.35)_40%,rgba(0,0,0,0.78)_100%)]'
 
+    // Strip Unsplash's hardcoded `w=1920` so Next.js can pick a size for the
+    // viewport. On a 375px phone this drops the LCP image from ~400KB to ~70KB.
+    const bgUrl = (b.backgroundImageUrl as string).replace(/([?&])w=\d+&?/, (_m, sep) => sep === '?' ? '?' : '&').replace(/[?&]$/, '')
     return (
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-20">
           <Image
-            src={b.backgroundImageUrl as string}
+            src={bgUrl}
             alt=""
             fill
-            sizes="100vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
             className="object-cover"
             priority
-            unoptimized
+            fetchPriority="high"
           />
         </div>
         <div className={cn('absolute inset-0 -z-10', overlayClass)} aria-hidden />
         <Container size="xl">
           <div
             className={cn(
-              'py-24 sm:py-32 md:py-40 max-w-3xl',
+              // Tighter mobile padding (was py-24 = 192px total) so the
+              // primary CTA lands above the fold on a 667px-tall phone.
+              // pt-20 on mobile ensures the eyebrow clears the absolutely-
+              // positioned LP logo (40px tall + 24px top inset = 64px occupied).
+              'pt-20 pb-14 sm:py-28 md:py-40 max-w-3xl',
               align === 'center' && 'mx-auto text-center',
             )}
           >
             {b.eyebrow ? (
-              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-white/85 mb-5 [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]">
+              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-white/85 mb-3 sm:mb-5 [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]">
                 {b.eyebrow}
               </p>
             ) : null}
             {/* Single, subtle drop-shadow on hero text — reads as legible-on-photo
                 without the layered "premium-studio designer" look. The heavy
                 gradient overlay does the heavy lifting for legibility. */}
-            <h1 className="font-serif font-semibold text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.85)]">
+            <h1 className="font-serif font-semibold text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] sm:leading-[1.02] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.85)]">
               {b.headline}
             </h1>
             {b.subheadline ? (
-              <p className="mt-6 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] text-white max-w-2xl [text-shadow:0_1px_8px_rgba(0,0,0,0.7)]">
+              <p className="mt-4 sm:mt-6 text-[clamp(1rem,1.4vw,1.25rem)] leading-[1.5] sm:leading-[1.55] text-white max-w-2xl [text-shadow:0_1px_8px_rgba(0,0,0,0.7)]">
                 {b.subheadline}
               </p>
             ) : null}
             {(b.ctas && b.ctas.length > 0) || (phoneRaw && phoneHrefVal) ? (
               <div
                 className={cn(
-                  'mt-10 flex flex-wrap gap-3',
-                  align === 'center' && 'justify-center',
+                  // Mobile: stack CTAs full-width so the primary action is
+                  // unmissable. Desktop: revert to inline row.
+                  'mt-6 sm:mt-10 flex flex-col sm:flex-row sm:flex-wrap gap-3 [&>a]:w-full sm:[&>a]:w-auto',
+                  align === 'center' && 'sm:justify-center',
                 )}
               >
                 {b.ctas?.map((c, i) => (

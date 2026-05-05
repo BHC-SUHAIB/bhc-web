@@ -36,6 +36,9 @@ import CentsAsDollarsField_0 from '@/components/admin/CentsAsDollarsField'
 import CentsAsDollarsCell_0 from '@/components/admin/CentsAsDollarsCell'
 import SendCarePlanSignupField_0 from '@/components/admin/SendCarePlanSignupField'
 import ClientRelatedRecordsField_0 from '@/components/admin/ClientRelatedRecordsField'
+import DelinquentBadgeCell_0 from '@/components/admin/DelinquentBadgeCell'
+import ChangeTierField_0 from '@/components/admin/ChangeTierField'
+import QuickCreateInvoiceField_0 from '@/components/admin/QuickCreateInvoiceField'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -71,4 +74,7 @@ export const importMap = {
   '/components/admin/CentsAsDollarsCell#default': CentsAsDollarsCell_0,
   '/components/admin/SendCarePlanSignupField#default': SendCarePlanSignupField_0,
   '/components/admin/ClientRelatedRecordsField#default': ClientRelatedRecordsField_0,
+  '/components/admin/DelinquentBadgeCell#default': DelinquentBadgeCell_0,
+  '/components/admin/ChangeTierField#default': ChangeTierField_0,
+  '/components/admin/QuickCreateInvoiceField#default': QuickCreateInvoiceField_0,
 }

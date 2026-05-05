@@ -146,6 +146,19 @@ export const Subscriptions: CollectionConfig = {
       name: 'internalNotes',
       type: 'textarea',
     },
+    {
+      // (Phase E #29) Tier upgrade/downgrade UI. POSTs to
+      // /api/subscriptions/[id]/change-tier with selected tier + proration
+      // behavior. Stripe handles the math; webhook syncs Payload mirror.
+      name: 'changeTier',
+      type: 'ui',
+      label: 'Change tier',
+      admin: {
+        components: {
+          Field: '/components/admin/ChangeTierField#default',
+        },
+      },
+    },
   ],
   timestamps: true,
 }

@@ -24,7 +24,9 @@ export const Clients: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'displayName',
-    defaultColumns: ['displayName', 'email', 'company', 'stripeCustomerId', 'createdAt'],
+    // (Phase E #31) `isDelinquent` shown prominently in the list so at-risk
+    // clients surface at-a-glance.
+    defaultColumns: ['displayName', 'email', 'isDelinquent', 'company', 'stripeCustomerId', 'createdAt'],
     description: 'Clients you bill. Saving a new client auto-creates the matching Stripe Customer.',
   },
   hooks: {
@@ -161,11 +163,15 @@ export const Clients: CollectionConfig = {
       // 90 days. Resets to false when subs return to active status.
       name: 'isDelinquent',
       type: 'checkbox',
+      label: 'Status',
       defaultValue: false,
       admin: {
         position: 'sidebar',
         readOnly: true,
         description: 'Auto-flagged when 2+ payments fail in 90d. Reach out manually before churn.',
+        components: {
+          Cell: '/components/admin/DelinquentBadgeCell#default',
+        },
       },
     },
     {

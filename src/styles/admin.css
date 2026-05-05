@@ -4,7 +4,64 @@
 :root {
   --bhc-brass: #B08D57;
   --bhc-brass-dark: #8E6E3F;
-  --bhc-brass-tint: rgba(176, 141, 87, 0.14);
+  --bhc-brass-tint: rgba(176, 141, 87, 0.18);
+  --bhc-forest: #2F4A35;
+  --bhc-forest-deep: #243A2A;
+  --bhc-forest-hover: rgba(255, 255, 255, 0.06);
+  --bhc-cream-text: #F4EFE6;
+  --bhc-cream-text-muted: rgba(244, 239, 230, 0.65);
+}
+
+/* Sidebar — forest green replaces the cream/sand to break up the visual
+   monotony and create a clear vertical hierarchy on every page. */
+.nav,
+.template-default__nav,
+[class*="template-default"] .nav,
+.nav-toggler {
+  background: var(--bhc-forest) !important;
+  color: var(--bhc-cream-text) !important;
+  border-right-color: var(--bhc-forest-deep) !important;
+}
+
+.nav .nav-group__toggle,
+.nav .nav-group__label,
+.nav .nav__link,
+.nav .nav__link-label,
+.nav a,
+.nav button {
+  color: var(--bhc-cream-text) !important;
+}
+
+.nav .nav-group__label,
+.nav .nav-group__toggle {
+  color: var(--bhc-cream-text-muted) !important;
+}
+
+.nav .nav-group__toggle:hover,
+.nav .nav__link:hover {
+  background: var(--bhc-forest-hover) !important;
+}
+
+.nav hr,
+.nav .nav-separator,
+.nav__divider {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* "Log out" / account link footer at bottom of sidebar */
+.nav__controls,
+.nav__log-out {
+  background: var(--bhc-forest-deep) !important;
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+.nav__controls a,
+.nav__log-out a,
+.nav__controls svg,
+.nav__log-out svg {
+  color: var(--bhc-cream-text) !important;
+  stroke: var(--bhc-cream-text) !important;
+  fill: var(--bhc-cream-text) !important;
 }
 
 /* KPI strip — horizontal flex row. */
@@ -18,16 +75,20 @@
   .bhc-kpi { flex-direction: column; }
 }
 
-/* Active sidebar nav item — brass tint + brass left border instead of Payload's default blue.
+/* Active sidebar nav item — brass background pops against the forest sidebar.
    Payload signals "active" by rendering a .nav__link-indicator child inside the link, so we
    target via :has() rather than a className. */
 .nav .nav__link:has(.nav__link-indicator) {
-  background: var(--bhc-brass-tint) !important;
-  border-left: 2px solid var(--bhc-brass) !important;
-  color: var(--theme-text) !important;
+  background: var(--bhc-brass) !important;
+  border-left: 2px solid var(--bhc-brass-dark) !important;
+  color: #1A1713 !important;
+}
+.nav .nav__link:has(.nav__link-indicator) .nav__link-label {
+  color: #1A1713 !important;
+  font-weight: 600;
 }
 
-/* Hide Payload's default blue indicator dot once we have our own brass border. */
+/* Hide Payload's default blue indicator dot once we have our own brass background. */
 .nav .nav__link .nav__link-indicator {
   display: none !important;
 }

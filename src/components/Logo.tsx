@@ -10,7 +10,7 @@ type LogoProps = {
 }
 
 const dims = {
-  primary:               { vb: '560 170 1300 1450', aspect: 1300 / 1450, defaultHeight: 40 },
+  primary:               { vb: '500 110 1420 1550', aspect: 1420 / 1550, defaultHeight: 40 },
   icon:                  { vb: '640 210 1160 1380', aspect: 1160 / 1380, defaultHeight: 32 },
   'wordmark-horizontal': { vb: '0 0 1800 600',      aspect: 1800 / 600,  defaultHeight: 44 },
   'wordmark-stacked':    { vb: '0 0 800 960',       aspect: 800 / 960,   defaultHeight: 160 },

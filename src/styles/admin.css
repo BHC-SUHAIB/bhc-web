@@ -51,3 +51,10 @@
 .collections .card:has(a[href*="/collections/webhook-events"]) .card__actions {
   display: none;
 }
+
+/* Suppress the "/ Dashboard" breadcrumb on the home view — there's nothing
+   to navigate back to and the text duplicates the page title. Uses :has()
+   to scope to pages that contain the dashboard root. */
+body:has(.dashboard) .step-nav {
+  display: none;
+}

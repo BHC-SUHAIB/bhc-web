@@ -34,12 +34,17 @@ export async function POST(req: NextRequest): Promise<Response> {
   const submitted = (formData.get('password') ?? '').toString()
   const next = formData.get('next')
 
+  // Build redirects against NEXT_PUBLIC_SITE_URL when available rather than
+  // `req.nextUrl` — running behind Caddy + docker-compose, the inner
+  // request's Host header is the container's short ID (e.g. `0fa0b729bf2c`)
+  // not the public hostname, despite Caddy's `header_up Host {host}`
+  // directive. Falling back to req.nextUrl.origin keeps local-dev working.
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || req.nextUrl.origin
+
   if (submitted.length === 0 || submitted !== expectedPassword()) {
     // Loop back to /dev-login with ?error=invalid (and preserve `next` if any)
     // so the visitor lands on the same page they were headed to after a fix.
-    const redirectUrl = req.nextUrl.clone()
-    redirectUrl.pathname = '/dev-login'
-    redirectUrl.search = ''
+    const redirectUrl = new URL('/dev-login', baseUrl)
     redirectUrl.searchParams.set('error', 'invalid')
     if (isSafeRedirectTarget(next)) {
       redirectUrl.searchParams.set('next', next)
@@ -51,9 +56,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Success — issue the cookie and redirect.
   const target = isSafeRedirectTarget(next) ? next : '/'
-  const dest = req.nextUrl.clone()
-  dest.pathname = target
-  dest.search = ''
+  const dest = new URL(target, baseUrl)
 
   const response = NextResponse.redirect(dest, 303)
   response.cookies.set(devAuthCookieName(), await signDevAuthCookie(), {

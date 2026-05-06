@@ -12,9 +12,11 @@ export async function POST(req: NextRequest): Promise<Response> {
     return NextResponse.json({ error: 'not_found' }, { status: 404 })
   }
 
-  const dest = req.nextUrl.clone()
-  dest.pathname = '/dev-login'
-  dest.search = ''
+  // Use NEXT_PUBLIC_SITE_URL for the redirect host. Behind Caddy +
+  // docker-compose, req.nextUrl.host is the container short ID, not the
+  // public hostname — same reason as login/route.ts.
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || req.nextUrl.origin
+  const dest = new URL('/dev-login', baseUrl)
 
   const response = NextResponse.redirect(dest, 303)
   response.cookies.delete(devAuthCookieName())

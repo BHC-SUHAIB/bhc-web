@@ -24,14 +24,16 @@ export default async function PortfolioPage() {
           the headline stays legible. */}
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-20">
+          {/* Strip Unsplash's hardcoded `w=1920` and let next/image generate
+              responsive sizes. `unoptimized` removed 2026-05-05 rerun. */}
           <Image
-            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&q=80"
+            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80"
             alt=""
             fill
-            sizes="100vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
             className="object-cover"
             priority
-            unoptimized
+            fetchPriority="high"
           />
         </div>
         <div

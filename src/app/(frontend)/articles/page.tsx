@@ -28,14 +28,17 @@ export default async function ArticlesPage() {
           "convince me" stage and heavy gloom would feel oppressive. */}
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-20">
+          {/* Strip Unsplash's hardcoded `w=1920` and let next/image generate
+              responsive sizes. `unoptimized` removed 2026-05-05 rerun: was
+              shipping ~217KB on mobile when ~70KB suffices. */}
           <Image
-            src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1920&q=80"
+            src="https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80"
             alt=""
             fill
-            sizes="100vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
             className="object-cover"
             priority
-            unoptimized
+            fetchPriority="high"
           />
         </div>
         <div
@@ -104,7 +107,7 @@ function FeaturedCard({ a }: { a: Article }) {
         </div>
         <div className="p-8 md:p-10 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-4 font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)]">
-            <span className="inline-flex items-center rounded-full border border-[var(--color-border)] px-2 py-1 text-[9px] tracking-[0.18em] text-[var(--color-brass)]">Featured</span>
+            <span className="inline-flex items-center rounded-full border border-[var(--color-border)] px-2 py-1 text-[9px] tracking-[0.18em] text-[var(--color-brass-text)]">Featured</span>
             {cat ? <span>{cat}</span> : null}
             {date ? <span>&middot;</span> : null}
             {date ? <span>{date}</span> : null}

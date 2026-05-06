@@ -81,8 +81,14 @@ export default async function ArticlePage({ params }: Args) {
               alt={(hero.alt as string) ?? a.title}
               fill
               className="object-cover"
-              sizes="100vw"
+              // Article hero is wrapped in `Container size="xl"` (max-width
+              // ~1280px). Mobile fills 100vw; tablet/desktop tops out at
+              // 1280px. Tightening this from "100vw" cut mobile transfer
+              // from ~600KB → ~120KB on the slowest article (Lighthouse
+              // 2026-05-05 rerun).
+              sizes="(max-width: 768px) 100vw, 1280px"
               priority
+              fetchPriority="high"
             />
           ) : (
             <Placeholder seed={a.slug ?? a.title} label={a.title} sublabel={cat ?? undefined} aspect="hero" />

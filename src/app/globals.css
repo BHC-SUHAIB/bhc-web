@@ -10,10 +10,12 @@
   --color-brass: #B08D57;
   --color-brass-dark: #8E6E3F;
   /* Body-text variant of brass that meets WCAG AA (4.5:1) on the cream
-     ivory/parchment surfaces. Use this for any sub-18pt brass-colored copy
-     (e.g. "Download the one-pager" links). Lighthouse 2026-05-05 flagged
-     `text-[var(--color-brass)]` as failing contrast on small text. */
-  --color-brass-text: #7A5F33;
+     ivory/parchment surfaces — including the slightly-darker
+     `--color-surface` (~#E4DECF) used for cards. Use this for any sub-18pt
+     brass-colored copy (eyebrows, "Download the one-pager" links).
+     Lighthouse 2026-05-05 + 2026-05-05-rerun flagged `text-[var(--color-brass)]`
+     and `text-[var(--color-brass-dark)]` as failing contrast on small text. */
+  --color-brass-text: #6E5530;
 
   /* Semantic tokens (light mode defaults) */
   --color-bg: var(--color-ivory);

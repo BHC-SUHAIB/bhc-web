@@ -6,8 +6,7 @@ import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref, mailtoHref } from '@/lib/contact'
 import { canonical } from '@/lib/seo'
 
-// HTML cached; revalidated by SiteSettings afterChange hook on contact info changes.
-export const revalidate = 600
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'SMS consent',

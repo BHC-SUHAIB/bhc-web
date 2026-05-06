@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Container } from '@/components/Container'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref, mailtoHref } from '@/lib/contact'
+import { canonical } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   description:
     'How Black Hart Consulting collects, uses, and protects your information.',
   robots: { index: true, follow: true },
+  ...canonical('/privacy'),
 }
 
 // If this policy materially changes, update LAST_UPDATED and re-deploy —

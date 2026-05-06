@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getCachedLandingPageBySlug } from '@/lib/payload-cache'
+import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 import type { LandingPage, Media } from '@/payload-types'
 
@@ -42,6 +43,10 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
     description: seo?.metaDescription ?? undefined,
     robots: noIndex ? { index: false, follow: true } : undefined,
     openGraph: og?.url ? { images: [{ url: og.url as string }] } : undefined,
+    // Canonical even though noindex is the default — Search Console still
+    // surfaces these in "Discovered" reports, and the canonical helps
+    // disambiguate against any www variant before the Caddy redirect lands.
+    ...canonical(`/lp/${slug}`),
   }
 }
 

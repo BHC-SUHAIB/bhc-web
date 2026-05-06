@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Container } from '@/components/Container'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref, mailtoHref } from '@/lib/contact'
+import { canonical } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   description:
     'Terms governing Black Hart Consulting customer-care SMS program — sender, purpose, frequency, fees, opt-out, and supported carriers.',
   robots: { index: true, follow: true },
+  ...canonical('/sms-terms'),
 }
 
 const LAST_UPDATED = 'April 23, 2026'

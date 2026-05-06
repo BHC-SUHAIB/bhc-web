@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
 import { getCachedProjectsList } from '@/lib/payload-cache'
+import { canonical } from '@/lib/seo'
 import { ArrowUpRight } from 'lucide-react'
 import type { Project, Media } from '@/payload-types'
 
@@ -12,6 +13,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Portfolio',
   description: 'Selected case studies from Black Hart Consulting.',
+  ...canonical('/portfolio'),
 }
 
 export default async function PortfolioPage() {

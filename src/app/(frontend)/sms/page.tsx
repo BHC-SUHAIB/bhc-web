@@ -4,6 +4,7 @@ import { Container } from '@/components/Container'
 import { SmsConsentForm } from './SmsConsentForm'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref, mailtoHref } from '@/lib/contact'
+import { canonical } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
   description:
     'Opt in to receive customer-care text messages from Black Hart Consulting — replies to your contact-form inquiry and confirmations of consulting calls you request.',
   robots: { index: true, follow: true },
+  ...canonical('/sms'),
 }
 
 export default async function SmsConsentPage() {

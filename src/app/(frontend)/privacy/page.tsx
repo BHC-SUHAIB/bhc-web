@@ -5,7 +5,9 @@ import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref, mailtoHref } from '@/lib/contact'
 import { canonical } from '@/lib/seo'
 
-export const dynamic = 'force-dynamic'
+// HTML cached; revalidated by SiteSettings afterChange hook (contact
+// info changes trigger revalidation of pages that surface it).
+export const revalidate = 600
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',

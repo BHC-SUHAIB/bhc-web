@@ -7,6 +7,14 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-bhc}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
       POSTGRES_DB: ${POSTGRES_DB:-bhc}
+    # 127.0.0.1-only port binding so the docker BUILD container (which runs
+    # in network: host mode below — see web.build.network) can reach Postgres
+    # at 127.0.0.1:5432 to do build-time prerendering of the home, /portfolio,
+    # /articles, and static-text routes. The bind is strictly localhost — not
+    # exposed externally — so no new attack surface beyond what shell access
+    # to the droplet already gives.
+    ports:
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -19,6 +27,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      # Build runs against host network so the prerender phase can reach
+      # the running Postgres container at 127.0.0.1:5432 (mapped above).
+      # Without this, BuildKit puts the build container in an isolated
+      # bridge network with no DNS for "postgres" and no route to the
+      # docker-compose default network — the prerender would crash with
+      # ENOTFOUND/ECONNREFUSED. Postgres must be running before
+      # `docker compose build`; deploy.sh now ensures that explicitly.
+      network: host
       args:
         # Baked into the client bundle by `next build` — must be a build arg,
         # not a runtime env var, or the GTM snippet will render empty.
@@ -26,6 +42,17 @@ services:
         # Microsoft Clarity project ID — same constraint as GTM (build arg,
         # not runtime), or the Clarity snippet won't get inlined.
         NEXT_PUBLIC_CLARITY_PROJECT_ID: ${NEXT_PUBLIC_CLARITY_PROJECT_ID:-}
+        # Build-time Payload connection. The runtime DATABASE_URI uses the
+        # docker-compose service name "postgres" as host (e.g.
+        # postgres://bhc:pass@postgres:5432/bhc), but the build container
+        # on the host network resolves "postgres" to nothing — so we strip
+        # the host portion in the Dockerfile and rebind to 127.0.0.1 there.
+        # PAYLOAD_SECRET is required for Payload's init regardless. Both
+        # values already live in /opt/bhc-web/.env on the droplet; passing
+        # them as build args doesn't broaden their attack surface (anyone
+        # with shell access reads .env directly).
+        DATABASE_URI: ${DATABASE_URI:-}
+        PAYLOAD_SECRET: ${PAYLOAD_SECRET:-}
     container_name: bhc-web
     restart: unless-stopped
     depends_on:

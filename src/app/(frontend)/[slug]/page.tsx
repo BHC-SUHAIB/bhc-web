@@ -5,7 +5,22 @@ import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 import type { Page, Media } from '@/payload-types'
 
-export const dynamic = 'force-dynamic'
+// Replaces the previous `export const dynamic = 'force-dynamic'`.
+//
+// Why this works: with `dynamicParams = true` (the default) and an empty
+// `generateStaticParams()`, Next 16 doesn't try to prerender any specific
+// slug at build time — so the build never has to call Payload, and the
+// "DATABASE_URI/PAYLOAD_SECRET are runtime-only" constraint is satisfied.
+// At runtime, the first request for /<slug> renders the page once and
+// caches the HTML for `revalidate` seconds. Edits to a Page record fire
+// the afterChange hook in src/collections/Pages.ts which calls
+// revalidatePath(`/${slug}`) — fresh HTML is served immediately on the
+// next request without waiting for the time-based revalidation window.
+export const revalidate = 600
+export const dynamicParams = true
+export async function generateStaticParams() {
+  return []
+}
 
 type Args = { params: Promise<{ slug: string }> }
 

@@ -11,7 +11,14 @@ import { canonical } from '@/lib/seo'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
 
-export const dynamic = 'force-dynamic'
+// See src/app/(frontend)/[slug]/page.tsx for the rationale on this combo.
+// Article edits in admin call revalidatePath(`/articles/${slug}`) via the
+// afterChange hook in src/collections/Articles.ts.
+export const revalidate = 600
+export const dynamicParams = true
+export async function generateStaticParams() {
+  return []
+}
 
 type Args = { params: Promise<{ slug: string }> }
 

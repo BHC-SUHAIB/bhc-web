@@ -61,7 +61,7 @@ export default async function PortfolioPage() {
           <p className="text-[var(--color-fg-muted)]">No projects published yet.</p>
         ) : (
           <ul className="grid gap-6 md:grid-cols-2">
-            {projects.map((p) => {
+            {projects.map((p, idx) => {
               const hero = typeof p.heroImage === 'object' ? (p.heroImage as Media | null) : null
               return (
                 <li key={p.id}>
@@ -77,6 +77,11 @@ export default async function PortfolioPage() {
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                           sizes="(min-width:768px) 50vw, 100vw"
+                          // First card is the mobile LCP candidate — without
+                          // priority it loaded after JS, pushing LCP to 9.5s.
+                          // Lighthouse audit 2026-05-05.
+                          priority={idx === 0}
+                          fetchPriority={idx === 0 ? 'high' : 'auto'}
                         />
                       ) : (
                         <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.02]">

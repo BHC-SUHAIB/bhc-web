@@ -5,6 +5,7 @@ import { HeroCta } from './HeroCta'
 import { HeroPhoneCta } from './HeroPhoneCta'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref } from '@/lib/contact'
+import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import type { HeroBlock, Media } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
@@ -45,9 +46,9 @@ export async function Hero(b: HeroBlock) {
             ? 'bg-[linear-gradient(180deg,rgba(0,0,0,0.88)_0%,rgba(0,0,0,0.7)_40%,rgba(0,0,0,0.95)_100%)]'
             : 'bg-[linear-gradient(180deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.35)_40%,rgba(0,0,0,0.78)_100%)]'
 
-    // Strip Unsplash's hardcoded `w=1920` so Next.js can pick a size for the
-    // viewport. On a 375px phone this drops the LCP image from ~400KB to ~70KB.
-    const bgUrl = (b.backgroundImageUrl as string).replace(/([?&])w=\d+&?/, (_m, sep) => sep === '?' ? '?' : '&').replace(/[?&]$/, '')
+    // Strip Unsplash's hardcoded `w=1920` so next/image can pick a size for
+    // the viewport — see src/lib/unsplash.ts for the full reasoning.
+    const bgUrl = stripUnsplashFixedWidth(b.backgroundImageUrl as string)
     return (
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-20">

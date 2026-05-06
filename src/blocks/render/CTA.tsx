@@ -1,5 +1,7 @@
+import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import { cn } from '@/lib/utils'
 import type { CTABlock } from '@/payload-types'
 
@@ -10,11 +12,19 @@ export function CTA(b: CTABlock) {
     <section className="relative isolate overflow-hidden py-10 sm:py-14">
       {hasBg ? (
         <>
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-20 bg-cover bg-center"
-            style={{ backgroundImage: `url(${b.backgroundImageUrl})`, opacity: 0.3 }}
-          />
+          {/* Was a CSS `background-image` — bypassed next/image, shipped raw
+              1920px Unsplash source on every viewport (~984KB on /home).
+              Routed through next/image so mobile gets a 750w variant.
+              Lighthouse audit 2026-05-05. */}
+          <div aria-hidden className="absolute inset-0 -z-20">
+            <Image
+              src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
+              className="object-cover opacity-30"
+            />
+          </div>
           <div
             aria-hidden
             className="absolute inset-0 -z-10"

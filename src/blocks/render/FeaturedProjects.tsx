@@ -105,7 +105,7 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p) => {
+          {projects.map((p, idx) => {
             const hero = typeof p.heroImage === 'object' ? (p.heroImage as Media | null) : null
             const Inner = (
               <>
@@ -117,6 +117,11 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                       sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+                      // First card on the home/landing FeaturedProjects grid
+                      // is a likely mobile LCP candidate (largest visible
+                      // image after hero scroll). Lighthouse audit 2026-05-05.
+                      priority={idx === 0}
+                      fetchPriority={idx === 0 ? 'high' : 'auto'}
                     />
                   ) : (
                     <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.03]">

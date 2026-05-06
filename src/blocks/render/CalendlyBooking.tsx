@@ -1,9 +1,11 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/Container'
 import { pushEvent, pushEventThenNavigate } from '@/lib/analytics'
 import { mailtoHref } from '@/lib/contact'
+import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import type { CalendlyBookingBlock } from '@/payload-types'
 
 // Calendly booking section, rendered as a CTA-style block. Clicking the
@@ -42,11 +44,17 @@ export function CalendlyBooking(b: CalendlyBookingBlock) {
     <section className="relative isolate overflow-hidden py-14 sm:py-18 scroll-mt-24" id="book">
       {hasBg ? (
         <>
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-20 bg-cover bg-center"
-            style={{ backgroundImage: `url(${b.backgroundImageUrl})`, opacity: 0.3 }}
-          />
+          {/* CSS background-image → next/image so the editor-pasted Unsplash
+              source gets responsive sizing. Lighthouse audit 2026-05-05. */}
+          <div aria-hidden className="absolute inset-0 -z-20">
+            <Image
+              src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
+              className="object-cover opacity-30"
+            />
+          </div>
           <div
             aria-hidden
             className="absolute inset-0 -z-10"

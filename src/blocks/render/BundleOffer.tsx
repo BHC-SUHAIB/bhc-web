@@ -1,5 +1,7 @@
+import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { Check } from 'lucide-react'
+import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import { cn } from '@/lib/utils'
 import { PricingCta } from './PricingCta'
 import type { BundleOfferBlock } from '@/payload-types'
@@ -17,11 +19,17 @@ export function BundleOffer(b: BundleOfferBlock) {
     <section className="relative isolate overflow-hidden py-14 sm:py-18 scroll-mt-24" id="bundles">
       {hasBg ? (
         <>
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-20 bg-cover bg-center"
-            style={{ backgroundImage: `url(${b.backgroundImageUrl})`, opacity: 0.3 }}
-          />
+          {/* CSS background-image → next/image so the editor-pasted Unsplash
+              source gets responsive sizing. Lighthouse audit 2026-05-05. */}
+          <div aria-hidden className="absolute inset-0 -z-20">
+            <Image
+              src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
+              className="object-cover opacity-30"
+            />
+          </div>
           <div
             aria-hidden
             className="absolute inset-0 -z-10"

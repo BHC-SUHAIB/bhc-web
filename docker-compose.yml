@@ -110,6 +110,13 @@ services:
       CRON_SECRET: ${CRON_SECRET:-}
     volumes:
       - media:/app/media
+      # Persist the Next.js image-optimization cache across container
+      # rotations. Without this, every deploy nukes all the cached Sharp
+      # transforms in /app/.next/cache/images and the next visitor pays
+      # a ~450ms cold-transform cost on every srcset variant. With the
+      # volume the cache survives deploys and warm transforms (~80ms)
+      # serve immediately.
+      - next_image_cache:/app/.next/cache/images
 
   caddy:
     image: caddy:2-alpine
@@ -131,3 +138,4 @@ volumes:
   media:
   caddy_data:
   caddy_config:
+  next_image_cache:

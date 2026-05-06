@@ -9,8 +9,18 @@
 # pointing at the droplet. Before DNS is live, #3 serves plain HTTP so you
 # can verify the stack via http://<droplet-ip>.
 
+# ---- www → apex permanent redirect ----
+# Both versions used to share one block, which made Google see them as
+# duplicate URLs without a canonical hint and triggered a Search Console
+# "Duplicate without user-selected canonical" warning (2026-05-05). Splitting
+# the block forces every www request to 308 to the apex equivalent so there
+# is exactly one indexable URL per page.
+www.blackhartconsulting.com {
+	redir https://blackhartconsulting.com{uri} 308
+}
+
 # ---- Canonical domain ----
-blackhartconsulting.com, www.blackhartconsulting.com {
+blackhartconsulting.com {
 	encode gzip zstd
 
 	# Long-lived cache on Next's hashed static chunks. Filenames include a

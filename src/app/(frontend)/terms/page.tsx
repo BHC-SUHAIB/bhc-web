@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Container } from '@/components/Container'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref, mailtoHref } from '@/lib/contact'
+import { canonical } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   description:
     'The terms that govern your use of Black Hart Consulting services and products.',
   robots: { index: true, follow: true },
+  ...canonical('/terms'),
 }
 
 // Update LAST_UPDATED whenever the terms materially change. The date is

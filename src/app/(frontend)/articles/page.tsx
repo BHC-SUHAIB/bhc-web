@@ -5,6 +5,7 @@ import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
 import { getCachedArticlesList } from '@/lib/payload-cache'
 import { articleCategoryLabel, formatArticleDate } from '@/lib/articles'
+import { canonical } from '@/lib/seo'
 import { ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
 
@@ -13,6 +14,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Articles',
   description: 'Field notes and essays from Black Hart Consulting — strategy, engineering, SEO, and design.',
+  ...canonical('/articles'),
 }
 
 export default async function ArticlesPage() {

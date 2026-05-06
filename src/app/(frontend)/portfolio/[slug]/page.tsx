@@ -7,6 +7,7 @@ import { Button } from '@/components/Button'
 import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
 import { getCachedProjectBySlug } from '@/lib/payload-cache'
+import { canonical } from '@/lib/seo'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Project, Media } from '@/payload-types'
 
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
     title: p.title,
     description: p.summary ?? undefined,
     openGraph: hero?.url ? { images: [{ url: hero.url as string }] } : undefined,
+    ...canonical(`/portfolio/${slug}`),
   }
 }
 

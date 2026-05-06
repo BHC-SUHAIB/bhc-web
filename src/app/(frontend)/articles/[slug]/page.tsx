@@ -7,6 +7,7 @@ import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
 import { getCachedArticleBySlug, getCachedArticlesExceptSlug } from '@/lib/payload-cache'
 import { articleCategoryLabel, formatArticleDate } from '@/lib/articles'
+import { canonical } from '@/lib/seo'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
 
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
     title: a.title,
     description: a.excerpt ?? undefined,
     openGraph: hero?.url ? { images: [{ url: hero.url as string }] } : undefined,
+    ...canonical(`/articles/${slug}`),
   }
 }
 

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getCachedPageBySlug } from '@/lib/payload-cache'
+import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 import type { Page, Media } from '@/payload-types'
 
@@ -24,6 +25,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
     description: seo?.metaDescription ?? undefined,
     robots: seo?.noIndex ? { index: false, follow: false } : undefined,
     openGraph: og?.url ? { images: [{ url: og.url as string }] } : undefined,
+    ...canonical(`/${slug}`),
   }
 }
 

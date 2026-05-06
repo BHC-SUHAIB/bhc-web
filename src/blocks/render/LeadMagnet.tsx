@@ -17,7 +17,7 @@ export function LeadMagnet(b: LeadMagnetBlock) {
         <div className="rounded-[var(--radius-xl)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-8 sm:p-10 md:flex md:items-center md:gap-10">
           <div className="md:flex-1">
             {b.eyebrow ? (
-              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-brass)] mb-3 font-semibold">
+              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-brass-text)] mb-3 font-semibold">
                 {b.eyebrow}
               </p>
             ) : null}

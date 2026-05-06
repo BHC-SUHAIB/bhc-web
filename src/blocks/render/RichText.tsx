@@ -67,7 +67,7 @@ export function RichText(b: RichTextBlock) {
                   pre-eyebrow seed data on the live site, but is editor-overridable. */}
               <div className="flex items-center gap-3 mb-5">
                 <span className="h-[2px] w-8 bg-[var(--color-brass)] rounded-full" aria-hidden />
-                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-brass-dark)]">
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-brass-text)]">
                   {b.eyebrow ?? 'Our mission'}
                 </span>
               </div>
@@ -91,7 +91,10 @@ export function RichText(b: RichTextBlock) {
               <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-fg-muted)] mb-6 text-center">{b.eyebrow}</p>
             ) : null}
             <div className="relative aspect-square w-[180px] sm:w-[200px] rounded-full overflow-hidden border-2 border-[var(--color-brass)] shadow-[0_18px_40px_-22px_color-mix(in_srgb,var(--color-ink)_45%,transparent)] mx-auto mb-8">
-              <Image src={imageUrl as string} alt={(img?.alt as string) ?? ''} fill className={imgObjectClass} sizes="(min-width:640px) 200px, 180px" unoptimized />
+              {/* `unoptimized` removed 2026-05-05: source headshot was 3.18MB
+                  raw on /about, dominated mobile LCP. With Next image
+                  optimization the same image renders at ~25KB on mobile. */}
+              <Image src={imageUrl as string} alt={(img?.alt as string) ?? ''} fill className={imgObjectClass} sizes="(min-width:640px) 200px, 180px" />
             </div>
             <div className="prose-content text-[17px] leading-[1.6]">
               <RichTextRenderer content={b.content} />

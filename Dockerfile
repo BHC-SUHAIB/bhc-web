@@ -26,43 +26,6 @@ ARG NEXT_PUBLIC_GTM_ID
 ENV NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}
 ARG NEXT_PUBLIC_CLARITY_PROJECT_ID
 ENV NEXT_PUBLIC_CLARITY_PROJECT_ID=${NEXT_PUBLIC_CLARITY_PROJECT_ID}
-ARG NEXT_PUBLIC_SITE_URL
-ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
-# Build-time Payload connection. PAYLOAD_SECRET is needed for Payload init,
-# DATABASE_URI for the prerender phase to read content from Postgres. The
-# runtime DATABASE_URI uses host "postgres" (the docker-compose service
-# name), unreachable from this build container — rewrite to 127.0.0.1
-# (which is the host's localhost since web.build sets `network: host`).
-# Runtime container's `environment:` block restores the docker-network URI
-# at startup, so production traffic still uses the docker DNS name.
-ARG DATABASE_URI
-ARG PAYLOAD_SECRET
-ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
-# S3 / Spaces credentials. WITHOUT these, payload.config.ts evaluates
-# s3Configured = false and Media records get local /api/media/file/...
-# URLs baked into the prerendered HTML, which 404 at runtime because the
-# actual files are on Spaces. WITH them, s3Storage plugin loads and Media
-# urls resolve to the CDN base (e.g. https://bhc-media.nyc3.cdn...).
-# Verified live 2026-05-06: the missing-S3-at-build was the root cause of
-# the dev rollback after PR #54.
-ARG S3_BUCKET
-ENV S3_BUCKET=${S3_BUCKET}
-ARG S3_ENDPOINT
-ENV S3_ENDPOINT=${S3_ENDPOINT}
-ARG S3_REGION
-ENV S3_REGION=${S3_REGION}
-ARG S3_ACCESS_KEY_ID
-ENV S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
-ARG S3_SECRET_ACCESS_KEY
-ENV S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
-ARG S3_PUBLIC_URL
-ENV S3_PUBLIC_URL=${S3_PUBLIC_URL}
-# Explicitly disable seed-on-init during the build phase. Without this,
-# Payload's onInit could attempt to upsert seed records during the
-# prerender phase, hitting the live database and potentially overwriting
-# customised content. Runtime SEED_ON_BOOT is controlled by the env block
-# in docker-compose.yml and is independent.
-ENV SEED_ON_BOOT=false
 # Persist Next.js / Turbopack compilation cache across builds. The
 # `.next/cache` directory is where Turbopack memoises its module graph
 # and webpack module outputs; mounting it as a BuildKit cache cuts warm
@@ -70,7 +33,6 @@ ENV SEED_ON_BOOT=false
 # files changed.
 RUN --mount=type=cache,target=/app/.next/cache,sharing=locked \
     --mount=type=cache,target=/root/.npm,sharing=locked \
-    DATABASE_URI=$(echo "${DATABASE_URI}" | sed 's|@postgres:|@127.0.0.1:|') \
     npm run build
 
 # ---------- runner ----------

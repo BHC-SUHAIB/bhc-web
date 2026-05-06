@@ -9,13 +9,11 @@ import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 // 2026-05-05 audit.
 export const metadata: Metadata = canonical('/')
 
-// HTML response cached for 10 minutes. Pages.afterChange hook fires
-// revalidatePath('/') the moment an editor saves a Page record, so admin
-// edits propagate to the public home page within milliseconds. The
-// docker build now provides DATABASE_URI / PAYLOAD_SECRET / S3_* as
-// build args (see Dockerfile + docker-compose.yml), letting this route
-// prerender at build time with valid Media URLs pointing at the CDN.
-export const revalidate = 600
+// Routes stay dynamic so the Docker build doesn't try to prerender
+// Payload-backed pages (PAYLOAD_SECRET / DATABASE_URI are runtime-only).
+// The heavy DB reads themselves are cached via unstable_cache in
+// src/lib/payload-cache.ts — repeat requests within 60s skip Payload.
+export const dynamic = 'force-dynamic'
 
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',

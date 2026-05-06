@@ -7,15 +7,21 @@ import type { LandingPage, Media } from '@/payload-types'
 
 // Dynamic landing-page route under (lp)/lp/[slug].
 //
-// HTML cached for 10 minutes. Empty generateStaticParams skips per-slug
-// prerender at build time (LPs come and go often; render on demand at
-// runtime is the right model). Edits in admin call revalidatePath via
-// the LandingPages afterChange hook so changes propagate within ms.
-export const revalidate = 600
-export const dynamicParams = true
-export async function generateStaticParams() {
-  return []
-}
+// Why a separate route from (frontend)/[slug]:
+// - (lp)/layout.tsx omits SiteHeader/SiteFooter — paid traffic shouldn't have
+//   a nav exit. (frontend)/layout.tsx includes them.
+// - LP records default to noindex so they don't compete with /services in
+//   organic search.
+// - Both route groups inject GTM identically, so analytics works on both.
+//
+// Editors create new LPs via Payload admin → Landing pages → Add new → drop
+// in blocks → publish. Data is cached at the data layer via
+// getCachedLandingPageBySlug (unstable_cache in src/lib/payload-cache.ts), so
+// we don't need force-dynamic here. Removing it lets Next emit a normal
+// Cache-Control header instead of `no-store`, re-enabling bf-cache for
+// instant back-nav — Lighthouse audit 2026-05-05 flagged this site-wide.
+// `revalidate=60` is NOT used: it triggers prerender at build time, which
+// requires Payload + DATABASE_URI in the build env (per project notes).
 
 type Args = { params: Promise<{ slug: string }> }
 

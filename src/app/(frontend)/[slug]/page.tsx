@@ -5,15 +5,7 @@ import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 import type { Page, Media } from '@/payload-types'
 
-// HTML cached for 10 minutes. Empty generateStaticParams + dynamicParams
-// = build doesn't prerender any specific slug, runtime renders + caches
-// on first request. Pages collection's afterChange hook calls
-// revalidatePath(`/${slug}`) on edit, propagating changes immediately.
-export const revalidate = 600
-export const dynamicParams = true
-export async function generateStaticParams() {
-  return []
-}
+export const dynamic = 'force-dynamic'
 
 type Args = { params: Promise<{ slug: string }> }
 

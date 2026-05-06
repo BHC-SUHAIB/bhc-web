@@ -43,6 +43,17 @@ blackhartconsulting.com {
 		Cache-Control "public, max-age=604800"
 	}
 
+	# Long-cache Next.js image-optimization responses. The /_next/image URL
+	# is fully content-addressed (`?url=<source>&w=<width>&q=<quality>`), so
+	# any change to the source produces a new URL. Safe to mark immutable
+	# and cache for 30 days in browsers + intermediate caches. Saves the
+	# round-trip through Sharp on repeat hits even after Next's own cache
+	# fills (Sharp transform is ~80ms warm; a Caddy-direct 304 is ~2ms).
+	@nextImage path /_next/image*
+	header @nextImage {
+		Cache-Control "public, max-age=2592000, immutable"
+	}
+
 	reverse_proxy web:3000 {
 		header_up Host {host}
 		header_up X-Real-IP {remote}

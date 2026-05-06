@@ -19,10 +19,13 @@ const innerWidthCls = (size: 'prose' | 'medium' | 'wide'): string => {
 export function RichText(b: RichTextBlock) {
   const size = (b.maxWidth ?? 'prose') as 'prose' | 'medium' | 'wide'
   const img = typeof b.image === 'object' ? (b.image as Media | null) : null
-  // External imageUrl takes precedence over the upload field — used for
-  // CDN-hosted portraits referenced by URL without re-uploading to local
-  // Payload during dev/seeding.
-  const imageUrl = b.imageUrl ?? img?.url ?? null
+  // Upload wins over the imageUrl text field. Editors expect the upload they
+  // just attached to take effect — having a stale `imageUrl` silently override
+  // a fresh upload broke the /about headshot 2026-05-06 (uploaded image had
+  // no effect because a leftover URL was still in the text field).
+  // imageUrl remains as a fallback for the seed/CDN path where there's no
+  // upload to attach.
+  const imageUrl = img?.url ?? b.imageUrl ?? null
   const hasImage = !!imageUrl
   const focus = (b.imageFocus as 'face' | 'center' | undefined) ?? 'face'
   const variant = (b.variant as 'default' | 'lede' | 'card' | undefined) ?? 'default'

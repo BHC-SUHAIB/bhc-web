@@ -351,7 +351,7 @@ export const RichTextBlock: Block = {
     {
       name: 'imageUrl',
       type: 'text',
-      admin: { description: 'Optional external image URL (e.g. CDN-hosted headshot). Used when no upload is provided. Takes precedence over the upload field.' },
+      admin: { description: 'Optional external image URL (e.g. CDN-hosted headshot). FALLBACK only — used when no upload is attached above. The upload field always wins if both are set.' },
     },
     { name: 'imageFocus', type: 'select', defaultValue: 'face', admin: { condition: (_, s: { image?: unknown; imageUrl?: string }) => !!(s.image || s.imageUrl), description: 'Where to anchor the crop inside the circle.' }, options: [
       { label: 'Face (top of subject)', value: 'face' },

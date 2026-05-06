@@ -26,6 +26,17 @@ ARG NEXT_PUBLIC_GTM_ID
 ENV NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}
 ARG NEXT_PUBLIC_CLARITY_PROJECT_ID
 ENV NEXT_PUBLIC_CLARITY_PROJECT_ID=${NEXT_PUBLIC_CLARITY_PROJECT_ID}
+# Build-time Payload connection. PAYLOAD_SECRET is needed for Payload init,
+# DATABASE_URI for the prerender phase to read pages from Postgres. The
+# runtime DATABASE_URI uses host "postgres" (the docker-compose service
+# name), unreachable from this build container — rewrite to 127.0.0.1
+# (which is the host's localhost since we set `network: host` on the
+# build). After the build completes, the runtime container ignores these
+# baked-in values because docker-compose's `environment:` block at runtime
+# overrides them with the docker-network-friendly version.
+ARG DATABASE_URI
+ARG PAYLOAD_SECRET
+ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
 # Persist Next.js / Turbopack compilation cache across builds. The
 # `.next/cache` directory is where Turbopack memoises its module graph
 # and webpack module outputs; mounting it as a BuildKit cache cuts warm
@@ -33,6 +44,7 @@ ENV NEXT_PUBLIC_CLARITY_PROJECT_ID=${NEXT_PUBLIC_CLARITY_PROJECT_ID}
 # files changed.
 RUN --mount=type=cache,target=/app/.next/cache,sharing=locked \
     --mount=type=cache,target=/root/.npm,sharing=locked \
+    DATABASE_URI=$(echo "${DATABASE_URI}" | sed 's|@postgres:|@127.0.0.1:|') \
     npm run build
 
 # ---------- runner ----------

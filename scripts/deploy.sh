@@ -59,6 +59,16 @@ if [[ "${RESET_IMAGE_CACHE:-}" == "1" ]]; then
   fi
 fi
 
+# Postgres MUST be running before `docker compose build web` — the build's
+# prerender phase now connects to Payload to render the home page,
+# /portfolio, /articles, and the static-text pages at build time
+# (see docker-compose.yml's `network: host` on web.build). On a normal
+# re-deploy postgres is already up under restart: unless-stopped, but
+# this guard handles first-deploy-after-down and the RESET_IMAGE_CACHE
+# path where web was just stopped (postgres stays up, but be explicit).
+log "Ensuring postgres is up so build-time prerender can reach it"
+docker compose up -d --wait postgres
+
 log "Building web image (Turbopack cache persists via BuildKit cache mounts)"
 docker compose build web
 

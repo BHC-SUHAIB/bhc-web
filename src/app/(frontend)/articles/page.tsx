@@ -9,7 +9,8 @@ import { canonical } from '@/lib/seo'
 import { ArrowUpRight } from 'lucide-react'
 import type { Article, Media } from '@/payload-types'
 
-export const dynamic = 'force-dynamic'
+// HTML cached; revalidated by Articles afterChange hook on edit.
+export const revalidate = 600
 
 export const metadata: Metadata = {
   title: 'Articles',

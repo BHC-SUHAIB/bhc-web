@@ -9,11 +9,14 @@ import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 // 2026-05-05 audit.
 export const metadata: Metadata = canonical('/')
 
-// Routes stay dynamic so the Docker build doesn't try to prerender
-// Payload-backed pages (PAYLOAD_SECRET / DATABASE_URI are runtime-only).
-// The heavy DB reads themselves are cached via unstable_cache in
-// src/lib/payload-cache.ts — repeat requests within 60s skip Payload.
-export const dynamic = 'force-dynamic'
+// HTML response cached for 10 minutes; Payload afterChange hooks fire
+// revalidatePath('/') the moment a Page record changes (see
+// src/collections/Pages.ts), so admin edits propagate to the public
+// home page within milliseconds. The Docker build now provides
+// DATABASE_URI / PAYLOAD_SECRET as build args + uses host network to
+// reach Postgres (see docker-compose.yml's web.build config), letting
+// this route prerender at build time.
+export const revalidate = 600
 
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',

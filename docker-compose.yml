@@ -7,12 +7,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-bhc}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
       POSTGRES_DB: ${POSTGRES_DB:-bhc}
-    # 127.0.0.1-only port binding so the docker BUILD container (which runs
-    # in network: host mode below — see web.build.network) can reach Postgres
-    # at 127.0.0.1:5432 to do build-time prerendering of pages backed by
-    # Payload data. The bind is strictly localhost — not exposed externally.
-    ports:
-      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -25,44 +19,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      # Build runs against host network so the prerender phase can reach
-      # the running Postgres container at 127.0.0.1:5432 (mapped above).
-      # Without this, BuildKit puts the build container in an isolated
-      # bridge network with no DNS for "postgres" and no route to the
-      # docker-compose default network — the prerender would crash with
-      # ENOTFOUND/ECONNREFUSED. Postgres must be running before
-      # `docker compose build`; deploy.sh ensures that explicitly.
-      network: host
       args:
-        # NEXT_PUBLIC_* are inlined into the client bundle by `next build`,
-        # so they MUST be build args. Same for any value Payload reads
-        # during init — without them at build time, the prerender phase
-        # generates HTML referencing the wrong URLs (e.g. /api/media/file/...
-        # instead of the S3 CDN URL that runtime would generate). The
-        # 2026-05-06 dev rollback (PR #55) was caused by S3 vars being
-        # missing here.
+        # Baked into the client bundle by `next build` — must be a build arg,
+        # not a runtime env var, or the GTM snippet will render empty.
         NEXT_PUBLIC_GTM_ID: ${NEXT_PUBLIC_GTM_ID:-}
+        # Microsoft Clarity project ID — same constraint as GTM (build arg,
+        # not runtime), or the Clarity snippet won't get inlined.
         NEXT_PUBLIC_CLARITY_PROJECT_ID: ${NEXT_PUBLIC_CLARITY_PROJECT_ID:-}
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-}
-        # Build-time Payload connection. The runtime DATABASE_URI uses the
-        # docker-compose service name "postgres" as host, but the build
-        # container on the host network needs 127.0.0.1 — Dockerfile
-        # rewrites the host portion. Both values already live in
-        # /opt/bhc-web/.env on the droplet; passing them as build args
-        # doesn't broaden their attack surface.
-        DATABASE_URI: ${DATABASE_URI:-}
-        PAYLOAD_SECRET: ${PAYLOAD_SECRET:-}
-        # S3 / DigitalOcean Spaces config. When all four creds are present,
-        # Payload's s3Storage plugin loads at build time and Media records'
-        # url fields resolve to the CDN base (e.g. bhc-media.nyc3.cdn...).
-        # Without these, build falls back to local /api/media/file/... URLs,
-        # which 404 in production because the actual files are on Spaces.
-        S3_BUCKET: ${S3_BUCKET:-}
-        S3_ENDPOINT: ${S3_ENDPOINT:-}
-        S3_REGION: ${S3_REGION:-}
-        S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-}
-        S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-}
-        S3_PUBLIC_URL: ${S3_PUBLIC_URL:-}
     container_name: bhc-web
     restart: unless-stopped
     depends_on:

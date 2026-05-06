@@ -55,6 +55,7 @@ next-env.d.ts
 # Local working notes (not for prod)
 /bhc-website-refresh-prompt.md
 /prospects/
+/performance_analysis/
 
 # IDE
 .vscode/

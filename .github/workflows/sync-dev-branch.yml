@@ -1,0 +1,75 @@
+# Keep `dev` fast-forwarded to `main` automatically.
+#
+# Why this exists: the dev droplet tracks the `dev` branch (separate from
+# `main` so dev-only state can land without immediately deploying to prod).
+# But there's no architectural reason for `dev` to ever diverge from main —
+# in practice every `main` merge should immediately become available on
+# `dev` so a `git pull` on the dev droplet picks it up.
+#
+# Without this workflow, every PR merged to `main` had to be followed by
+# a manual `git push origin dev` from someone's laptop. Forgetting that
+# step left dev one commit behind and broke deploys (`git pull` on the
+# droplet found nothing new). Hit this multiple times during the
+# 2026-05-05 perf marathon.
+#
+# What this does:
+#   - Triggers on every push to `main`.
+#   - Fetches both branches.
+#   - If `dev` is an ancestor of `main` (i.e. dev has no unique commits),
+#     fast-forwards dev to main and pushes.
+#   - If `dev` has commits not in `main`, skips with a warning. That
+#     should never happen given the current workflow (everything merges
+#     via PR to main), but the guard prevents data loss if someone
+#     pushes directly to dev for a one-off.
+
+name: Sync dev branch
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need full history for the ancestry check below; default
+          # checkout is shallow and `git merge-base --is-ancestor` would
+          # fail with "Not a valid object name".
+          fetch-depth: 0
+          # Default GITHUB_TOKEN — has contents:write per the permissions
+          # block above. If branch protection is added to `dev` later
+          # that requires PR-only writes, swap this for a PAT in repo
+          # secrets and reference it here.
+
+      - name: Configure git identity
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Fast-forward dev to main
+        run: |
+          set -euo pipefail
+          git fetch origin main dev
+
+          # If dev has commits not in main, abort — preserves any
+          # divergent work. This shouldn't happen under normal flow.
+          if ! git merge-base --is-ancestor origin/dev origin/main; then
+            echo "::warning title=dev branch has divergent commits::dev has commits not in main; skipping auto-sync. Open a PR from dev to main to reconcile, or push the missing commits to main first."
+            exit 0
+          fi
+
+          # Already in sync? Nothing to do.
+          if [ "$(git rev-parse origin/dev)" = "$(git rev-parse origin/main)" ]; then
+            echo "dev already at main ($(git rev-parse --short origin/main)); nothing to do."
+            exit 0
+          fi
+
+          git checkout dev
+          git merge --ff-only origin/main
+          git push origin dev
+          echo "::notice title=dev fast-forwarded::dev now at $(git rev-parse --short HEAD)"

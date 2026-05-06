@@ -137,7 +137,15 @@ services:
       - "443:443"
       - "443:443/udp"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # CADDYFILE_PATH lets a non-prod environment point Caddy at a
+      # different host file without diverging the in-git Caddyfile. On
+      # prod the var stays unset and the default `./Caddyfile` is used —
+      # the file checked into git. On dev, set CADDYFILE_PATH=./Caddyfile.dev
+      # in /opt/bhc-web/.env and put the dev-specific config (Basic Auth,
+      # dev domain, X-Robots-Tag) in /opt/bhc-web/Caddyfile.dev (gitignored).
+      # Decouples dev's bespoke Caddy config from prod's so `git pull` on
+      # dev never conflicts on Caddyfile changes.
+      - ${CADDYFILE_PATH:-./Caddyfile}:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
 

@@ -108,6 +108,14 @@ services:
       # crontab) that POSTs to /api/cron/billing-ops with the matching
       # x-cron-key header. Skipping = the cron endpoint refuses all calls.
       CRON_SECRET: ${CRON_SECRET:-}
+      # Dev-environment access gate. When DEV_AUTH_ENABLED=true, every
+      # route except /dev-login + /api/dev-auth/* + /api/stripe/webhook
+      # requires a signed cookie issued by the styled login form. Used on
+      # dev.blackhartconsulting.com to replace the browser-popup HTTP
+      # Basic Auth with a branded page. Unset on prod (gate is a no-op).
+      DEV_AUTH_ENABLED: ${DEV_AUTH_ENABLED:-}
+      DEV_AUTH_PASSWORD: ${DEV_AUTH_PASSWORD:-}
+      DEV_AUTH_SECRET: ${DEV_AUTH_SECRET:-}
     volumes:
       - media:/app/media
       # Persist the Next.js image-optimization cache across container

@@ -11,7 +11,14 @@ import { canonical } from '@/lib/seo'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { Project, Media } from '@/payload-types'
 
-export const dynamic = 'force-dynamic'
+// See src/app/(frontend)/[slug]/page.tsx for the rationale on this combo.
+// Project edits in admin call revalidatePath(`/portfolio/${slug}`) via the
+// afterChange hook in src/collections/Projects.ts.
+export const revalidate = 600
+export const dynamicParams = true
+export async function generateStaticParams() {
+  return []
+}
 
 type Args = { params: Promise<{ slug: string }> }
 

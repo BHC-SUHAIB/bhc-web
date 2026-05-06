@@ -21,6 +21,17 @@ if [[ ! -f .env ]]; then
   exit 1
 fi
 
+# Source .env so script-level flags like RESET_IMAGE_CACHE=1 work as documented.
+# `docker compose` reads .env on its own, but bash conditionals in this script
+# don't see those vars unless we explicitly load them. `set -a` exports every
+# subsequent assignment, then we unset it so we don't accidentally export the
+# rest of the script's locals. Skip lines that don't look like KEY=VALUE so a
+# stray comment or blank line in .env doesn't blow up the shell.
+set -a
+# shellcheck disable=SC1091
+source <(grep -E '^[A-Z_][A-Z0-9_]*=' .env || true)
+set +a
+
 log "Pulling latest code"
 git pull --ff-only
 

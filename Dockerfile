@@ -49,6 +49,26 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 RUN mkdir -p /app/media && chown -R nextjs:nodejs /app/media
+# Pre-create the image-optimization cache path with nextjs ownership BEFORE
+# the named volume in docker-compose.yml mounts here. When Docker initializes
+# an empty named volume against an existing path, it copies the path's
+# content + ownership into the volume. Without this, the volume mount point
+# defaults to root:root, the nextjs (UID 1001) process can't write to it,
+# and Sharp re-encodes every image transform from scratch on every request
+# (~1.3s TTFB instead of ~80ms cached). Verified live 2026-05-06: identical
+# /_next/image requests returned `x-nextjs-cache: MISS` with different etags
+# back-to-back, proving no transform output was being persisted.
+#
+# IMPORTANT — for an EXISTING deployment with a broken (root-owned)
+# next_image_cache volume, this Dockerfile change alone is NOT enough.
+# Docker will not re-initialize ownership on a volume that already has
+# content. You must one-shot delete the volume on the next deploy:
+#   docker compose down web    # detach the volume
+#   docker volume rm bhc-web_next_image_cache
+#   docker compose up -d web   # fresh init picks up nextjs ownership
+# scripts/deploy.sh has been updated to do this once when an env flag is
+# set; remove the flag after the next successful deploy.
+RUN mkdir -p /app/.next/cache/images && chown -R nextjs:nodejs /app/.next
 
 USER nextjs
 EXPOSE 3000

@@ -24,6 +24,30 @@ fi
 log "Pulling latest code"
 git pull --ff-only
 
+# One-shot reset for the image-optimization cache volume. Dockerfile change
+# 2026-05-06 pre-creates /app/.next/cache/images with nextjs:nodejs ownership
+# so Sharp can persist transforms across requests. Existing deployments have
+# a root-owned volume from the original Dockerfile that ignored ownership;
+# Docker won't re-init ownership on a populated volume, so the volume must
+# be deleted ONCE for the new ownership to take effect. Set
+# RESET_IMAGE_CACHE=1 in /opt/bhc-web/.env on the next deploy, then remove
+# the line after it succeeds.
+if [[ "${RESET_IMAGE_CACHE:-}" == "1" ]]; then
+  log "RESET_IMAGE_CACHE=1 — wiping next_image_cache volume so new ownership takes effect"
+  # Stop just the web service so the volume detaches; postgres + caddy stay up.
+  docker compose stop web
+  docker compose rm -f web
+  # Project name is the directory basename (bhc-web on prod). Volume is namespaced.
+  PROJECT="$(basename "$PWD")"
+  VOLUME_NAME="${PROJECT}_next_image_cache"
+  if docker volume ls --format '{{.Name}}' | grep -qx "$VOLUME_NAME"; then
+    docker volume rm "$VOLUME_NAME"
+    log "Removed volume $VOLUME_NAME — fresh init on next 'compose up' will inherit nextjs ownership"
+  else
+    log "Volume $VOLUME_NAME does not exist — nothing to reset"
+  fi
+fi
+
 log "Building web image (Turbopack cache persists via BuildKit cache mounts)"
 docker compose build web
 

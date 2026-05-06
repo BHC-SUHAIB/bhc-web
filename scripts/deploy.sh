@@ -30,6 +30,19 @@ docker compose build web
 log "Bringing the stack up"
 docker compose up -d
 
+# Caddy uses a bind-mounted Caddyfile (./Caddyfile -> /etc/caddy/Caddyfile).
+# Two issues `docker compose up -d` alone does NOT solve:
+#   1. Caddy doesn't auto-reload its config when the bind-mounted file
+#      changes — it parses the file at process start and runs from memory.
+#   2. When git replaces a file (atomic temp-write + rename), the bind-mount
+#      can detach from the new inode and keep showing old content. Verified
+#      live 2026-05-06 — host had updated Caddyfile but container saw stale.
+# A restart re-reads the file AND re-resolves the bind-mount inode. ~5s
+# overhead per deploy is worth eliminating the silent stale-config class
+# of bug.
+log "Restarting caddy so it picks up any Caddyfile changes"
+docker compose restart caddy
+
 log "Waiting 5s for web to boot"
 sleep 5
 

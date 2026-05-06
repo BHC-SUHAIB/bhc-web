@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { allBlocks } from '../blocks/schema'
+import { revalidateContent } from '../lib/cms-revalidate'
 
 // Landing pages live in their own collection because they use the (lp)/layout.tsx
 // — no SiteHeader, no SiteFooter, noindex by default. Same block library as
@@ -24,6 +25,26 @@ export const LandingPages: CollectionConfig = {
     group: 'Content',
   },
   versions: { drafts: true },
+  hooks: {
+    afterChange: [
+      async ({ doc, previousDoc }) => {
+        const slug = (doc?.slug as string) ?? null
+        const prevSlug = (previousDoc?.slug as string) ?? null
+        revalidateContent({ tag: 'landingPages', slug, slugPathPrefix: '/lp' })
+        if (prevSlug && prevSlug !== slug) {
+          revalidateContent({ tag: 'landingPages', slug: prevSlug, slugPathPrefix: '/lp' })
+        }
+        return doc
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        const slug = (doc?.slug as string) ?? null
+        revalidateContent({ tag: 'landingPages', slug, slugPathPrefix: '/lp' })
+        return doc
+      },
+    ],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, admin: { description: 'Internal name. Not shown to visitors unless you put it in a Hero headline.' } },
     {

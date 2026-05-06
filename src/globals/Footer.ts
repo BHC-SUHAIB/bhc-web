@@ -1,9 +1,19 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateContent } from '../lib/cms-revalidate'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
   access: { read: () => true },
   admin: { group: 'Site', description: 'Site footer' },
+  hooks: {
+    afterChange: [
+      async ({ doc }) => {
+        revalidateContent({ tag: 'globalFooter' })
+        revalidateContent({ tag: 'globals' })
+        return doc
+      },
+    ],
+  },
   fields: [
     { name: 'tagline', type: 'text', defaultValue: 'Websites, SEO, and hosting for businesses that care how their work shows up online.' },
     { name: 'columns', type: 'array', maxRows: 4, fields: [

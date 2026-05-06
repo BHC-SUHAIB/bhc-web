@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateContent } from '../lib/cms-revalidate'
 
 // Testimonials collection. Schema is intentionally identical to what
 // already exists in production — every previous attempt to change the
@@ -15,6 +16,26 @@ export const Testimonials: CollectionConfig = {
     useAsTitle: 'author',
     defaultColumns: ['author', 'company', 'role', 'rating', 'featured', 'sortOrder', 'updatedAt'],
     description: 'Client quotes shown by the Testimonials block on any page.',
+  },
+  hooks: {
+    // Testimonials don't have their own URL — they're rendered inside
+    // Testimonials blocks on Pages / LandingPages. So we just flush the
+    // tag; the next request to any page that uses this query gets fresh
+    // data. We don't know which paths a given testimonial appears on
+    // (it's based on which pages have the block enabled), so a tag-only
+    // invalidation is the right surface.
+    afterChange: [
+      async ({ doc }) => {
+        revalidateContent({ tag: 'testimonials' })
+        return doc
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        revalidateContent({ tag: 'testimonials' })
+        return doc
+      },
+    ],
   },
   fields: [
     // Rating sits first so admins are prompted for it before writing

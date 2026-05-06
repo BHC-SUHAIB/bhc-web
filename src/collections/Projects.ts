@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateContent } from '../lib/cms-revalidate'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -10,6 +11,28 @@ export const Projects: CollectionConfig = {
     description: 'Portfolio case studies. Detailed project write-ups.',
   },
   versions: { drafts: true },
+  hooks: {
+    afterChange: [
+      async ({ doc, previousDoc }) => {
+        const slug = (doc?.slug as string) ?? null
+        const prevSlug = (previousDoc?.slug as string) ?? null
+        revalidateContent({ tag: 'projects', paths: ['/portfolio', '/'] })
+        revalidateContent({ tag: 'projects', slug, slugPathPrefix: '/portfolio' })
+        if (prevSlug && prevSlug !== slug) {
+          revalidateContent({ tag: 'projects', slug: prevSlug, slugPathPrefix: '/portfolio' })
+        }
+        return doc
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        const slug = (doc?.slug as string) ?? null
+        revalidateContent({ tag: 'projects', paths: ['/portfolio', '/'] })
+        revalidateContent({ tag: 'projects', slug, slugPathPrefix: '/portfolio' })
+        return doc
+      },
+    ],
+  },
   fields: [
     { name: 'title', type: 'text', required: true },
     { name: 'slug', type: 'text', required: true, unique: true },

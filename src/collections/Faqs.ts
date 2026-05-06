@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateContent } from '../lib/cms-revalidate'
 
 // Centralized FAQ collection — every FAQ block on the site (homepage, /about,
 // /services, /contact, all /lp/* landing pages) reads from this collection
@@ -18,6 +19,20 @@ export const Faqs: CollectionConfig = {
     useAsTitle: 'question',
     defaultColumns: ['question', 'category', 'featured', 'sortOrder', 'updatedAt'],
     description: 'Centralized Q&A. FAQ blocks set to "Auto (latest featured)" pull from here, so an edit propagates to every page that renders a FAQ block.',
+  },
+  hooks: {
+    afterChange: [
+      async ({ doc }) => {
+        revalidateContent({ tag: 'faqs' })
+        return doc
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        revalidateContent({ tag: 'faqs' })
+        return doc
+      },
+    ],
   },
   fields: [
     {

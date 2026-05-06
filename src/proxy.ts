@@ -41,10 +41,16 @@ export async function proxy(req: NextRequest): Promise<NextResponse> {
 
   // Preserve the URL the visitor was trying to reach so we can bounce them
   // back after a successful login. Encoded into `?next=` on /dev-login.
+  //
+  // Build the redirect against NEXT_PUBLIC_SITE_URL when available rather
+  // than `req.nextUrl` — running behind Caddy + docker-compose, the inner
+  // request's Host header is the container's short ID (e.g. `0fa0b729bf2c`)
+  // not the public hostname, despite Caddy's `header_up Host {host}`
+  // directive. `req.nextUrl.clone()` would inherit that bogus host and
+  // ship a Location header that DNS can't resolve.
   const target = req.nextUrl.pathname + req.nextUrl.search
-  const loginUrl = req.nextUrl.clone()
-  loginUrl.pathname = '/dev-login'
-  loginUrl.search = ''
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || req.nextUrl.origin
+  const loginUrl = new URL('/dev-login', baseUrl)
   if (target && target !== '/') loginUrl.searchParams.set('next', target)
   return NextResponse.redirect(loginUrl)
 }

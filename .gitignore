@@ -33,6 +33,14 @@ yarn-error.log*
 .env*
 !.env.example
 
+# Per-environment Caddyfile overrides (dev droplet has a bespoke version
+# with Basic Auth removed, dev domain, X-Robots-Tag). Pointed at via
+# CADDYFILE_PATH in docker-compose.yml. Only the canonical prod Caddyfile
+# is tracked in git.
+/Caddyfile.dev
+/Caddyfile.local
+/Caddyfile.pre-devauth-*
+
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,9 +1,19 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateContent } from '../lib/cms-revalidate'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'siteSettings',
   access: { read: () => true },
   admin: { group: 'Site', description: 'Global site title, description, favicon, OG image' },
+  hooks: {
+    afterChange: [
+      async ({ doc }) => {
+        revalidateContent({ tag: 'globalSiteSettings' })
+        revalidateContent({ tag: 'globals' })
+        return doc
+      },
+    ],
+  },
   fields: [
     { name: 'siteName', type: 'text', defaultValue: 'Black Hart Consulting' },
     { name: 'tagline', type: 'text', defaultValue: 'Consulting for the web — done right.' },

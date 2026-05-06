@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateContent } from '../lib/cms-revalidate'
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
@@ -10,6 +11,28 @@ export const Articles: CollectionConfig = {
     description: 'Long-form writing — essays, field notes, deep dives.',
   },
   versions: { drafts: true },
+  hooks: {
+    afterChange: [
+      async ({ doc, previousDoc }) => {
+        const slug = (doc?.slug as string) ?? null
+        const prevSlug = (previousDoc?.slug as string) ?? null
+        revalidateContent({ tag: 'articles', paths: ['/articles'] })
+        revalidateContent({ tag: 'articles', slug, slugPathPrefix: '/articles' })
+        if (prevSlug && prevSlug !== slug) {
+          revalidateContent({ tag: 'articles', slug: prevSlug, slugPathPrefix: '/articles' })
+        }
+        return doc
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        const slug = (doc?.slug as string) ?? null
+        revalidateContent({ tag: 'articles', paths: ['/articles'] })
+        revalidateContent({ tag: 'articles', slug, slugPathPrefix: '/articles' })
+        return doc
+      },
+    ],
+  },
   fields: [
     { name: 'title', type: 'text', required: true },
     { name: 'slug', type: 'text', required: true, unique: true, admin: { description: 'URL path (e.g. "why-nextjs-over-wordpress")' } },

@@ -11,15 +11,21 @@
  * the function's keyParts + its runtime args. Cache hits skip Payload
  * entirely. Cache misses run the real query and store the result.
  *
- * Admin edits propagate within REVALIDATE seconds; tags let us add
- * explicit invalidation (revalidateTag) later if we wire up Payload
- * afterChange hooks to purge on save.
+ * Admin edits propagate immediately via Payload afterChange hooks that
+ * call revalidateTag — see src/lib/cms-revalidate.ts and the hooks on
+ * each content collection. The time-based REVALIDATE below is just a
+ * backstop for edge cases where a hook can't fire (out-of-band psql
+ * edits, seed scripts, migration runs).
  */
 import { unstable_cache } from 'next/cache'
 import { getPayloadClient } from './payload'
 import type { Article, Faq, Footer, Header, LandingPage, Page, Project, SiteSetting, Testimonial } from '@/payload-types'
 
-const REVALIDATE = 60
+// 1 hour. Was 60s before 2026-05-06 — at that TTL roughly 1-in-60
+// visitors paid the full Payload round-trip on hot pages. Bumped to
+// 3600s once afterChange hooks were added so admin edits no longer
+// have to wait for the time-based window to expire.
+const REVALIDATE = 3600
 
 // --- Globals ----------------------------------------------------------
 

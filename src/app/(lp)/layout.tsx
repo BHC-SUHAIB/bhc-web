@@ -43,12 +43,23 @@ export default async function LpLayout({ children }: { children: React.ReactNode
             {/* page_type pushed before GTM loads so the first pageview tag
                 already has it set. The (frontend) layout pushes 'main_site';
                 this LP layout pushes 'landing_page' so paid-traffic pages
-                are trivially separable in GA4. */}
+                are trivially separable in GA4.
+
+                All three scripts (page_type push, gtm-init, clarity-init)
+                short-circuit when localStorage has bhc_skip_analytics='true'
+                — internal-traffic opt-out. Set in DevTools console once on a
+                blackhartconsulting.com tab to make that browser invisible
+                to GA4, GTM, Google Ads pixel, AND Clarity. The try/catch
+                swallows SecurityError from Safari Private Browsing so
+                analytics still loads normally for everyone else when
+                storage is unreadable. Source of truth for the flag name
+                is the matching block in (frontend)/layout.tsx — keep them
+                in sync if changed. */}
             <Script id="gtm-page-type" strategy="beforeInteractive">
-              {`window.dataLayer = window.dataLayer || []; window.dataLayer.push({ page_type: 'landing_page' });`}
+              {`(function(){try{if(window.localStorage&&localStorage.getItem('bhc_skip_analytics')==='true')return;}catch(e){}window.dataLayer=window.dataLayer||[];window.dataLayer.push({page_type:'landing_page'});})();`}
             </Script>
             <Script id="gtm-init" strategy="afterInteractive">
-              {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              {`(function(w,d,s,l,i){try{if(w.localStorage&&w.localStorage.getItem('bhc_skip_analytics')==='true')return;}catch(e){}w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
@@ -60,8 +71,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           // Clarity is non-essential for conversion attribution; lazy-load it
           // after window.load so it doesn't block initial paint on mobile LP
           // visits where Lighthouse currently measures 4.6s Speed Index.
+          //
+          // Same bhc_skip_analytics short-circuit as the GTM scripts above.
           <Script id="clarity-init" strategy="lazyOnload">
-            {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
+            {`(function(c,l,a,r,i,t,y){try{if(c.localStorage&&c.localStorage.getItem('bhc_skip_analytics')==='true')return;}catch(e){}c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
           </Script>
         ) : null}
         {/* Same Unsplash preconnect as the (frontend) layout — every LP hero

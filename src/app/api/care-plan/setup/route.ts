@@ -11,24 +11,33 @@ export const dynamic = 'force-dynamic'
 // POST /api/care-plan/setup
 //
 // Mints a Stripe Checkout Session in `mode: 'setup'` for capturing a card
-// to bind to a future Care Plan subscription. Used in two flows:
+// to bind to a future Care Plan / custom subscription. Used in three flows:
 //
 //   1. BNPL fallback: client paid the invoice with Klarna/Affirm, so no
 //      reusable PM was saved. The thank-you page redirects them here.
-//   2. Standalone signup: client wants a Care Plan without an attached
-//      invoice (rare; mostly internal use for Philip-style hosting).
+//   2. Standalone signup (standard tier): client wants a Care/Growth/Scale
+//      Care Plan; admin sends the branded email link.
+//   3. Standalone signup (custom): hosting-friend / negotiated price.
+//      Admin sends the branded email link with carePlan='custom' plus
+//      customLabel + customAmountCents. The card-capture flow is
+//      identical; the actual subscription is created in Stripe Dashboard
+//      afterwards with the agreed-upon price.
 //
 // Body:
 //   {
-//     carePlan: 'care' | 'growth' | 'scale' | 'hosting-friend' | <lookupKey>
-//     stripeCustomerId?: string  // for standalone (no invoice token)
-//     invoiceToken?: string      // signed token from /invoice/[id] flow
-//     payloadInvoiceId?: string  // mirror invoice ID for source attribution
+//     carePlan: 'care' | 'growth' | 'scale' | 'custom'
+//     customLabel?: string           // required when carePlan === 'custom'
+//     customAmountCents?: number     // required when carePlan === 'custom'
+//     stripeCustomerId?: string      // for standalone (no invoice token)
+//     invoiceToken?: string          // signed token from /invoice/[id] flow
+//     payloadInvoiceId?: string      // mirror invoice ID for source attribution
 //     consentText?: string
 //   }
 
 type Body = {
   carePlan?: string
+  customLabel?: string
+  customAmountCents?: number
   stripeCustomerId?: string
   invoiceToken?: string
   payloadInvoiceId?: string
@@ -53,9 +62,30 @@ export async function POST(req: Request) {
   if (!body.carePlan) {
     return NextResponse.json({ error: 'Missing carePlan slug.' }, { status: 400 })
   }
-  const tier = carePlanBySlug(body.carePlan)
-  if (!tier) {
-    return NextResponse.json({ error: 'Unknown care plan.' }, { status: 400 })
+
+  // Resolve tier into a uniform shape regardless of standard vs custom.
+  // For custom tiers, the lookupKey is empty — Stripe Checkout in setup
+  // mode doesn't bind a price (we're only capturing a card). The actual
+  // price is set by the operator when creating the Stripe Subscription
+  // afterwards.
+  type ResolvedTier = { slug: string; name: string; lookupKey: string; monthlyAmountCents: number }
+  let resolvedTier: ResolvedTier
+  if (body.carePlan === 'custom') {
+    const label = (body.customLabel ?? '').trim()
+    const amount = body.customAmountCents
+    if (!label) {
+      return NextResponse.json({ error: 'Custom care plan requires customLabel.' }, { status: 400 })
+    }
+    if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 100) {
+      return NextResponse.json({ error: 'Custom care plan requires customAmountCents (>=100).' }, { status: 400 })
+    }
+    resolvedTier = { slug: 'custom', name: label.slice(0, 80), lookupKey: '', monthlyAmountCents: Math.round(amount) }
+  } else {
+    const t = carePlanBySlug(body.carePlan)
+    if (!t) {
+      return NextResponse.json({ error: 'Unknown care plan.' }, { status: 400 })
+    }
+    resolvedTier = { slug: t.slug, name: t.name, lookupKey: t.lookupKey, monthlyAmountCents: t.monthlyAmountCents }
   }
 
   const stripe = getStripe()
@@ -104,8 +134,13 @@ export async function POST(req: Request) {
     payment_method_types: ['card', 'us_bank_account', 'link'],
     setup_intent_data: {
       metadata: {
-        care_plan_tier: tier.slug,
-        care_plan_lookup_key: tier.lookupKey,
+        care_plan_tier: resolvedTier.slug,
+        care_plan_lookup_key: resolvedTier.lookupKey,
+        // For custom tiers, also stamp the agreed-upon label + price so
+        // the operator has it on the SetupIntent record when creating the
+        // matching subscription afterwards.
+        care_plan_custom_label: resolvedTier.slug === 'custom' ? resolvedTier.name : '',
+        care_plan_custom_amount_cents: resolvedTier.slug === 'custom' ? String(resolvedTier.monthlyAmountCents) : '',
         payload_invoice_id: body.payloadInvoiceId ?? '',
         consent_text: body.consentText?.slice(0, 500) ?? '',
         consent_authorized_at: new Date().toISOString(),

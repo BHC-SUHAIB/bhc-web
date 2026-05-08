@@ -210,14 +210,31 @@ export async function sendBrandedCarePlanSignupEmail(args: {
   to: string
   clientName: string
   stripeCustomerId: string
-  tier: CarePlanSlug
+  /** Tier slug. `'custom'` enables an arbitrary label + price (for
+   *  hosting-friend rates, FXI-Group-style negotiated plans, etc.). */
+  tier: CarePlanSlug | 'custom'
   monthlyAmountCents: number
+  /** Required when tier === 'custom'. The display name shown in the
+   *  email + on the setup page (e.g. "Hosting Friend Plan"). Ignored
+   *  for standard tiers, which derive the name from the slug. */
+  customLabel?: string
 }): Promise<void> {
-  const { payload, to, clientName, stripeCustomerId, tier, monthlyAmountCents } = args
+  const { payload, to, clientName, stripeCustomerId, tier, monthlyAmountCents, customLabel } = args
   const token = signInvoiceToken(stripeCustomerId)
-  const url = `${siteUrl()}/care-plan/setup?customer=${encodeURIComponent(stripeCustomerId)}&tier=${tier}&token=${encodeURIComponent(token)}`
+  const isCustom = tier === 'custom'
+  const tierName = isCustom
+    ? (customLabel?.trim() || 'Care Plan')
+    : tier[0].toUpperCase() + tier.slice(1)
+  // Display label / amount travel as URL params for the setup page to
+  // render the right card. They're display-only — the actual subscription
+  // price is set by Suhaib when creating the subscription in Stripe
+  // Dashboard, so a tampered URL can't change what the client is charged.
+  // Token still gates access to the customer record.
+  const customParams = isCustom
+    ? `&label=${encodeURIComponent(tierName)}&amount=${monthlyAmountCents}`
+    : ''
+  const url = `${siteUrl()}/care-plan/setup?customer=${encodeURIComponent(stripeCustomerId)}&tier=${tier}${customParams}&token=${encodeURIComponent(token)}`
   const monthly = formatUSD(monthlyAmountCents)
-  const tierName = tier[0].toUpperCase() + tier.slice(1)
 
   // (Phase D / #21) Stripe Customer Portal link — clients can manage
   // their payment method + cancel from there once the sub is active. URL
@@ -225,13 +242,19 @@ export async function sendBrandedCarePlanSignupEmail(args: {
   // portal session URL expires after ~5 min.
   const portalUrl = `${siteUrl()}/portal/${encodeURIComponent(stripeCustomerId)}?token=${encodeURIComponent(token)}`
 
+  // Custom labels often already include "Plan" or describe the offering
+  // ("Hosting Friend Plan"), so don't append "Care Plan" again. Standard
+  // tiers (Care/Growth/Scale) get the full "<Tier> Care Plan" name.
+  const fullPlanName = isCustom ? tierName : `${tierName} Care Plan`
+  const planRowLabel = isCustom ? tierName : `${tierName} Care Plan`
+
   const html = renderEmailLayout({
-    pageTitle: 'Activate your Care Plan',
-    preheader: `Activate your ${tierName} Care Plan with Black Hart Consulting`,
-    title: 'Activate your Care Plan',
-    bodyHtml: `Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(tierName)} Care Plan</strong> is ready to start. Add a card or U.S. bank account — you&rsquo;ll be charged <strong>${monthly}</strong> today and the same amount every 30 days going forward. Cancel anytime.`,
+    pageTitle: 'Activate your subscription',
+    preheader: `Activate your ${fullPlanName} with Black Hart Consulting`,
+    title: 'Activate your subscription',
+    bodyHtml: `Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(fullPlanName)}</strong> is ready to start. Add a card or U.S. bank account — you&rsquo;ll be charged <strong>${monthly}</strong> today and the same amount every 30 days going forward. Cancel anytime.`,
     rows: [
-      { label: `${tierName} Care Plan`, value: `${monthly} / month` },
+      { label: planRowLabel, value: `${monthly} / month` },
       { label: 'First charge', value: 'Today' },
       { label: 'Then', value: 'Every 30 days' },
       { label: 'Cancellation', value: 'Anytime, no fees' },
@@ -245,7 +268,9 @@ export async function sendBrandedCarePlanSignupEmail(args: {
       to,
       from: billingFromAddress(),
       headers: unsubscribeHeaders(),
-      subject: `Activate your Care Plan with Black Hart Consulting`,
+      subject: isCustom
+        ? `Activate your ${tierName} with Black Hart Consulting`
+        : `Activate your Care Plan with Black Hart Consulting`,
       html,
     })
     payload.logger.info({ to, stripeCustomerId, tier }, '[email] sent branded care plan signup email')

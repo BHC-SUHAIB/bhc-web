@@ -88,13 +88,21 @@ export async function GET(req: Request) {
         invoice: FIXTURE_INVOICE,
       })
     } else if (type === 'care-plan') {
+      // Optional custom-tier preview: ?type=care-plan&customLabel=...&customAmount=...
+      // Lets you eyeball the email layout for hosting-friend / negotiated
+      // price plans before sending the real one to a real client.
+      const customLabel = url.searchParams.get('customLabel')
+      const customAmountStr = url.searchParams.get('customAmount')
+      const customAmount = customAmountStr ? Number(customAmountStr) : null
+      const useCustom = customLabel && Number.isInteger(customAmount) && (customAmount as number) >= 100
       await sendBrandedCarePlanSignupEmail({
         payload,
         to: recipient,
         clientName: "Joe's Coffee",
         stripeCustomerId: 'cus_PREVIEW1234567890',
-        tier: 'growth',
-        monthlyAmountCents: 49500,
+        tier: useCustom ? 'custom' : 'growth',
+        monthlyAmountCents: useCustom ? (customAmount as number) : 49500,
+        customLabel: useCustom ? (customLabel as string) : undefined,
       })
     } else if (type === 'payment-failed') {
       await sendPaymentFailedAlertEmail({

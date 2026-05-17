@@ -104,11 +104,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             don't want a nav exit back to the marketing site that pulls the
             visitor out of the conversion funnel. Just brand presence.
             Forced white because LP heroes always have a darkening overlay
-            and the logo must read clearly over them. */}
-        <header className="absolute top-0 left-0 right-0 z-30 pt-6 sm:pt-8 px-6 sm:px-10">
+            and the logo must read clearly over them.
+
+            Right side: a small "Services & pricing" escape hatch.
+            Background: Clarity dead-click data (2026-05-16 audit) showed
+            ~57% of dead clicks landing on the unlinked logo — visitors
+            were clicking it expecting nav, getting nothing, and bouncing.
+            The link below gives them a productive click target on the
+            main site rather than letting them rage-bounce. People who
+            click it were already leaving the funnel; we'd rather route
+            them to a re-engagement page than lose them entirely. */}
+        <header className="absolute top-0 left-0 right-0 z-30 pt-6 sm:pt-8 px-6 sm:px-10 flex items-center justify-between gap-4">
           <div aria-label="Black Hart Consulting" className="inline-flex items-center text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
             <Logo variant="primary" height={40} />
           </div>
+          <Link
+            href="/services"
+            className="text-white font-mono text-[12px] tracking-[0.15em] uppercase underline decoration-white/40 decoration-1 underline-offset-[6px] drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)] hover:decoration-[var(--color-brass)] hover:text-[var(--color-brass)] transition-colors"
+          >
+            Services &amp; pricing →
+          </Link>
         </header>
 
         <main id="lp-main" className="flex-1">{children}</main>

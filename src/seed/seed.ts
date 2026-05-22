@@ -489,7 +489,7 @@ async function run() {
         eyebrow: 'About',
         headline: 'Built in the Heights, for the Heights.',
         subheadline:
-          'A solo studio with senior-grade craft, AI-leveraged delivery speed, and an obsession with sites that load fast and convert better.',
+          'A solo studio with senior-grade craft, a fixed-price model, and an obsession with sites that load fast and convert better.',
         align: 'left',
       },
       {

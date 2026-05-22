@@ -1,3 +1,10 @@
+// Temporary phone-number override displayed on landing pages only.
+// Homepage and main marketing site continue to use SiteSettings.contactPhone.
+// Revert by deleting these constants and the imports in (lp)/layout.tsx,
+// blocks/render/RenderBlocks.tsx, and (lp)/lp/express-website/booked/page.tsx.
+export const LP_PHONE_DISPLAY = '(346) 560-5430'
+export const LP_PHONE_HREF = 'tel:+13465605430'
+
 // Turn a display phone number like "(866) 434-9777" into a tel: href.
 // Keeps a leading + if present; strips everything else non-digit.
 export function phoneHref(display: string | null | undefined): string | null {

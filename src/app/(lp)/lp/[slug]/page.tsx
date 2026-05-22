@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { getCachedLandingPageBySlug } from '@/lib/payload-cache'
 import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
+import { LP_PHONE_DISPLAY } from '@/lib/contact'
 import type { LandingPage, Media } from '@/payload-types'
 
 // Dynamic landing-page route under (lp)/lp/[slug].
@@ -54,5 +55,5 @@ export default async function LandingPageRoute({ params }: Args) {
   const { slug } = await params
   const lp = await loadLandingPage(slug)
   if (!lp) notFound()
-  return <RenderBlocks blocks={lp.layout ?? []} />
+  return <RenderBlocks blocks={lp.layout ?? []} phoneOverride={LP_PHONE_DISPLAY} />
 }

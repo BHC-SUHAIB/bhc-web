@@ -844,12 +844,12 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     const waygftProject: any = {
       title: 'WAYGFT \u2014 What Are You Grateful For Today?',
       slug: 'waygft',
-      summary: 'A worldwide wall of anonymous gratitude \u2014 quotes, stories, photos, and videos, moderated by one human, delivered over a global CDN. Scaffolded, branded, and shipped to production in a single day.',
+      summary: 'A worldwide wall of anonymous gratitude \u2014 quotes, stories, photos, and videos, moderated by one human, delivered over a global CDN. Scaffolded, branded, and shipped to production in 5 days.',
       client: 'Kaiti (waygft)',
       industry: 'Consumer / Community',
       projectType: 'webapp',
       year: 2026,
-      duration: '1 day (7 commits)',
+      duration: '5 days (7 commits)',
       teamSize: 1,
       liveUrl: 'https://waygft.life',
       ...(wgtMediaHome?.id ? { heroImage: wgtMediaHome.id } : {}),
@@ -884,7 +884,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         ['p', 'Three tabs: Pending, Approved, Rejected. Each post renders inline (text, photo, or video), with approve/reject buttons and a delete confirmation. Settings page with a change-password flow. No build step, no CMS to learn \u2014 just a login and three tabs.'],
       ]),
       outcome: rtDoc([
-        ['p', 'Shipped in a single day. Seven commits from `create-next-app` to a moderated, multimedia, CDN-backed, mobile-ready production site live at waygft.life.'],
+        ['p', 'Shipped in 5 days. Seven commits from `create-next-app` to a moderated, multimedia, CDN-backed, mobile-ready production site live at waygft.life.'],
         ['ul', [
           'Public gratitude wall with 3-column autoscroll and opacity mask.',
           'Four submission types: quote, story, photo, video \u2014 all moderated.',
@@ -897,7 +897,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         ['p', 'The brand landed in a way that matters: warm, soft, unmistakably not a product demo. The kind of site people actually want to submit to.'],
       ]),
       metrics: [
-        { value: '1 day', label: 'scaffold \u2192 production' },
+        { value: '5 days', label: 'scaffold \u2192 production' },
         { value: '4', label: 'submission types supported' },
         { value: '100%', label: 'human-moderated posts' },
         { value: '~$33/mo', label: 'all-in hosting cost' },

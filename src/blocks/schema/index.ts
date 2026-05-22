@@ -86,7 +86,7 @@ export const FoundingClient: Block = {
       fields: [
         { name: 'name', type: 'text', required: true, admin: { description: 'e.g. "Starter Site"' } },
         { name: 'priceFounding', type: 'text', required: true, admin: { description: 'e.g. "$1,495"' } },
-        { name: 'priceRetail', type: 'text', required: true, admin: { description: 'e.g. "$1,950"' } },
+        { name: 'priceRetail', type: 'text', admin: { description: 'e.g. "$1,950". Optional — leave blank when the founding price has no meaningful retail anchor (e.g. ongoing Care plan whose value lives in the savings line).' } },
         { name: 'savings', type: 'text', admin: { description: 'e.g. "Save $455"' } },
       ],
     },

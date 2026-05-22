@@ -54,7 +54,7 @@ const SUHAIB_HEADSHOT_URL = 'https://bhc-media.nyc3.cdn.digitaloceanspaces.com/s
 // different, then credibility + an open invitation. No em dashes (reads as
 // AI-generated to the demographic per the project's writing memory).
 const WHO_BUILDS_IT_PARAGRAPHS: string[] = [
-  "Hi, I'm Suhaib, and I run Black Hart as a one-person studio out of Houston. When you hire me, I'm the one designing your site, writing every line of code, and showing up to every call. No account managers, no junior handoffs, no agency overhead between us.",
+  "Hi, I'm Suhaib, and I run Black Hart Consulting as a one-person studio out of Houston. When you hire me, I'm the one designing your site, writing every line of code, and showing up to every call. No account managers, no junior handoffs, no agency overhead between us.",
   "I've spent over a decade building websites for businesses big and small. If you're thinking about a new site or a rebuild, I'd love to hear about it.",
 ]
 

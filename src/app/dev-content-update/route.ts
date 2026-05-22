@@ -168,6 +168,22 @@ export async function POST() {
   const payload = await getPayload({ config })
   const changes: string[] = []
   const skipped: string[] = []
+  const failed: Array<{ where: string; error: string }> = []
+
+  // Helper: catch + record errors per step so one failure doesn't bomb the
+  // whole endpoint. The first attempt at this endpoint died on a Payload
+  // ValidationError from a single LP's Care plan offer, which short-circuited
+  // every other update (testimonials, About page, etc.) and returned a 500
+  // HTML page with no JSON body. Per-step catches + a top-level try/catch
+  // (wrapping the whole handler) guarantee the caller always gets useful JSON.
+  const tryStep = async (where: string, fn: () => Promise<void>) => {
+    try { await fn() } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      failed.push({ where, error: msg })
+    }
+  }
+
+  try {
 
   // ── A + B. Home page ────────────────────────────────────────────────
   const homeRes = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1 })
@@ -197,7 +213,9 @@ export async function POST() {
     }
 
     if (modified) {
-      await payload.update({ collection: 'pages', id: home.id, data: { layout } })
+      await tryStep('home.update', async () => {
+        await payload.update({ collection: 'pages', id: home.id, data: { layout } })
+      })
     } else {
       skipped.push('home: already up to date')
     }
@@ -224,7 +242,9 @@ export async function POST() {
       layout[i] = block
     }
     if (modified) {
-      await payload.update({ collection: 'pages', id: about.id, data: { layout } })
+      await tryStep('about.update', async () => {
+        await payload.update({ collection: 'pages', id: about.id, data: { layout } })
+      })
     } else {
       skipped.push('about: already up to date')
     }
@@ -246,7 +266,12 @@ export async function POST() {
         const newOffers = block.offers.map((o: any) => {
           if (o?.name === 'All Care plans' && o?.priceFounding === 'Free') {
             offersModified = true
-            return { ...o, priceFounding: '$149/mo', priceRetail: '' }
+            // priceRetail is now optional in the foundingClient schema, so
+            // clearing it lets the tile render just "$149/mo" + the
+            // "First month free" savings line. A non-null value here used
+            // to leave a strikethrough next to "Free" that read as
+            // "Free is the new price" — misleading on a recurring offer.
+            return { ...o, priceFounding: '$149/mo', priceRetail: null }
           }
           return o
         })
@@ -301,7 +326,12 @@ export async function POST() {
     }
 
     if (modified) {
-      await payload.update({ collection: 'landingPages', id: lp.id, data: { layout } })
+      // Wrap each LP update so a single ValidationError doesn't take down
+      // the rest of the batch. The caller sees the failure in `failed[]`
+      // and can target a re-run after fixing the offending field.
+      await tryStep(`lp[${slug}].update`, async () => {
+        await payload.update({ collection: 'landingPages', id: lp.id, data: { layout } })
+      })
     } else {
       skipped.push(`lp[${slug}]: already up to date`)
     }
@@ -318,53 +348,66 @@ export async function POST() {
     featured: true,
     sortOrder: 5,
   }
-  const kaitiExisting = await payload.find({
-    collection: 'testimonials',
-    where: { author: { equals: kaitiData.author } },
-    limit: 1,
-  })
-  if (kaitiExisting.totalDocs === 0) {
-    await payload.create({ collection: 'testimonials', data: kaitiData as any })
-    changes.push('testimonials: created Kaiti Wachter (WAYGFT)')
-  } else {
-    // Update in case the existing record is missing fields or unfeatured.
-    const existing = kaitiExisting.docs[0] as any
-    const needsUpdate =
-      existing.featured !== true ||
-      existing.quote !== kaitiQuote ||
-      existing.role !== kaitiData.role ||
-      existing.company !== kaitiData.company
-    if (needsUpdate) {
-      await payload.update({ collection: 'testimonials', id: existing.id, data: kaitiData as any })
-      changes.push('testimonials: updated existing Kaiti Wachter row')
+  await tryStep('testimonials.upsertKaiti', async () => {
+    const kaitiExisting = await payload.find({
+      collection: 'testimonials',
+      where: { author: { equals: kaitiData.author } },
+      limit: 1,
+    })
+    if (kaitiExisting.totalDocs === 0) {
+      await payload.create({ collection: 'testimonials', data: kaitiData as any })
+      changes.push('testimonials: created Kaiti Wachter (WAYGFT)')
     } else {
-      skipped.push('testimonials: Kaiti Wachter already current')
+      const existing = kaitiExisting.docs[0] as any
+      const needsUpdate =
+        existing.featured !== true ||
+        existing.quote !== kaitiQuote ||
+        existing.role !== kaitiData.role ||
+        existing.company !== kaitiData.company
+      if (needsUpdate) {
+        await payload.update({ collection: 'testimonials', id: existing.id, data: kaitiData as any })
+        changes.push('testimonials: updated existing Kaiti Wachter row')
+      } else {
+        skipped.push('testimonials: Kaiti Wachter already current')
+      }
     }
-  }
+  })
 
   // ── H. Unfeature the filler testimonial ─────────────────────────────
-  const filler = await payload.find({
-    collection: 'testimonials',
-    where: { author: { equals: 'Quote Length Test' } },
-    limit: 1,
-  })
-  if (filler.docs[0]) {
-    const fillerDoc = filler.docs[0] as any
-    if (fillerDoc.featured !== false) {
-      await payload.update({ collection: 'testimonials', id: fillerDoc.id, data: { featured: false } })
-      changes.push('testimonials: unfeatured "Quote Length Test" filler')
-    } else {
-      skipped.push('testimonials: filler already unfeatured')
+  await tryStep('testimonials.unfeatureFiller', async () => {
+    const filler = await payload.find({
+      collection: 'testimonials',
+      where: { author: { equals: 'Quote Length Test' } },
+      limit: 1,
+    })
+    if (filler.docs[0]) {
+      const fillerDoc = filler.docs[0] as any
+      if (fillerDoc.featured !== false) {
+        await payload.update({ collection: 'testimonials', id: fillerDoc.id, data: { featured: false } })
+        changes.push('testimonials: unfeatured "Quote Length Test" filler')
+      } else {
+        skipped.push('testimonials: filler already unfeatured')
+      }
     }
+  })
+
+    // Bust caches so the public site picks up the changes on next request
+    // without waiting for the 60s unstable_cache window to expire. Next 16
+    // requires the CacheLifeConfig second arg (expire: 0 = immediate).
+    revalidateTag('pages', { expire: 0 })
+    revalidateTag('landingPages', { expire: 0 })
+    revalidateTag('testimonials', { expire: 0 })
+    revalidateTag('global:siteSettings', { expire: 0 })
+
+    return NextResponse.json({ ok: failed.length === 0, changes, skipped, failed })
+  } catch (err: unknown) {
+    // Top-level safety net. If anything throws outside the per-step try/catch
+    // helpers above (e.g. payload.find on a missing collection), still return
+    // JSON so the caller can debug rather than getting Next.js's HTML 500.
+    const msg = err instanceof Error ? err.message : String(err)
+    return NextResponse.json(
+      { ok: false, error: msg, changes, skipped, failed },
+      { status: 500 },
+    )
   }
-
-  // Bust caches so the public site picks up the changes on next request
-  // without waiting for the 60s unstable_cache window to expire. Next 16
-  // requires the CacheLifeConfig second arg (expire: 0 = immediate).
-  revalidateTag('pages', { expire: 0 })
-  revalidateTag('landingPages', { expire: 0 })
-  revalidateTag('testimonials', { expire: 0 })
-  revalidateTag('global:siteSettings', { expire: 0 })
-
-  return NextResponse.json({ ok: true, changes, skipped })
 }

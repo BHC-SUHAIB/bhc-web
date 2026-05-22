@@ -13,13 +13,18 @@ import { NextResponse } from 'next/server'
 //
 // Usage on the droplet (one-shot prod seed):
 //   1. SSH in, edit .env, add: ALLOW_DEV_SEED=one-time-yes
-//   2. Restart the web container so the env var loads:
-//        docker compose restart web
+//   2. Recreate the web container so the env var loads. NOTE: must be
+//      `up -d --force-recreate` (which re-reads .env), NOT `restart`.
+//      `docker compose restart` keeps the existing container's environment
+//      and will silently leave the bypass off — which cost us an hour on
+//      2026-05-22 chasing a 500-with-empty-body before we realized the
+//      flag wasn't actually in the running process:
+//        docker compose up -d --force-recreate web
 //   3. POST the route(s) you need:
 //        curl -X POST https://blackhartconsulting.com/dev-schema-fix
 //        curl -X POST https://blackhartconsulting.com/dev-seed-rework
-//   4. Remove the env var from .env, restart again:
-//        docker compose restart web
+//   4. Remove the env var from .env, recreate again:
+//        docker compose up -d --force-recreate web
 //
 // Returns NextResponse.json(403) if blocked, otherwise null (caller proceeds).
 export function denyIfProductionLocked(): NextResponse | null {
@@ -27,7 +32,7 @@ export function denyIfProductionLocked(): NextResponse | null {
   const bypass = process.env.ALLOW_DEV_SEED === 'one-time-yes'
   if (isProd && !bypass) {
     return NextResponse.json(
-      { error: 'Disabled in production. Set ALLOW_DEV_SEED=one-time-yes + restart container to unlock for one-shot use.' },
+      { error: 'Disabled in production. Set ALLOW_DEV_SEED=one-time-yes + `docker compose up -d --force-recreate web` to unlock for one-shot use (NOT `restart` — that does not re-read .env).' },
       { status: 403 },
     )
   }

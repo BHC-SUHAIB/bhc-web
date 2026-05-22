@@ -117,6 +117,57 @@ db: postgresAdapter({
 
 ---
 
+## Local dev against live data (SSH tunnel)
+
+The default `DATABASE_URI=file:./payload.db` runs against a local SQLite file that drifts from prod the moment anyone edits content via the live admin. To keep your local dev server in sync with the latest production content (max 15min stale), point `npm run dev` at the **dev droplet's Postgres** over an SSH tunnel.
+
+The dev droplet (`bhc-dev`, 68.183.144.201) gets a fresh prod snapshot every 15 minutes via `scripts/sync-from-prod.sh` on a cron. So pointing local at the dev droplet's Postgres effectively gives you "prod, lagged by ≤15min" without ever touching real prod.
+
+### One-time setup (macOS)
+
+```bash
+# 1. Install the LaunchAgent that keeps the SSH tunnel alive in the
+#    background (auto-starts on login, auto-reconnects on drop):
+./scripts/install-dev-tunnel-agent.sh
+
+# 2. Grab the dev droplet's Postgres credentials and put them in .env.local:
+ssh deploy@68.183.144.201 'grep ^POSTGRES_ /opt/bhc-web/.env'
+# Then in .env.local:
+#   DATABASE_URI=postgres://<POSTGRES_USER>:<POSTGRES_PASSWORD>@localhost:5432/<POSTGRES_DB>
+
+# 3. Start the dev server. It now reads/writes the dev droplet's DB:
+npm run dev
+```
+
+After the LaunchAgent is installed, opening your laptop is enough — the tunnel comes back up automatically. Logs land in `/tmp/bhc-dev-tunnel.log` and `/tmp/bhc-dev-tunnel.err`.
+
+### Verifying
+
+```bash
+# Tunnel is listening locally:
+lsof -i :5432
+
+# Same content shows on both:
+open http://localhost:3000/admin
+open https://dev.blackhartconsulting.com/admin
+```
+
+### Reverting to local SQLite
+
+```bash
+./scripts/uninstall-dev-tunnel-agent.sh
+# Then edit .env.local:
+#   DATABASE_URI=file:./payload.db
+```
+
+### Tradeoffs to know
+
+- **Local edits hit the dev droplet's DB**, not a private copy. If you edit a testimonial via the local Payload admin, that edit lives on the shared dev droplet (and gets wiped on the next prod→dev sync). Fine for reading + experimenting with code against real data; not for destructive data exploration.
+- **Tunnel needs network on first wake.** After travel/airplane mode, give the agent a few seconds to reconnect before `npm run dev`.
+- **One-off manual tunnel:** if you just want a single-session tunnel without installing the agent, run `npm run dev:tunnel` in a separate terminal (foreground, ctrl-c to close).
+
+---
+
 ## Brand tokens
 
 Colors in `src/app/globals.css` under `@theme`. The **Heritage** palette:

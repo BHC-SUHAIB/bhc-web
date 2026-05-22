@@ -26,6 +26,10 @@
  *   D. Testimonials — upsert Kaiti Wachter (WAYGFT) at sortOrder 5 so she
  *      surfaces ahead of Grace + Philip in the latest-3 carousel; set
  *      featured=false on the "Quote Length Test" filler row.
+ *   E. WAYGFT project — re-frame "shipped in a single day" → "shipped in
+ *      5 days" across summary, duration, outcome rich-text, and the
+ *      metric tile. The original 1-day claim undercut the Starter Site's
+ *      14-day pitch on the homepage.
  *
  * Delete this file once the changes have shipped to prod.
  */
@@ -405,12 +409,70 @@ export async function POST() {
     }
   })
 
+  // ── I. WAYGFT project: re-frame "single day" → "5 days" ──────────────
+  // The original case study claimed a 1-day scaffold-to-prod timeline.
+  // That reading was technically true (initial scaffold landed in a day)
+  // but undercut the Starter Site's 14-day pitch on the homepage —
+  // visitors saw "shipped in a single day" and asked why we charge for
+  // 14. Reframing as 5 days reflects the actual total engagement
+  // (design + build + deploy iterations) without contradicting Prometheus
+  // Minds' own 5-day timeline, which the carousel already shows.
+  await tryStep('projects.waygft', async () => {
+    const waygftRes = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: 'waygft' } },
+      limit: 1,
+    })
+    if (waygftRes.docs.length === 0) {
+      skipped.push('projects.waygft: not found')
+      return
+    }
+    const project = waygftRes.docs[0] as any
+    const updates: Record<string, any> = {}
+
+    if (typeof project.summary === 'string' && project.summary.includes('in a single day')) {
+      updates.summary = project.summary.split('in a single day').join('in 5 days')
+    }
+
+    if (project.duration === '1 day (7 commits)') {
+      updates.duration = '5 days (7 commits)'
+    }
+
+    if (project.outcome) {
+      const beforeJson = JSON.stringify(project.outcome)
+      const afterJson = beforeJson.split('Shipped in a single day.').join('Shipped in 5 days.')
+      if (afterJson !== beforeJson) {
+        updates.outcome = JSON.parse(afterJson)
+      }
+    }
+
+    if (Array.isArray(project.metrics)) {
+      const newMetrics = project.metrics.map((m: any) => {
+        if (m?.value === '1 day' && typeof m?.label === 'string' && m.label.includes('production')) {
+          return { ...m, value: '5 days' }
+        }
+        return m
+      })
+      if (JSON.stringify(newMetrics) !== JSON.stringify(project.metrics)) {
+        updates.metrics = newMetrics
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      await payload.update({ collection: 'projects', id: project.id, data: updates })
+      changes.push(`projects.waygft: re-framed to 5 days (${Object.keys(updates).join(', ')})`)
+    } else {
+      skipped.push('projects.waygft: already up to date')
+    }
+  })
+
     // Bust caches so the public site picks up the changes on next request
     // without waiting for the 60s unstable_cache window to expire. Next 16
     // requires the CacheLifeConfig second arg (expire: 0 = immediate).
     revalidateTag('pages', { expire: 0 })
     revalidateTag('landingPages', { expire: 0 })
     revalidateTag('testimonials', { expire: 0 })
+    revalidateTag('projects', { expire: 0 })
     revalidateTag('global:siteSettings', { expire: 0 })
 
     return NextResponse.json({ ok: failed.length === 0, changes, skipped, failed })

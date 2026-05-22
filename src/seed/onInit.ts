@@ -343,7 +343,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       title: 'Home', slug: 'home', publishedAt: new Date().toISOString(),
       seo: { metaTitle: 'Black Hart Consulting \u2014 Websites, SEO, apps, hosting', metaDescription: 'Steady craft for businesses that care how their work shows up online.' },
       layout: [
-        { blockType: 'hero', eyebrow: 'Built by humans + AI', headline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
+        { blockType: 'hero', eyebrow: 'Built by hand', headline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
           subheadline: 'We design the site. We make it rank. We keep it online. One team, one bill, one line of accountability.', align: 'left',
           ctas: [
             { label: 'Start a project', href: '/contact', variant: 'primary' },
@@ -365,7 +365,6 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         { blockType: 'testimonials', eyebrow: 'Clients', headline: 'What they said after launch.', mode: 'latest', limit: 3 },
         { blockType: 'faq', eyebrow: 'Questions', headline: 'Common questions we get.', items: [
           { question: 'Do you work with clients outside your region?', answer: 'Yes. Most of our clients are remote, and time zones are rarely an issue.' },
-          { question: 'Do you use AI in your workflow?', answer: 'Yes \u2014 explicitly. Modern AI tooling is part of how we ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision we deliver. You\u2019re not paying for AI to do your work; you\u2019re paying for senior consulting that uses AI to do more of it, in less time.' },
           { question: 'How do you price custom work?', answer: 'Scoped fixed-price for anything that fits a clear brief. Hourly retainers for ongoing work. We\u2019ll give you a quote within 48 hours of our initial call.' },
           { question: 'Do you handle hosting, or just build the site?', answer: 'Both. Every Care plan (Care, Growth, Scale) bundles managed hosting, monitoring, backups, and SSL \u2014 so you never see a separate hosting bill. Prefer to host elsewhere? We\u2019ll deploy to your existing host (DigitalOcean, AWS, Vercel, etc.) and document everything so you\u2019re never stuck. Standalone hosting without a Care plan is $79/mo.' },
           { question: 'What stack do you build on?', answer: 'Default is Next.js + Payload CMS + Postgres, deployed to DigitalOcean. We\u2019ll use a different stack if your situation calls for it \u2014 for example, Shopify for a commerce-first site. We pick the right tool, not the fashionable one.' },
@@ -401,7 +400,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     const aboutData: any = {
       title: 'About', slug: 'about', publishedAt: new Date().toISOString(),
       layout: [
-        { blockType: 'hero', eyebrow: 'About', headline: 'Modern craft, modern tooling, one line of accountability.',
+        { blockType: 'hero', eyebrow: 'About', headline: 'Modern craft, one line of accountability.',
           subheadline: 'Black Hart Consulting is a Houston-based digital studio. We build websites, run SEO, and keep them online \u2014 for businesses that care how their work shows up online.', align: 'left' },
         {
           blockType: 'richText',
@@ -409,7 +408,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           variant: 'lede',
           content: rtDoc([
             ['p', 'We started Black Hart because most small businesses are stuck between two bad choices: a generic template site that looks like everyone else\u2019s, or an agency quote that\u2019s three times what it should cost.'],
-            ['p', 'We close that gap with modern AI tooling \u2014 used carefully, with a senior reviewer accountable for every deliverable. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.'],
+            ['p', 'We close that gap with a senior, accountable owner on every deliverable, a fixed-price model, and a tight delivery window. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.'],
           ]),
         },
         { blockType: 'stats', items: [
@@ -425,7 +424,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           content: rtDoc([
             ['h2', 'Who you\u2019ll work with'],
             ['p', 'You\u2019ll work directly with Suhaib Chaudhry, the founder of Black Hart Consulting. There\u2019s no account manager layer, no junior handoff \u2014 every brief, every line of code, and every design decision goes through one senior reviewer. That\u2019s the whole point of the studio: agency-grade craft from a single accountable owner, not a sales team funneling you to the cheapest contractor on a roster.'],
-            ['p', 'Suhaib has been shipping production web software for over a decade \u2014 across consumer, fintech, and B2B SaaS \u2014 and started Black Hart to apply modern AI tooling to small-business work that traditional agencies overcharge for. The result: deliverables you\u2019d normally pay $20K+ for, shipped in days instead of months, at prices that make sense for a business that\u2019s still proving its model.'],
+            ['p', 'Suhaib has been shipping production web software for over a decade \u2014 across consumer, fintech, and B2B SaaS \u2014 and started Black Hart to bring that craft to small-business work that traditional agencies overcharge for. The result: deliverables you\u2019d normally pay $20K+ for, shipped in days instead of months, at prices that make sense for a business that\u2019s still proving its model.'],
           ]),
         },
         { blockType: 'richText', maxWidth: 'medium', content: rtDoc([
@@ -433,7 +432,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           ['h3', 'Scope first.'],
           ['p', 'Every engagement starts with a 30-minute conversation, then a fixed-price proposal within 48 hours. We never bill hourly for project work \u2014 if a brief doesn\u2019t fit a clean scope, we\u2019ll tell you before you sign anything.'],
           ['h3', 'Build in days, not months.'],
-          ['p', 'We use modern AI tooling alongside human judgment to ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision. You\u2019re not paying for AI to do your work; you\u2019re paying for senior consulting that uses AI to do more of it, in less time.'],
+          ['p', 'A senior developer is accountable for every line of code, every word of copy, and every design decision. No junior handoffs, no agency layers between you and the work. The studio ships in days because one person owns the brief end to end \u2014 not because anything is being automated away.'],
           ['h3', 'Stay involved after launch.'],
           ['p', 'Most agencies hand you a site and walk away. We host, monitor, and improve yours for as long as you\u2019d like \u2014 through Care, Growth, or Scale plans that scale up or down with your needs.'],
         ]) },

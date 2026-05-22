@@ -48,7 +48,7 @@ const FOUNDING_BANNER = {
     { name: 'Starter Site', priceFounding: '$1,495', priceRetail: '$1,950', savings: 'Save $455' },
     { name: 'Pro Site', priceFounding: '$3,500', priceRetail: '$4,500', savings: 'Save $1,000' },
     { name: 'Local SEO Sprint', priceFounding: '$1,195', priceRetail: '$1,495', savings: 'Save $300' },
-    { name: 'All Care plans', priceFounding: 'Free', priceRetail: '$149/mo', savings: 'First month free' },
+    { name: 'All Care plans', priceFounding: '$149/mo', priceRetail: '', savings: 'First month free' },
   ],
   cta: { label: 'Claim a founding spot', href: '/contact' },
 }
@@ -524,7 +524,7 @@ export async function POST() {
         eyebrow: 'Custom Web Design · United States & Worldwide',
         headline: 'Custom websites in 14 days, from $1,495.',
         subheadline:
-          'A solo developer using modern AI tooling to ship fast, fixed-price websites for businesses across the U.S. and around the world. One bill, one accountable owner, no agency overhead — that’s how we keep prices honest and timelines short.',
+          'A solo developer shipping fast, fixed-price websites for businesses across the U.S. and around the world. One bill, one accountable owner, no agency overhead — that’s how we keep prices honest and timelines short.',
         align: 'left',
         // Person at a laptop preparing to start a client meeting — adds a
         // human-touch element to the homepage hero (replaces the abstract
@@ -553,7 +553,7 @@ export async function POST() {
         eyebrow: 'What we do',
         headline: 'Web, SEO, and care — under one roof.',
         description:
-          'Four disciplines, one solo developer working alongside modern AI tooling. Sized for solo operators, mid-market companies, and larger teams that want a partner who ships fast.',
+          'Four disciplines, one solo developer accountable for every deliverable. Sized for solo operators, mid-market companies, and larger teams that want a partner who ships fast.',
         items: [
           { title: 'Website design & build', icon: 'globe', description: 'Marketing sites and web apps, mobile-first, on a CMS your team actually uses.', bullets: [
             { label: 'Custom design tuned to your brand' },
@@ -725,7 +725,7 @@ export async function POST() {
   // Mirrors the structure on the live blackhartconsulting.com/about:
   // mission statement, founder bio (Suhaib Chaudhry), stats, and three
   // "How we work" callouts. Updated to align with new pricing language
-  // (Care/Growth/Scale plans, founder-led, AI-leveraged delivery).
+  // (Care/Growth/Scale plans, founder-led, fixed-price delivery).
   const aboutData: any = {
     title: 'About',
     slug: 'about',
@@ -752,7 +752,7 @@ export async function POST() {
         variant: 'lede',
         eyebrow: 'Our mission',
         content: rt(
-          'We started Black Hart because most businesses are stuck between two bad choices: a generic template site that looks like everyone else’s, or an agency quote that’s three times what it should cost. We close that gap with modern AI tooling used carefully and with a senior reviewer accountable for every deliverable. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.',
+          'We started Black Hart because most businesses are stuck between two bad choices: a generic template site that looks like everyone else’s, or an agency quote that’s three times what it should cost. We close that gap with a senior, accountable owner on every deliverable, a fixed-price model, and a tight delivery window. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.',
         ),
       },
       {
@@ -776,7 +776,7 @@ export async function POST() {
         imageFocus: 'face',
         eyebrow: 'Who you’ll work with',
         content: rt(
-          'You’ll work directly with Suhaib Chaudhry, the founder of Black Hart Consulting — and the only person on the build. There’s no account manager layer, no junior handoff, no agency overhead. Every brief, every line of code, and every design decision goes through one accountable owner. That’s the whole point: pair a senior developer with modern AI tooling and you get the kind of deliverables you’d normally pay $20K+ for, shipped in days instead of months. Suhaib has been shipping production web software for over a decade across consumer, e-commerce, B2B SaaS, and other platforms. He started Black Hart to bring that craft to small and mid-market businesses at prices that make sense for a company that’s still proving its model.',
+          'You’ll work directly with Suhaib Chaudhry, the founder of Black Hart Consulting — and the only person on the build. There’s no account manager layer, no junior handoff, no agency overhead. Every brief, every line of code, and every design decision goes through one accountable owner. That’s the whole point: a senior developer doing the work himself, shipping the kind of deliverables you’d normally pay $20K+ for in days instead of months. Suhaib has been shipping production web software for over a decade across consumer, e-commerce, B2B SaaS, and other platforms. He started Black Hart to bring that craft to small and mid-market businesses at prices that make sense for a company that’s still proving its model.',
         ),
       },
       // "How we work" — three short principles. Rendered as a Services block
@@ -799,7 +799,7 @@ export async function POST() {
             title: 'Build in days, not months.',
             icon: 'zap',
             description:
-              'We use modern AI tooling alongside human judgment to ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision.',
+              'A senior developer is accountable for every line of code, every word of copy, and every design decision — no junior handoffs, no agency layers between you and the work.',
           },
           {
             title: 'Stay involved after launch.',

@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils'
 // The overlay strength is editor-controllable so dark photos and bright photos
 // both keep the headline readable.
 
-export async function Hero(b: HeroBlock) {
+export async function Hero(b: HeroBlock & { phoneOverride?: string }) {
   const align = b.align ?? 'left'
   const img = typeof b.image === 'object' ? (b.image as Media | null) : null
   const hasUpload = !!img?.url
@@ -28,8 +28,11 @@ export async function Hero(b: HeroBlock) {
   // Phone CTA: read SiteSettings.contactPhone (cached) and render an
   // "Or call: <number>" line directly under the CTAs when showPhoneCta is on.
   // Wrapped in a small client component so the click fires the
-  // `phone_click` dataLayer event for ad-attribution.
-  const phoneRaw = b.showPhoneCta ? (await getCachedSiteSettings())?.contactPhone ?? '' : ''
+  // `phone_click` dataLayer event for ad-attribution. When called from the LP
+  // route group, phoneOverride is set so the LP shows its own number rather
+  // than the main-site contactPhone from SiteSettings.
+  const settingsPhone = b.showPhoneCta ? (await getCachedSiteSettings())?.contactPhone ?? '' : ''
+  const phoneRaw = b.showPhoneCta ? (b.phoneOverride ?? settingsPhone) : ''
   const phoneHrefVal = phoneRaw ? phoneHref(phoneRaw) : null
 
   if (hasBackgroundUrl) {

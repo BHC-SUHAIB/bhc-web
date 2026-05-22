@@ -21,20 +21,24 @@ import type { Page, SiteSetting } from '@/payload-types'
 // shared block type and let the discriminated `blockType` switch dispatch.
 export type RenderBlock = NonNullable<Page['layout']>[number]
 
-export async function RenderBlocks({ blocks }: { blocks: RenderBlock[] }) {
+// phoneOverride lets the LP route group display a different phone number than
+// SiteSettings.contactPhone (which the main site still uses). When set, both
+// the Hero phone CTA and the ContactForm aside surface the override instead.
+export async function RenderBlocks({ blocks, phoneOverride }: { blocks: RenderBlock[]; phoneOverride?: string }) {
   if (!blocks?.length) return null
 
   // Only fetch siteSettings if a block on the page actually needs it.
   // Keeps simple pages from paying for a DB read they don't use.
-  const needsSiteSettings = blocks.some((b) => b.blockType === 'contactForm')
+  const needsSiteSettings = blocks.some((b) => b.blockType === 'contactForm' || b.blockType === 'hero')
   const siteSettings: SiteSetting | null = needsSiteSettings ? await getCachedSiteSettings() : null
+  const effectivePhone = phoneOverride ?? siteSettings?.contactPhone ?? null
 
   return (
     <>
       {blocks.map((b, i) => {
         const key = (b as { id?: string }).id ?? String(i)
         switch (b.blockType) {
-          case 'hero':            return <Hero key={key} {...b} />
+          case 'hero':            return <Hero key={key} {...b} phoneOverride={phoneOverride} />
           case 'foundingClient':  return <FoundingClient key={key} {...b} />
           case 'bundleOffer':     return <BundleOffer key={key} {...b} />
           case 'calendlyBooking': return <CalendlyBooking key={key} {...b} />
@@ -53,7 +57,7 @@ export async function RenderBlocks({ blocks }: { blocks: RenderBlock[] }) {
               key={key}
               {...b}
               contactEmail={siteSettings?.contactEmail ?? null}
-              contactPhone={siteSettings?.contactPhone ?? null}
+              contactPhone={effectivePhone}
             />
           )
           default:                return null

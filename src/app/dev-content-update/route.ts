@@ -40,16 +40,22 @@ export const dynamic = 'force-dynamic'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// Headshot URL — same one used on the About page rich-text founder block,
-// served from the DigitalOcean Spaces CDN edge (no Media upload needed).
-const SUHAIB_HEADSHOT_URL = 'https://bhc-media.nyc3.cdn.digitaloceanspaces.com/suhaib-headshot.jpg'
+// Headshot URL — same image served from the DigitalOcean Spaces CDN edge.
+// The "-1" suffix is the actual filename Payload's Media collection assigned
+// on upload (collision-avoidance). The first cut of this endpoint used
+// "suhaib-headshot.jpg" without the suffix and got a 403 from Spaces.
+// The About page uses image_id (Media upload) which resolves to the real
+// filename automatically; LP blocks rely on this literal URL.
+const SUHAIB_HEADSHOT_URL = 'https://bhc-media.nyc3.cdn.digitaloceanspaces.com/suhaib-headshot-1.jpg'
 
-// Shortened founder bio for the LP. The About page version runs ~120 words
-// with extra detail on engagement model; this is ~75 words and front-loads
-// the "one person on the build" pitch since LP visitors only skim.
+// First-person founder bio for the LP. Warmer + more inviting than a 3rd-
+// person About page bio, since the LP is paid traffic that needs to convert.
+// Two short paragraphs (~70 words total): hello + what makes the studio
+// different, then credibility + an open invitation. No em dashes (reads as
+// AI-generated to the demographic per the project's writing memory).
 const WHO_BUILDS_IT_PARAGRAPHS: string[] = [
-  "You'll work directly with Suhaib Chaudhry — the only person on the build. No account managers, no junior handoffs, no agency layers between you and the work. Every brief, every line of code, every design decision goes through one accountable owner.",
-  "Suhaib has shipped production web software for over a decade across consumer, e-commerce, and B2B SaaS, and started Black Hart to bring that craft to small and mid-market businesses at prices that make sense for a business still proving its model.",
+  "Hi, I'm Suhaib, and I run Black Hart as a one-person studio out of Houston. When you hire me, I'm the one designing your site, writing every line of code, and showing up to every call. No account managers, no junior handoffs, no agency overhead between us.",
+  "I've spent over a decade building websites for businesses big and small. If you're thinking about a new site or a rebuild, I'd love to hear about it.",
 ]
 
 // Unified replacement list — applied recursively to every string field on
@@ -290,28 +296,44 @@ export async function POST() {
         }
       }
 
-      // E. Insert "Who builds it" rich-text block between founding_client and
-      // pricing — idempotent via the eyebrow string check.
-      const alreadyHasWhoBuildsIt = layout.some((b: any) =>
+      // E. Ensure the "Who builds it" rich-text block is present AND has the
+      // latest copy + headshot URL. First pass inserted the block but skipped
+      // it on rerun (idempotent insert) — which meant the wrong headshot URL
+      // from the first cut never got fixed. Now: replace in place if found
+      // and the content/URL drifted, otherwise insert.
+      const desiredContent = buildLexicalParagraphs(WHO_BUILDS_IT_PARAGRAPHS)
+      const desiredContentJson = JSON.stringify(desiredContent)
+      const existingIdx = layout.findIndex((b: any) =>
         b?.blockType === 'richText' && typeof b?.eyebrow === 'string' && b.eyebrow.toLowerCase().startsWith('who builds it'),
       )
-      if (!alreadyHasWhoBuildsIt) {
+      const blockBase = {
+        blockType: 'richText' as const,
+        eyebrow: 'Who builds it',
+        maxWidth: 'medium' as const,
+        variant: 'default' as const,
+        imageUrl: SUHAIB_HEADSHOT_URL,
+        imageFocus: 'face' as const,
+        content: desiredContent,
+      }
+      if (existingIdx >= 0) {
+        const old = layout[existingIdx]
+        const needsUpdate =
+          old?.imageUrl !== SUHAIB_HEADSHOT_URL ||
+          JSON.stringify(old?.content) !== desiredContentJson
+        if (needsUpdate) {
+          // Preserve the block's existing id so Payload doesn't churn refs.
+          layout[existingIdx] = { ...blockBase, ...(old?.id ? { id: old.id } : {}) }
+          modified = true
+          changes.push(`lp[express-website].block[${existingIdx}]: "Who builds it" updated (URL + copy)`)
+        }
+      } else {
         const insertIdx = (() => {
           const fcIdx = layout.findIndex((b: any) => b?.blockType === 'foundingClient')
           if (fcIdx >= 0) return fcIdx + 1
           const heroI = layout.findIndex((b: any) => b?.blockType === 'hero')
           return heroI >= 0 ? heroI + 1 : 0
         })()
-        const whoBuildsIt = {
-          blockType: 'richText',
-          eyebrow: 'Who builds it',
-          maxWidth: 'medium',
-          variant: 'default',
-          imageUrl: SUHAIB_HEADSHOT_URL,
-          imageFocus: 'face',
-          content: buildLexicalParagraphs(WHO_BUILDS_IT_PARAGRAPHS),
-        }
-        layout.splice(insertIdx, 0, whoBuildsIt)
+        layout.splice(insertIdx, 0, blockBase)
         modified = true
         changes.push(`lp[express-website].layout: inserted "Who builds it" at position ${insertIdx}`)
       }

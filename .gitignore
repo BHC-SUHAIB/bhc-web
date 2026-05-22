@@ -60,3 +60,9 @@ next-env.d.ts
 # IDE
 .vscode/
 .idea/
+
+# Claude Code agent tooling — ephemeral worktrees created when subagents
+# run with isolation: "worktree". Machine-specific, never meant to be
+# versioned. Other .claude/* files (settings.local.json, launch.json) are
+# either already tracked or already ignored by their own conventions.
+.claude/worktrees/

@@ -11,19 +11,21 @@
  * container, POST the route, then remove the env var and restart again.
  *
  * Steps applied:
- *   A. Home page hero subheadline — strip "using modern AI tooling " phrasing.
- *   B. Home page FAQ — remove "Do you use AI in your workflow?" item if present.
- *   C. About page rich-text blocks — replace AI-tooling sentences with
- *      accountable-owner phrasing (Our mission + Who you'll work with).
- *   D. Express-website LP hero — eyebrow → "Houston · 14-Day Delivery".
- *   E. Express-website LP — insert "Who builds it" richText block between the
- *      founding-client banner and pricing (only if not already present).
- *   F. All landing pages — founding-client Care plan offer: priceFounding
- *      "$149/mo", priceRetail "" (fixes the "Free$149/mo" misread).
- *   G. Testimonials — upsert Kaiti Wachter (WAYGFT) at sortOrder 5 so she
- *      surfaces ahead of Grace + Philip in the latest-3 carousel.
- *   H. Testimonials — set featured=false on the "Quote Length Test" filler
- *      so it stops appearing in carousels (keeps the row for QA).
+ *   A. Home page — recursive string sweep across every block (catches the
+ *      hero subheadline, the services "Four disciplines..." intro, and any
+ *      future stray mentions); foundingClient Care plan offer fix; FAQ
+ *      filter dropping any "Do you use AI" question if present.
+ *   B. About page — recursive string sweep that reaches plain text fields
+ *      AND Lexical text nodes (handles "Our mission" long-form, the bare
+ *      "We use modern AI tooling alongside human judgment..." on "How we
+ *      work", and any "Who you'll work with" variants).
+ *   C. Landing pages — recursive sweep + Care plan offer fix on every LP;
+ *      express-website additionally gets hero eyebrow → "Houston · 14-Day
+ *      Delivery" and the "Who builds it" rich-text block inserted between
+ *      the founding banner and pricing.
+ *   D. Testimonials — upsert Kaiti Wachter (WAYGFT) at sortOrder 5 so she
+ *      surfaces ahead of Grace + Philip in the latest-3 carousel; set
+ *      featured=false on the "Quote Length Test" filler row.
  *
  * Delete this file once the changes have shipped to prod.
  */
@@ -50,11 +52,21 @@ const WHO_BUILDS_IT_PARAGRAPHS: string[] = [
   "Suhaib has shipped production web software for over a decade across consumer, e-commerce, and B2B SaaS, and started Black Hart to bring that craft to small and mid-market businesses at prices that make sense for a business still proving its model.",
 ]
 
-// Replacement pairs applied to JSON-serialized Lexical content. Each `from`
-// must match verbatim (curly apostrophes included) — entries that don't match
-// the current document are no-ops, so it's safe to leave them in across runs.
-const AI_REPLACEMENTS: Array<[string, string]> = [
-  // About → Our mission
+// Unified replacement list — applied recursively to every string field on
+// every block (plain text AND Lexical text nodes via the same walker). Longer
+// most-specific patterns first so they win when both could match the same
+// span. Order matters: when two pairs overlap on the same substring, the
+// earlier one fires and the later one no longer finds its needle.
+const TEXT_REPLACEMENTS: Array<[string, string]> = [
+  // ── Long-form About variants (Lexical paragraphs) ──────────────────────
+  [
+    'We use modern AI tooling alongside human judgment to ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision. You’re not paying for AI to do your work; you’re paying for senior consulting that uses AI to do more of it, in less time.',
+    'A senior developer is accountable for every line of code, every word of copy, and every design decision. No junior handoffs, no agency layers between you and the work. The studio ships in days because one person owns the brief end to end, not because anything is being automated away.',
+  ],
+  [
+    'We use modern AI tooling alongside human judgment to ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision.',
+    'A senior developer is accountable for every line of code, every word of copy, and every design decision — no junior handoffs, no agency layers between you and the work.',
+  ],
   [
     'We close that gap with modern AI tooling used carefully and with a senior reviewer accountable for every deliverable. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.',
     'We close that gap with a senior, accountable owner on every deliverable, a fixed-price model, and a tight delivery window. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.',
@@ -63,34 +75,23 @@ const AI_REPLACEMENTS: Array<[string, string]> = [
     'We close that gap with modern AI tooling — used carefully, with a senior reviewer accountable for every deliverable. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.',
     'We close that gap with a senior, accountable owner on every deliverable, a fixed-price model, and a tight delivery window. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.',
   ],
-  // About → Who you'll work with (rework variant)
   [
-    "That’s the whole point: pair a senior developer with modern AI tooling and you get the kind of deliverables you’d normally pay $20K+ for, shipped in days instead of months.",
-    "That’s the whole point: a senior developer doing the work himself, shipping the kind of deliverables you’d normally pay $20K+ for in days instead of months.",
-  ],
-  // About → Who you'll work with (older onInit variant)
-  [
-    "started Black Hart to apply modern AI tooling to small-business work that traditional agencies overcharge for.",
-    "started Black Hart to bring that craft to small-business work that traditional agencies overcharge for.",
-  ],
-  // About → How we work / similar paragraphs
-  [
-    "We use modern AI tooling alongside human judgment to ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision.",
-    "A senior developer is accountable for every line of code, every word of copy, and every design decision — no junior handoffs, no agency layers between you and the work.",
+    'That’s the whole point: pair a senior developer with modern AI tooling and you get the kind of deliverables you’d normally pay $20K+ for, shipped in days instead of months.',
+    'That’s the whole point: a senior developer doing the work himself, shipping the kind of deliverables you’d normally pay $20K+ for in days instead of months.',
   ],
   [
-    "We use modern AI tooling alongside human judgment to ship faster than traditional agencies. A senior reviewer is accountable for every line of code, every word of copy, and every design decision. You’re not paying for AI to do your work; you’re paying for senior consulting that uses AI to do more of it, in less time.",
-    "A senior developer is accountable for every line of code, every word of copy, and every design decision. No junior handoffs, no agency layers between you and the work. The studio ships in days because one person owns the brief end to end, not because anything is being automated away.",
+    'started Black Hart to apply modern AI tooling to small-business work that traditional agencies overcharge for.',
+    'started Black Hart to bring that craft to small-business work that traditional agencies overcharge for.',
   ],
-]
 
-// Hero subheadline string-replacements applied directly to the field value.
-// Live homepage uses the first form; the others are legacy variants kept here
-// for safety so an older snapshot also gets cleaned up.
-const HOME_HERO_SUBHEAD_REPLACEMENTS: Array<[string, string]> = [
+  // ── Hero / plain-text variants on home + services pages ────────────────
   [
     'A solo developer using modern AI tooling to ship fast, fixed-price websites',
     'A solo developer shipping fast, fixed-price websites',
+  ],
+  [
+    'Four disciplines, one solo developer working alongside modern AI tooling.',
+    'Four disciplines, one solo developer accountable for every deliverable.',
   ],
   [
     'using modern AI tooling to ship',
@@ -100,53 +101,68 @@ const HOME_HERO_SUBHEAD_REPLACEMENTS: Array<[string, string]> = [
     ', modern AI tooling,',
     ',',
   ],
-]
 
-// Find/replace pairs that get applied verbatim to any plain-text field
-// (eyebrow, headline, description). Used to clean up legacy AI eyebrow copy
-// like "Built by humans + AI" on hero blocks anywhere in the layout.
-const PLAIN_TEXT_REPLACEMENTS: Array<[string, string]> = [
+  // ── Bare-sentence variant (About → How we work) ──────────────────────
+  // Must appear AFTER the longer "We use modern AI tooling... A senior
+  // reviewer is accountable..." pairs above so those win when both could
+  // match. When the longer text isn't in the doc (the actual current state
+  // on prod), this bare version is the one that fires.
+  [
+    'We use modern AI tooling alongside human judgment to ship faster than traditional agencies.',
+    'A senior developer is accountable for every line of code, every word of copy, and every design decision.',
+  ],
+
+  // ── Eyebrow / headline shorts ──────────────────────────────────────────
   ['Built by humans + AI', 'Built by hand'],
   ['Modern craft, modern tooling, one line of accountability.', 'Modern craft, one line of accountability.'],
 ]
 
-function replaceInLexicalJson(content: unknown, pairs: Array<[string, string]>): { content: any; changed: boolean } {
-  if (!content || typeof content !== 'object') return { content, changed: false }
-  let json: string
-  try { json = JSON.stringify(content) } catch { return { content, changed: false } }
-  let changed = false
-  for (const [from, to] of pairs) {
-    // Strip the surrounding quotes JSON.stringify adds so the search needle
-    // matches the inner text within "text":"..." nodes.
-    const fromEsc = JSON.stringify(from).slice(1, -1)
-    const toEsc = JSON.stringify(to).slice(1, -1)
-    if (json.includes(fromEsc)) {
-      json = json.split(fromEsc).join(toEsc)
-      changed = true
+// Recursive walker: applies TEXT_REPLACEMENTS to every string value inside an
+// arbitrarily nested block object. Mutates in place and returns true when
+// anything changed. Plain text fields (eyebrow, headline, description, items
+// array elements, bullets, etc.) all flow through here. Lexical rich-text
+// content has text in `text` properties on leaf nodes, which the walker also
+// reaches — so one helper handles both shapes.
+function sweepStrings(obj: any): boolean {
+  if (obj == null || typeof obj !== 'object') return false
+  let modified = false
+  const entries: Array<[string | number, any]> = Array.isArray(obj)
+    ? obj.map((v, i) => [i, v])
+    : Object.keys(obj).map((k) => [k, obj[k]])
+  for (const [key, val] of entries) {
+    if (typeof val === 'string') {
+      let out = val
+      let changed = false
+      for (const [from, to] of TEXT_REPLACEMENTS) {
+        if (out.includes(from)) { out = out.split(from).join(to); changed = true }
+      }
+      if (changed) {
+        ;(obj as any)[key] = out
+        modified = true
+      }
+    } else if (val && typeof val === 'object') {
+      if (sweepStrings(val)) modified = true
     }
   }
-  if (!changed) return { content, changed: false }
-  return { content: JSON.parse(json), changed: true }
+  return modified
 }
 
-function applyPlainReplacements(value: unknown): { value: any; changed: boolean } {
-  if (typeof value !== 'string') return { value, changed: false }
-  let out = value
-  let changed = false
-  for (const [from, to] of PLAIN_TEXT_REPLACEMENTS) {
-    if (out.includes(from)) { out = out.split(from).join(to); changed = true }
-  }
-  return { value: out, changed }
-}
-
-function applyHomeSubheadReplacements(value: unknown): { value: any; changed: boolean } {
-  if (typeof value !== 'string') return { value, changed: false }
-  let out = value
-  let changed = false
-  for (const [from, to] of HOME_HERO_SUBHEAD_REPLACEMENTS) {
-    if (out.includes(from)) { out = out.split(from).join(to); changed = true }
-  }
-  return { value: out, changed }
+// Care plan offer fix on a single foundingClient block. Returns true when
+// the block was mutated. Used on every page / LP that may have a founding-
+// client banner with the "Free / $149/mo" Care plan shape — originally
+// only LPs were swept, but the homepage carries its own copy of the same
+// block and was missed on the first pass.
+function fixCarePlanOffers(block: any): boolean {
+  if (block?.blockType !== 'foundingClient' || !Array.isArray(block.offers)) return false
+  let modified = false
+  block.offers = block.offers.map((o: any) => {
+    if (o?.name === 'All Care plans' && o?.priceFounding === 'Free') {
+      modified = true
+      return { ...o, priceFounding: '$149/mo', priceRetail: null }
+    }
+    return o
+  })
+  return modified
 }
 
 function buildLexicalParagraphs(paragraphs: string[]): any {
@@ -186,6 +202,13 @@ export async function POST() {
   try {
 
   // ── A + B. Home page ────────────────────────────────────────────────
+  // Strategy: sweep every block's string fields (recursively, including
+  // Lexical text nodes) for the TEXT_REPLACEMENTS list, drop any FAQ items
+  // whose question is "Do you use AI in your workflow?", and apply the
+  // foundingClient Care plan fix. The first pass missed the homepage's
+  // foundingClient block (it only looped over LPs) and missed the bare
+  // "Four disciplines..." sentence on the services block (no enumeration
+  // covered the services block's description field).
   const homeRes = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1 })
   const home = homeRes.docs[0] as any
   if (home) {
@@ -194,21 +217,14 @@ export async function POST() {
 
     for (let i = 0; i < layout.length; i++) {
       const block = { ...layout[i] }
-
-      if (block.blockType === 'hero') {
-        const sub = applyHomeSubheadReplacements(block.subheadline)
-        if (sub.changed) { block.subheadline = sub.value; modified = true; changes.push('home.hero.subheadline: stripped AI tooling phrasing') }
-        const eb = applyPlainReplacements(block.eyebrow)
-        if (eb.changed) { block.eyebrow = eb.value; modified = true; changes.push('home.hero.eyebrow: rewritten') }
-      }
-
+      if (sweepStrings(block)) { modified = true; changes.push(`home.block[${i}] (${block.blockType}): text replacements applied`) }
+      if (fixCarePlanOffers(block)) { modified = true; changes.push(`home.block[${i}].foundingClient.offers: Care plan price fixed`) }
       if (block.blockType === 'faq' && Array.isArray(block.items)) {
         const beforeLen = block.items.length
         block.items = block.items.filter((it: any) =>
           typeof it?.question !== 'string' || !it.question.toLowerCase().includes('do you use ai'))
         if (block.items.length !== beforeLen) { modified = true; changes.push(`home.faq: removed ${beforeLen - block.items.length} AI-related question(s)`) }
       }
-
       layout[i] = block
     }
 
@@ -221,7 +237,10 @@ export async function POST() {
     }
   }
 
-  // ── C. About page rich-text ─────────────────────────────────────────
+  // ── C. About page ───────────────────────────────────────────────────
+  // Same recursive sweep, which reaches Lexical text nodes inside richText
+  // blocks (where the long-form "modern AI tooling" sentences live) AND
+  // plain text fields on hero/stats/CTA blocks.
   const aboutRes = await payload.find({ collection: 'pages', where: { slug: { equals: 'about' } }, limit: 1 })
   const about = aboutRes.docs[0] as any
   if (about) {
@@ -229,16 +248,7 @@ export async function POST() {
     let modified = false
     for (let i = 0; i < layout.length; i++) {
       const block = { ...layout[i] }
-      if (block.blockType === 'richText' && block.content) {
-        const { content, changed } = replaceInLexicalJson(block.content, AI_REPLACEMENTS)
-        if (changed) { block.content = content; modified = true; changes.push(`about.richText[${i}]: AI mentions replaced`) }
-      }
-      if (block.blockType === 'hero') {
-        const eb = applyPlainReplacements(block.eyebrow)
-        if (eb.changed) { block.eyebrow = eb.value; modified = true; changes.push('about.hero.eyebrow: rewritten') }
-        const hl = applyPlainReplacements(block.headline)
-        if (hl.changed) { block.headline = hl.value; modified = true; changes.push('about.hero.headline: rewritten') }
-      }
+      if (sweepStrings(block)) { modified = true; changes.push(`about.block[${i}] (${block.blockType}): text replacements applied`) }
       layout[i] = block
     }
     if (modified) {
@@ -257,30 +267,12 @@ export async function POST() {
     const layout: any[] = Array.isArray(lp.layout) ? [...lp.layout] : []
     let modified = false
 
-    // F. Care plan offer fix — applies to every LP that has the founding-
-    // client block with the broken "Free / $149/mo" shape.
+    // F. Care plan offer fix + general text sweep — applies to every LP.
+    // Sweep catches any stray AI mentions in niche LP heroes/FAQ/etc.
     for (let i = 0; i < layout.length; i++) {
       const block = { ...layout[i] }
-      if (block.blockType === 'foundingClient' && Array.isArray(block.offers)) {
-        let offersModified = false
-        const newOffers = block.offers.map((o: any) => {
-          if (o?.name === 'All Care plans' && o?.priceFounding === 'Free') {
-            offersModified = true
-            // priceRetail is now optional in the foundingClient schema, so
-            // clearing it lets the tile render just "$149/mo" + the
-            // "First month free" savings line. A non-null value here used
-            // to leave a strikethrough next to "Free" that read as
-            // "Free is the new price" — misleading on a recurring offer.
-            return { ...o, priceFounding: '$149/mo', priceRetail: null }
-          }
-          return o
-        })
-        if (offersModified) {
-          block.offers = newOffers
-          modified = true
-          changes.push(`lp[${slug}].foundingClient.offers: Care plan price fixed`)
-        }
-      }
+      if (sweepStrings(block)) { modified = true; changes.push(`lp[${slug}].block[${i}] (${block.blockType}): text replacements applied`) }
+      if (fixCarePlanOffers(block)) { modified = true; changes.push(`lp[${slug}].foundingClient.offers: Care plan price fixed`) }
       layout[i] = block
     }
 

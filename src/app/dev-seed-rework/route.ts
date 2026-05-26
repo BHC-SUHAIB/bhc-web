@@ -97,13 +97,36 @@ const LP_CONTACT_FORM = {
   eyebrow: 'Prefer email?',
   headline: 'Send us a note instead.',
   description:
-    "If a phone call isn't your thing, drop your details below — we'll reply within one business day.",
+    "If a phone call isn't your thing, drop your details below. We reply within one business day.",
   successMessage:
-    "Thanks — we'll be in touch within one business day.",
+    "Thanks. We'll be in touch within one business day.",
   showCompanyField: true,
   showProjectTypeField: false,
   showBudgetField: false,
   submitLabel: 'Send inquiry',
+}
+
+// Free site audit — primary low-friction CTA for cold ad traffic (added
+// 2026-05-26 redesign). Visitors paste their URL + a sentence on what feels
+// broken; they get an email back within one business day with 3 specific
+// fixes. No call, no pitch. Sits near the top of the LP + homepage so the
+// 47% scroll-depth dropoff at the founding-pricing block (per Clarity data
+// week of 2026-05-18) no longer kills the conversion path before any CTA
+// is offered.
+const AUDIT_FORM = {
+  blockType: 'contactForm',
+  // Eyebrow slug becomes the section id (#audit) so the hero CTA can deep-link
+  // straight to the form. Keep it terse — the headline carries the framing.
+  eyebrow: 'Audit',
+  headline: 'Paste your website. Get 3 specific fixes in 24 hours.',
+  description:
+    "Drop your URL and a sentence on what feels broken. Within one business day, you get an email with three specific things to fix on your site, why they matter, and what each is costing you. Free. No call required. No pitch.",
+  successMessage:
+    "Got it. Your audit will land in your inbox within one business day. If you'd like a faster reply, text the number below — I check texts before email.",
+  showCompanyField: false,
+  showProjectTypeField: false,
+  showBudgetField: false,
+  submitLabel: 'Send me my audit',
 }
 
 // Calendly block factory — defaulted to the BHC subscription URL. Suhaib
@@ -129,7 +152,29 @@ function calendly(opts: { headline?: string; description?: string; mode?: 'inlin
   }
 }
 
+// Site Health Sprint — productized $297 entry tier (added 2026-05-26 redesign).
+// Sits below Single Page. Designed to convert cold ad traffic that won't
+// commit to a $1,495+ rebuild yet. Pairs with the free 5-min audit CTA: the
+// audit identifies issues, the Sprint pays to fix them. Easy yes → portfolio
+// builder → upsells to Starter/Care.
+const SITE_HEALTH_SPRINT_TIER = {
+  name: 'Site Health Sprint',
+  price: '$297',
+  priceNote: '5-day delivery · pick 3 fixes',
+  description:
+    "Your site has problems. You don't need a rebuild yet. Pick three things, we ship in five days. Free audit included so you know what to fix before paying.",
+  features: [
+    { label: 'Free 5-minute site audit included', included: true },
+    { label: '3 specific fixes shipped in 5 days', included: true },
+    { label: 'Tested on mobile and desktop', included: true },
+    { label: 'Before-and-after Lighthouse report', included: true },
+    { label: '30-day fix guarantee', included: true },
+  ],
+  cta: { label: 'Start the Sprint', href: '/contact?tier=sprint' },
+}
+
 const HOMEPAGE_PRICING_TIERS = [
+  SITE_HEALTH_SPRINT_TIER,
   {
     name: 'Single Page',
     price: '$795',
@@ -205,6 +250,15 @@ function makeNicheLandingPage(input: NicheLpInput) {
     campaign: input.campaign,
     publishedAt: new Date().toISOString(),
     seo: { metaTitle: input.metaTitle, metaDescription: input.metaDescription, noIndex: true },
+    // 2026-05-26 redesign — block order rebuilt around Clarity scroll-depth
+    // data (week 2026-05-18 to -24): 41% drop at 15% scroll, 47% at 20%
+    // (right where the price block used to sit), only 35% past 50%. New
+    // order leads with the audit form (low-friction CTA), surfaces trust
+    // signals (stats, testimonials, recent work) BEFORE any price block,
+    // then anchors with founding pricing + the Sprint/Starter pair, and
+    // ends with Calendly + FAQ + a final CTA. The bottom contact form
+    // is replaced by the final CTA to avoid duplicating the lead-capture
+    // path further down the page.
     layout: [
       {
         blockType: 'hero',
@@ -225,36 +279,8 @@ function makeNicheLandingPage(input: NicheLpInput) {
         // shouldn't have to scroll to the footer to find a number to call.
         showPhoneCta: true,
       },
-      FOUNDING_BANNER,
-      {
-        blockType: 'pricing',
-        eyebrow: 'The offer',
-        headline: 'One package, one price, fourteen days.',
-        description: 'No hourly bills, no scope creep. Fixed price, fixed timeline, senior-engineer sign-off on every line of code.',
-        // Wider, page-centered single tier — fixes the awkward
-        // left-aligned solo card the user flagged.
-        layoutVariant: 'centered-single',
-        tiers: [
-          {
-            name: 'Starter Site',
-            price: '$1,495',
-            originalPrice: '$1,950',
-            priceNote: input.starterPriceLine,
-            description: '5-page website, mobile-first, live in 14 days.',
-            highlighted: true,
-            features: input.starterFeatures.map((label) => ({ label, included: true })),
-            cta: { label: 'Claim a founding spot', href: '/contact' },
-          },
-        ],
-      },
-      // Calendly booking section — primary conversion point on every LP.
-      calendly({
-        headline: input.calendlyHeadline ?? 'Book a 30-minute intro call.',
-        description:
-          'Pick any open time. We will walk through what you need, ballpark a price, and figure out whether we are a fit — all in 30 minutes.',
-        mode: 'inline',
-        bg: input.bookingBg,
-      }),
+      // Trust band first — three quick numbers so cold ad traffic has a
+      // reason to keep scrolling past the hero before any ask.
       {
         blockType: 'stats',
         eyebrow: 'What you get',
@@ -265,10 +291,15 @@ function makeNicheLandingPage(input: NicheLpInput) {
           { value: '$0', label: 'In hidden fees', description: 'Hosting first month free. No scope creep clauses.' },
         ],
       },
+      // Free audit form — the primary low-friction lead-capture on the LP.
+      // Visitors who aren't ready to book a call can paste a URL and get a
+      // written reply, which converts paid traffic that would otherwise bounce.
+      AUDIT_FORM,
+      // Social proof before pricing.
+      { blockType: 'testimonials', eyebrow: 'What clients said', headline: 'Real work, real businesses.', mode: 'latest', limit: 3 },
       // Compact unlinked FeaturedProjects — shows the latest 3 project
       // screenshots with names below them, centered. UNLINKED on purpose
-      // so visitors can't navigate away from the LP. Replaces the previous
-      // "View portfolio" CTA button.
+      // so visitors can't navigate away from the LP.
       {
         blockType: 'featuredProjects',
         eyebrow: 'Recent work',
@@ -281,13 +312,57 @@ function makeNicheLandingPage(input: NicheLpInput) {
         viewAllLabel: '',
         viewAllHref: '',
       },
-      { blockType: 'testimonials', eyebrow: 'What clients said', headline: 'Real work, real businesses.', mode: 'latest', limit: 3 },
+      // Founding banner anchors the discount frame AFTER trust has been built.
+      FOUNDING_BANNER,
+      // Two-tier pricing pair: Sprint at $297 for cold traffic that can't yet
+      // justify a rebuild, Starter at $1,495 founding price for those ready.
+      // The Sprint is the easy-yes that converts paid traffic into paying
+      // clients fast (builds the portfolio Suhaib needs); Starter upsells.
+      {
+        blockType: 'pricing',
+        eyebrow: 'The offer',
+        headline: 'Two ways to start. Pick the one that fits.',
+        description:
+          'If your site needs a tune-up, start with the 5-day Sprint. If you need a real rebuild, the Starter Site is the founding-client tier most clients pick.',
+        tiers: [
+          SITE_HEALTH_SPRINT_TIER,
+          {
+            name: 'Starter Site',
+            price: '$1,495',
+            originalPrice: '$1,950',
+            priceNote: input.starterPriceLine,
+            description: '5-page website, mobile-first, live in 14 days.',
+            highlighted: true,
+            features: input.starterFeatures.map((label) => ({ label, included: true })),
+            cta: { label: 'Claim a founding spot', href: '/contact?tier=starter' },
+          },
+        ],
+      },
+      // Calendly booking section — for visitors who want a conversation
+      // before paying. Falls below pricing now, not above it.
+      calendly({
+        headline: input.calendlyHeadline ?? 'Prefer to talk it through?',
+        description:
+          'Thirty minutes. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.',
+        mode: 'inline',
+        bg: input.bookingBg,
+      }),
       // Auto mode: pulls every featured FAQ from the FAQs collection in
-       // the admin. Single source of truth across home + 5 LPs + services
-       // + about + contact. Drop a niche-specific FAQ in the admin and
-       // it surfaces on every page that renders this block.
+      // the admin. Single source of truth across home + 5 LPs + services
+      // + about + contact. Drop a niche-specific FAQ in the admin and
+      // it surfaces on every page that renders this block.
       { blockType: 'faq', eyebrow: 'Common questions', headline: 'Everything you wanted to ask.', mode: 'auto', limit: 12 },
-      LP_CONTACT_FORM,
+      // Final CTA replaces the second contact form — visitors who scroll all
+      // the way down have one focused choice rather than another long form.
+      {
+        blockType: 'cta',
+        headline: 'Still here? Get the free audit.',
+        description:
+          'Three specific fixes, in your inbox within a business day. No call required. If you would rather talk, book a 30-minute discovery call below.',
+        primaryCta: { label: 'Get my free audit', href: '#audit' },
+        secondaryCta: { label: 'Book a 30-min call', href: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call' },
+        variant: 'emphasized',
+      },
     ],
   }
 }
@@ -300,17 +375,26 @@ const LANDING_PAGES: NicheLpInput[] = [
     slug: 'express-website',
     niche: 'generic',
     campaign: 'Search · Web Design · US · LP Express',
-    metaTitle: 'Custom Small Business Website — $1,495, 14-Day Delivery',
+    metaTitle: 'Houston Heights Small Business Websites — Free Audit, $1,495 Rebuild',
     metaDescription:
-      'Custom 5-page website for small to mid-market businesses across the U.S. Founding-client price $1,495 (was $1,950). 14-day delivery guaranteed.',
-    heroEyebrow: 'U.S. & Worldwide · 14-Day Delivery',
-    heroHeadline: 'A custom website. In 14 days. From $1,495.',
-    heroSub: 'Built by hand, hosted by us, kept fast forever. Founding-client pricing for our first 5 clients — open to small and mid-market businesses anywhere.',
-    // Designer working on website mockups — directly tied to the "we'll
-    // build your site in 14 days" promise this LP makes.
-    heroBackgroundUrl: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1920&q=80',
-    heroPrimaryCta: { label: 'Book a 30-min discovery call', href: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call' },
-    heroSecondaryCta: { label: 'See the deliverables', href: '#pricing' },
+      'Heights-local web studio. Free 5-minute site audit with 3 specific fixes in your inbox within a business day. Or, full custom website built in 14 days, from $1,495 founding price.',
+    // 2026-05-26 redesign — Heights-focused, problem-led hero. Replaces the
+    // previous feature-led "Custom website. In 14 days. From $1,495." which
+    // the Clarity scroll data (week 2026-05-18) showed losing 47% of visitors
+    // by 20% scroll depth. New hero leads with the buyer's pain (phone not
+    // ringing), introduces Suhaib by name to differentiate from agency
+    // competitors, and offers a free audit as the primary CTA so cold paid
+    // traffic has a low-friction conversion path.
+    heroEyebrow: 'Houston Heights · One-person studio',
+    heroHeadline: "Your phone isn't ringing. Let's fix the site that's costing you those calls.",
+    heroSub:
+      "I'm Suhaib, a senior developer running a one-person studio out of the Heights. Two ways we can start: paste your URL below and get a free written audit with 3 specific fixes (within one business day, no call required), or if you want a rebuild, I ship a fast 5-page site in 14 days, from $1,495 founding price.",
+    // Photo of a Houston-style neighborhood storefront block — speaks to the
+    // local small-business audience without being location-specific enough to
+    // alienate non-Heights TX visitors who occasionally land here.
+    heroBackgroundUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80',
+    heroPrimaryCta: { label: 'Get my free audit', href: '#audit' },
+    heroSecondaryCta: { label: 'Or book a 30-min call', href: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call' },
     starterPriceLine: 'founding price · 14-day delivery',
     starterFeatures: [
       '5 bespoke pages designed for your business',
@@ -321,14 +405,15 @@ const LANDING_PAGES: NicheLpInput[] = [
       'First month of hosting free, then $99/mo bundle price',
       '14-day delivery, guaranteed in writing',
     ],
-    // bookingBg removed — Calendly section sits next to Stats which has bg
-    // bookingBg: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1920&q=80',
     statsBg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=80',
+    calendlyHeadline: 'Want to talk it through? Book a Heights-local 30-min call.',
     faqItems: [
-      { question: 'What if I don’t like the design?', answer: 'You see a Figma mockup before any code is written. If the mockup isn’t right, we iterate until it is. The 14-day clock doesn’t start until you approve the design direction.' },
-      { question: 'Do I own the code?', answer: 'Yes. The code lives in a GitHub repo we hand over to you on launch. No proprietary lock-in.' },
-      { question: 'Can you work with my existing brand?', answer: 'Yes. If you have a logo, color palette, and fonts, we use them.' },
-      { question: 'Where are you based — and do you take remote clients?', answer: 'Houston, Texas. Most of our clients are remote, across the U.S. and a few international. Time zones are rarely an issue.' },
+      { question: 'What exactly is in the free site audit?', answer: 'Paste your URL and a sentence on what feels broken. Within one business day, I send an email back with three specific things to fix on your site — what they are, why they matter, and what each is roughly costing you. No call required. No pitch. If you want me to do the fixes, the Site Health Sprint at $297 covers it.' },
+      { question: 'What does the $297 Site Health Sprint cover?', answer: 'You pick three fixes from a menu: mobile responsiveness, page speed, Google Business Profile setup, contact form + GA4 tracking, hero rewrite, SEO basics (title/meta/OG tags), missing-section add (testimonials block, services block, etc.), or broken images/links cleanup. Delivered in 5 days with a before-and-after Lighthouse report. 30-day fix guarantee.' },
+      { question: "What if I don't like the design?", answer: 'You see a Figma mockup before any code is written. If the mockup is not right, we iterate until it is. The 14-day clock does not start until you approve the design direction.' },
+      { question: 'Do I own the code?', answer: 'Yes. The code lives in a GitHub repo I hand over to you on launch. No proprietary lock-in.' },
+      { question: 'Can you work with my existing brand?', answer: 'Yes. If you have a logo, color palette, and fonts, I use them.' },
+      { question: 'Where are you based?', answer: "Houston Heights. Most of my clients are within a few miles of the studio, but I work with remote clients across Texas and the U.S. too. If you'd rather meet in person, I can come to you anywhere from the Heights down to Montrose or East End." },
     ],
   },
   {
@@ -508,46 +593,58 @@ export async function POST() {
   })
   log.push('updated footer (cleared social links)')
 
-  // ── HOMEPAGE — US-focused, no "small business only" framing ─────
+  // ── HOMEPAGE ─────────────────────────────────────────────────────
+  // 2026-05-26 redesign — problem-led hero with the free audit as primary
+  // CTA, trust signals above the price anchor, and a 3-tier pricing teaser
+  // (Sprint / Starter / Pro) so visitors see the range without being walled
+  // off by a single anchor price. The old "Custom Web Design · United States
+  // & Worldwide" hero averaged 4.66s engagement per GA4 (week 2026-05-18):
+  // visitors weren't connecting to a feature-led headline. New hero leads
+  // with the buyer's pain and a low-friction next step.
   const homeData: any = {
     title: 'Home',
     slug: 'home',
     publishedAt: new Date().toISOString(),
     seo: {
-      metaTitle: 'Black Hart Consulting — Custom websites in 14 days, from $1,495',
+      metaTitle: 'Black Hart Consulting — Free site audit · Custom websites in 14 days from $1,495',
       metaDescription:
-        'A U.S. studio building fast, fixed-price websites for businesses of every size — small, mid-market, and enterprise. 14-day delivery, founding-client pricing.',
+        'Houston-based web studio. Free 5-minute site audit with 3 specific fixes in your inbox within one business day. Or, full custom website built in 14 days, from $1,495.',
     },
     layout: [
       {
         blockType: 'hero',
-        eyebrow: 'Custom Web Design · United States & Worldwide',
-        headline: 'Custom websites in 14 days, from $1,495.',
+        eyebrow: 'Houston · One-person studio',
+        headline: "Custom websites that fix the broken funnel.",
         subheadline:
-          'A solo developer shipping fast, fixed-price websites for businesses across the U.S. and around the world. One bill, one accountable owner, no agency overhead — that’s how we keep prices honest and timelines short.',
+          "Hi, I'm Suhaib. I build fast, fixed-price websites for businesses across the U.S. — out of a one-person studio in Houston. Two ways we can start: paste your URL below for a free 5-minute audit (3 specific fixes, in your inbox within one business day), or jump to a full rebuild from $1,495 founding price.",
         align: 'left',
         // Person at a laptop preparing to start a client meeting — adds a
-        // human-touch element to the homepage hero (replaces the abstract
-        // workspace photo previously shared with /portfolio).
+        // human-touch element to the homepage hero.
         backgroundImageUrl: 'https://images.unsplash.com/photo-1573497019418-b400bb3ab074?w=1920&q=80',
-        // Heavy (not extra-heavy) so the photo shows faintly behind the
-        // headline — same treatment as About / Services / Contact / LP heroes
-        // for visual consistency across the site.
         overlayStrength: 'heavy',
         ctas: [
-          { label: 'Book a 30-min discovery call', href: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call', variant: 'primary' },
-          { label: 'See the offer', href: '/#pricing', variant: 'ghost' },
+          { label: 'Get my free audit', href: '#audit', variant: 'primary' },
+          { label: 'Book a 30-min call', href: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call', variant: 'ghost' },
         ],
-        // Phone CTA under hero buttons — captures voice-preferring inbound
-        // callers without requiring a Calendly booking or contact form.
         showPhoneCta: true,
       },
-      FOUNDING_BANNER,
-      // Homepage simplification (rec #1): Stats block removed — content lives
-      // on /services. Same for the BUNDLES block further down. Goal is to
-      // collapse the homepage decision-load: hero → founding banner →
-      // services → ONE pricing teaser (Starter only) with link to /services
-      // → Calendly → recent work → testimonial → FAQ.
+      // Trust band first — three quick numbers establish credibility before
+      // any ask. Replaces the founding-banner-immediately-after-hero pattern
+      // that anchored visitors to price before any reason to believe.
+      {
+        blockType: 'stats',
+        eyebrow: 'How we work',
+        headline: 'Three things we promise.',
+        items: [
+          { value: '14 days', label: 'Site live, every time', description: 'Fixed scope, fixed price, fixed launch date.' },
+          { value: '<200KB', label: 'First-paint JavaScript', description: 'Loads under a second on the worst phone in your customer base.' },
+          { value: 'Same-week', label: 'Edits after launch', description: 'Need a price changed, hours updated, photo swapped? Done within five business days.' },
+        ],
+      },
+      // Primary lead-capture — the free site audit. Anchored as #audit so the
+      // hero CTA scrolls straight here. Low-friction conversion path for cold
+      // ad traffic that won't book a call cold.
+      AUDIT_FORM,
       {
         blockType: 'services',
         eyebrow: 'What we do',
@@ -577,37 +674,52 @@ export async function POST() {
           ], downloadHref: '/downloads/service-addons' },
         ],
       },
-      // Homepage pricing TEASER — Starter Site only (the most-bought tier).
-      // The full 3-tier grid + Custom Build + Care + SEO + add-ons live on
-      // /services. The CTA on this teaser links to /services for visitors
-      // who want to compare or browse beyond Starter.
+      // Founding banner anchors the discount frame AFTER the audit form and
+      // services have warmed the visitor up. Keeps the founding-client
+      // narrative without using it as a cold-traffic price wall.
+      FOUNDING_BANNER,
+      // 3-tier pricing teaser: Sprint as the easy-yes, Starter (highlighted)
+      // as the main offer, Pro as the upmarket. Single Page lives on
+      // /services for solopreneurs/event campaigns who arrive via the
+      // "See all pricing" link below.
       {
         blockType: 'pricing',
-        eyebrow: 'Starter pricing',
-        headline: 'Most clients start here.',
-        description: 'Founding-client pricing on our most-popular tier. Want a comparison or a different size build? See all pricing →',
-        layoutVariant: 'centered-single',
-        tiers: [HOMEPAGE_PRICING_TIERS[1]],
+        eyebrow: 'Pricing',
+        headline: 'Three ways to work together.',
+        description:
+          "Start with the Sprint if you just need fixes. Jump to Starter if you want a rebuild. Go Pro if you need content + SEO + multi-location depth from day one. Want the full menu? See all pricing →",
+        // HOMEPAGE_PRICING_TIERS = [Sprint, Single Page, Starter, Pro].
+        // Show 3 on the homepage; Single Page hidden here, visible on /services.
+        tiers: [HOMEPAGE_PRICING_TIERS[0], HOMEPAGE_PRICING_TIERS[2], HOMEPAGE_PRICING_TIERS[3]],
       },
-      // Secondary CTA leading into the full pricing page — not a Calendly
-      // ask, just a softer "browse more" path for visitors who aren't yet
-      // ready to book but want to compare.
       {
         blockType: 'cta',
-        headline: 'See every package, every price, every deliverable.',
-        description: 'Single Page · Starter · Pro · Custom Build · Care plans · Local SEO · quick-win add-ons — all on one page, every number visible.',
+        headline: 'Want the full pricing menu?',
+        description: 'Single Page · Sprint · Starter · Pro · Custom Build · Care plans · Local SEO · quick-win add-ons — every number visible, no quote forms.',
         primaryCta: { label: 'See all pricing →', href: '/services' },
         variant: 'default',
       },
+      // Featured work — social proof through finished projects.
+      {
+        blockType: 'featuredProjects',
+        eyebrow: 'Recent work',
+        headline: "A few projects we're proud of.",
+        description: 'Each case study covers what we shipped, why it works, and what changed for the client.',
+        mode: 'latest',
+        limit: 3,
+        viewAllLabel: 'View all projects',
+        viewAllHref: '/portfolio',
+      },
+      // Testimonials — pulled from the Testimonials collection (featured=true).
+      { blockType: 'testimonials', eyebrow: 'What clients said', headline: 'Real work, real businesses.', mode: 'latest', limit: 6 },
+      // Calendly for visitors who'd rather talk than fill the audit form.
       calendly({
-        headline: 'Book a call — or email if you prefer.',
-        description: 'Thirty minutes on Calendly to scope your project, or send a note if a call is not your style.',
+        headline: "Rather talk it through? Book 30 minutes.",
+        description: 'Pick any open time. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.',
         mode: 'popup',
         emailFallback: true,
       }),
-      // Lead magnet — low-friction CTA for visitors who aren't ready to book
-      // a call. Downloading the checklist fires `pdf_download` to the dataLayer
-      // which we treat as a soft conversion (Google Ads "Secondary action").
+      // Lead magnet — fires `pdf_download` as a soft conversion in Google Ads.
       {
         blockType: 'leadMagnet',
         eyebrow: 'Free resource',
@@ -618,24 +730,6 @@ export async function POST() {
         fineprint: 'PDF · 2 pages · no email required',
       },
       {
-        blockType: 'featuredProjects',
-        eyebrow: 'Recent work',
-        headline: 'A few projects we’re proud of.',
-        description: 'Each case study covers what we shipped, why it works, and what changed for the client.',
-        mode: 'latest',
-        limit: 3,
-        viewAllLabel: 'View all projects',
-        viewAllHref: '/portfolio',
-      },
-      // Testimonials block uses the same carousel render as the LP version —
-      // pulls all featured testimonials from the admin (Testimonials
-      // collection, `featured: true`), capped at `limit`. Bump this if you
-      // add more testimonials and want them all to rotate on the home hero.
-      { blockType: 'testimonials', eyebrow: 'What clients said', headline: 'Real work, real businesses.', mode: 'latest', limit: 6 },
-      // Auto mode pulls featured FAQs from the admin collection (single source
-      // of truth across home + LPs + about + services + contact). Edit a FAQ
-      // once and it propagates everywhere on the next 60s cache window.
-      {
         blockType: 'faq',
         eyebrow: 'Common questions',
         headline: 'Everything you wanted to ask.',
@@ -644,10 +738,10 @@ export async function POST() {
       },
       {
         blockType: 'cta',
-        headline: 'Let’s talk about your site.',
-        description: 'No hard sell. A 30-minute discovery call where we figure out what you need, what it would cost, and whether we’re a fit.',
-        primaryCta: { label: 'Book a 30-min discovery call', href: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call' },
-        secondaryCta: { label: 'See the portfolio', href: '/portfolio' },
+        headline: "Still here? Get the free audit.",
+        description: 'Three specific fixes, in your inbox within a business day. No call required. If you would rather talk, book a 30-min discovery call below.',
+        primaryCta: { label: 'Get my free audit', href: '#audit' },
+        secondaryCta: { label: 'Book a 30-min call', href: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call' },
         variant: 'emphasized',
         backgroundImageUrl: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&q=80',
       },
@@ -668,7 +762,16 @@ export async function POST() {
     log.push('updated home')
   }
 
-  // ── CONTACT — add Calendly above the form ──────────────────────
+  // ── CONTACT ─────────────────────────────────────────────────────
+  // 2026-05-26 redesign — /contact saw 50 views from 7 active users in the
+  // week of 2026-05-18 (multiple revisits per user) but produced ZERO real
+  // inquiries: the only submissions were spam. High-intent traffic, blocked
+  // funnel. Likely cause: the only paths offered were a 30-min Calendly
+  // booking and a long form (company + project type + budget required) —
+  // both high-commitment for a visitor still deciding whether to engage.
+  // New flow: lead with the audit (lowest friction), then a slimmer inquiry
+  // form (no project type / budget), then Calendly as the third option.
+  // Three explicit paths matching the three commitment levels.
   const contactData: any = {
     title: 'Contact',
     slug: 'contact',
@@ -676,37 +779,48 @@ export async function POST() {
     seo: {
       metaTitle: 'Contact — Black Hart Consulting',
       metaDescription:
-        'Send a note about your project or book a 30-minute discovery call. We reply within one business day from hello@blackhartconsulting.com.',
+        'Three ways to reach Suhaib: free site audit, written inquiry, or a 30-minute discovery call. We reply within one business day.',
     },
     layout: [
       {
         blockType: 'hero',
-        eyebrow: 'Get in touch',
-        headline: 'Tell us about your business.',
+        eyebrow: 'Three ways to start',
+        headline: "Get in touch the way that's easiest.",
         subheadline:
-          'A sentence on what you do, a sentence on what you’re trying to fix or build, and a rough budget if you have one. Or just book directly below.',
+          "Free audit if you just want a second opinion. Written inquiry if you have a project in mind. Discovery call if you'd rather talk it through. All three reach me directly — no account manager, no junior handoff.",
         align: 'left',
         backgroundImageUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1920&q=80',
         overlayStrength: 'heavy',
+        ctas: [
+          { label: 'Get the free audit', href: '#audit', variant: 'primary' },
+          { label: 'Send an inquiry', href: '#inquiry', variant: 'ghost' },
+          { label: 'Book a call', href: '#book', variant: 'ghost' },
+        ],
+        showPhoneCta: true,
       },
-      calendly({
-        headline: 'Book a 30-min intro call.',
-        description:
-          'Pick any open time. We will walk through what you need, ballpark a price, and figure out whether we are a fit.',
-        mode: 'inline',
-      }),
+      // Path 1 — free audit (lowest friction).
+      AUDIT_FORM,
+      // Path 2 — written inquiry (slimmed down: no project type, no budget).
+      // Per the 2026-05-26 redesign analysis, the long form was likely the
+      // friction that kept high-intent /contact visitors from converting.
       {
         blockType: 'contactForm',
-        eyebrow: 'Or drop us a note',
-        headline: 'Send a written inquiry.',
-        description: 'If a call isn’t your thing, send us a note — we reply within one business day.',
+        eyebrow: 'Inquiry',
+        headline: 'Have a project in mind? Send a note.',
+        description: "A sentence or two on what you do and what you're trying to fix or build. I reply within one business day.",
         showCompanyField: true,
-        showProjectTypeField: true,
-        showBudgetField: true,
+        showProjectTypeField: false,
+        showBudgetField: false,
         submitLabel: 'Send inquiry',
       },
-      // Auto FAQ — same centralized collection as everywhere else. Capped
-      // tighter on /contact since visitors here are already mid-funnel.
+      // Path 3 — Calendly call. Inline so visitors can pick a time without
+      // leaving the page.
+      calendly({
+        headline: 'Book a 30-min discovery call.',
+        description:
+          'Pick any open time. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.',
+        mode: 'inline',
+      }),
       {
         blockType: 'faq',
         eyebrow: 'Common questions',
@@ -1111,10 +1225,25 @@ export async function POST() {
   // sortOrder controls display order. Spaced by 10s so it's easy to slot
   // a new FAQ in the middle without renumbering everyone.
   const FAQ_SEED: Array<{ question: string; answer: string; category: 'pricing' | 'process' | 'ownership' | 'care'; sortOrder: number }> = [
+    // 2026-05-26 redesign — surface the free audit + Site Health Sprint FAQs
+    // first, since they map to the new top-of-funnel CTAs. Existing FAQs
+    // (Starter pricing, founding-client meaning, etc.) shifted down.
+    {
+      category: 'process',
+      sortOrder: 1,
+      question: 'What exactly is in the free site audit?',
+      answer: "Paste your URL and a sentence on what feels broken. Within one business day, I send an email back with three specific things to fix on your site, what they are, why they matter, and what each is roughly costing you in lost calls or bookings. No call required. No pitch. If you want me to do the fixes, the Site Health Sprint at $297 covers it.",
+    },
+    {
+      category: 'pricing',
+      sortOrder: 5,
+      question: 'What does the $297 Site Health Sprint cover?',
+      answer: "You pick three fixes from a menu: mobile responsiveness, page speed (Lighthouse target 85+), Google Business Profile + LocalBusiness schema, contact form with GA4 conversion tracking, hero rewrite, SEO basics (title/meta/OG tags), missing-section add (testimonials block, services block, FAQ, etc.), or broken images/links cleanup. Delivered in 5 days with a before-and-after Lighthouse report. 30-day fix guarantee. Free audit included so you know what to fix before paying.",
+    },
     {
       category: 'pricing',
       sortOrder: 10,
-      question: 'What’s included in the Starter Site at $1,495?',
+      question: "What's included in the Starter Site at $1,495?",
       answer: 'Up to 5 bespoke pages, Payload CMS so your team can edit every section, Google Business Profile setup, LocalBusiness schema markup, contact form pre-wired with GA4 conversion tracking, mobile-first responsive design, and 14-day delivery — guaranteed in writing.',
     },
     {

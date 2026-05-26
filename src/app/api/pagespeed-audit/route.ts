@@ -88,10 +88,21 @@ export async function POST(req: Request) {
   // PSI can take 20-60s for a cold run. 90s ceiling to fail-fast on edge cases.
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 90_000)
+  // Build request headers. When the Google Cloud API key has an HTTP-referrer
+  // application restriction (the recommended setting so a leaked key can't be
+  // used from arbitrary origins), Google rejects server-side requests with
+  // no Referer header as `API_KEY_HTTP_REFERRER_BLOCKED`. We send a Referer
+  // that matches the site's public URL so the restriction is satisfied
+  // without weakening it.
+  const headers: Record<string, string> = { Accept: 'application/json' }
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  if (apiKey && siteUrl) {
+    headers.Referer = siteUrl.endsWith('/') ? siteUrl : `${siteUrl}/`
+  }
   try {
     const res = await fetch(psiUrl.toString(), {
       signal: controller.signal,
-      headers: { Accept: 'application/json' },
+      headers,
     })
     clearTimeout(timeout)
     if (!res.ok) {

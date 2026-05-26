@@ -653,13 +653,16 @@ export async function POST() {
     data: {
       contactEmail: 'hello@blackhartconsulting.com',
       contactPhone: '(866) 434-9777',
+      // Tagline overwritten on every seed so the footer copy stays in sync
+      // with the redesign (no leftover em-dashes from prior wording).
+      tagline: 'Websites, SEO, apps, and hosting. Done right.',
       // Founding cohort counter, edit in admin (SiteSettings global) when
       // a new client signs; this seed only initializes the value.
       foundingSpotsTotal: 5,
       foundingSpotsRemaining: 3,
     } as any,
   })
-  log.push('updated siteSettings (email/phone)')
+  log.push('updated siteSettings (email/phone/tagline)')
 
   // Footer, clear the social array per request (no LinkedIn / GitHub /
   // pseudo-email link in the main site footer). Keep tagline + columns +
@@ -1400,6 +1403,23 @@ export async function POST() {
       answer: 'Book a 30-minute discovery call at blackhartconsulting.com, send a note to hello@blackhartconsulting.com, or call (866) 434-9777. We’ll scope your project, ballpark a price, and tell you whether we’re a fit, no hard sell.',
     },
   ]
+
+  // Prune orphaned FAQs: any featured FAQ whose question text isn't in
+  // FAQ_SEED is a stale row from a prior seed run (e.g. the pre-iteration-2
+  // "What's included in the Starter Site at $1,495?" got renamed to "$999").
+  // Without this cleanup, both versions stay featured and the old text keeps
+  // rendering on the auto FAQ blocks.
+  const seedQuestions = new Set(FAQ_SEED.map((f) => f.question))
+  const allFeatured = await payload.find({
+    collection: 'faqs',
+    where: { featured: { equals: true } },
+    limit: 200,
+  })
+  const stale = allFeatured.docs.filter((doc: any) => !seedQuestions.has(doc.question))
+  for (const doc of stale as any[]) {
+    await payload.delete({ collection: 'faqs', id: doc.id })
+  }
+  if (stale.length > 0) log.push(`pruned ${stale.length} orphaned faqs`)
 
   for (const f of FAQ_SEED) {
     const existing = await payload.find({

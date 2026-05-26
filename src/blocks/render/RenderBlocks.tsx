@@ -13,6 +13,12 @@ import { RichText } from './RichText'
 import { MediaBlock } from './MediaBlock'
 import { Faq } from './Faq'
 import { ContactForm } from './ContactForm'
+import { SiteAuditTool } from './SiteAuditTool'
+
+// Sentinel eyebrow that flips a contactForm block over to the interactive
+// PageSpeed audit tool. Defined here so the value lives next to its only
+// consumer (the dispatch below).
+const PAGESPEED_AUDIT_EYEBROW = 'PageSpeed audit'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import type { Page, SiteSetting } from '@/payload-types'
 
@@ -52,14 +58,30 @@ export async function RenderBlocks({ blocks, phoneOverride }: { blocks: RenderBl
           case 'richText':        return <RichText key={key} {...b} />
           case 'mediaBlock':      return <MediaBlock key={key} {...b} />
           case 'faq':             return <Faq key={key} {...b} />
-          case 'contactForm':     return (
-            <ContactForm
-              key={key}
-              {...b}
-              contactEmail={siteSettings?.contactEmail ?? null}
-              contactPhone={effectivePhone}
-            />
-          )
+          case 'contactForm':
+            // Sentinel-eyebrow swap: a contactForm block whose eyebrow exactly
+            // equals the PageSpeed-audit sentinel renders the interactive
+            // audit tool instead of the regular contact form. Pragmatic
+            // workaround for adding a new Payload block type without a
+            // schema + migration cycle.
+            if (b.eyebrow === PAGESPEED_AUDIT_EYEBROW) {
+              return (
+                <SiteAuditTool
+                  key={key}
+                  eyebrow={b.eyebrow}
+                  headline={b.headline}
+                  description={b.description}
+                />
+              )
+            }
+            return (
+              <ContactForm
+                key={key}
+                {...b}
+                contactEmail={siteSettings?.contactEmail ?? null}
+                contactPhone={effectivePhone}
+              />
+            )
           default:                return null
         }
       })}

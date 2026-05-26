@@ -115,21 +115,25 @@ const LP_CONTACT_FORM = {
 // 47% scroll-depth dropoff at the founding-pricing block (per Clarity data
 // week of 2026-05-18) no longer kills the conversion path before any CTA
 // is offered.
-const AUDIT_FORM = {
+// 2026-05-27 — AUDIT_FORM (24h written audit) replaced by AUDIT_TOOL (instant
+// PageSpeed Insights via /api/pagespeed-audit). The eyebrow "PageSpeed audit"
+// is a sentinel watched by RenderBlocks that swaps the contactForm renderer
+// for SiteAuditTool. Anchor stays #audit so the hero CTA still scrolls here.
+// Kept in the contactForm block-type slot so we avoid a Payload schema
+// migration for a one-block experiment.
+const AUDIT_TOOL = {
   blockType: 'contactForm',
-  // Eyebrow slug becomes the section id (#audit) so the hero CTA can deep-link
-  // straight to the form. Keep it terse, the headline carries the framing.
-  eyebrow: 'Audit',
-  headline: 'Paste your website. Get 3 specific fixes in 24 hours.',
+  eyebrow: 'PageSpeed audit',
+  headline: 'How fast is your site, actually?',
   description:
-    "Drop your URL and a sentence on what feels broken. Within one business day, you get an email with three specific things to fix on your site, why they matter, and what each is costing you. Free. No call required. No pitch.",
-  successMessage:
-    "Got it. Your audit will land in your inbox within one business day. If you'd like a faster reply, text the number below, I check texts before email.",
+    "Paste your URL. We run the same Lighthouse audit Google uses, then show you all four scores in about 30 seconds. No email required. If something is broken, the $297 Site Health Sprint covers three specific fixes shipped in five days.",
   showCompanyField: false,
   showProjectTypeField: false,
   showBudgetField: false,
-  submitLabel: 'Send me my audit',
 }
+// Keep the old name as an alias so the existing references in the seed still
+// resolve; both names point to the same audit-tool block now.
+const AUDIT_FORM = AUDIT_TOOL
 
 // Calendly block factory, defaulted to the BHC subscription URL. Suhaib
 // updates this once per LP via the admin if he wants different event types
@@ -323,9 +327,17 @@ function makeNicheLandingPage(input: NicheLpInput) {
         viewAllHref: '',
       },
       // Founding banner anchors the discount frame AFTER trust has been built.
-      FOUNDING_BANNER,
+      // LP-specific banner override: CTA points to #book (Calendly inline)
+      // instead of /contact so visitors don't bounce off the LP. Spread the
+      // shared FOUNDING_BANNER and only override the cta.
+      { ...FOUNDING_BANNER, cta: { label: 'Claim a founding spot', href: '#book' } },
       // Two-tier pricing pair: Sprint as the easy-yes, and either Starter
       // (small-biz default) or Pro (mid-market override) as the rebuild path.
+      //
+      // 2026-05-27: LP CTAs anchored on-page (no /contact exits). Sprint →
+      // #audit (low-commitment, paste-URL-and-go). Starter / Pro / "Claim a
+      // founding spot" → #book (Calendly inline, matches the higher
+      // commitment level of those clicks).
       {
         blockType: 'pricing',
         eyebrow: 'The offer',
@@ -334,7 +346,7 @@ function makeNicheLandingPage(input: NicheLpInput) {
           input.pricingDescription ??
           'If your site needs a tune-up, start with the 5-day Sprint. If you need a real rebuild, the Starter Site is the founding-client tier most clients pick.',
         tiers: [
-          SITE_HEALTH_SPRINT_TIER,
+          { ...SITE_HEALTH_SPRINT_TIER, cta: { label: 'Start the Sprint', href: '#audit' } },
           input.pricingTier === 'pro'
             ? {
                 name: 'Pro Site',
@@ -344,7 +356,7 @@ function makeNicheLandingPage(input: NicheLpInput) {
                 description: 'Mid-market build. Up to 12 pages, multi-location welcome, full blog + content workflow.',
                 highlighted: true,
                 features: (input.proFeatures ?? input.starterFeatures).map((label) => ({ label, included: true })),
-                cta: { label: 'Claim a founding spot', href: '/contact?tier=pro' },
+                cta: { label: 'Claim a founding spot', href: '#book' },
               }
             : {
                 name: 'Starter Site',
@@ -354,7 +366,7 @@ function makeNicheLandingPage(input: NicheLpInput) {
                 description: '5-page website, mobile-first, live in 14 days.',
                 highlighted: true,
                 features: input.starterFeatures.map((label) => ({ label, included: true })),
-                cta: { label: 'Claim a founding spot', href: '/contact?tier=starter' },
+                cta: { label: 'Claim a founding spot', href: '#book' },
               },
         ],
       },

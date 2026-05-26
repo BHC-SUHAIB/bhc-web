@@ -107,7 +107,18 @@ export function Pricing(b: PricingBlock) {
               <h3 className="font-serif font-semibold text-[22px] mb-2">{t.name}</h3>
               <div className="mb-4">
                 <div className="flex items-baseline flex-wrap gap-x-3">
-                  <span className="font-serif font-semibold text-[40px] tracking-[-0.025em] leading-none">{t.price}</span>
+                  {/* Brass-colored price on the highlighted tier so the LP's
+                      headline number (e.g. $999 on express-website, $2,495
+                      on houston-midmarket) pops visually against the other
+                      tier in the pair. Added 2026-05-27 per dev review. */}
+                  <span
+                    className={cn(
+                      'font-serif font-semibold text-[40px] tracking-[-0.025em] leading-none',
+                      t.highlighted && 'text-[var(--color-brass)]',
+                    )}
+                  >
+                    {t.price}
+                  </span>
                   {/* Discount display: original price renders strikethrough next
                       to the current price when set. Replaces the older "was $X"
                       pattern that lived inside priceNote. */}

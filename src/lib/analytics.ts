@@ -11,14 +11,16 @@
 // guard makes the function a no-op during SSR.
 
 type EventName =
-  | 'generate_lead'        // Contact form submit success — primary Google Ads conversion
-  | 'phone_click'          // tel: link clicked
-  | 'email_click'          // mailto: link clicked
-  | 'pricing_cta_click'    // Click on a pricing tier CTA
-  | 'hero_cta_click'       // Click on a hero CTA
-  | 'booking_click'        // Click on Cal.com / Calendly link (intent signal)
-  | 'booking_completed'    // Calendly redirect-back fired this — they actually booked
-  | 'pdf_download'         // Click on a one-pager / lead-magnet download button
+  | 'generate_lead'              // Contact form submit success — primary Google Ads conversion
+  | 'phone_click'                // tel: link clicked
+  | 'email_click'                // mailto: link clicked
+  | 'pricing_cta_click'          // Click on a pricing tier CTA
+  | 'hero_cta_click'             // Click on a hero CTA
+  | 'booking_click'              // Click on Cal.com / Calendly link (intent signal)
+  | 'booking_completed'          // Calendly redirect-back fired this — they actually booked
+  | 'pdf_download'               // Click on a one-pager / lead-magnet download button
+  | 'pagespeed_audit_started'    // Visitor submitted a URL to the PSI audit tool
+  | 'pagespeed_audit_completed'  // PSI returned scores; engagement signal
 
 type EventParams = {
   /** Page or section the event fired from. */

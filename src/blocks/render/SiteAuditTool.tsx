@@ -169,9 +169,19 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
               </div>
             ) : null}
             <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+              {/* type="text" (not "url") so visitors can type a bare domain
+                  like "godaddy.com" without the browser blocking submit with
+                  a protocol-validation error. The API route normalises the
+                  raw value (prepends https:// when no scheme is present)
+                  before calling PSI, so the server is the single source of
+                  truth for URL shape. */}
               <input
-                type="url"
+                type="text"
                 required
+                inputMode="url"
+                autoComplete="url"
+                autoCapitalize="none"
+                spellCheck={false}
                 placeholder="yoursite.com"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}

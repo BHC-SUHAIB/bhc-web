@@ -72,6 +72,19 @@ export async function POST(req: Request) {
   psiUrl.searchParams.set('strategy', strategy)
   CATEGORIES.forEach((c) => psiUrl.searchParams.append('category', c))
 
+  // Attach a Google Cloud API key when one is configured. Without a key,
+  // Google groups every anonymous PSI request from a shared IP under the
+  // same project quota (which is tiny and easily exhausted by other tenants
+  // on the same network). With a key the call counts against the project's
+  // own 25k-queries-per-day budget. Provision a key at:
+  //   https://console.cloud.google.com/apis/credentials
+  // and add PAGESPEED_API_KEY=<key> to the droplet's .env, then:
+  //   docker compose up -d --force-recreate web
+  const apiKey = process.env.PAGESPEED_API_KEY
+  if (apiKey) {
+    psiUrl.searchParams.set('key', apiKey)
+  }
+
   // PSI can take 20-60s for a cold run. 90s ceiling to fail-fast on edge cases.
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 90_000)
@@ -83,13 +96,19 @@ export async function POST(req: Request) {
     clearTimeout(timeout)
     if (!res.ok) {
       const errBody: { error?: { message?: string } } = await res.json().catch(() => ({}))
+      const rawMsg = errBody?.error?.message ?? ''
+      // Surface a friendly message for the common Google quota error. The raw
+      // PSI text is a 200-character mouthful about consumer projects and SKUs
+      // that scares visitors. Map it to plain English.
+      const isQuota = res.status === 429 || /quota/i.test(rawMsg)
+      const friendly = isQuota
+        ? "We've hit Google's PageSpeed audit limit for the day. Try again tomorrow, or text me your URL at the number below for a written audit within one business day."
+        : rawMsg
+          ? `PageSpeed Insights couldn't audit that site. ${rawMsg.slice(0, 200)}`
+          : 'PageSpeed Insights returned an error. The site may block crawlers or be down.'
       return NextResponse.json(
-        {
-          error: 'psi_error',
-          status: res.status,
-          message: errBody?.error?.message ?? 'PageSpeed Insights returned an error. The site may block crawlers or be down.',
-        },
-        { status: 502 },
+        { error: isQuota ? 'quota_exceeded' : 'psi_error', status: res.status, message: friendly },
+        { status: isQuota ? 429 : 502 },
       )
     }
     type PsiResp = {

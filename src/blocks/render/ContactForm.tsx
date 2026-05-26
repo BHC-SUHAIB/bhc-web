@@ -163,7 +163,7 @@ export function ContactForm(b: ContactFormProps) {
               <path d="M20 6L9 17l-5-5" />
             </svg>
             <p className="font-serif text-[22px] leading-[1.3] tracking-[-0.015em]">
-              {b.successMessage ?? 'Thanks \u2014 we\u2019ll reply within one business day.'}
+              {b.successMessage ?? 'Thanks. We\u2019ll reply within one business day.'}
             </p>
           </div>
         ) : (
@@ -235,7 +235,7 @@ export function ContactForm(b: ContactFormProps) {
                 autoComplete="tel"
                 inputMode="tel"
                 className={inputCls}
-                placeholder="+1 (555) 123-4567 — international welcome"
+                placeholder="+1 (555) 123-4567 · international welcome"
                 value={phoneValue}
                 onChange={(e) => setPhoneValue(e.target.value)}
               />

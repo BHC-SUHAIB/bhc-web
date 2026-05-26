@@ -1413,14 +1413,27 @@ export async function POST() {
       // Don't clobber edits, only update sortOrder + category to keep the
       // canonical structure in sync. Question + answer are admin-controlled
       // after first seed.
+      //
+      // 2026-05-26 update: this used to skip question + answer to preserve
+      // admin edits, but iteration 2 of the redesign needed pricing FAQs
+      // to track the new $999 / $2,495 founding numbers. The seed is now
+      // authoritative for FAQ text; admin edits will be clobbered by a
+      // re-seed. If preserving admin edits matters later, gate the answer
+      // overwrite behind an env flag.
       await payload.update({
         collection: 'faqs',
         id: existing.docs[0].id,
-        data: { sortOrder: f.sortOrder, category: f.category, featured: true } as any,
+        data: {
+          question: f.question,
+          answer: f.answer,
+          sortOrder: f.sortOrder,
+          category: f.category,
+          featured: true,
+        } as any,
       })
     }
   }
-  log.push(`seeded ${FAQ_SEED.length} faqs (idempotent)`)
+  log.push(`seeded ${FAQ_SEED.length} faqs (question + answer authoritative)`)
 
   // ── LANDING PAGES ──────────────────────────────────────────────
   for (const lp of LANDING_PAGES) {

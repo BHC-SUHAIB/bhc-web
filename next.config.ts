@@ -78,6 +78,34 @@ const nextConfig: NextConfig = {
   //
   // `must-revalidate` keeps freshness guarantees on actual reloads. Scoped to
   // public marketing pages only; admin/portal/invoice/etc. keep no-store.
+  // Serve password-gated prospect concept previews under clean URLs
+  // (/p/<slug>/<tier>) without an .html suffix. The auth gate is enforced
+  // upstream by proxy.ts; this rewrite just maps the clean URL to the
+  // static file Next.js serves out of public/p/<slug>/<tier>.html.
+  //
+  // The :tier matcher is intentionally loose (no enum) so adding a new
+  // prospect with custom tier names doesn't require editing this file —
+  // just edit data/prospects.json and drop the HTML into public/p/<slug>/.
+  // Requests for tier names that don't have a matching HTML file fall
+  // through to Next.js's normal 404.
+  async rewrites() {
+    return [
+      { source: '/p/:slug/:tier', destination: '/p/:slug/:tier.html' },
+    ]
+  },
+
+  // Migrate the old /spotless/* URLs (shipped before the /p/<slug>/<tier>
+  // system existed) to the new layout. Any links Suhaib already shared with
+  // Spotless Car Spa keep working via the 308.
+  async redirects() {
+    return [
+      { source: '/spotless',                                                         destination: '/p/spotlesscarspa/signature', permanent: true },
+      { source: '/spotless/:tier(essentials|studio|signature)',                      destination: '/p/spotlesscarspa/:tier',     permanent: true },
+      { source: '/spotless/:tier(essentials|studio|signature)/preview',              destination: '/p/spotlesscarspa/:tier',     permanent: true },
+      { source: '/spotless/:tier(essentials|studio|signature)/index.html',           destination: '/p/spotlesscarspa/:tier',     permanent: true },
+      { source: '/spotless/:tier(essentials|studio|signature)/preview.html',         destination: '/p/spotlesscarspa/:tier',     permanent: true },
+    ]
+  },
   async headers() {
     const bfCacheHeaders = [
       { key: 'Cache-Control', value: 'private, max-age=0, must-revalidate' },

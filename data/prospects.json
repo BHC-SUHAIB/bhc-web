@@ -1,0 +1,9 @@
+{
+  "spotlesscarspa": {
+    "password": "Spotless$11",
+    "label": "Spotless Car Spa",
+    "tiers": ["essentials", "studio", "signature"],
+    "defaultTier": "signature",
+    "created": "2026-05-28"
+  }
+}

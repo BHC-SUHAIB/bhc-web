@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Spotless Car Spa — Houston's hand-wash detail house on South Shepherd. Book a slot, view our work, learn the process." />
+<title>Spotless Car Spa — Hand-Wash Detail · Houston</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0908;
+    --bg-2: #100e0b;
+    --surface: #161310;
+    --surface-2: #1f1b16;
+    --border: rgba(245, 239, 223, 0.08);
+    --border-strong: rgba(245, 239, 223, 0.18);
+    --text: #f5efdf;
+    --text-2: #c9c2b2;
+    --text-3: #8a8478;
+    --brass: #c8a55d;
+    --brass-2: #e0bd76;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --max: 1340px;
+    --pad: clamp(20px, 4vw, 56px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: 0; background: transparent; color: inherit; }
+  h1, h2, h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+  }
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); position: relative; z-index: 2; }
+  section { position: relative; z-index: 2; }
+
+  /* Nav */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 18px var(--pad);
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 100;
+    transition: all 0.4s var(--ease);
+  }
+  .nav.scrolled {
+    background: rgba(10, 9, 8, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .logo-mark {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brass-2), #8a6f3a);
+    display: flex; align-items: center; justify-content: center;
+    color: #0a0908;
+    font-weight: 600;
+    font-size: 15px;
+    font-family: 'Fraunces', serif;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--text-2);
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--brass); }
+  .nav-cta {
+    padding: 10px 22px;
+    border: 1px solid var(--brass);
+    border-radius: 999px;
+    color: var(--brass);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.25s;
+  }
+  .nav-cta:hover { background: var(--brass); color: #0a0908; }
+
+  /* Hero */
+  .hero {
+    height: 100vh;
+    min-height: 700px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 var(--pad) clamp(50px, 8vh, 100px);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url("https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=2200&q=85&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center 40%;
+  }
+  .hero-grad {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(10, 9, 8, 0.5) 0%, rgba(10, 9, 8, 0.25) 35%, rgba(10, 9, 8, 0.92) 100%),
+      linear-gradient(90deg, rgba(10, 9, 8, 0.65), transparent 60%);
+  }
+  .hero-content { position: relative; z-index: 2; max-width: var(--max); margin: 0 auto; width: 100%; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 14px;
+    margin-bottom: 26px;
+    opacity: 0; animation: fadeUp 1s var(--ease) 0.3s forwards;
+  }
+  .hero-eyebrow::before { content: ""; width: 36px; height: 1px; background: var(--brass); }
+  h1.hero-title {
+    font-size: clamp(60px, 10.5vw, 172px);
+    font-weight: 300;
+    line-height: 0.88;
+    margin-bottom: 30px;
+    opacity: 0; animation: fadeUp 1.1s var(--ease) 0.45s forwards;
+  }
+  h1.hero-title em { font-style: italic; color: var(--brass-2); }
+  .hero-sub {
+    max-width: 540px;
+    font-size: clamp(15px, 1.3vw, 18px);
+    color: var(--text-2);
+    margin-bottom: 36px;
+    opacity: 0; animation: fadeUp 1.1s var(--ease) 0.65s forwards;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; opacity: 0; animation: fadeUp 1.1s var(--ease) 0.8s forwards; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 17px 30px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.25s var(--ease);
+  }
+  .btn-primary { background: var(--brass); color: #0a0908; }
+  .btn-primary:hover { background: var(--brass-2); transform: translateY(-1px); }
+  .btn-ghost { border: 1px solid var(--border-strong); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--brass); color: var(--brass); }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Marquee */
+  .marquee {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    background: var(--bg-2);
+    position: relative;
+    z-index: 3;
+  }
+  .marquee-track {
+    display: flex; gap: 56px;
+    width: max-content;
+    animation: marqueeScroll 36s linear infinite;
+  }
+  .marquee-item {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--text-2);
+    white-space: nowrap;
+  }
+  .marquee-item .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--brass); }
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+
+  /* About */
+  .about { padding: clamp(80px, 12vh, 140px) 0; }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(40px, 7vw, 100px);
+    align-items: center;
+  }
+  .about-eyebrow { margin-bottom: 24px; }
+  .about h2 {
+    font-size: clamp(38px, 5vw, 68px);
+    margin-bottom: 28px;
+  }
+  .about h2 em { color: var(--brass); font-style: italic; }
+  .about p {
+    color: var(--text-2);
+    font-size: 17px;
+    max-width: 500px;
+    margin-bottom: 16px;
+  }
+  .about-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 3.6vw, 48px);
+    color: var(--brass);
+    line-height: 1; margin-bottom: 6px;
+  }
+  .stat-label { font-size: 11px; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .about-img {
+    aspect-ratio: 4/5;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .about-img img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Section head */
+  .section-head { margin-bottom: 56px; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; }
+  .section-head h2 { font-size: clamp(36px, 5vw, 60px); max-width: 700px; }
+  .section-head h2 em { color: var(--brass); font-style: italic; }
+  .section-head .mono { display: block; margin-bottom: 16px; }
+  .section-head-meta { max-width: 320px; color: var(--text-2); font-size: 15px; }
+
+  /* Services */
+  .services { padding: clamp(80px, 12vh, 140px) 0; background: var(--bg-2); }
+  .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .service-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 30px 26px;
+    border-radius: 4px;
+    display: flex; flex-direction: column;
+    transition: all 0.3s var(--ease);
+  }
+  .service-card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+  .service-card.featured {
+    border-color: rgba(200, 165, 93, 0.3);
+    background: linear-gradient(180deg, rgba(200,165,93,0.06), transparent);
+  }
+  .featured-tag {
+    align-self: flex-start;
+    padding: 4px 10px;
+    background: var(--brass);
+    color: #0a0908;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .service-card h3 { font-size: 24px; margin-bottom: 8px; }
+  .service-card .svc-tag {
+    color: var(--brass);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: block;
+  }
+  .service-card .svc-desc {
+    color: var(--text-2);
+    font-size: 14px;
+    margin-bottom: 22px;
+    min-height: 56px;
+  }
+  .service-card .svc-price {
+    font-family: 'Fraunces', serif;
+    font-size: 42px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .service-card .svc-price .currency { font-size: 20px; color: var(--text-3); vertical-align: top; margin-right: 2px; }
+  .service-card .svc-price-meta { font-size: 11px; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 22px; }
+  .service-card ul { list-style: none; margin-bottom: 22px; flex: 1; }
+  .service-card li {
+    font-size: 13px;
+    color: var(--text-2);
+    padding: 7px 0;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .service-card li::before { content: ""; width: 14px; height: 1px; background: var(--brass); }
+  .service-card li:first-child { border-top: 0; }
+  .svc-cta {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    transition: all 0.25s;
+    text-align: center;
+  }
+  .svc-cta:hover { background: var(--brass); color: #0a0908; border-color: var(--brass); }
+  .service-card.featured .svc-cta { background: var(--brass); color: #0a0908; border-color: var(--brass); }
+
+  /* Pricing scale strip */
+  .scale-strip {
+    margin-top: 44px;
+    padding: 22px 26px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: center; gap: 24px;
+    overflow-x: auto;
+  }
+  .scale-strip .label { white-space: nowrap; }
+  .scale-strip .scale-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px;
+    flex: 1;
+  }
+  .scale-cell { text-align: center; }
+  .scale-cell .vh { font-size: 10px; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .scale-cell .pr { font-family: 'Fraunces', serif; font-size: 22px; color: var(--brass); }
+
+  /* Gallery */
+  .gallery { padding: clamp(80px, 12vh, 140px) 0; }
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px; }
+  .filter-chip {
+    padding: 10px 18px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-2);
+    transition: all 0.25s;
+  }
+  .filter-chip:hover { color: var(--text); border-color: var(--border-strong); }
+  .filter-chip.active { background: var(--brass); color: #0a0908; border-color: var(--brass); }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 90px;
+    gap: 14px;
+  }
+  .ga-item {
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    transition: opacity 0.4s, filter 0.4s;
+  }
+  .ga-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .ga-item:hover img { transform: scale(1.05); }
+  .ga-item.hidden { opacity: 0.15; pointer-events: none; filter: grayscale(0.8); }
+  .ga-1 { grid-column: span 6; grid-row: span 4; }
+  .ga-2 { grid-column: span 6; grid-row: span 2; }
+  .ga-3 { grid-column: span 3; grid-row: span 2; }
+  .ga-4 { grid-column: span 3; grid-row: span 2; }
+  .ga-5 { grid-column: span 4; grid-row: span 3; }
+  .ga-6 { grid-column: span 4; grid-row: span 3; }
+  .ga-7 { grid-column: span 4; grid-row: span 3; }
+  .ga-label {
+    position: absolute; bottom: 12px; left: 12px;
+    padding: 5px 10px;
+    background: rgba(10, 9, 8, 0.78);
+    font-size: 10px; letter-spacing: 0.12em;
+    color: var(--brass);
+    text-transform: uppercase;
+    border-radius: 999px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .ga-item:hover .ga-label { opacity: 1; }
+
+  /* Testimonials */
+  .testimonials { padding: clamp(80px, 12vh, 140px) 0; background: var(--bg-2); }
+  .tcards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .tcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 34px 30px;
+    border-radius: 4px;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .tcard::before {
+    content: "“";
+    position: absolute; top: -8px; left: 22px;
+    font-family: 'Fraunces', serif;
+    font-size: 90px; color: var(--brass);
+    line-height: 1; opacity: 0.3;
+  }
+  .tcard .stars { color: var(--brass); margin-bottom: 18px; font-size: 14px; letter-spacing: 2px; position: relative; }
+  .tcard .quote { font-family: 'Fraunces', serif; font-size: 19px; line-height: 1.42; margin-bottom: 24px; flex: 1; }
+  .tcard .author { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border); }
+  .tcard .author-name { font-weight: 500; font-size: 13px; }
+  .tcard .author-meta { font-size: 12px; color: var(--text-3); }
+  .source-row { display: flex; gap: 24px; margin-top: 36px; padding-top: 26px; border-top: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
+  .source-row .label { font-size: 11px; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .source-row .src { color: var(--text-2); font-size: 13px; font-weight: 500; }
+
+  /* Visit */
+  .visit { padding: clamp(80px, 12vh, 140px) 0; }
+  .visit-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(40px, 6vw, 80px);
+    align-items: stretch;
+  }
+  .visit-map {
+    aspect-ratio: 4/5;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .visit-map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(0.4) brightness(0.85); }
+  .visit-info { display: flex; flex-direction: column; justify-content: center; }
+  .visit-info h2 { font-size: clamp(36px, 4.2vw, 54px); margin-bottom: 22px; }
+  .visit-info h2 em { color: var(--brass); font-style: italic; }
+  .visit-row {
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .visit-row:last-of-type { border-bottom: 1px solid var(--border); }
+  .visit-row .mono { padding-top: 2px; }
+  .visit-row p, .visit-row a { color: var(--text); font-size: 15px; line-height: 1.5; }
+  .visit-row a { color: var(--brass); }
+  .hours-grid { display: grid; grid-template-columns: 1fr auto; gap: 6px 24px; font-size: 14px; }
+  .hours-grid span:nth-child(odd) { color: var(--text-2); }
+  .visit-cta { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* Footer */
+  footer {
+    padding: 70px var(--pad) 36px;
+    border-top: 1px solid var(--border);
+    background: var(--bg-2);
+    position: relative; z-index: 3;
+  }
+  .foot-inner { max-width: var(--max); margin: 0 auto; }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 50px;
+    padding-bottom: 44px;
+    border-bottom: 1px solid var(--border);
+  }
+  .foot-brand h3 { font-size: 32px; font-family: 'Fraunces', serif; margin-bottom: 10px; }
+  .foot-brand p { color: var(--text-3); font-size: 14px; max-width: 300px; }
+  .foot-grid h4 { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); margin-bottom: 16px; font-weight: 500; }
+  .foot-grid a, .foot-grid p { color: var(--text-2); font-size: 14px; display: block; padding: 3px 0; }
+  .foot-grid a:hover { color: var(--brass); }
+  .foot-bottom { padding-top: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+  .foot-bottom .mono { color: var(--text-3); }
+
+  /* Sticky CTA */
+  .sticky-cta {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    z-index: 90;
+    padding: 16px 26px;
+    border-radius: 999px;
+    background: var(--brass);
+    color: #0a0908;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 28px rgba(200, 165, 93, 0.3);
+    transform: translateY(120px);
+    transition: transform 0.5s var(--ease);
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .sticky-cta.show { transform: translateY(0); }
+  .sticky-cta:hover { background: var(--brass-2); }
+  .pulse-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: #0a0908;
+    position: relative;
+  }
+  .pulse-dot::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    background: #0a0908; opacity: 0.5;
+    animation: pulse 2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(3); opacity: 0; }
+  }
+
+  /* Modal — single-step booking REQUEST */
+  .modal-bg {
+    position: fixed; inset: 0;
+    background: rgba(10, 9, 8, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 200;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s var(--ease);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-bg.show { opacity: 1; pointer-events: auto; }
+  .modal {
+    width: 100%; max-width: 580px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    overflow: hidden;
+    transform: translateY(30px) scale(0.97);
+    transition: transform 0.4s var(--ease);
+  }
+  .modal-bg.show .modal { transform: translateY(0) scale(1); }
+  .modal-header {
+    padding: 22px 30px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-header h3 { font-size: 22px; }
+  .modal-header p { font-size: 13px; color: var(--text-3); margin-top: 2px; }
+  .modal-close {
+    width: 34px; height: 34px;
+    border-radius: 50%; border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s;
+  }
+  .modal-close:hover { background: var(--brass); color: #0a0908; border-color: var(--brass); }
+  .modal-body { padding: 26px 30px 30px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .form-group label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--brass);
+  }
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23c8a55d' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+  .form-group textarea { min-height: 80px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-submit {
+    width: 100%;
+    margin-top: 10px;
+    padding: 16px;
+    background: var(--brass);
+    color: #0a0908;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background 0.3s;
+  }
+  .modal-submit:hover { background: var(--brass-2); }
+  .modal-foot-note {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--text-3);
+    text-align: center;
+  }
+
+  /* Success */
+  .success {
+    text-align: center;
+    padding: 30px 10px 10px;
+    display: none;
+  }
+  .success.show { display: block; }
+  .form-wrap.hide { display: none; }
+  .success-mark {
+    width: 70px; height: 70px; margin: 0 auto 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brass-2), #8a6f3a);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 50px rgba(200, 165, 93, 0.3);
+  }
+  .success h4 { font-size: 26px; margin-bottom: 10px; }
+  .success p { color: var(--text-2); max-width: 380px; margin: 0 auto 24px; font-size: 14px; }
+
+  /* Responsive */
+  @media (max-width: 1000px) {
+    .service-grid { grid-template-columns: repeat(2, 1fr); }
+    .visit-grid, .about-grid { grid-template-columns: 1fr; }
+    .tcards, .foot-grid { grid-template-columns: 1fr 1fr; }
+    .scale-strip { flex-direction: column; align-items: flex-start; }
+    .scale-strip .scale-grid { grid-template-columns: repeat(3, 1fr); width: 100%; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    h1.hero-title { font-size: 60px; }
+    .service-grid, .gallery-grid, .tcards, .foot-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(6, 1fr); grid-auto-rows: 80px; }
+    .ga-1 { grid-column: span 6; grid-row: span 4; }
+    .ga-2 { grid-column: span 6; grid-row: span 3; }
+    .ga-3, .ga-4 { grid-column: span 3; grid-row: span 2; }
+    .ga-5, .ga-6, .ga-7 { grid-column: span 3; grid-row: span 3; }
+    .form-row { grid-template-columns: 1fr; }
+    .scale-strip .scale-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a href="#" class="logo">
+    <span class="logo-mark">S</span>
+    <span>Spotless Car Spa</span>
+  </a>
+  <nav class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#gallery">Work</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#visit">Visit</a>
+  </nav>
+  <button class="nav-cta" onclick="openBooking()">Request a Slot</button>
+</header>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="mono">South Shepherd · Houston · Est. 2014</span>
+    </div>
+    <h1 class="hero-title">Hand-washed.<br/><em>Spotless</em>.</h1>
+    <p class="hero-sub">
+      Every panel, every cuff of trim, finished by hand. Two-bucket method, clay treatment,
+      and premium wax — starting at $250.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="openBooking()">
+        Request a Slot
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <a class="btn btn-ghost" href="#services">View the menu</a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item">100% Hand Wash <span class="dot"></span></span>
+    <span class="marquee-item">Clay Treatment Included <span class="dot"></span></span>
+    <span class="marquee-item">Premium Black or Cherry Wax <span class="dot"></span></span>
+    <span class="marquee-item">233 + Five-Star Reviews <span class="dot"></span></span>
+    <span class="marquee-item">Walk-ins Welcome <span class="dot"></span></span>
+    <span class="marquee-item">South Shepherd · Houston <span class="dot"></span></span>
+  </div>
+</div>
+
+<section class="about reveal">
+  <div class="wrap about-grid">
+    <div>
+      <span class="mono about-eyebrow">§ The House</span>
+      <h2>A wash bay, <em>not a tunnel</em>.</h2>
+      <p>
+        For more than a decade we've washed Houston by hand from a single bay on South Shepherd.
+        Two-bucket method, plush mitts, foam cannon, and a careful eye on every panel before
+        the wax goes on.
+      </p>
+      <p>
+        Coffee and Wi-Fi in the lounge. Walk-ins welcome from nine to four-thirty, every day.
+      </p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">10+</div>
+          <div class="stat-label">Years on Shepherd</div>
+        </div>
+        <div>
+          <div class="stat-num">25k</div>
+          <div class="stat-label">Cars detailed</div>
+        </div>
+        <div>
+          <div class="stat-num">4.6★</div>
+          <div class="stat-label">Across 233 reviews</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-img">
+      <img src="https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=900&q=85&auto=format&fit=crop" alt="Detailer working by hand" loading="lazy"/>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="mono">§ The Menu</span>
+        <h2>Four ways to leave <em>Spotless</em>.</h2>
+      </div>
+      <p class="section-head-meta">
+        Every Spotless Detail is hand-wash, clay-treated and waxed.
+        Pricing scales with your vehicle size.
+      </p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card reveal">
+        <h3>Spotless Wash</h3>
+        <span class="svc-tag">Hand wash · Exterior</span>
+        <p class="svc-desc">Foam pre-soak, two-bucket hand wash, hand-dry, tire dressing, glass in and out.</p>
+        <div class="svc-price"><span class="currency">$</span>35</div>
+        <div class="svc-price-meta">From, sedan / coupe</div>
+        <ul>
+          <li>30-minute turnaround</li>
+          <li>Wheel face cleaning</li>
+          <li>Tire dressing</li>
+          <li>Streak-free glass</li>
+        </ul>
+        <button class="svc-cta" onclick="openBooking('Spotless Wash')">Book Wash</button>
+      </div>
+
+      <div class="service-card featured reveal reveal-delay-1">
+        <span class="featured-tag">Signature</span>
+        <h3>Spotless Detail</h3>
+        <span class="svc-tag">Wash + Clay + Wax</span>
+        <p class="svc-desc">Full hand wash, paint decontamination via clay bar, then black or cherry wax.</p>
+        <div class="svc-price"><span class="currency">$</span>250</div>
+        <div class="svc-price-meta">From, sedan / coupe</div>
+        <ul>
+          <li>Full hand wash &amp; decon</li>
+          <li>Clay bar paint treatment</li>
+          <li>Black or cherry wax finish</li>
+          <li>Interior vacuum &amp; dust</li>
+        </ul>
+        <button class="svc-cta" onclick="openBooking('Spotless Detail')">Book Detail</button>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <h3>Spotless Interior</h3>
+        <span class="svc-tag">Cabin deep-clean</span>
+        <p class="svc-desc">Steam clean of carpets, leather condition, vent and crevice detail.</p>
+        <div class="svc-price"><span class="currency">$</span>150</div>
+        <div class="svc-price-meta">From, sedan / coupe</div>
+        <ul>
+          <li>Carpet &amp; seat steam</li>
+          <li>Leather condition</li>
+          <li>Vent &amp; crevice detail</li>
+          <li>UV-safe trim dressing</li>
+        </ul>
+        <button class="svc-cta" onclick="openBooking('Spotless Interior')">Book Interior</button>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <h3>Spotless Signature</h3>
+        <span class="svc-tag">Show finish · By appt.</span>
+        <p class="svc-desc">Single-stage polish, full decon, paint sealant. The full deck.</p>
+        <div class="svc-price"><span class="currency">$</span>450</div>
+        <div class="svc-price-meta">From, sedan / coupe</div>
+        <ul>
+          <li>Everything in Detail</li>
+          <li>Single-stage polish</li>
+          <li>Paint sealant top-coat</li>
+          <li>4-hour service</li>
+        </ul>
+        <button class="svc-cta" onclick="openBooking('Spotless Signature')">Reserve Signature</button>
+      </div>
+    </div>
+
+    <div class="scale-strip reveal">
+      <span class="mono label">Spotless Detail by vehicle</span>
+      <div class="scale-grid">
+        <div class="scale-cell"><div class="vh">Sedan</div><div class="pr">$250</div></div>
+        <div class="scale-cell"><div class="vh">Crossover</div><div class="pr">$270</div></div>
+        <div class="scale-cell"><div class="vh">Sm/Mid SUV</div><div class="pr">$290</div></div>
+        <div class="scale-cell"><div class="vh">Lg SUV</div><div class="pr">$320</div></div>
+        <div class="scale-cell"><div class="vh">XL Truck</div><div class="pr">$360</div></div>
+        <div class="scale-cell"><div class="vh">XXL Pickup</div><div class="pr">$389</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="mono">§ The Work</span>
+        <h2>A decade of <em>spotless finishes</em>.</h2>
+      </div>
+      <p class="section-head-meta">Filter by what you came here for.</p>
+    </div>
+
+    <div class="filter-row reveal">
+      <button class="filter-chip active" data-filter="all">All work</button>
+      <button class="filter-chip" data-filter="exterior">Exterior</button>
+      <button class="filter-chip" data-filter="interior">Interior</button>
+      <button class="filter-chip" data-filter="wheel">Wheels</button>
+    </div>
+
+    <div class="gallery-grid reveal">
+      <div class="ga-item ga-1" data-cat="exterior">
+        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1400&q=85&auto=format&fit=crop" alt="Sedan after detail" loading="lazy"/>
+        <span class="ga-label">Exterior</span>
+      </div>
+      <div class="ga-item ga-2" data-cat="interior">
+        <img src="https://images.unsplash.com/photo-1485291571150-772bcfc10da5?w=1200&q=85&auto=format&fit=crop" alt="Conditioned interior" loading="lazy"/>
+        <span class="ga-label">Interior</span>
+      </div>
+      <div class="ga-item ga-3" data-cat="wheel">
+        <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?w=700&q=85&auto=format&fit=crop" alt="Wheel detail" loading="lazy"/>
+        <span class="ga-label">Wheel</span>
+      </div>
+      <div class="ga-item ga-4" data-cat="exterior">
+        <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=700&q=85&auto=format&fit=crop" alt="Glossy paint after wax" loading="lazy"/>
+        <span class="ga-label">Paint</span>
+      </div>
+      <div class="ga-item ga-5" data-cat="exterior">
+        <img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=900&q=85&auto=format&fit=crop" alt="SUV exterior finish" loading="lazy"/>
+        <span class="ga-label">SUV finish</span>
+      </div>
+      <div class="ga-item ga-6" data-cat="exterior">
+        <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=900&q=85&auto=format&fit=crop" alt="Foam cannon wash" loading="lazy"/>
+        <span class="ga-label">Foam</span>
+      </div>
+      <div class="ga-item ga-7" data-cat="interior">
+        <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=1200&q=85&auto=format&fit=crop" alt="Dashboard detail" loading="lazy"/>
+        <span class="ga-label">Cabin</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="reviews">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="mono">§ The Room</span>
+        <h2>What South Shepherd <em>is saying</em>.</h2>
+      </div>
+      <p class="section-head-meta">233 five-star reviews. Wi-Fi in the lounge.</p>
+    </div>
+    <div class="tcards">
+      <div class="tcard reveal">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Best hand wash in Houston, hands down. They actually clay-bar the paint — try finding that at a tunnel."</p>
+        <div class="author">
+          <div class="author-name">Marcus R.</div>
+          <div class="author-meta">Yelp · River Oaks</div>
+        </div>
+      </div>
+      <div class="tcard reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Lounge is comfortable, coffee's good, Wi-Fi works. Came in for a wash, ended up booking the detail."</p>
+        <div class="author">
+          <div class="author-name">Priya N.</div>
+          <div class="author-meta">Google · Upper Kirby</div>
+        </div>
+      </div>
+      <div class="tcard reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Six years bringing my truck here. They treat an F-250 the same way they'd treat a Bentley."</p>
+        <div class="author">
+          <div class="author-name">DeAndre W.</div>
+          <div class="author-meta">Nextdoor · Bellaire</div>
+        </div>
+      </div>
+    </div>
+    <div class="source-row">
+      <span class="label">Reviewed on</span>
+      <span class="src">Yelp · 4.5★ / 233 reviews</span>
+      <span class="src">Google · 4.7★</span>
+      <span class="src">Nextdoor · Recommended</span>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="mono">§ Visit Us</span>
+        <h2>3414 South <em>Shepherd Drive</em>.</h2>
+      </div>
+      <p class="section-head-meta">Two blocks south of the 59, between Westheimer and Richmond.</p>
+    </div>
+    <div class="visit-grid">
+      <div class="visit-map reveal">
+        <iframe
+          src="https://www.google.com/maps?q=3414+S+Shepherd+Dr,+Houston,+TX+77098&output=embed"
+          loading="lazy"
+          allowfullscreen></iframe>
+      </div>
+      <div class="visit-info reveal reveal-delay-1">
+        <h2>Walk in, <em>or request a slot</em>.</h2>
+        <div class="visit-row">
+          <span class="mono">Address</span>
+          <p>3414 S Shepherd Dr<br/>Houston, TX 77098</p>
+        </div>
+        <div class="visit-row">
+          <span class="mono">Phone</span>
+          <p><a href="tel:7134850182">713 · 485 · 0182</a></p>
+        </div>
+        <div class="visit-row">
+          <span class="mono">Hours</span>
+          <div class="hours-grid">
+            <span>Mon — Sun</span><span>9:00 AM — 4:30 PM</span>
+          </div>
+        </div>
+        <div class="visit-row">
+          <span class="mono">Lounge</span>
+          <p>Free Wi-Fi · Espresso &amp; iced coffee · Cold drinks</p>
+        </div>
+        <div class="visit-cta">
+          <button class="btn btn-primary" onclick="openBooking()">Request a Slot</button>
+          <a class="btn btn-ghost" href="tel:7134850182">Call the Shop</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h3>Spotless</h3>
+        <p>Hand-wash detail house. South Shepherd Drive, Houston, since 2014.</p>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <a href="#services">Spotless Wash</a>
+        <a href="#services">Spotless Detail</a>
+        <a href="#services">Interior Detail</a>
+        <a href="#services">Signature Polish</a>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <p>3414 S Shepherd Dr</p>
+        <p>Houston, TX 77098</p>
+        <a href="tel:7134850182">713-485-0182</a>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">Yelp</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="mono">© 2026 Spotless Car Spa</span>
+      <span class="mono">Designed by Black Hart Consulting</span>
+    </div>
+  </div>
+</footer>
+
+<button class="sticky-cta" id="stickyCta" onclick="openBooking()">
+  <span class="pulse-dot"></span>
+  Request a Slot
+</button>
+
+<!-- Single-step booking REQUEST modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3>Request a slot</h3>
+        <p>We'll text you back within an hour to confirm.</p>
+      </div>
+      <button class="modal-close" onclick="closeBooking()" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 2 L12 12 M12 2 L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-wrap" id="formWrap">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="fName" placeholder="Marcus"/>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="lName" placeholder="Rodriguez"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" id="phone" placeholder="(713) 555-0182"/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="marcus@email.com"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Vehicle (year, make, model)</label>
+          <input type="text" id="vehicle" placeholder="2021 Tesla Model S"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Service</label>
+            <select id="service">
+              <option value="">Choose one</option>
+              <option value="Spotless Wash">Spotless Wash — from $35</option>
+              <option value="Spotless Detail" selected>Spotless Detail — from $250</option>
+              <option value="Spotless Interior">Spotless Interior — from $150</option>
+              <option value="Spotless Signature">Spotless Signature — from $450</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Date</label>
+            <input type="text" id="date" placeholder="Sat May 31, morning"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes (optional)</label>
+          <textarea id="notes" placeholder="Pet hair on rear seats, please. And the wheel covers come off."></textarea>
+        </div>
+        <button class="modal-submit" id="submitBtn" onclick="submitBooking()">Send Request</button>
+        <p class="modal-foot-note">No deposit. We confirm by text within an hour during shop hours.</p>
+      </div>
+
+      <div class="success" id="success">
+        <div class="success-mark">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12l4 4L19 7" stroke="#0a0908" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h4>Request received.</h4>
+        <p>We'll text you back at the number you gave us within an hour. Coffee will be on.</p>
+        <button class="btn btn-ghost" onclick="closeBooking()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* Nav scroll state */
+  const nav = document.getElementById('nav');
+  const stickyCta = document.getElementById('stickyCta');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    nav.classList.toggle('scrolled', y > 60);
+    stickyCta.classList.toggle('show', y > 700);
+  }, { passive: true });
+
+  /* Reveal */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* Marquee seamless */
+  const mq = document.getElementById('marquee');
+  mq.innerHTML += mq.innerHTML;
+
+  /* Gallery filter */
+  const chips = document.querySelectorAll('.filter-chip');
+  const items = document.querySelectorAll('.ga-item');
+  chips.forEach(c => {
+    c.addEventListener('click', () => {
+      chips.forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      const f = c.dataset.filter;
+      items.forEach(it => it.classList.toggle('hidden', f !== 'all' && it.dataset.cat !== f));
+    });
+  });
+
+  /* Booking modal */
+  const modalBg = document.getElementById('modalBg');
+  const formWrap = document.getElementById('formWrap');
+  const success = document.getElementById('success');
+  function openBooking(presetSvc) {
+    modalBg.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    formWrap.classList.remove('hide');
+    success.classList.remove('show');
+    if (presetSvc) {
+      const sel = document.getElementById('service');
+      const opt = Array.from(sel.options).find(o => o.value === presetSvc);
+      if (opt) sel.value = presetSvc;
+    }
+  }
+  function closeBooking() {
+    modalBg.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  function submitBooking() {
+    const ok = ['fName', 'lName', 'phone', 'vehicle', 'service']
+      .every(id => document.getElementById(id).value.trim().length > 1);
+    if (!ok) {
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Please fill required fields';
+      setTimeout(() => btn.textContent = 'Send Request', 1600);
+      return;
+    }
+    formWrap.classList.add('hide');
+    success.classList.add('show');
+  }
+  window.openBooking = openBooking;
+  window.closeBooking = closeBooking;
+  window.submitBooking = submitBooking;
+  modalBg.addEventListener('click', (e) => { if (e.target === modalBg) closeBooking(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBooking(); });
+</script>
+
+</body>
+</html>

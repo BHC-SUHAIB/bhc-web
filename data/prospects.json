@@ -5,5 +5,12 @@
     "tiers": ["essentials", "studio", "signature"],
     "defaultTier": "signature",
     "created": "2026-05-28"
+  },
+  "inasthreadingbeauty": {
+    "password": "Ina$11",
+    "label": "Ina's Threading and Beauty",
+    "tiers": ["essential", "studio", "signature"],
+    "defaultTier": "signature",
+    "created": "2026-05-29"
   }
 }

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta name="robots" content="noindex, nofollow">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#faf6f0" />
+  <title>Ina's Threading &amp; Beauty — Houston Threading Studio (Studio)</title>
+  <meta name="description" content="Book eyebrow threading, lashes, waxing & facials in west Houston. 15 years on Gessner Road." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --serif:"Cormorant Garamond",Georgia,serif; --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; --radius-sm:8px; --radius-md:14px; --radius-lg:22px; --container:1180px; --tier-accent:#a2614b; }
+    [data-theme="light"]{ --bg:#faf6f0; --bg-2:#f2eae0; --surface:#fff; --surface-2:#faf6f0; --ink:#221b16; --ink-2:#3c322b; --muted:#6f6458; --line:#e8ddcd; --rose:#c0846f; --rose-deep:#a2614b; --gold:#b8894f; --gold-soft:#d8b985; --shadow-sm:0 1px 2px rgba(34,27,22,.06),0 4px 14px rgba(34,27,22,.05); --shadow-md:0 10px 30px rgba(34,27,22,.10); --shadow-lg:0 30px 70px rgba(34,27,22,.16); --hero-grad:linear-gradient(160deg,#faf6f0,#f2eae0); }
+    [data-theme="dark"]{ --bg:#17110d; --bg-2:#1d1610; --surface:#211910; --surface-2:#2a2015; --ink:#f2e8d6; --ink-2:#ddd0bb; --muted:#9c8c78; --line:rgba(242,232,214,.12); --rose:#d39a83; --rose-deep:#e0ac95; --gold:#d9ad6e; --gold-soft:#ecc888; --shadow-sm:0 2px 8px rgba(0,0,0,.4); --shadow-md:0 14px 38px rgba(0,0,0,.5); --shadow-lg:0 30px 80px rgba(0,0,0,.6); --hero-grad:radial-gradient(ellipse 80% 60% at 78% 28%,rgba(217,173,110,.12),transparent 60%),linear-gradient(180deg,#17110d,#1d1610); }
+    *,*::before,*::after{box-sizing:border-box;} html{scroll-behavior:smooth;}
+    body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s;}
+    img{max-width:100%;display:block;} a{color:inherit;text-decoration:none;} button{font:inherit;cursor:pointer;border:0;background:none;color:inherit;}
+    h1,h2,h3,h4{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;margin:0 0 .5em;color:var(--ink);}
+    h1{font-size:clamp(2.6rem,6vw,4.4rem);line-height:1.05;} h2{font-size:clamp(2rem,4vw,3rem);line-height:1.1;} h3{font-size:clamp(1.35rem,2.4vw,1.7rem);}
+    p{margin:0 0 1em;color:var(--ink-2);}
+    .container{width:100%;max-width:var(--container);margin:0 auto;padding:0 24px;}
+    .section{padding:clamp(60px,8vw,110px) 0;}
+    .eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:.24em;font-size:.72rem;font-weight:600;color:var(--rose-deep);margin-bottom:1rem;display:inline-block;}
+    .section-head{text-align:center;max-width:700px;margin:0 auto clamp(40px,5vw,60px);} .section-head p{color:var(--muted);font-size:1.08rem;}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;font-size:.95rem;transition:transform .15s,box-shadow .2s,background .2s,color .2s,border-color .2s;white-space:nowrap;}
+    .btn:active{transform:translateY(1px);} .btn-primary{background:var(--ink);color:var(--bg);box-shadow:var(--shadow-md);} .btn-primary:hover{background:var(--rose-deep);color:#fff;}
+    .btn-secondary{background:transparent;color:var(--ink);border:1.5px solid var(--ink);} .btn-secondary:hover{background:var(--ink);color:var(--bg);}
+    .btn-book{background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;box-shadow:0 10px 26px rgba(162,97,75,.3);} .btn-book:hover{filter:brightness(1.05);}
+    .topbar{background:var(--ink);color:var(--bg);font-size:.82rem;} .topbar-inner{max-width:var(--container);margin:0 auto;padding:8px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;} .topbar a:hover{color:var(--gold-soft);} .topbar .pipe{opacity:.4;margin:0 10px;}
+    .nav-wrap{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:saturate(140%) blur(12px);border-bottom:1px solid var(--line);}
+    .nav{max-width:var(--container);margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .brand{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:1.5rem;font-weight:600;} .brand-mark{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--serif);font-style:italic;font-weight:600;} .brand small{display:block;font-family:var(--sans);font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-top:-2px;}
+    .nav-links{display:flex;gap:24px;align-items:center;} .nav-links a{font-size:.92rem;font-weight:500;color:var(--ink-2);} .nav-links a:hover{color:var(--rose-deep);}
+    .nav-cta{display:flex;gap:10px;align-items:center;}
+    .toolbtn{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;background:var(--surface);transition:border-color .2s,transform .2s;} .toolbtn:hover{border-color:var(--rose);transform:translateY(-1px);} .toolbtn svg{width:20px;height:20px;}
+    [data-theme="light"] .icon-moon{display:block;} [data-theme="light"] .icon-sun{display:none;} [data-theme="dark"] .icon-moon{display:none;} [data-theme="dark"] .icon-sun{display:block;}
+    .tierswitch{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);font-size:.8rem;font-weight:600;background:var(--surface);color:var(--ink-2);} .tierswitch b{color:var(--tier-accent);} .tierswitch:hover{border-color:var(--tier-accent);}
+    .nav-toggle{display:none;width:42px;height:42px;border-radius:var(--radius-sm);align-items:center;justify-content:center;} .nav-toggle span,.nav-toggle span::before,.nav-toggle span::after{content:"";position:absolute;width:22px;height:2px;background:var(--ink);display:block;} .nav-toggle span{position:relative;} .nav-toggle span::before{top:-7px;} .nav-toggle span::after{top:7px;}
+    .hero{background:var(--hero-grad);overflow:hidden;} .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(32px,5vw,72px);align-items:center;padding:clamp(54px,8vw,104px) 0;}
+    .hero h1 .script{font-style:italic;color:var(--rose-deep);} .hero-lead{font-size:1.12rem;color:var(--ink-2);max-width:52ch;margin-bottom:2rem;} .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:2.2rem;}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:22px 34px;padding-top:26px;border-top:1px solid var(--line);} .meta-item .k{font-size:.66rem;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);display:block;margin-bottom:3px;} .meta-item .v{font-family:var(--serif);font-size:1.22rem;}
+    .hero-media{position:relative;aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);} .hero-media img{width:100%;height:100%;object-fit:cover;}
+    .hero-badge{position:absolute;left:20px;right:20px;bottom:20px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(8px);border-radius:var(--radius-md);padding:16px 20px;box-shadow:var(--shadow-md);display:flex;gap:14px;align-items:center;} .hero-badge .stars{color:var(--gold);letter-spacing:2px;} .hero-badge strong{font-family:var(--serif);font-size:1.3rem;display:block;} .hero-badge span{color:var(--muted);font-size:.82rem;}
+    .trust{background:var(--ink);color:var(--bg);padding:20px 0;} .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center;} .trust .item{font-family:var(--serif);font-style:italic;font-size:1.02rem;} .trust .item .k{display:block;font-family:var(--sans);font-style:normal;font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:3px;font-weight:600;}
+    .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;} .service-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;} .service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+    .service-image{aspect-ratio:4/3;overflow:hidden;position:relative;} .service-image img{width:100%;height:100%;object-fit:cover;transition:transform .5s;} .service-card:hover .service-image img{transform:scale(1.05);}
+    .dur{position:absolute;top:12px;left:12px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(6px);border-radius:999px;padding:4px 12px;font-size:.72rem;font-weight:600;color:var(--ink);}
+    .service-body{padding:22px 20px 24px;display:flex;flex-direction:column;flex:1;} .service-body h3{font-size:1.4rem;margin-bottom:6px;} .service-body p{color:var(--muted);font-size:.92rem;margin-bottom:14px;flex:1;}
+    .service-foot{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--line);} .service-foot .price{font-family:var(--serif);font-size:1.2rem;} .service-foot .price small{display:block;font-family:var(--sans);font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);}
+    .mini-book{font-size:.8rem;padding:8px 16px;border-radius:999px;background:var(--bg-2);color:var(--rose-deep);font-weight:600;border:1px solid var(--line);} .mini-book:hover{background:var(--rose-deep);color:#fff;}
+    /* Gallery */
+    .gallery{background:var(--bg-2);} .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:14px;} .gallery-grid figure{margin:0;overflow:hidden;border-radius:var(--radius-md);cursor:pointer;position:relative;} .gallery-grid img{width:100%;height:100%;object-fit:cover;transition:transform .5s;} .gallery-grid figure:hover img{transform:scale(1.07);} .gallery-grid .tall{grid-row:span 2;} .gallery-grid .wide{grid-column:span 2;}
+    .lightbox{position:fixed;inset:0;z-index:100;background:rgba(10,7,5,.92);display:none;align-items:center;justify-content:center;padding:30px;} .lightbox.open{display:flex;} .lightbox img{max-width:90vw;max-height:86vh;border-radius:var(--radius-md);box-shadow:0 30px 80px rgba(0,0,0,.6);} .lightbox .close{position:absolute;top:24px;right:30px;color:#fff;font-size:2rem;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.3);}
+    /* Team */
+    .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;} .team-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);text-align:center;} .team-card .ph{aspect-ratio:1;overflow:hidden;} .team-card .ph img{width:100%;height:100%;object-fit:cover;} .team-card .body{padding:24px;} .team-card h3{margin-bottom:2px;} .team-card .spec{color:var(--rose-deep);font-size:.82rem;text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:10px;} .team-card p{color:var(--muted);font-size:.92rem;}
+    /* Gift band */
+    .gift{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#2a1f12;} .gift-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;} .gift h2{color:#2a1f12;} .gift p{color:rgba(42,31,18,.8);} .gift .btn-primary{background:#2a1f12;color:#faf6f0;} .gift-card-visual{background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.5);border-radius:var(--radius-lg);padding:32px;backdrop-filter:blur(4px);} .gift-card-visual .amt{font-family:var(--serif);font-size:3rem;color:#2a1f12;}
+    /* Pricing */
+    .pricing{background:var(--bg);} .pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;} .price-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);padding:30px;box-shadow:var(--shadow-sm);} .price-card h3{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;margin-bottom:14px;border-bottom:1.5px solid var(--ink);font-size:1.5rem;} .price-card h3 .tag{font-family:var(--sans);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rose-deep);font-weight:600;}
+    .plist{list-style:none;margin:0;padding:0;} .plist li{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line);} .plist li:last-child{border-bottom:0;} .plist .name{color:var(--ink-2);font-size:.96rem;} .plist .dots{flex:1;border-bottom:1px dotted var(--line);transform:translateY(-4px);margin:0 6px;} .plist .amt{font-family:var(--serif);font-size:1.12rem;font-weight:500;white-space:nowrap;}
+    /* Reviews carousel */
+    .reviews{background:var(--bg-2);} .carousel{position:relative;overflow:hidden;} .carousel-track{display:flex;transition:transform .5s ease;} .carousel-slide{min-width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:4px;}
+    .review-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);padding:30px 26px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;} .review-card .stars{color:var(--gold);letter-spacing:3px;margin-bottom:12px;} .review-card blockquote{font-family:var(--serif);font-style:italic;font-size:1.12rem;line-height:1.5;margin:0 0 20px;flex:1;color:var(--ink);} .review-card .who{display:flex;gap:12px;align-items:center;padding-top:16px;border-top:1px solid var(--line);} .review-card .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:600;} .review-card .name{font-weight:600;font-size:.94rem;} .review-card .role{color:var(--muted);font-size:.8rem;}
+    .carousel-nav{display:flex;justify-content:center;gap:10px;margin-top:28px;} .cdot{width:10px;height:10px;border-radius:50%;background:var(--line);transition:background .2s,width .2s;} .cdot.active{background:var(--rose-deep);width:26px;border-radius:6px;}
+    /* Instagram */
+    .ig-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;} .ig-grid a{aspect-ratio:1;overflow:hidden;border-radius:var(--radius-sm);position:relative;} .ig-grid img{width:100%;height:100%;object-fit:cover;transition:transform .4s;} .ig-grid a:hover img{transform:scale(1.08);}
+    /* Visit */
+    .visit{background:var(--bg-2);} .visit-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(28px,4vw,56px);} .info-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);padding:34px;box-shadow:var(--shadow-sm);} .info-row{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);} .info-row:last-of-type{border-bottom:0;} .info-icon{width:42px;height:42px;flex-shrink:0;border-radius:50%;background:var(--bg-2);color:var(--rose-deep);display:grid;place-items:center;} .info-row .lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:2px;} .info-row .val{font-family:var(--serif);font-size:1.2rem;}
+    .hours{width:100%;border-collapse:collapse;margin-top:4px;} .hours td{padding:5px 0;font-size:.94rem;} .hours td:last-child{text-align:right;font-family:var(--serif);} .hours tr.today td{color:var(--rose-deep);font-weight:600;}
+    .map-card{border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--line);min-height:460px;} .map-card iframe{width:100%;height:100%;min-height:460px;border:0;display:block;} [data-theme="dark"] .map-card iframe{filter:invert(.9) hue-rotate(180deg) saturate(.6) brightness(.95);}
+    footer{background:var(--ink);color:rgba(244,237,224,.7);padding:60px 0 26px;font-size:.9rem;} .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;margin-bottom:42px;} footer h4{font-family:var(--sans);font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--bg);margin-bottom:14px;} footer ul{list-style:none;padding:0;margin:0;} footer li{padding:4px 0;} footer a:hover{color:var(--gold-soft);} .footer-brand{font-family:var(--serif);font-size:1.4rem;color:var(--bg);margin-bottom:10px;} .footer-bottom{padding-top:24px;border-top:1px solid rgba(244,237,224,.14);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.8rem;color:rgba(244,237,224,.55);}
+    /* Booking modal */
+    .modal{position:fixed;inset:0;z-index:120;background:rgba(10,7,5,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;} .modal.open{display:flex;}
+    .booking{background:var(--surface);border-radius:var(--radius-lg);max-width:560px;width:100%;max-height:90vh;overflow:auto;box-shadow:var(--shadow-lg);} .booking-head{padding:24px 28px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;} .booking-head .bk-brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:1.3rem;} .bk-powered{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;}
+    .booking-body{padding:26px 28px;} .bk-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin:18px 0 10px;font-weight:600;} .bk-label:first-child{margin-top:0;}
+    .bk-select{width:100%;padding:14px 16px;border-radius:var(--radius-sm);border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;}
+    .bk-days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;} .bk-day{flex-shrink:0;min-width:62px;text-align:center;padding:10px 6px;border-radius:var(--radius-sm);border:1.5px solid var(--line);background:var(--bg);} .bk-day.active{border-color:var(--rose-deep);background:var(--rose-deep);color:#fff;} .bk-day .d{font-size:.68rem;text-transform:uppercase;color:var(--muted);} .bk-day.active .d{color:rgba(255,255,255,.8);} .bk-day .n{font-family:var(--serif);font-size:1.3rem;}
+    .bk-times{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;} .bk-time{padding:10px;text-align:center;border-radius:var(--radius-sm);border:1.5px solid var(--line);background:var(--bg);font-size:.86rem;font-weight:500;} .bk-time.active{border-color:var(--rose-deep);background:var(--rose-deep);color:#fff;} .bk-time.taken{opacity:.35;text-decoration:line-through;pointer-events:none;}
+    .booking-foot{padding:20px 28px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:14px;} .bk-summary{font-size:.86rem;color:var(--muted);} .bk-summary b{color:var(--ink);font-family:var(--serif);font-size:1.05rem;}
+    .mobile-cta{display:none;position:fixed;bottom:0;left:0;right:0;z-index:70;background:var(--surface);border-top:1px solid var(--line);padding:10px 14px;gap:10px;box-shadow:0 -6px 24px rgba(0,0,0,.12);} .mobile-cta .btn{flex:1;}
+    @media (max-width:960px){ .hero-grid{grid-template-columns:1fr;} .hero-media{max-width:460px;margin:0 auto;} .services-grid{grid-template-columns:repeat(2,1fr);} .pricing-grid{grid-template-columns:1fr;} .visit-grid{grid-template-columns:1fr;} .gallery-grid{grid-template-columns:repeat(2,1fr);} .team-grid{grid-template-columns:1fr;} .gift-inner{grid-template-columns:1fr;} .ig-grid{grid-template-columns:repeat(3,1fr);} .carousel-slide{grid-template-columns:1fr;} .trust-row{grid-template-columns:1fr 1fr;text-align:left;} .footer-grid{grid-template-columns:1fr 1fr;} .nav-links{display:none;} .nav-toggle{display:flex;} .nav-cta .btn-secondary{display:none;} .tierswitch{display:none;} }
+    @media (max-width:560px){ .services-grid{grid-template-columns:1fr;} .footer-grid{grid-template-columns:1fr;} .gallery-grid{grid-template-columns:1fr;} .bk-times{grid-template-columns:repeat(3,1fr);} .mobile-cta{display:flex;} body{padding-bottom:64px;} .topbar .pipe + a{display:none;} }
+  </style>
+</head>
+<body>
+  <div class="topbar"><div class="topbar-inner"><div><a href="tel:8325825307">Call (832) 582-5307</a><span class="pipe">|</span><a href="#visit">2030 Gessner Rd, Houston</a></div><div>Walk-ins welcome · Online booking 24/7</div></div></div>
+
+  <div class="nav-wrap"><nav class="nav">
+    <a href="#" class="brand"><span class="brand-mark">I</span><span>Ina's<small>Threading &amp; Beauty</small></span></a>
+    <div class="nav-links"><a href="#services">Services</a><a href="#gallery">Gallery</a><a href="#team">Team</a><a href="#pricing">Prices</a><a href="#reviews">Reviews</a><a href="#visit">Visit</a></div>
+    <div class="nav-cta">
+      <a href="index.html" class="tierswitch">Tier: <b>Studio</b> · compare ▸</a>
+      <button class="toolbtn" id="themeBtn" aria-label="Toggle dark mode"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <a href="tel:8325825307" class="btn btn-secondary">Call</a>
+      <button class="btn btn-book" data-book>Book Now</button>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span></button>
+    </div>
+  </nav></div>
+
+  <section class="hero"><div class="container"><div class="hero-grid">
+    <div>
+      <span class="eyebrow">Houston · Since 2010</span>
+      <h1>Brows that frame <span class="script">your face</span>, not someone else's trend.</h1>
+      <p class="hero-lead">Fifteen years of threading on Gessner Road — precise, fast, and honest about what suits you. Book online in 30 seconds, or walk in any day.</p>
+      <div class="hero-cta"><button class="btn btn-book" data-book>Book Online</button><a href="tel:8325825307" class="btn btn-secondary">Call (832) 582-5307</a></div>
+      <div class="hero-meta"><div class="meta-item"><span class="k">Online Booking</span><span class="v">Open 24/7</span></div><div class="meta-item"><span class="k">Brow Threading</span><span class="v">From $12</span></div><div class="meta-item"><span class="k">Walk-ins</span><span class="v">Always Welcome</span></div></div>
+    </div>
+    <div class="hero-media"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1100&q=80" alt="Shaped eyebrows"><div class="hero-badge"><div><div class="stars">★★★★★</div><strong>4.9 / 5</strong><span>425+ Google reviews</span></div></div></div>
+  </div></div></section>
+
+  <section class="trust"><div class="container"><div class="trust-row">
+    <div class="item"><span class="k">Established</span>15 Years in Houston</div><div class="item"><span class="k">Specialty</span>Eyebrow Threading</div><div class="item"><span class="k">Booking</span>Online &amp; Walk-In</div><div class="item"><span class="k">Spoken</span>English · Hindi · Urdu</div>
+  </div></div></section>
+
+  <section class="section" id="services"><div class="container">
+    <div class="section-head"><span class="eyebrow">What We Do</span><h2>Pick a service. Book it in two taps.</h2><p>Durations shown so you can plan your day.</p></div>
+    <div class="services-grid">
+      <article class="service-card"><div class="service-image"><span class="dur">⏱ 3–10 min</span><img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80" alt="Threading"></div><div class="service-body"><h3>Threading</h3><p>Brows, lip, chin, full face. Clean lines, minimal redness.</p><div class="service-foot"><div class="price"><small>Brows from</small>$12</div><button class="mini-book" data-book>Book</button></div></div></article>
+      <article class="service-card"><div class="service-image"><span class="dur">⏱ 60–90 min</span><img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=900&q=80" alt="Lashes"></div><div class="service-body"><h3>Lashes</h3><p>Extensions, lifts, and tints suited to your eye shape.</p><div class="service-foot"><div class="price"><small>From</small>$18</div><button class="mini-book" data-book>Book</button></div></div></article>
+      <article class="service-card"><div class="service-image"><span class="dur">⏱ 15–45 min</span><img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=900&q=80" alt="Waxing"></div><div class="service-body"><h3>Waxing</h3><p>Soft &amp; hard wax, Brazilians. Gentle, sanitary technique.</p><div class="service-foot"><div class="price"><small>From</small>$20</div><button class="mini-book" data-book>Book</button></div></div></article>
+      <article class="service-card"><div class="service-image"><span class="dur">⏱ 45–60 min</span><img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80" alt="Facials"></div><div class="service-body"><h3>Facials</h3><p>A classic deep cleanse or a Hydrafacial that lifts and clears.</p><div class="service-foot"><div class="price"><small>From</small>$50</div><button class="mini-book" data-book>Book</button></div></div></article>
+    </div>
+  </div></section>
+
+  <section class="section gallery" id="gallery"><div class="container">
+    <div class="section-head"><span class="eyebrow">The Work</span><h2>Brows we're proud of.</h2><p>Tap any photo to see it full-size.</p></div>
+    <div class="gallery-grid">
+      <figure class="tall"><img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=700&q=80" alt="Brow detail"></figure>
+      <figure class="wide"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80" alt="Salon"></figure>
+      <figure><img src="https://images.unsplash.com/photo-1620331311520-246422fd82f9?auto=format&fit=crop&w=600&q=80" alt="Lash work"></figure>
+      <figure><img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=600&q=80" alt="Brow shaping"></figure>
+      <figure class="wide"><img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=900&q=80" alt="Facial treatment"></figure>
+      <figure><img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?auto=format&fit=crop&w=600&q=80" alt="Beauty closeup"></figure>
+      <figure class="tall"><img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=700&q=80" alt="Lashes"></figure>
+    </div>
+  </div></section>
+
+  <section class="section" id="team"><div class="container">
+    <div class="section-head"><span class="eyebrow">Meet the Studio</span><h2>The hands behind your brows.</h2><p>Inas trains every technician to her standard.</p></div>
+    <div class="team-grid">
+      <div class="team-card"><div class="ph"><img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=700&q=80" alt="Inas"></div><div class="body"><h3>Inas</h3><div class="spec">Founder · Master Threader</div><p>Fifteen years and counting. Most regulars won't let anyone else touch their brows — and we get it.</p></div></div>
+      <div class="team-card"><div class="ph"><img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=700&q=80" alt="Technician"></div><div class="body"><h3>Sana</h3><div class="spec">Lash Specialist</div><p>Extensions and lifts that look like your lashes on their best day. Booking recommended.</p></div></div>
+      <div class="team-card"><div class="ph"><img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=700&q=80" alt="Technician"></div><div class="body"><h3>Mariam</h3><div class="spec">Wax &amp; Facials</div><p>Gentle, fast, and unflappable. The person you want for your first Brazilian or Hydrafacial.</p></div></div>
+    </div>
+  </div></section>
+
+  <section class="section gift"><div class="container"><div class="gift-inner">
+    <div><span class="eyebrow" style="color:#6e4f1e">Give Good Brows</span><h2>Gift cards for the people who'd never treat themselves.</h2><p>Digital gift cards delivered by email, or a printed card to slip in a birthday envelope. Any amount, never expires.</p><button class="btn btn-primary" data-book>Buy a Gift Card</button></div>
+    <div class="gift-card-visual"><div style="font-family:var(--serif);font-size:1.2rem;margin-bottom:8px">Ina's Threading &amp; Beauty</div><div class="amt">$50</div><div style="font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;margin-top:8px">Gift Card · Never Expires</div></div>
+  </div></div></section>
+
+  <section class="section pricing" id="pricing"><div class="container">
+    <div class="section-head"><span class="eyebrow">Transparent Pricing</span><h2>What things cost. No surprises.</h2><p>Cash, card, and contactless accepted.</p></div>
+    <div class="pricing-grid">
+      <div class="price-card"><h3>Threading <span class="tag">Walk-in or book</span></h3><ul class="plist"><li><span class="name">Eyebrow Threading</span><span class="dots"></span><span class="amt">$12</span></li><li><span class="name">Upper Lip</span><span class="dots"></span><span class="amt">$6</span></li><li><span class="name">Forehead</span><span class="dots"></span><span class="amt">$6</span></li><li><span class="name">Chin</span><span class="dots"></span><span class="amt">$8</span></li><li><span class="name">Neck</span><span class="dots"></span><span class="amt">$10</span></li><li><span class="name">Sideburns</span><span class="dots"></span><span class="amt">$12</span></li><li><span class="name">Eyebrow Tinting</span><span class="dots"></span><span class="amt">$18</span></li><li><span class="name">Full Face</span><span class="dots"></span><span class="amt">$35–45</span></li></ul></div>
+      <div class="price-card"><h3>Waxing <span class="tag">Soft &amp; hard wax</span></h3><ul class="plist"><li><span class="name">Under Arms</span><span class="dots"></span><span class="amt">$20</span></li><li><span class="name">Half Arms</span><span class="dots"></span><span class="amt">$30</span></li><li><span class="name">Full Arms</span><span class="dots"></span><span class="amt">$50</span></li><li><span class="name">Half Legs</span><span class="dots"></span><span class="amt">$35</span></li><li><span class="name">Full Legs</span><span class="dots"></span><span class="amt">$65</span></li><li><span class="name">Bikini</span><span class="dots"></span><span class="amt">$35</span></li><li><span class="name">Brazilian</span><span class="dots"></span><span class="amt">$60</span></li><li><span class="name">Full Body</span><span class="dots"></span><span class="amt">$250</span></li></ul></div>
+      <div class="price-card"><h3>Lashes <span class="tag">By appointment</span></h3><ul class="plist"><li><span class="name">Eyelash Extensions</span><span class="dots"></span><span class="amt">$45</span></li><li><span class="name">Eyelash Lift</span><span class="dots"></span><span class="amt">$55</span></li><li><span class="name">Eyelash Tinting</span><span class="dots"></span><span class="amt">$18</span></li></ul></div>
+      <div class="price-card"><h3>Facials <span class="tag">By appointment</span></h3><ul class="plist"><li><span class="name">Full Facial</span><span class="dots"></span><span class="amt">$50</span></li><li><span class="name">Full Hydrafacial</span><span class="dots"></span><span class="amt">$75</span></li></ul></div>
+    </div>
+  </div></section>
+
+  <section class="section reviews" id="reviews"><div class="container">
+    <div class="section-head"><span class="eyebrow">From Our Regulars</span><h2>425 five-star reviews and counting.</h2><p>Real Google reviews. Swipe through a few.</p></div>
+    <div class="carousel"><div class="carousel-track" id="ctrack">
+      <div class="carousel-slide">
+        <div class="review-card"><div class="stars">★★★★★</div><blockquote>"I have been going to the same lady for 15 years and I decided to give Inas a chance and she didn't disappoint. Definitely recommend!!!"</blockquote><div class="who"><div class="avatar">G</div><div><div class="name">Gladys Pardo</div><div class="role">Google · 5 stars</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><blockquote>"The best eyebrow threading!! I will always be back to see Ina! She consistently keeps my eyebrows looking perfect. There is no one I trust more!"</blockquote><div class="who"><div class="avatar">E</div><div><div class="name">Erin H.</div><div class="role">Google · 5 stars</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><blockquote>"Got my eyebrows and upper lip threaded here and had a great experience! Super friendly staff and my technician made sure I liked it."</blockquote><div class="who"><div class="avatar">V</div><div><div class="name">Victoria D.</div><div class="role">Google · Jan 2026</div></div></div></div>
+      </div>
+      <div class="carousel-slide">
+        <div class="review-card"><div class="stars">★★★★★</div><blockquote>"Love this place! She's quick and super sweet. My eyebrows look perfect!!"</blockquote><div class="who"><div class="avatar">M</div><div><div class="name">Marisa Guzman</div><div class="role">Google · 5 stars</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><blockquote>"Inas does an amazing job every time! She is consistent and keeps my eyebrows looking great!"</blockquote><div class="who"><div class="avatar">J</div><div><div class="name">Jennifer Dudley</div><div class="role">Google · 5 stars</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><blockquote>"I'm so happy I found this threading shop in Spring Branch. Ina is amazingly good at shaping my brows, I could not be happier."</blockquote><div class="who"><div class="avatar">J</div><div><div class="name">JoAnna C.</div><div class="role">Google · 5 stars</div></div></div></div>
+      </div>
+    </div></div>
+    <div class="carousel-nav"><button class="cdot active" data-slide="0"></button><button class="cdot" data-slide="1"></button></div>
+  </div></section>
+
+  <section class="section" id="instagram"><div class="container">
+    <div class="section-head"><span class="eyebrow">@inas_threading</span><h2>See the latest from the studio.</h2><p>Follow along on Instagram &amp; TikTok.</p></div>
+    <div class="ig-grid">
+      <a href="https://instagram.com/inas_threading" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=400&q=80" alt="IG post"></a>
+      <a href="https://instagram.com/inas_threading" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=400&q=80" alt="IG post"></a>
+      <a href="https://instagram.com/inas_threading" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?auto=format&fit=crop&w=400&q=80" alt="IG post"></a>
+      <a href="https://instagram.com/inas_threading" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1620331311520-246422fd82f9?auto=format&fit=crop&w=400&q=80" alt="IG post"></a>
+      <a href="https://instagram.com/inas_threading" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=400&q=80" alt="IG post"></a>
+      <a href="https://instagram.com/inas_threading" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=400&q=80" alt="IG post"></a>
+    </div>
+  </div></section>
+
+  <section class="section visit" id="visit"><div class="container">
+    <div class="section-head"><span class="eyebrow">Find Us</span><h2>2030 Gessner Road. Walk in any time.</h2><p>Free parking out front. Five minutes off I-10.</p></div>
+    <div class="visit-grid">
+      <div class="info-card">
+        <div class="info-row"><div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="lbl">Address</div><div class="val">2030 Gessner Road<br>Houston, TX 77080</div></div></div>
+        <div class="info-row"><div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.08 4.18 2 2 0 0 1 5.06 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L9.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="lbl">Phone</div><div class="val"><a href="tel:8325825307">(832) 582-5307</a></div></div></div>
+        <div class="info-row"><div class="info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="flex:1"><div class="lbl">Hours</div><table class="hours"><tr class="today"><td>Today (Wed)</td><td>9 AM – 5 PM</td></tr><tr><td>Mon – Sat</td><td>9 AM – 5 PM</td></tr><tr><td>Sunday</td><td>Closed</td></tr></table></div></div>
+        <div style="display:flex;gap:12px;margin-top:20px"><button class="btn btn-book" style="flex:1" data-book>Book Online</button><a href="https://www.google.com/maps/dir/?api=1&destination=2030+Gessner+Rd+Houston+TX+77080" target="_blank" rel="noopener" class="btn btn-secondary">Directions</a></div>
+      </div>
+      <div class="map-card"><iframe title="Map" src="https://www.google.com/maps?q=2030+Gessner+Rd,+Houston,+TX+77080&output=embed" loading="lazy"></iframe></div>
+    </div>
+  </div></section>
+
+  <footer><div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-brand">Ina's Threading &amp; Beauty</div><p style="color:rgba(244,237,224,.6)">Houston's threading studio since 2010. Book online, or walk in for brows.</p></div>
+      <div><h4>Services</h4><ul><li><a href="#services">Threading</a></li><li><a href="#services">Lashes</a></li><li><a href="#services">Waxing</a></li><li><a href="#services">Facials</a></li></ul></div>
+      <div><h4>Visit</h4><ul><li>2030 Gessner Rd</li><li>Houston, TX 77080</li><li><a href="tel:8325825307">(832) 582-5307</a></li><li>Mon–Sat · 9–5</li></ul></div>
+      <div><h4>Quick Links</h4><ul><li><a href="#gallery">Gallery</a></li><li><a href="#team">Team</a></li><li><a href="#reviews">Reviews</a></li><li><a href="https://instagram.com/inas_threading" target="_blank" rel="noopener">Instagram</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 Ina's Threading &amp; Beauty</div><div>Mockup by <a href="https://blackhartconsulting.com" target="_blank" rel="noopener" style="color:var(--gold-soft)">Black Hart Consulting</a> · Studio tier</div></div>
+  </div></footer>
+
+  <div class="mobile-cta"><a href="tel:8325825307" class="btn btn-secondary">Call</a><button class="btn btn-book" data-book>Book Now</button></div>
+
+  <!-- Booking modal (Booksy-style mock) -->
+  <div class="modal" id="bookModal"><div class="booking">
+    <div class="booking-head"><div class="bk-brand"><span class="brand-mark" style="width:32px;height:32px;font-size:1rem">I</span> Book your visit</div><button class="toolbtn" id="bkClose" aria-label="Close" style="width:36px;height:36px">✕</button></div>
+    <div class="booking-body">
+      <div class="bk-label">Service</div>
+      <select class="bk-select"><option>Eyebrow Threading — $12 · 10 min</option><option>Full Face Threading — $35–45 · 25 min</option><option>Eyelash Lift — $55 · 60 min</option><option>Eyelash Extensions — $45 · 90 min</option><option>Brazilian Wax — $60 · 30 min</option><option>Full Hydrafacial — $75 · 60 min</option></select>
+      <div class="bk-label">Date</div>
+      <div class="bk-days"><div class="bk-day"><div class="d">Wed</div><div class="n">28</div></div><div class="bk-day active"><div class="d">Thu</div><div class="n">29</div></div><div class="bk-day"><div class="d">Fri</div><div class="n">30</div></div><div class="bk-day"><div class="d">Sat</div><div class="n">31</div></div><div class="bk-day"><div class="d">Mon</div><div class="n">2</div></div><div class="bk-day"><div class="d">Tue</div><div class="n">3</div></div></div>
+      <div class="bk-label">Time</div>
+      <div class="bk-times"><div class="bk-time">9:00</div><div class="bk-time taken">9:30</div><div class="bk-time active">10:00</div><div class="bk-time">10:30</div><div class="bk-time">11:00</div><div class="bk-time taken">11:30</div><div class="bk-time">1:00</div><div class="bk-time">2:30</div></div>
+    </div>
+    <div class="booking-foot"><div class="bk-summary">Thu Apr 29 · <b>10:00 AM</b></div><button class="btn btn-book" id="bkConfirm">Confirm Booking</button></div>
+  </div></div>
+
+  <div class="lightbox" id="lightbox"><button class="close" id="lbClose">✕</button><img id="lbImg" src="" alt="Gallery image"></div>
+
+  <script>
+    (function(){
+      var root=document.documentElement;
+      var saved=localStorage.getItem('inas-theme');
+      if(saved){root.setAttribute('data-theme',saved);} else if(matchMedia('(prefers-color-scheme:dark)').matches){root.setAttribute('data-theme','dark');}
+      document.getElementById('themeBtn').onclick=function(){var n=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',n);localStorage.setItem('inas-theme',n);};
+      var links=document.querySelector('.nav-links'); document.getElementById('navToggle').onclick=function(){var o=links.style.display==='flex';links.style.display=o?'':'flex';links.style.flexDirection='column';links.style.position='absolute';links.style.top='100%';links.style.left=0;links.style.right=0;links.style.background='var(--bg)';links.style.padding='18px 24px';links.style.borderBottom='1px solid var(--line)';links.style.gap='14px';};
+      // Booking modal
+      var modal=document.getElementById('bookModal');
+      document.querySelectorAll('[data-book]').forEach(function(b){b.onclick=function(){modal.classList.add('open');};});
+      document.getElementById('bkClose').onclick=function(){modal.classList.remove('open');};
+      modal.onclick=function(e){if(e.target===modal)modal.classList.remove('open');};
+      document.querySelectorAll('.bk-day').forEach(function(d){d.onclick=function(){document.querySelectorAll('.bk-day').forEach(function(x){x.classList.remove('active');});d.classList.add('active');};});
+      document.querySelectorAll('.bk-time:not(.taken)').forEach(function(t){t.onclick=function(){document.querySelectorAll('.bk-time').forEach(function(x){x.classList.remove('active');});t.classList.add('active');};});
+      document.getElementById('bkConfirm').onclick=function(){this.textContent='✓ Booked! (demo)';this.style.background='#3c8b5a';};
+      // Lightbox
+      var lb=document.getElementById('lightbox'),lbi=document.getElementById('lbImg');
+      document.querySelectorAll('.gallery-grid img').forEach(function(img){img.onclick=function(){lbi.src=img.src.replace('w=700','w=1400').replace('w=900','w=1600').replace('w=600','w=1400');lb.classList.add('open');};});
+      document.getElementById('lbClose').onclick=function(){lb.classList.remove('open');}; lb.onclick=function(e){if(e.target===lb)lb.classList.remove('open');};
+      // Carousel
+      var track=document.getElementById('ctrack'),dots=document.querySelectorAll('.cdot'),cur=0;
+      function go(i){cur=i;track.style.transform='translateX(-'+(i*100)+'%)';dots.forEach(function(d,j){d.classList.toggle('active',j===i);});}
+      dots.forEach(function(d,i){d.onclick=function(){go(i);};});
+      setInterval(function(){go((cur+1)%dots.length);},6000);
+    })();
+  </script>
+<script>
+/* Self-healing image fallback: any image that fails to load becomes a brand gradient, never a broken icon. */
+(function(){
+  var FB="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='900'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23d8b1a0'/%3E%3Cstop offset='1' stop-color='%23b8894f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='900' fill='url(%23g)'/%3E%3C/svg%3E";
+  function hasRealSrc(i){ var s=i.getAttribute('src'); return s && s.indexOf('data:image/svg')!==0; }
+  function fix(i){ if(i.dataset.fb || !hasRealSrc(i)) return; i.dataset.fb='1'; i.src=FB; }
+  [].forEach.call(document.images, function(i){
+    if(i.complete && i.naturalWidth===0 && hasRealSrc(i)){ fix(i); }
+    else { i.addEventListener('error', function(){ fix(i); }); }
+  });
+})();
+</script>
+</body>
+</html>

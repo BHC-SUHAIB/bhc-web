@@ -12,5 +12,12 @@
     "tiers": ["essential", "studio", "signature"],
     "defaultTier": "signature",
     "created": "2026-05-29"
+  },
+  "tokeproperties": {
+    "password": "Toke$11",
+    "label": "Toke Properties",
+    "tiers": ["main"],
+    "defaultTier": "main",
+    "created": "2026-05-30"
   }
 }

@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Toke Properties · Houston Luxury & Commercial Real Estate</title>
+<meta name="description" content="Toke Ettehadieh — Houston luxury & commercial real estate. Sell for more with a private valuation, a global marketing reach, and a 4.98-star reputation across 740+ reviews. Director, Fine Homes & Estates, Century 21 Olympian." />
+<meta name="theme-color" content="#0a0a0b" />
+
+<!-- ============================================================
+     TOKE PROPERTIES — DESIGN MOCKUP (single-file demo)
+     Direction: valuation-first (win sellers) · Buy·Sell·Invest dual path
+     · cinematic & minimal · gold-on-black · Toke-led, C21 endorsed.
+     PLACEHOLDERS to swap with real assets before launch:
+       • Logo wordmark  → replace .brand mark with Toke's real logo (SVG/PNG)
+       • Portrait        → replace .portrait monogram with Toke's headshot
+       • Listings        → replace sampleListings[] with live MLS/HAR/IDX feed
+       • CTA targets     → wire tel:, mailto:, WhatsApp & booking links (search "REPLACE")
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ---------- Tokens ---------- */
+:root{
+  --bg:#0a0a0b; --bg-2:#0f0f12; --surface:#141417; --surface-2:#1a1a1f;
+  --line:rgba(201,162,75,.20); --line-soft:rgba(255,255,255,.07);
+  --gold:#c9a24b; --gold-2:#e7cd93; --gold-deep:#9c7a2c;
+  --text:#f4f1ea; --muted:#a8a195; --muted-2:#7b7468; --ink:#15110a;
+  --r:14px; --maxw:1240px; --ease:cubic-bezier(.22,.61,.36,1);
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Jost',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--sans);
+  font-weight:300; line-height:1.6; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden; letter-spacing:.2px;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit}
+::selection{background:var(--gold);color:var(--ink)}
+.icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- Type & layout helpers ---------- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+.eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);
+  font-weight:500;display:inline-flex;align-items:center;gap:.7em}
+.eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.eyebrow.center::after{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+h1,h2,h3,.serif{font-family:var(--serif);font-weight:500;line-height:1.04;letter-spacing:.3px}
+h2.title{font-size:clamp(2.1rem,5vw,3.6rem);margin:.35em 0 .5em}
+.lead{color:var(--muted);font-size:clamp(1rem,1.6vw,1.15rem);max-width:60ch}
+.gold-text{color:var(--gold)}
+.section{padding:clamp(64px,9vw,128px) 0;position:relative}
+.section-head{margin-bottom:clamp(36px,5vw,64px)}
+.center{text-align:center}.center .lead{margin-inline:auto}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:.6em;padding:.95em 1.5em;border-radius:50px;
+  font-weight:500;font-size:.92rem;letter-spacing:.04em;transition:.4s var(--ease);white-space:nowrap}
+.btn .icon{width:1.05em;height:1.05em;stroke-width:1.8}
+.btn-gold{background:linear-gradient(135deg,var(--gold-2),var(--gold));color:var(--ink);
+  box-shadow:0 6px 24px -8px rgba(201,162,75,.6)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 34px -8px rgba(201,162,75,.75)}
+.btn-ghost{border:1px solid var(--line);color:var(--text);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.btn-lg{padding:1.05em 1.9em;font-size:1rem}
+.link-arrow{display:inline-flex;align-items:center;gap:.5em;color:var(--gold);font-weight:500;
+  font-size:.9rem;letter-spacing:.05em;transition:.3s var(--ease)}
+.link-arrow .icon{transition:transform .3s var(--ease)}
+.link-arrow:hover .icon{transform:translate(3px,-3px)}
+
+/* ---------- Preview banner ---------- */
+.preview-bar{background:linear-gradient(90deg,#15120a,#1c1709,#15120a);border-bottom:1px solid var(--line);
+  font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;gap:1em;padding:.6em 1em;text-align:center}
+.preview-bar b{color:var(--gold);font-weight:500}
+.preview-bar button{color:var(--muted-2);font-size:1rem;line-height:1;padding:.2em .4em}
+.preview-bar button:hover{color:var(--gold)}
+
+/* ---------- Header / nav ---------- */
+header{position:sticky;top:0;z-index:60;transition:.45s var(--ease);
+  border-bottom:1px solid transparent}
+header.scrolled{background:rgba(10,10,11,.82);backdrop-filter:blur(16px);border-bottom-color:var(--line-soft)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:1.1rem 0;transition:padding .4s var(--ease)}
+header.scrolled .nav{padding:.7rem 0}
+.brand{display:flex;flex-direction:column;line-height:1;gap:4px}
+.brand .mark{font-family:var(--serif);font-size:1.5rem;font-weight:600;letter-spacing:.42em;
+  color:var(--text);text-indent:.42em}
+.brand .mark b{color:var(--gold);font-weight:600}
+.brand .sub{font-size:.54rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted-2);text-indent:.05em}
+.nav-links{display:flex;align-items:center;gap:2.1rem}
+.nav-links a{font-size:.82rem;letter-spacing:.08em;color:var(--muted);font-weight:400;transition:.3s;position:relative;padding:.2em 0}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--gold);transition:width .35s var(--ease)}
+.nav-links a:hover{color:var(--text)}.nav-links a:hover::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:1.1rem}
+.lang{display:flex;gap:.1rem;border:1px solid var(--line-soft);border-radius:40px;padding:3px}
+.lang button{font-size:.68rem;letter-spacing:.1em;padding:.4em .7em;border-radius:30px;color:var(--muted-2);transition:.3s}
+.lang button.on{background:var(--gold);color:var(--ink);font-weight:500}
+.nav-phone{font-size:.84rem;letter-spacing:.05em;color:var(--text);display:inline-flex;align-items:center;gap:.5em}
+.nav-phone .icon{color:var(--gold)}
+.burger{display:none;flex-direction:column;gap:5px;padding:.4em}
+.burger span{width:24px;height:1.6px;background:var(--text);transition:.3s}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;background-color:#0b0a08;
+  background-image:
+    linear-gradient(95deg,rgba(8,8,9,.9) 0%,rgba(8,8,9,.62) 38%,rgba(8,8,9,.2) 68%,rgba(8,8,9,0) 100%),
+    linear-gradient(180deg,rgba(10,10,11,.2) 0%,rgba(10,10,11,.15) 30%,rgba(10,10,11,.55) 78%,rgba(10,10,11,.95) 100%),
+    radial-gradient(110% 85% at 84% 14%,rgba(201,162,75,.22),transparent 52%),
+    url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80');
+  transform:scale(1.05);animation:heroZoom 18s ease-out forwards}
+@keyframes heroZoom{to{transform:scale(1)}}
+.hero-grain{position:absolute;inset:0;z-index:-1;opacity:.5;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E")}
+.hero-inner{padding:7rem 0 4rem;max-width:50rem}
+.hero h1{font-size:clamp(3rem,8.2vw,6rem);margin:.45em 0 .5em;font-weight:500}
+.hero h1 .it{font-style:italic;color:var(--gold-2)}
+.hero .lead{font-size:clamp(1.05rem,1.8vw,1.3rem);color:#d8d3c8;max-width:48ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.4rem}
+.trust{display:flex;flex-wrap:wrap;gap:2.4rem;margin-top:3.4rem;padding-top:2rem;border-top:1px solid var(--line-soft)}
+.trust .t-num{font-family:var(--serif);font-size:2rem;color:var(--gold);line-height:1}
+.trust .t-lbl{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:.5em}
+.scroll-cue{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;
+  align-items:center;gap:.6em;color:var(--muted-2);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase}
+.scroll-cue i{width:1px;height:42px;background:linear-gradient(var(--gold),transparent);animation:cue 2.4s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- Reveal ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.08s}.reveal[data-d="2"]{transition-delay:.16s}
+.reveal[data-d="3"]{transition-delay:.24s}.reveal[data-d="4"]{transition-delay:.32s}
+
+/* ---------- Dual path ---------- */
+.paths{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.path{position:relative;border-radius:var(--r);overflow:hidden;min-height:340px;display:flex;
+  flex-direction:column;justify-content:flex-end;padding:2rem;border:1px solid var(--line-soft);
+  transition:.5s var(--ease);isolation:isolate}
+.path .media{position:absolute;inset:0;z-index:-2;background:linear-gradient(135deg,#1a1a1f,#0c0c0e)}
+.path .media img{width:100%;height:100%;object-fit:cover;opacity:.55;transition:.7s var(--ease)}
+.path::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(10,10,11,.1),rgba(10,10,11,.88))}
+.path:hover{transform:translateY(-6px);border-color:var(--gold)}
+.path:hover .media img{transform:scale(1.07);opacity:.7}
+.path.feature{outline:1px solid var(--gold);box-shadow:0 24px 60px -30px rgba(201,162,75,.5)}
+.path .tag{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.7em}
+.path h3{font-size:2rem}
+.path p{color:var(--muted);font-size:.92rem;margin:.5em 0 1.1em;max-width:30ch}
+.path .go{display:inline-flex;align-items:center;gap:.5em;color:var(--text);font-size:.82rem;letter-spacing:.08em}
+.path .go .icon{color:var(--gold);transition:transform .3s var(--ease)}
+.path:hover .go .icon{transform:translate(4px,-4px)}
+
+/* ---------- Valuation ---------- */
+.valuation{background:
+  radial-gradient(80% 120% at 100% 0,rgba(201,162,75,.10),transparent 50%),
+  linear-gradient(180deg,var(--bg),var(--bg-2))}
+.val-card{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--line);
+  border-radius:22px;padding:clamp(28px,4vw,52px);display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,4vw,56px);
+  align-items:center;box-shadow:0 40px 80px -50px rgba(0,0,0,.9)}
+.val-form{display:flex;flex-direction:column;gap:1rem;margin-top:1.6rem}
+.field{display:flex;flex-direction:column;gap:.5em}
+.field label{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{background:rgba(0,0,0,.35);border:1px solid var(--line-soft);border-radius:10px;
+  padding:.95em 1.1em;color:var(--text);font-size:.95rem;transition:.3s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gold);background:rgba(0,0,0,.55)}
+.val-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.val-result{background:linear-gradient(160deg,rgba(201,162,75,.12),rgba(201,162,75,.02));
+  border:1px solid var(--line);border-radius:18px;padding:2rem;text-align:center;min-height:100%;
+  display:flex;flex-direction:column;justify-content:center;gap:.4rem}
+.val-result .small{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.val-result .range{font-family:var(--serif);font-size:clamp(2.2rem,4.5vw,3.4rem);color:var(--gold);line-height:1.1}
+.val-result.empty{color:var(--muted);justify-content:center}
+.val-result .icon-lg{width:46px;height:46px;color:var(--gold);margin:0 auto .4rem;stroke-width:1.2}
+.val-note{font-size:.78rem;color:var(--muted);margin-top:.6rem}
+.val-tag{display:inline-block;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--line-soft);border-radius:30px;padding:.4em .85em;margin-bottom:.6rem}
+.val-tag.live{color:#86e0a4;border-color:rgba(134,224,164,.38);background:rgba(134,224,164,.06)}
+.val-spin{width:36px;height:36px;border-radius:50%;border:2px solid var(--line-soft);border-top-color:var(--gold);
+  margin:.4rem auto .8rem;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.val-comps{width:100%;text-align:left;margin-top:.7rem;border-top:1px solid var(--line-soft);padding-top:.8rem}
+.val-comp{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;font-size:.82rem;color:var(--muted);padding:.32em 0}
+.val-comp span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.val-comp b{color:var(--text);font-weight:500;flex:none}
+
+/* ---------- Listings ---------- */
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:50px;padding:4px;background:rgba(0,0,0,.3)}
+.toggle button{padding:.6em 1.4em;border-radius:40px;font-size:.82rem;letter-spacing:.06em;color:var(--muted);transition:.35s var(--ease);display:inline-flex;align-items:center;gap:.5em}
+.toggle button.on{background:linear-gradient(135deg,var(--gold-2),var(--gold));color:var(--ink);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.4rem}
+.card{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r);overflow:hidden;
+  transition:.5s var(--ease);display:flex;flex-direction:column}
+.card:hover{transform:translateY(-6px);border-color:var(--line);box-shadow:0 30px 60px -40px rgba(0,0,0,.9)}
+.card .media{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,#1c1c21,#0d0d0f);overflow:hidden}
+.card .media img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.card:hover .media img{transform:scale(1.08)}
+.card .badge{position:absolute;top:14px;left:14px;background:rgba(10,10,11,.7);backdrop-filter:blur(6px);
+  border:1px solid var(--line);color:var(--gold);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:.45em .8em;border-radius:30px}
+.card .fav{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;
+  background:rgba(10,10,11,.6);backdrop-filter:blur(6px);display:grid;place-items:center;color:#fff;border:1px solid var(--line-soft);transition:.3s}
+.card .fav:hover{color:var(--gold);border-color:var(--gold)}
+.card .fav.on{color:var(--gold);border-color:var(--gold)}
+.card-body{padding:1.3rem 1.4rem 1.5rem;display:flex;flex-direction:column;gap:.6rem;flex:1}
+.card .price{font-family:var(--serif);font-size:1.7rem;color:var(--gold);line-height:1}
+.card .addr{font-size:1.02rem;color:var(--text)}
+.card .loc{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.4em}
+.card .specs{display:flex;gap:1.1rem;flex-wrap:wrap;font-size:.78rem;color:var(--muted);
+  padding-top:.9rem;margin-top:auto;border-top:1px solid var(--line-soft)}
+.card .specs span{display:inline-flex;align-items:center;gap:.4em}
+.card .specs b{color:var(--text);font-weight:500}
+.card .cta-row{margin-top:.4rem}
+.card .cta-row button{width:100%;justify-content:center;padding:.8em;border-radius:10px;border:1px solid var(--line);
+  font-size:.8rem;letter-spacing:.08em;color:var(--text);transition:.35s var(--ease);display:flex;align-items:center;gap:.5em}
+.card .cta-row button:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,162,75,.06)}
+.listings-note{display:none;align-items:center;gap:.7em;margin:0 0 1.6rem;padding:.85em 1.15em;
+  border:1px dashed var(--line);border-radius:12px;background:rgba(201,162,75,.05);font-size:.82rem;color:var(--muted)}
+.listings-note .icon{color:var(--gold);width:1.15em;height:1.15em;flex:none}
+.listings-note b{color:var(--gold);font-weight:500}
+.card.skel{pointer-events:none}
+.card.skel .media,.card.skel .sk-line{background:linear-gradient(110deg,#161619 25%,#1f1f24 50%,#161619 75%);
+  background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.card.skel .sk-line{height:13px;border-radius:6px;margin:.6rem 0}
+.card.skel .sk-line.short{width:55%}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+/* ---------- Sell showcase ---------- */
+.sell{background:linear-gradient(180deg,var(--bg-2),var(--bg))}
+.sell-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,72px);align-items:center}
+.pillars{display:grid;gap:1.1rem;margin-top:2rem}
+.pillar{display:flex;gap:1.1rem;padding:1.2rem 1.3rem;border:1px solid var(--line-soft);border-radius:var(--r);
+  background:rgba(255,255,255,.015);transition:.4s var(--ease)}
+.pillar:hover{border-color:var(--line);transform:translateX(4px)}
+.pillar .pico{width:46px;height:46px;flex:none;border-radius:11px;display:grid;place-items:center;color:var(--gold);
+  background:radial-gradient(circle at 30% 20%,rgba(201,162,75,.22),rgba(201,162,75,.05));border:1px solid var(--line);font-size:1.3rem}
+.pillar h4{font-family:var(--sans);font-size:1rem;font-weight:500;letter-spacing:.02em;margin-bottom:.25em}
+.pillar p{font-size:.86rem;color:var(--muted);max-width:42ch}
+.sell-media{position:relative;border-radius:20px;overflow:hidden;min-height:480px;border:1px solid var(--line)}
+.sell-media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.sell-media .stat{position:absolute;left:24px;bottom:24px;right:24px;background:rgba(10,10,11,.66);
+  backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:14px;padding:1.2rem 1.4rem;display:flex;gap:1.6rem;flex-wrap:wrap}
+.sell-media .stat .s-num{font-family:var(--serif);font-size:1.7rem;color:var(--gold);line-height:1}
+.sell-media .stat .s-lbl{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- About ---------- */
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(32px,5vw,72px);align-items:center}
+.portrait{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/5;border:1px solid var(--line);
+  background:radial-gradient(120% 90% at 30% 10%,#23201a,#0c0c0e);display:grid;place-items:center}
+.portrait .mono{font-family:var(--serif);font-size:7rem;color:var(--gold);opacity:.85;letter-spacing:.05em}
+.portrait .ring{position:absolute;inset:18px;border:1px solid var(--line);border-radius:14px;pointer-events:none}
+.portrait .cap{position:absolute;left:0;right:0;bottom:0;padding:1.4rem;background:linear-gradient(transparent,rgba(10,10,11,.9));
+  font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center}
+.portrait .cap b{color:var(--text);font-weight:500}
+.badges{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.8rem 0}
+.chip{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);
+  border-radius:30px;padding:.5em .95em;background:rgba(201,162,75,.05)}
+.about-grid blockquote{font-family:var(--serif);font-size:clamp(1.3rem,2.4vw,1.8rem);font-style:italic;
+  color:var(--text);line-height:1.4;margin:1.4rem 0;padding-left:1.2rem;border-left:2px solid var(--gold)}
+.c21{display:inline-flex;align-items:center;gap:.7em;margin-top:1.4rem;font-size:.78rem;color:var(--muted);
+  letter-spacing:.06em;border:1px solid var(--line-soft);border-radius:30px;padding:.55em 1em}
+.c21 b{color:var(--gold);font-weight:500;letter-spacing:.14em}
+
+/* ---------- Private collection ---------- */
+.collection{position:relative;text-align:center;overflow:hidden}
+.collection .col-bg{position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;
+  background-image:linear-gradient(180deg,rgba(10,10,11,.82),rgba(10,10,11,.94)),
+   url('https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=2000&q=80')}
+.collection .col-inner{max-width:640px;margin:0 auto}
+.inline-form{display:flex;gap:.7rem;max-width:480px;margin:2rem auto 0;flex-wrap:wrap}
+.inline-form input{flex:1;min-width:220px;background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:50px;
+  padding:1em 1.4em;color:var(--text)}
+.inline-form input:focus{outline:none;border-color:var(--gold)}
+.form-ok{color:var(--gold);margin-top:1rem;font-size:.9rem;display:none;align-items:center;gap:.5em;justify-content:center}
+.form-ok.show{display:flex}
+
+/* ---------- Invest / calculator ---------- */
+.invest-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+.calc{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--line);
+  border-radius:20px;padding:clamp(26px,3.5vw,40px)}
+.calc h3{font-family:var(--sans);font-weight:500;font-size:1.05rem;letter-spacing:.04em;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6em}
+.calc h3 .icon{color:var(--gold)}
+.calc .field{margin-bottom:1rem}
+.calc-out{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.6rem}
+.calc-out .o{background:rgba(0,0,0,.3);border:1px solid var(--line-soft);border-radius:12px;padding:1.1rem;text-align:center}
+.calc-out .o .v{font-family:var(--serif);font-size:2rem;color:var(--gold);line-height:1}
+.calc-out .o .l{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.5em}
+
+/* ---------- Reviews ---------- */
+.reviews{background:linear-gradient(180deg,var(--bg),var(--bg-2))}
+.rev-top{display:flex;align-items:center;justify-content:center;gap:1.4rem;flex-wrap:wrap;margin-bottom:2.6rem}
+.stars{display:flex;gap:.2rem;color:var(--gold)}
+.stars .icon{fill:var(--gold);stroke:var(--gold);width:1.1rem;height:1.1rem}
+.rev-top .big{font-family:var(--serif);font-size:2.4rem;color:var(--gold);line-height:1}
+.rev-stage{position:relative;max-width:840px;margin:0 auto;min-height:230px}
+.rev{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:.7s var(--ease);
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.4rem;pointer-events:none}
+.rev.on{opacity:1;transform:none;pointer-events:auto;position:relative}
+.rev .quote-icon{color:var(--gold);opacity:.5;font-family:var(--serif);font-size:4rem;line-height:.6;height:.5em}
+.rev q{font-family:var(--serif);font-style:italic;font-size:clamp(1.3rem,2.6vw,2rem);line-height:1.4;color:var(--text);quotes:none}
+.rev .who{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.rev-nav{display:flex;justify-content:center;gap:.6rem;margin-top:2rem}
+.rev-nav button{width:9px;height:9px;border-radius:50%;background:var(--muted-2);transition:.3s;opacity:.5}
+.rev-nav button.on{background:var(--gold);opacity:1;width:26px;border-radius:6px}
+
+/* ---------- Areas ---------- */
+.areas-wrap{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;max-width:880px;margin:0 auto}
+.area{border:1px solid var(--line-soft);border-radius:40px;padding:.7em 1.3em;font-size:.84rem;color:var(--muted);
+  letter-spacing:.04em;transition:.35s var(--ease)}
+.area:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
+
+/* ---------- Contact ---------- */
+.contact{background:linear-gradient(180deg,var(--bg-2),var(--bg))}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px)}
+.contact-form{display:grid;gap:1rem}
+.contact-form .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.contact-form textarea{background:rgba(0,0,0,.35);border:1px solid var(--line-soft);border-radius:10px;
+  padding:.95em 1.1em;color:var(--text);min-height:120px;resize:vertical}
+.contact-form textarea:focus{outline:none;border-color:var(--gold)}
+.touch{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.6rem}
+.touch a{display:flex;align-items:center;gap:.8em;border:1px solid var(--line-soft);border-radius:12px;padding:1rem 1.1rem;transition:.35s var(--ease)}
+.touch a:hover{border-color:var(--gold);background:rgba(201,162,75,.05);transform:translateY(-3px)}
+.touch .ti{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:var(--gold);
+  background:rgba(201,162,75,.08);border:1px solid var(--line);font-size:1.1rem;flex:none}
+.touch .tl{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.touch .tv{font-size:.92rem;color:var(--text)}
+.map{border-radius:14px;overflow:hidden;border:1px solid var(--line);height:230px;margin-top:1.2rem}
+.map iframe{width:100%;height:100%;border:0;filter:invert(.92) hue-rotate(180deg) brightness(.95) contrast(.92)}
+.lang-line{font-size:.8rem;color:var(--muted);margin-top:1.2rem;letter-spacing:.05em}
+.lang-line b{color:var(--gold);font-weight:500}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--line-soft);padding:clamp(48px,7vw,80px) 0 2.4rem;background:var(--bg)}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.4rem;margin-bottom:3rem}
+.foot-grid p{color:var(--muted);font-size:.88rem;max-width:34ch;margin-top:1.1rem}
+.foot-col h5{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem}
+.foot-col a{display:block;color:var(--muted);font-size:.88rem;padding:.32em 0;transition:.3s}
+.foot-col a:hover{color:var(--text);padding-left:.3em}
+.socials{display:flex;gap:.7rem;margin-top:1.4rem}
+.socials a{width:38px;height:38px;border:1px solid var(--line-soft);border-radius:50%;display:grid;place-items:center;color:var(--muted);transition:.35s var(--ease)}
+.socials a:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
+.foot-bottom{border-top:1px solid var(--line-soft);padding-top:1.8rem;display:flex;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap;font-size:.74rem;color:var(--muted-2);letter-spacing:.05em}
+.foot-bottom .eh{display:inline-flex;align-items:center;gap:.5em}
+
+/* ---------- Floating concierge ---------- */
+.fab{position:fixed;right:22px;bottom:22px;z-index:70;width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold));color:var(--ink);display:grid;place-items:center;
+  box-shadow:0 14px 36px -10px rgba(201,162,75,.7);transition:.4s var(--ease);font-size:1.5rem}
+.fab:hover{transform:scale(1.07) translateY(-2px)}
+.fab .icon{width:26px;height:26px;stroke-width:1.7}
+.concierge{position:fixed;right:22px;bottom:94px;z-index:71;width:min(340px,calc(100vw - 44px));
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.95);transform:translateY(20px) scale(.96);opacity:0;pointer-events:none;
+  transition:.4s var(--ease);transform-origin:bottom right}
+.concierge.open{transform:none;opacity:1;pointer-events:auto}
+.concierge .ch-head{background:linear-gradient(135deg,#1a1610,#221c10);padding:1.1rem 1.3rem;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:.8rem}
+.concierge .ch-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold-2),var(--gold));
+  color:var(--ink);display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:1.1rem}
+.concierge .ch-head .n{font-size:.95rem;color:var(--text)}
+.concierge .ch-head .s{font-size:.7rem;color:var(--gold);display:flex;align-items:center;gap:.4em}
+.concierge .ch-head .s::before{content:"";width:7px;height:7px;border-radius:50%;background:#5fd07a;box-shadow:0 0 8px #5fd07a}
+.ch-body{padding:1.2rem;display:flex;flex-direction:column;gap:.7rem;max-height:300px;overflow-y:auto}
+.ch-msg{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:12px 12px 12px 4px;
+  padding:.8rem 1rem;font-size:.86rem;color:var(--muted);max-width:90%}
+.ch-msg.me{align-self:flex-end;background:rgba(201,162,75,.12);border-color:var(--line);color:var(--text);border-radius:12px 12px 4px 12px}
+.ch-quick{display:flex;flex-wrap:wrap;gap:.5rem;padding:0 1.2rem 1.2rem}
+.ch-quick button{font-size:.76rem;border:1px solid var(--line);border-radius:30px;padding:.5em .9em;color:var(--gold);transition:.3s}
+.ch-quick button:hover{background:rgba(201,162,75,.1)}
+
+/* ---------- Mobile bottom bar ---------- */
+.mobile-bar{position:fixed;left:0;right:0;bottom:0;z-index:65;display:none;
+  background:rgba(10,10,11,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);
+  grid-template-columns:repeat(4,1fr);padding:.5rem .4rem calc(.5rem + env(safe-area-inset-bottom))}
+.mobile-bar a{display:flex;flex-direction:column;align-items:center;gap:.3em;font-size:.6rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);padding:.5em 0}
+.mobile-bar a .icon{width:20px;height:20px;color:var(--gold)}
+
+/* ---------- Mobile nav overlay ---------- */
+.mobile-nav{position:fixed;inset:0;z-index:80;background:rgba(10,10,11,.98);backdrop-filter:blur(10px);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.6rem;
+  transform:translateY(-100%);transition:.5s var(--ease);opacity:0}
+.mobile-nav.open{transform:none;opacity:1}
+.mobile-nav a{font-family:var(--serif);font-size:2rem;color:var(--text);transition:.3s}
+.mobile-nav a:hover{color:var(--gold)}
+.mobile-nav .close{position:absolute;top:1.4rem;right:1.4rem;font-size:1.6rem;color:var(--muted)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1000px){
+  .paths{grid-template-columns:1fr}
+  .val-card,.sell-grid,.about-grid,.invest-grid,.contact-grid{grid-template-columns:1fr}
+  .about-grid .portrait{max-width:380px}
+  .sell-media{min-height:340px;order:-1}
+}
+@media(max-width:760px){
+  .nav-links,.nav-phone,.nav-right .lang{display:none}
+  .burger{display:flex}
+  .mobile-bar{display:grid}
+  body{padding-bottom:64px}
+  .fab{bottom:78px}.concierge{bottom:150px}
+  .trust{gap:1.6rem}.trust .t-num{font-size:1.6rem}
+  .touch,.contact-form .two,.calc-out,.foot-grid{grid-template-columns:1fr}
+  .foot-grid{gap:2rem}
+  .val-row{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .hero-bg{animation:none;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SVG icon sprite ===== -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-.9L3 20l1-3.9A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M3 21l1.65-4.5A8 8 0 1 1 12 20a8 8 0 0 1-3.85-1L3 21Z"/><path d="M8.5 8.6c.2-.6.4-.6.7-.6h.5c.2 0 .4 0 .6.5l.8 1.8c.1.2 0 .4-.1.5l-.4.5c-.2.2-.3.3-.1.6a6 6 0 0 0 2.7 2.4c.3.1.5.1.6-.1l.5-.6c.2-.2.3-.2.5-.1l1.7.9c.3.1.4.2.4.4 0 .4-.3 1.2-.7 1.4-.6.4-1.5.6-3-.1a8 8 0 0 1-3.9-3.7c-.5-1-.5-1.8-.3-2.3Z" stroke="none" fill="currentColor"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5-5.9-3.1-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18Z"/></symbol>
+  <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 14h18M3 18v2M21 18v2M7 10V7a1 1 0 0 1 1-1h3v4"/></symbol>
+  <symbol id="i-bath" viewBox="0 0 24 24"><path d="M4 12V6a2 2 0 0 1 2-2c1 0 1.5.5 2 1M4 12h17v2a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4ZM6 18l-1 2M18 18l1 2"/></symbol>
+  <symbol id="i-area" viewBox="0 0 24 24"><path d="M3 9V4h5M21 9V4h-5M3 15v5h5M21 15v5h-5"/></symbol>
+  <symbol id="i-build" viewBox="0 0 24 24"><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14 21V9h5a1 1 0 0 1 1 1v11M2 21h20M7 8h0M7 12h0M7 16h0M10 8h0M10 12h0M10 16h0M17 13h0M17 17h0"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 7-7M14 8h6v6"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1l1.7 1.7L12 21.5l7.1-7.1 1.7-1.7a5 5 0 0 0 0-7.1Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L19 6h0a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="12.5" r="3.5"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 6a3 3 0 0 0 6 0L5 7ZM19 7l-3 6a3 3 0 0 0 6 0l-3-6ZM7 21h10"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+</svg>
+
+<!-- ===== Preview banner (remove for production) ===== -->
+<div class="preview-bar" id="previewBar">
+  <span><b>✦ Design preview</b> — sample imagery &amp; listings. Final site connects Toke's live MLS feed &amp; photography.</span>
+  <button onclick="document.getElementById('previewBar').remove()" aria-label="Dismiss">×</button>
+</div>
+
+<!-- ===== Header ===== -->
+<header id="header">
+  <div class="wrap nav">
+    <a href="#home" class="brand" aria-label="Toke Properties home">
+      <span class="mark">TOKE<b>.</b></span>
+      <span class="sub">Properties · Houston</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#listings" data-i18n="nav_listings">Listings</a>
+      <a href="#sell" data-i18n="nav_sell">Sell</a>
+      <a href="#invest" data-i18n="nav_invest">Invest</a>
+      <a href="#about" data-i18n="nav_about">About</a>
+      <a href="#reviews" data-i18n="nav_reviews">Reviews</a>
+      <a href="#contact" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="en" class="on">EN</button>
+        <button data-lang="es">ES</button>
+        <button data-lang="fa">FA</button>
+      </div>
+      <!-- REPLACE tel: with Toke's number -->
+      <a class="nav-phone" href="tel:+17133985009"><svg class="icon"><use href="#i-phone"/></svg> (713) 398-5009</a>
+      <a class="btn btn-gold" href="#contact" data-i18n="nav_book">Book a Call</a>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Mobile nav ===== -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="close" id="navClose" aria-label="Close">×</button>
+  <a href="#listings">Listings</a>
+  <a href="#sell">Sell</a>
+  <a href="#invest">Invest</a>
+  <a href="#about">About</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#contact">Contact</a>
+  <a class="btn btn-gold" href="#contact" style="font-family:var(--sans);font-size:1rem">Book a Call</a>
+</div>
+
+<main>
+<!-- ===== Hero ===== -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow reveal" data-i18n="hero_eyebrow">Houston · Luxury &amp; Commercial Real Estate</span>
+    <h1 class="reveal" data-d="1"><span data-i18n="hero_h1a">Sell for more,</span><br><span class="it" data-i18n="hero_h1b">with less effort.</span></h1>
+    <p class="lead reveal" data-d="2" data-i18n="hero_sub">Toke Ettehadieh guides Houston's families and investors to extraordinary outcomes — backed by a 4.98-star reputation across 740+ client reviews and the 2025 CENTURION® Award.</p>
+    <div class="hero-cta reveal" data-d="3">
+      <a href="#valuation" class="btn btn-gold btn-lg"><span data-i18n="hero_cta1">What's your home worth?</span> <svg class="icon"><use href="#i-arrow"/></svg></a>
+      <a href="#listings" class="btn btn-ghost btn-lg" data-i18n="hero_cta2">Explore the collection</a>
+    </div>
+    <div class="trust reveal" data-d="4">
+      <div><div class="t-num"><span data-count="4.98" data-dec="2">4.98</span><span style="font-size:1rem">★</span></div><div class="t-lbl">Client rating</div></div>
+      <div><div class="t-num"><span data-count="740">740</span>+</div><div class="t-lbl">5-star reviews</div></div>
+      <div><div class="t-num"><span data-count="15">15</span>+</div><div class="t-lbl">Years in Houston</div></div>
+      <div><div class="t-num">EN·ES·FA</div><div class="t-lbl">Spoken fluently</div></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><i></i></div>
+</section>
+
+<!-- ===== Dual path ===== -->
+<section class="section" id="paths">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow center">Where would you like to begin?</span>
+      <h2 class="title">One advisor. Every move.</h2>
+    </div>
+    <div class="paths">
+      <article class="path feature reveal" data-d="1">
+        <div class="media"><img loading="lazy" alt="Luxury home for sale" src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=900&q=80"></div>
+        <span class="tag">Most requested</span>
+        <h3>Sell</h3>
+        <p>A private valuation and a marketing plan engineered to command top dollar.</p>
+        <a href="#valuation" class="go">Get my home's value <svg class="icon"><use href="#i-ur"/></svg></a>
+      </article>
+      <article class="path reveal" data-d="2">
+        <div class="media"><img loading="lazy" alt="Luxury interior" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80"></div>
+        <span class="tag">Buyers &amp; relocation</span>
+        <h3>Buy</h3>
+        <p>Curated Houston estates plus off-market homes you won't find on the portals.</p>
+        <a href="#listings" class="go">Browse listings <svg class="icon"><use href="#i-ur"/></svg></a>
+      </article>
+      <article class="path reveal" data-d="3">
+        <div class="media"><img loading="lazy" alt="Commercial building" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80"></div>
+        <span class="tag">Commercial</span>
+        <h3>Invest</h3>
+        <p>Income property, leasing &amp; 1031 strategy from a Certified International Property Specialist.</p>
+        <a href="#invest" class="go">Run the numbers <svg class="icon"><use href="#i-ur"/></svg></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Valuation ===== -->
+<section class="section valuation" id="valuation">
+  <div class="wrap">
+    <div class="val-card reveal">
+      <div>
+        <span class="eyebrow">Complimentary &amp; private</span>
+        <h2 class="title" style="margin-bottom:.2em" data-i18n="val_h">What's your home worth today?</h2>
+        <p class="lead">A no-obligation estimate in seconds — then personally refined by Toke with real comps and market timing.</p>
+        <form class="val-form" id="valForm">
+          <div class="field">
+            <label for="valAddr">Property address</label>
+            <input id="valAddr" type="text" placeholder="e.g. 1820 River Oaks Blvd, Houston, TX" required>
+          </div>
+          <div class="val-row">
+            <div class="field">
+              <label for="valType">Property type</label>
+              <select id="valType">
+                <option>Single-family home</option>
+                <option>Condo / Townhome</option>
+                <option>Luxury estate</option>
+                <option>Commercial / Investment</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="valEmail">Email for full report</label>
+              <input id="valEmail" type="email" placeholder="you@email.com">
+            </div>
+          </div>
+          <button class="btn btn-gold btn-lg" type="submit" style="justify-content:center">Reveal my estimate <svg class="icon"><use href="#i-arrow"/></svg></button>
+        </form>
+      </div>
+      <div class="val-result empty" id="valResult" aria-live="polite">
+        <svg class="icon icon-lg"><use href="#i-trend"/></svg>
+        <div class="small">Your estimated value will appear here</div>
+        <p class="val-note">Enter an address to see an instant range. This demo generates an illustrative figure — the live tool uses real Houston MLS comps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Listings ===== -->
+<section class="section" id="listings">
+  <div class="wrap">
+    <div class="section-head reveal" style="display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap">
+      <div>
+        <span class="eyebrow">Featured portfolio</span>
+        <h2 class="title" style="margin-bottom:0">The collection</h2>
+      </div>
+      <div class="toggle" role="group" aria-label="Property category">
+        <button class="on" data-cat="res"><svg class="icon"><use href="#i-bed"/></svg> Residential</button>
+        <button data-cat="com"><svg class="icon"><use href="#i-build"/></svg> Commercial</button>
+      </div>
+    </div>
+    <div class="listings-note" id="listingsNote">
+      <svg class="icon"><use href="#i-build"/></svg>
+      <span><b>Demo MLS feed.</b> These are sample listings, shown to demonstrate live MLS search. Once Toke's Century&nbsp;21&nbsp;/&nbsp;HAR feed is connected, this grid updates automatically with her real inventory — no redesign needed.</span>
+    </div>
+    <div class="grid" id="listingGrid"></div>
+    <div class="center" style="margin-top:2.6rem">
+      <a href="#contact" class="btn btn-ghost btn-lg">Request the full portfolio <svg class="icon"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Sell showcase ===== -->
+<section class="section sell" id="sell">
+  <div class="wrap sell-grid">
+    <div class="reveal">
+      <span class="eyebrow">Why sellers choose Toke</span>
+      <h2 class="title">Marketing that makes buyers compete.</h2>
+      <p class="lead">Your home is launched like a luxury brand — and marketed in three languages to Houston's most active local and international buyers.</p>
+      <div class="pillars">
+        <div class="pillar"><div class="pico"><svg class="icon"><use href="#i-cam"/></svg></div><div><h4>Cinematic media</h4><p>Architectural photography, film &amp; aerial — the standard for Fine Homes &amp; Estates.</p></div></div>
+        <div class="pillar"><div class="pico"><svg class="icon"><use href="#i-globe"/></svg></div><div><h4>Global reach</h4><p>Exposed to qualified buyers worldwide through the Century 21 network across 80+ countries.</p></div></div>
+        <div class="pillar"><div class="pico"><svg class="icon"><use href="#i-scale"/></svg></div><div><h4>Strategic pricing</h4><p>Data-driven positioning and staging guidance that protects your equity and your timeline.</p></div></div>
+        <div class="pillar"><div class="pico"><svg class="icon"><use href="#i-trend"/></svg></div><div><h4>Expert negotiation</h4><p>A Real Estate Negotiation Expert (RENE) at the table for every counter and contingency.</p></div></div>
+      </div>
+    </div>
+    <div class="sell-media reveal" data-d="1">
+      <img loading="lazy" alt="Beautifully staged luxury kitchen" src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1100&q=80">
+      <div class="stat">
+        <div><div class="s-num">80+</div><div class="s-lbl">Countries reached</div></div>
+        <div><div class="s-num">3</div><div class="s-lbl">Languages marketed</div></div>
+        <div><div class="s-num">4.98★</div><div class="s-lbl">Seller satisfaction</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== About ===== -->
+<section class="section" id="about">
+  <div class="wrap about-grid">
+    <!-- PLACEHOLDER portrait — replace with Toke's professional headshot -->
+    <div class="portrait reveal">
+      <div class="ring"></div>
+      <span class="mono">TE</span>
+      <div class="cap"><b>Toke Ettehadieh</b><br>Director · Fine Homes &amp; Estates</div>
+    </div>
+    <div class="reveal" data-d="1">
+      <span class="eyebrow">From the United Nations to Houston's finest addresses</span>
+      <h2 class="title">A global perspective on your most personal decision.</h2>
+      <p class="lead">Toke holds dual Master's degrees from Columbia University and began her career at the United Nations in New York. That lens — on people, place and migration — shapes how she advises every client across 15+ years and 740+ five-star reviews.</p>
+      <blockquote>"Real estate is never just a transaction. It's where your next chapter begins."</blockquote>
+      <div class="badges">
+        <span class="chip">2025 CENTURION® Award</span>
+        <span class="chip">CIPS · International</span>
+        <span class="chip">SRS · Seller Specialist</span>
+        <span class="chip">ABR · Buyer Specialist</span>
+        <span class="chip">RENE · Negotiation</span>
+        <span class="chip">English · Spanish · Farsi</span>
+      </div>
+      <div class="c21"><svg class="icon" style="color:var(--gold)"><use href="#i-build"/></svg> Director, Fine Homes &amp; Estates — <b>CENTURY 21 Olympian</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Private collection ===== -->
+<section class="section collection" id="collection">
+  <div class="col-bg"></div>
+  <div class="wrap col-inner reveal">
+    <span class="eyebrow center">By invitation</span>
+    <h2 class="title">The Private Collection</h2>
+    <p class="lead center">Off-market estates and commercial opportunities, shared discreetly before they ever reach the public market. Request access below.</p>
+    <form class="inline-form" id="collectForm">
+      <input type="email" placeholder="Your private email" required aria-label="Email">
+      <button class="btn btn-gold" type="submit">Request access <svg class="icon"><use href="#i-arrow"/></svg></button>
+    </form>
+    <div class="form-ok" id="collectOk"><svg class="icon"><use href="#i-check"/></svg> Thank you — Toke's team will be in touch privately.</div>
+  </div>
+</section>
+
+<!-- ===== Invest / calculator ===== -->
+<section class="section invest" id="invest">
+  <div class="wrap invest-grid">
+    <div class="reveal">
+      <span class="eyebrow">Commercial &amp; investment</span>
+      <h2 class="title">Numbers first. Always.</h2>
+      <p class="lead">Considering an income property, a 1031 exchange, or a lease-vs-buy decision? Model the return in seconds, then let Toke pressure-test it with on-the-ground Houston data.</p>
+      <div class="badges">
+        <span class="chip">Cap-rate analysis</span>
+        <span class="chip">1031 exchange</span>
+        <span class="chip">Lease vs. buy</span>
+        <span class="chip">Off-market deals</span>
+      </div>
+      <a href="#contact" class="btn btn-ghost btn-lg" style="margin-top:1rem">Talk commercial with Toke <svg class="icon"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="calc reveal" data-d="1">
+      <h3><svg class="icon"><use href="#i-trend"/></svg> Cap-rate &amp; NOI calculator</h3>
+      <div class="field"><label for="cPrice">Purchase price ($)</label><input id="cPrice" type="number" value="2400000"></div>
+      <div class="field"><label for="cIncome">Annual gross income ($)</label><input id="cIncome" type="number" value="228000"></div>
+      <div class="field"><label for="cExp">Annual operating expenses ($)</label><input id="cExp" type="number" value="64000"></div>
+      <div class="calc-out">
+        <div class="o"><div class="v" id="oNoi">$164,000</div><div class="l">Net operating income</div></div>
+        <div class="o"><div class="v" id="oCap">6.83%</div><div class="l">Cap rate</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Reviews ===== -->
+<section class="section reviews" id="reviews">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow center">In their words</span>
+      <h2 class="title" style="margin-bottom:.1em">A reputation earned 740 times over.</h2>
+    </div>
+    <div class="rev-top reveal">
+      <div class="stars" aria-label="4.98 out of 5">
+        <svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg><svg class="icon"><use href="#i-star"/></svg>
+      </div>
+      <span class="big">4.98 / 5</span>
+      <span style="color:var(--muted);font-size:.85rem;letter-spacing:.1em">740+ verified HAR reviews</span>
+    </div>
+    <div class="rev-stage reveal" id="revStage"></div>
+    <div class="rev-nav" id="revNav"></div>
+  </div>
+</section>
+
+<!-- ===== Areas ===== -->
+<section class="section" id="areas" style="padding-top:0">
+  <div class="wrap center">
+    <div class="section-head center reveal">
+      <span class="eyebrow center">Where she works</span>
+      <h2 class="title" style="margin-bottom:.4em">Houston &amp; beyond</h2>
+    </div>
+    <div class="areas-wrap reveal">
+      <span class="area">River Oaks</span><span class="area">Memorial</span><span class="area">Tanglewood</span>
+      <span class="area">West University</span><span class="area">Bellaire</span><span class="area">The Heights</span>
+      <span class="area">Uptown / Galleria</span><span class="area">Montrose</span><span class="area">Sugar Land</span>
+      <span class="area">Katy</span><span class="area">The Woodlands</span><span class="area">Galveston</span>
+      <span class="area">Humble</span><span class="area">Hockley</span><span class="area">Alvin</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Contact ===== -->
+<section class="section contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <span class="eyebrow">Let's talk</span>
+      <h2 class="title">Tell Toke what you're planning.</h2>
+      <p class="lead" style="margin-bottom:1.6rem">A short, no-pressure conversation — by call, text, or whichever channel suits your schedule.</p>
+      <div class="touch">
+        <!-- REPLACE all hrefs with Toke's real contact points -->
+        <a href="tel:+17133985009"><span class="ti"><svg class="icon"><use href="#i-phone"/></svg></span><span><span class="tl">Call</span><br><span class="tv">(713) 398-5009</span></span></a>
+        <a href="sms:+17133985009"><span class="ti"><svg class="icon"><use href="#i-chat"/></svg></span><span><span class="tl">Text</span><br><span class="tv">(713) 398-5009</span></span></a>
+        <a href="https://wa.me/17133985009" target="_blank" rel="noopener"><span class="ti"><svg class="icon"><use href="#i-wa"/></svg></span><span><span class="tl">WhatsApp</span><br><span class="tv">Message now</span></span></a>
+        <a href="mailto:toke@tokeproperties.com"><span class="ti"><svg class="icon"><use href="#i-mail"/></svg></span><span><span class="tl">Email</span><br><span class="tv">toke@tokeproperties.com</span></span></a>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:.7em;color:var(--muted);font-size:.88rem">
+        <svg class="icon" style="color:var(--gold);margin-top:.2em"><use href="#i-pin"/></svg>
+        <span>CENTURY 21 Olympian — Toke Properties<br>3033 Chimney Rock Rd, Ste 120, Houston, TX 77056</span>
+      </div>
+      <div class="map">
+        <iframe title="Office location" loading="lazy" src="https://www.google.com/maps?q=3033+Chimney+Rock+Rd+Suite+120,+Houston,+TX+77056&output=embed"></iframe>
+      </div>
+      <p class="lang-line">Se habla <b>español</b> · <b>فارسی</b> صحبت می‌کنیم</p>
+    </div>
+    <div class="reveal" data-d="1">
+      <form class="contact-form" id="contactForm" style="background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:20px;padding:clamp(24px,3.5vw,40px)">
+        <div class="two">
+          <div class="field"><label for="cName">Name</label><input id="cName" type="text" required></div>
+          <div class="field"><label for="cPhone">Phone</label><input id="cPhone" type="tel" required></div>
+        </div>
+        <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" required></div>
+        <div class="field"><label for="cIntent">I'm looking to</label>
+          <select id="cIntent"><option>Sell a property</option><option>Buy a home</option><option>Invest / commercial</option><option>Just exploring</option></select>
+        </div>
+        <div class="field"><label for="cMsg">Anything Toke should know?</label><textarea id="cMsg" placeholder="Timeline, neighborhood, budget…"></textarea></div>
+        <button class="btn btn-gold btn-lg" type="submit" style="justify-content:center">Send to Toke <svg class="icon"><use href="#i-arrow"/></svg></button>
+        <div class="form-ok" id="contactOk"><svg class="icon"><use href="#i-check"/></svg> Sent — Toke personally replies within one business day.</div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <span class="mark" style="font-family:var(--serif);font-size:1.5rem;font-weight:600;letter-spacing:.42em;color:var(--text)">TOKE<b style="color:var(--gold)">.</b></span>
+        <p>Houston luxury &amp; commercial real estate, guided by a global perspective and a 4.98-star reputation.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.linkedin.com/in/tokeproperties/" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v0M11 17v-4a2 2 0 0 1 4 0v4M11 11v6"/></svg></a>
+          <a href="https://www.facebook.com/FineHomesTx/" aria-label="Facebook"><svg class="icon" viewBox="0 0 24 24"><path d="M14 8h2V5h-2a3 3 0 0 0-3 3v2H9v3h2v6h3v-6h2l1-3h-3V8a1 1 0 0 1 1-1Z"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg class="icon" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="4"/><path d="M10 9.5l5 2.5-5 2.5Z" fill="currentColor" stroke="none"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h5>Explore</h5>
+        <a href="#listings">Listings</a><a href="#valuation">Home valuation</a><a href="#invest">Commercial</a>
+        <a href="#collection">Private Collection</a><a href="#about">About Toke</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+17133985009">(713) 398-5009</a>
+        <a href="mailto:toke@tokeproperties.com">toke@tokeproperties.com</a>
+        <a href="https://www.google.com/maps?q=3033+Chimney+Rock+Rd+Suite+120,+Houston,+TX+77056" target="_blank" rel="noopener">3033 Chimney Rock Rd, Ste 120<br>Houston, TX 77056</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Toke Properties · CENTURY 21 Olympian. All rights reserved.</span>
+      <span class="eh"><svg class="icon" viewBox="0 0 24 24" style="width:1rem;height:1rem"><path d="M3 11l9-7 9 7M5 10v9h14v-9M10 19v-5h4v5"/></svg> Equal Housing Opportunity · REALTOR®</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== Floating concierge ===== -->
+<button class="fab" id="fab" aria-label="Chat with Toke's concierge"><svg class="icon"><use href="#i-chat"/></svg></button>
+<div class="concierge" id="concierge" role="dialog" aria-label="Concierge chat">
+  <div class="ch-head">
+    <div class="ch-av">T</div>
+    <div><div class="n">Toke's Concierge</div><div class="s">Online · replies in minutes</div></div>
+  </div>
+  <div class="ch-body" id="chBody">
+    <div class="ch-msg">Hi there 👋 I'm Toke's concierge. How can I help you today?</div>
+  </div>
+  <div class="ch-quick" id="chQuick">
+    <button data-q="I'd like to sell my home">Sell my home</button>
+    <button data-q="Book a call with Toke">Book a call</button>
+    <button data-q="Show me listings">See listings</button>
+    <button data-q="I'm interested in commercial">Commercial</button>
+  </div>
+</div>
+
+<!-- ===== Mobile bottom bar ===== -->
+<nav class="mobile-bar" aria-label="Quick contact">
+  <a href="tel:+17133985009"><svg class="icon"><use href="#i-phone"/></svg>Call</a>
+  <a href="sms:+17133985009"><svg class="icon"><use href="#i-chat"/></svg>Text</a>
+  <a href="https://wa.me/17133985009" target="_blank" rel="noopener"><svg class="icon"><use href="#i-wa"/></svg>WhatsApp</a>
+  <a href="#contact"><svg class="icon"><use href="#i-cal"/></svg>Book</a>
+</nav>
+
+<script>
+/* ---------- Data ---------- */
+const sampleListings = {
+  res:[
+    {img:'1600585154340-be6161a56a0c',price:'$2,150,000',addr:'River Oaks Estate',loc:'River Oaks',beds:5,baths:'5.5',sqft:'6,400',badge:'New'},
+    {img:'1564013799919-ab600027ffc6',price:'$1,475,000',addr:'Memorial Modern',loc:'Memorial',beds:4,baths:4,sqft:'4,200',badge:'For Sale'},
+    {img:'1512917774080-9991f1c4c750',price:'$1,890,000',addr:'Tanglewood Classic',loc:'Tanglewood',beds:5,baths:'4.5',sqft:'5,100',badge:'For Sale'},
+    {img:'1600607687939-ce8a6c25118c',price:'$685,000',addr:'Galleria High-Rise',loc:'Uptown / Galleria',beds:2,baths:2,sqft:'1,750',badge:'Condo'}
+  ],
+  com:[
+    {img:'1497366811353-6870744d04b2',price:'$3,250,000',addr:'Uptown Office Suite',loc:'Galleria',sf:'12,000',cap:'7.1%',type:'Office',badge:'For Sale'},
+    {img:'1542361345-89e58247f2d5',price:'$2,400,000',addr:'Westheimer Retail',loc:'Montrose',sf:'9,500',cap:'6.8%',type:'Retail',badge:'For Sale'},
+    {img:'1431576901776-e539bd916ba2',price:'$4,100,000',addr:'Med Center Mixed-Use',loc:'Medical Center',sf:'18,000',cap:'6.2%',type:'Mixed-Use',badge:'New'},
+    {img:'1554469384-e58fac16e23a',price:'$1,650,000',addr:'Heights Flex / Warehouse',loc:'The Heights',sf:'14,500',cap:'7.4%',type:'Industrial',badge:'For Sale'}
+  ]
+};
+const reviews = [
+  {q:"Toke is a premier REALTOR and a fantastic lady. She marshaled every resource to sell our home for more than we expected.",w:"Verified HAR review · Seller, River Oaks"},
+  {q:"Even with many other clients, she always made us feel like her top priority — incredibly personable and easy to work with.",w:"Verified HAR review · Buyer, Memorial"},
+  {q:"She made the negotiation as stress-free as possible. Her market knowledge gave us real confidence in our investment.",w:"Verified HAR review · Investor"},
+  {q:"The team went above and beyond, making the entire process smooth and stress-free from start to finish.",w:"Verified HAR review · Seller, Tanglewood"},
+  {q:"Her professionalism, knowledge, and willingness to help truly set her apart from every agent we'd worked with.",w:"Verified HAR review · Repeat client"}
+];
+
+/* ---------- Listings: live via SimplyRETS proxy (/api/listings), demo-data fallback ---------- */
+const grid=document.getElementById('listingGrid'), listingsNote=document.getElementById('listingsNote');
+function imgUrl(id,w){return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w||800}&q=80`}
+const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+const numify=v=>typeof v==='string'?+v.replace(/[^0-9.]/g,''):v;
+const TYPE_LABEL={RES:'House',CND:'Condo',TWN:'Townhome',RNT:'Rental',MLF:'Multi-Family',CRE:'Commercial',COM:'Commercial',LND:'Land',FRM:'Farm'};
+function specsRes(beds,baths,sqft){const s=numify(sqft);return `<span><svg class="icon"><use href="#i-bed"/></svg><b>${beds??'—'}</b> bd</span>
+  <span><svg class="icon"><use href="#i-bath"/></svg><b>${baths??'—'}</b> ba</span>
+  <span><svg class="icon"><use href="#i-area"/></svg><b>${s?s.toLocaleString():'—'}</b> sqft</span>`;}
+function specsCom(sqft,label){const s=numify(sqft);return `<span><svg class="icon"><use href="#i-area"/></svg><b>${s?s.toLocaleString():'—'}</b> SF</span>
+  <span><svg class="icon"><use href="#i-build"/></svg><b>${label||'Commercial'}</b></span>`;}
+function card(o){return `<article class="card">
+    <div class="media">
+      <span class="badge">${o.badge}</span>
+      <button class="fav" aria-label="Save"><svg class="icon"><use href="#i-heart"/></svg></button>
+      ${o.photo?`<img loading="lazy" alt="${o.title}" src="${o.photo}" onerror="this.style.opacity=0">`:''}
+    </div>
+    <div class="card-body">
+      <div class="price">${o.price}</div>
+      <div class="addr">${o.title}</div>
+      <div class="loc"><svg class="icon" style="width:.9em;height:.9em;color:var(--gold)"><use href="#i-pin"/></svg> ${o.loc}</div>
+      <div class="specs">${o.specs}</div>
+      <div class="cta-row"><button onclick="location.href='#contact'"><svg class="icon"><use href="#i-cal"/></svg> Request private showing</button></div>
+    </div>
+  </article>`;}
+function wireFavs(){grid.querySelectorAll('.fav').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('on')));}
+function showNote(on){if(listingsNote)listingsNote.style.display=on?'flex':'none';}
+function skeleton(){grid.innerHTML=Array.from({length:4},()=>`<article class="card skel"><div class="media"></div><div class="card-body"><div class="sk-line"></div><div class="sk-line short"></div><div class="sk-line"></div></div></article>`).join('');}
+async function renderListings(cat){
+  skeleton();
+  const ctrl=new AbortController(), to=setTimeout(()=>ctrl.abort(),9000);
+  try{
+    const r=await fetch('/api/listings?type='+cat,{signal:ctrl.signal}); clearTimeout(to);
+    if(!r.ok) throw 0;
+    const d=await r.json();
+    if(!d.listings||!d.listings.length) throw 0;
+    grid.innerHTML=d.listings.map(l=>card({
+      photo:l.photo, price:money(l.price), title:(l.address||'Listing').split(',')[0],
+      loc:l.city||'Houston area', badge:l.status||'For Sale',
+      specs: cat==='com'?specsCom(l.sqft,TYPE_LABEL[l.typeCode]):specsRes(l.beds,l.baths,l.sqft)
+    })).join('');
+    showNote(d.demo!==false);
+  }catch(_){
+    clearTimeout(to);
+    grid.innerHTML=sampleListings[cat].map(p=>card({
+      photo:imgUrl(p.img,800), price:p.price, title:p.addr, loc:p.loc, badge:p.badge,
+      specs: cat==='com'?specsCom(p.sf,p.type):specsRes(p.beds,p.baths,p.sqft)
+    })).join('');
+    showNote(true);
+  }
+  wireFavs();
+}
+renderListings('res');
+document.querySelectorAll('.toggle button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.toggle button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); renderListings(b.dataset.cat);
+  });
+});
+
+/* ---------- Reviews carousel ---------- */
+const stage=document.getElementById('revStage'), nav=document.getElementById('revNav');
+stage.innerHTML = reviews.map((r,i)=>`<figure class="rev ${i===0?'on':''}"><div class="quote-icon">"</div><q>${r.q}</q><figcaption class="who">${r.w}</figcaption></figure>`).join('');
+nav.innerHTML = reviews.map((_,i)=>`<button class="${i===0?'on':''}" aria-label="Review ${i+1}"></button>`).join('');
+let rev=0; const revs=stage.querySelectorAll('.rev'), dots=nav.querySelectorAll('button');
+function showRev(n){revs[rev].classList.remove('on');dots[rev].classList.remove('on');rev=(n+reviews.length)%reviews.length;revs[rev].classList.add('on');dots[rev].classList.add('on');}
+dots.forEach((d,i)=>d.addEventListener('click',()=>{showRev(i);resetRev();}));
+let revTimer=setInterval(()=>showRev(rev+1),5500);
+function resetRev(){clearInterval(revTimer);revTimer=setInterval(()=>showRev(rev+1),5500);}
+
+/* ---------- Valuation: live via RentCast proxy (/api/valuation), graceful demo fallback ---------- */
+(function(){
+  const form=document.getElementById('valForm'), box=document.getElementById('valResult');
+  const fmt=n=>'$'+Math.round(n).toLocaleString('en-US');
+  // client-side illustrative estimate when no server/proxy is reachable (e.g. opening the file directly)
+  function clientEstimate(addr,type){
+    const s=addr+type; let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0;
+    let base=/estate/i.test(type)?2600000:/commercial|invest/i.test(type)?3200000:/condo|town/i.test(type)?720000:1250000;
+    base+=(h%650)*1000;
+    return {value:base,low:Math.round(base*0.94/1000)*1000,high:Math.round(base*1.07/1000)*1000,simulated:true};
+  }
+  function loading(){box.classList.remove('empty');box.innerHTML=`<div class="val-spin"></div><div class="small">Analyzing recent Houston comparables…</div>`;}
+  function render(d,addr,live){
+    box.classList.remove('empty');
+    const tag=live?`<span class="val-tag live">● Live estimate · RentCast</span>`
+                  :`<span class="val-tag">Demo estimate · connect RentCast for live comps</span>`;
+    let comps='';
+    if(d.comps&&d.comps.length){
+      comps=`<div class="val-comps"><div class="small" style="margin-bottom:.5rem">Based on ${d.comps.length} nearby comparable sales</div>`+
+        d.comps.slice(0,3).map(c=>`<div class="val-comp"><span>${((c.address||'Nearby sale').split(',')[0])}</span><b>${fmt(c.price)}</b></div>`).join('')+`</div>`;
+    }
+    let rent='';
+    if(d.rent){const yield_=d.value?` · ~${(d.rent*12/d.value*100).toFixed(1)}% gross yield`:'';rent=`<div class="val-note">Est. monthly rent <b style="color:var(--text)">${fmt(d.rent)}</b>${yield_}</div>`;}
+    box.innerHTML=`${tag}
+      <div class="small">Estimated market value</div>
+      <div class="range" id="rng">${fmt(d.low)} – ${fmt(d.high)}</div>
+      ${rent}${comps}
+      <div class="val-note">For <b style="color:var(--text)">${addr.replace(/[<>]/g,'')}</b>. Toke personally refines this with live comps & market timing.</div>
+      <a href="#contact" class="btn btn-gold" style="justify-content:center;margin-top:1rem">Book a 15-min valuation call <svg class="icon"><use href="#i-cal"/></svg></a>`;
+    const rng=document.getElementById('rng'); let t=0; const steps=26;
+    const tick=setInterval(()=>{t++;const k=t/steps;rng.textContent=`${fmt(d.low*k)} – ${fmt(d.high*k)}`;if(t>=steps){clearInterval(tick);rng.textContent=`${fmt(d.low)} – ${fmt(d.high)}`;}},22);
+  }
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const addr=document.getElementById('valAddr').value.trim(), type=document.getElementById('valType').value;
+    if(!addr) return;
+    loading();
+    const ctrl=new AbortController(), to=setTimeout(()=>ctrl.abort(),9000);
+    try{
+      const r=await fetch('/api/valuation?'+new URLSearchParams({address:addr,propertyType:type}),{signal:ctrl.signal});
+      clearTimeout(to);
+      if(!r.ok) throw 0;
+      const d=await r.json();
+      if(d.error||d.value==null) throw 0;
+      render(d,addr,d.source==='rentcast');
+    }catch(_){clearTimeout(to);render(clientEstimate(addr,type),addr,false);}
+  });
+})();
+
+/* ---------- Cap-rate calculator ---------- */
+function calc(){
+  const p=+document.getElementById('cPrice').value||0;
+  const inc=+document.getElementById('cIncome').value||0;
+  const exp=+document.getElementById('cExp').value||0;
+  const noi=inc-exp; const cap=p>0?(noi/p*100):0;
+  document.getElementById('oNoi').textContent='$'+noi.toLocaleString('en-US');
+  document.getElementById('oCap').textContent=cap.toFixed(2)+'%';
+}
+['cPrice','cIncome','cExp'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+calc();
+
+/* ---------- Forms (demo) ---------- */
+document.getElementById('collectForm').addEventListener('submit',e=>{e.preventDefault();e.target.reset();document.getElementById('collectOk').classList.add('show');});
+document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();e.target.reset();document.getElementById('contactOk').classList.add('show');});
+
+/* ---------- Concierge ---------- */
+const fab=document.getElementById('fab'),concierge=document.getElementById('concierge'),chBody=document.getElementById('chBody');
+fab.addEventListener('click',()=>concierge.classList.toggle('open'));
+const replies={
+  "I'd like to sell my home":"Wonderful — Toke would love to help. Try the instant valuation above, or tap “Book a call” and she'll personally walk you through your home's value and a marketing plan.",
+  "Book a call with Toke":"Of course. Scroll to the contact section and pick a time — or call/text (713) 398-5009. Toke replies within one business day.",
+  "Show me listings":"You'll find featured residential and commercial properties in the collection above. Want the full off-market list? Request access to the Private Collection.",
+  "I'm interested in commercial":"Great — Toke is a Certified International Property Specialist. Use the cap-rate calculator to model returns, then let's talk strategy."
+};
+document.getElementById('chQuick').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  const q=b.dataset.q;
+  chBody.insertAdjacentHTML('beforeend',`<div class="ch-msg me">${q}</div>`);
+  chBody.scrollTop=chBody.scrollHeight;
+  setTimeout(()=>{chBody.insertAdjacentHTML('beforeend',`<div class="ch-msg">${replies[q]||"Toke will be glad to help — tap “Book a call” and she'll be in touch shortly."}</div>`);chBody.scrollTop=chBody.scrollHeight;},650);
+});
+
+/* ---------- Header / nav / mobile ---------- */
+const header=document.getElementById('header');
+addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>40));
+const mobileNav=document.getElementById('mobileNav');
+document.getElementById('burger').addEventListener('click',()=>mobileNav.classList.add('open'));
+document.getElementById('navClose').addEventListener('click',()=>mobileNav.classList.remove('open'));
+mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mobileNav.classList.remove('open')));
+
+/* ---------- Reveal on scroll ---------- */
+const io=new IntersectionObserver((es)=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+/* Safety net: if IntersectionObserver never fires (headless/zero-viewport, JS edge cases), reveal everything so content is never stuck hidden */
+setTimeout(()=>{if(!document.querySelector('.reveal.in'))document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));},1000);
+
+/* ---------- Count up ---------- */
+const cio=new IntersectionObserver((es)=>es.forEach(en=>{
+  if(!en.isIntersecting)return; const el=en.target; cio.unobserve(el);
+  const target=+el.dataset.count, dec=+(el.dataset.dec||0); let t=0; const steps=40;
+  const tk=setInterval(()=>{t++;const k=t/steps;el.textContent=(target*k).toFixed(dec);if(t>=steps){clearInterval(tk);el.textContent=target.toFixed(dec);}},20);
+}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+/* ---------- Language toggle (demo i18n) ---------- */
+const i18n={
+  en:{nav_listings:'Listings',nav_sell:'Sell',nav_invest:'Invest',nav_about:'About',nav_reviews:'Reviews',nav_contact:'Contact',nav_book:'Book a Call',
+    hero_eyebrow:'Houston · Luxury & Commercial Real Estate',hero_h1a:'Sell for more,',hero_h1b:'with less effort.',
+    hero_sub:"Toke Ettehadieh guides Houston's families and investors to extraordinary outcomes — backed by a 4.98-star reputation across 740+ client reviews and the 2025 CENTURION® Award.",
+    hero_cta1:"What's your home worth?",hero_cta2:'Explore the collection',val_h:"What's your home worth today?"},
+  es:{nav_listings:'Propiedades',nav_sell:'Vender',nav_invest:'Invertir',nav_about:'Acerca',nav_reviews:'Reseñas',nav_contact:'Contacto',nav_book:'Agenda una llamada',
+    hero_eyebrow:'Houston · Bienes Raíces de Lujo y Comerciales',hero_h1a:'Vende por más,',hero_h1b:'con menos esfuerzo.',
+    hero_sub:'Toke Ettehadieh guía a las familias e inversionistas de Houston hacia resultados extraordinarios, con una reputación de 4.98 estrellas en más de 740 reseñas y el Premio CENTURION® 2025.',
+    hero_cta1:'¿Cuánto vale tu casa?',hero_cta2:'Explora la colección',val_h:'¿Cuánto vale tu casa hoy?'},
+  fa:{nav_listings:'املاک',nav_sell:'فروش',nav_invest:'سرمایه‌گذاری',nav_about:'درباره',nav_reviews:'نظرات',nav_contact:'تماس',nav_book:'رزرو تماس',
+    hero_eyebrow:'هیوستون · املاک لوکس و تجاری',hero_h1a:'بیشتر بفروشید،',hero_h1b:'با تلاش کمتر.',
+    hero_sub:'توکه اتحدیه خانواده‌ها و سرمایه‌گذاران هیوستون را به نتایجی استثنایی می‌رساند — با اعتباری ۴٫۹۸ ستاره در بیش از ۷۴۰ نظر و جایزه CENTURION® سال ۲۰۲۵.',
+    hero_cta1:'خانه شما چقدر می‌ارزد؟',hero_cta2:'مشاهده مجموعه',val_h:'امروز خانه شما چقدر می‌ارزد؟'}
+};
+const rtlEls=['hero_eyebrow','hero_h1a','hero_h1b','hero_sub'];
+document.querySelectorAll('.lang button').forEach(btn=>btn.addEventListener('click',()=>{
+  const l=btn.dataset.lang; const dict=i18n[l];
+  document.querySelectorAll('.lang button').forEach(x=>x.classList.remove('on')); btn.classList.add('on');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n; if(dict[k]!=null){el.textContent=dict[k]; el.setAttribute('dir', l==='fa'&&rtlEls.includes(k)?'rtl':'ltr');}});
+}));
+</script>
+</body>
+</html>

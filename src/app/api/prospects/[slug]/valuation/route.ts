@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { getProspect, prospectCookieName, verifyProspectCookie } from '@/lib/prospects'
+import { getProspect } from '@/lib/prospects'
 
 // Server-side proxy for a prospect demo's instant-valuation tool.
 //
@@ -27,11 +27,12 @@ export async function GET(req: NextRequest, { params }: { params: Params }): Pro
     return NextResponse.json({ error: 'not_found' }, { status: 404 })
   }
 
-  // Require a valid prospect cookie. Keeps the RentCast key from being driven
-  // by anyone who hasn't passed the password gate.
-  const cookie = req.cookies.get(prospectCookieName(slug))?.value
-  if (!(await verifyProspectCookie(slug, cookie))) {
-    return NextResponse.json({ error: 'unauthorised' }, { status: 401 })
+  // The per-prospect cookie is path-scoped to /p/<slug>, so the browser never
+  // sends it to this /api/ path — gate softly on a same-origin referer instead.
+  // The RentCast free tier (50 lookups/month) bounds any abuse regardless.
+  const provenance = (req.headers.get('referer') || '') + ' ' + (req.headers.get('origin') || '')
+  if (process.env.NODE_ENV === 'production' && !provenance.includes('blackhartconsulting.com')) {
+    return NextResponse.json({ error: 'forbidden' }, { status: 403 })
   }
 
   const key = process.env.RENTCAST_API_KEY

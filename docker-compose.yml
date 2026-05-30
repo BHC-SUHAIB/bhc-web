@@ -58,6 +58,8 @@ services:
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       EMAIL_FROM: ${EMAIL_FROM:-}
       CONTACT_NOTIFY_EMAIL: ${CONTACT_NOTIFY_EMAIL:-}
+      # RentCast AVM key for the Toke Properties prospect-demo valuation route.
+      RENTCAST_API_KEY: ${RENTCAST_API_KEY:-}
       # Seed control. SEED_ON_BOOT=false skips seeding entirely; the FORCE_*
       # flags are one-shot migration switches that re-upsert specific content
       # from src/seed/onInit.ts when set to "true" in .env. After landing the

@@ -83,6 +83,13 @@ h2.title{font-size:clamp(2.1rem,5vw,3.6rem);margin:.35em 0 .5em}
 .preview-bar b{color:var(--gold);font-weight:500}
 .preview-bar button{color:var(--muted-2);font-size:1rem;line-height:1;padding:.2em .4em}
 .preview-bar button:hover{color:var(--gold)}
+.proposal-bar{display:none;align-items:center;justify-content:center;gap:1.1em;flex-wrap:wrap;
+  background:linear-gradient(90deg,#15120a,#241a09,#15120a);border-bottom:1px solid var(--line);
+  padding:.7em 1.2em;font-size:.82rem;color:var(--muted);text-align:center}
+.proposal-bar a{color:var(--ink);background:linear-gradient(135deg,var(--gold-2),var(--gold));
+  padding:.5em 1.15em;border-radius:40px;font-weight:500;white-space:nowrap;font-size:.78rem;
+  letter-spacing:.02em;transition:.3s var(--ease);box-shadow:0 4px 16px -6px rgba(201,162,75,.55)}
+.proposal-bar a:hover{transform:translateY(-1px)}
 
 /* ---------- Header / nav ---------- */
 header{position:sticky;top:0;z-index:60;transition:.45s var(--ease);
@@ -450,6 +457,12 @@ footer{border-top:1px solid var(--line-soft);padding:clamp(48px,7vw,80px) 0 2.4r
   <button onclick="document.getElementById('previewBar').remove()" aria-label="Dismiss">×</button>
 </div>
 
+<!-- ===== Proposal download bar (shown only on the hosted /p/ demo) ===== -->
+<div class="proposal-bar" id="proposalBar">
+  <span>Prepared for Toke — the full proposal covers every feature, the recommended integrations, and pricing.</span>
+  <a href="proposal.pdf" target="_blank" rel="noopener">Download the full proposal (PDF) →</a>
+</div>
+
 <!-- ===== Header ===== -->
 <header id="header">
   <div class="wrap nav">
@@ -802,6 +815,7 @@ footer{border-top:1px solid var(--line-soft);padding:clamp(48px,7vw,80px) 0 2.4r
         <h5>Explore</h5>
         <a href="#listings">Listings</a><a href="#valuation">Home valuation</a><a href="#invest">Commercial</a>
         <a href="#collection">Private Collection</a><a href="#about">About Toke</a>
+        <a href="proposal.pdf" target="_blank" rel="noopener" id="proposalFootLink" style="display:none">Download the proposal (PDF)</a>
       </div>
       <div class="foot-col">
         <h5>Contact</h5>
@@ -895,22 +909,37 @@ function card(o){return `<article class="card">
 function wireFavs(){grid.querySelectorAll('.fav').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('on')));}
 function showNote(on){if(listingsNote)listingsNote.style.display=on?'flex':'none';}
 function skeleton(){grid.innerHTML=Array.from({length:4},()=>`<article class="card skel"><div class="media"></div><div class="card-body"><div class="sk-line"></div><div class="sk-line short"></div><div class="sk-line"></div></div></article>`).join('');}
+/* Deployment context. On the hosted gated demo (/p/<slug>/...) there is no Node
+   proxy, but SimplyRETS' demo feed allows direct browser calls (public creds,
+   CORS *), so listings call it directly; locally we use the server.js proxy. */
+const PROSPECT=(location.pathname.match(/^\/p\/([a-z0-9-]+)/)||[])[1]||null;
+async function simplyRetsDirect(cat){
+  const q = cat==='com'
+    ? 'type=commercial&type=multifamily&type=land&sort=-listprice&limit=8'
+    : 'type=residential&type=condominium&minprice=400000&maxprice=12000000&sort=-listprice&limit=8&status=Active';
+  const r=await fetch('https://api.simplyrets.com/properties?'+q,{headers:{Authorization:'Basic '+btoa('simplyrets:simplyrets')}});
+  if(!r.ok) throw 0;
+  return (await r.json()).map(p=>{const pr=p.property||{};const baths=(pr.bathsFull||0)+(pr.bathsHalf?pr.bathsHalf*0.5:0);
+    return {price:p.listPrice,photo:(p.photos||[])[0]||'',address:(p.address&&p.address.full)||'',city:(p.address&&p.address.city)||'',beds:pr.bedrooms??null,baths:baths||null,sqft:pr.area||null,typeCode:pr.type||'',status:(p.mls&&p.mls.status)||'Active'};});
+}
 async function renderListings(cat){
   skeleton();
-  const ctrl=new AbortController(), to=setTimeout(()=>ctrl.abort(),9000);
   try{
-    const r=await fetch('/api/listings?type='+cat,{signal:ctrl.signal}); clearTimeout(to);
-    if(!r.ok) throw 0;
-    const d=await r.json();
-    if(!d.listings||!d.listings.length) throw 0;
-    grid.innerHTML=d.listings.map(l=>card({
+    let listings;
+    if(PROSPECT){ listings=await simplyRetsDirect(cat); }
+    else{
+      const ctrl=new AbortController(), to=setTimeout(()=>ctrl.abort(),9000);
+      const r=await fetch('/api/listings?type='+cat,{signal:ctrl.signal}); clearTimeout(to);
+      if(!r.ok) throw 0; listings=(await r.json()).listings;
+    }
+    if(!listings||!listings.length) throw 0;
+    grid.innerHTML=listings.map(l=>card({
       photo:l.photo, price:money(l.price), title:(l.address||'Listing').split(',')[0],
       loc:l.city||'Houston area', badge:l.status||'For Sale',
       specs: cat==='com'?specsCom(l.sqft,TYPE_LABEL[l.typeCode]):specsRes(l.beds,l.baths,l.sqft)
     })).join('');
-    showNote(d.demo!==false);
+    showNote(true);
   }catch(_){
-    clearTimeout(to);
     grid.innerHTML=sampleListings[cat].map(p=>card({
       photo:imgUrl(p.img,800), price:p.price, title:p.addr, loc:p.loc, badge:p.badge,
       specs: cat==='com'?specsCom(p.sf,p.type):specsRes(p.beds,p.baths,p.sqft)
@@ -918,6 +947,7 @@ async function renderListings(cat){
     showNote(true);
   }
   wireFavs();
+  if(PROSPECT){const pb=document.getElementById('proposalBar');if(pb)pb.style.display='flex';const pf=document.getElementById('proposalFootLink');if(pf)pf.style.display='inline-block';}
 }
 renderListings('res');
 document.querySelectorAll('.toggle button').forEach(b=>{
@@ -976,7 +1006,7 @@ function resetRev(){clearInterval(revTimer);revTimer=setInterval(()=>showRev(rev
     loading();
     const ctrl=new AbortController(), to=setTimeout(()=>ctrl.abort(),9000);
     try{
-      const r=await fetch('/api/valuation?'+new URLSearchParams({address:addr,propertyType:type}),{signal:ctrl.signal});
+      const r=await fetch((PROSPECT?`/api/prospects/${PROSPECT}/valuation`:'/api/valuation')+'?'+new URLSearchParams({address:addr,propertyType:type}),{signal:ctrl.signal});
       clearTimeout(to);
       if(!r.ok) throw 0;
       const d=await r.json();

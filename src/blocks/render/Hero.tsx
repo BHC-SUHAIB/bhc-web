@@ -3,6 +3,7 @@ import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
 import { HeroCta } from './HeroCta'
 import { HeroPhoneCta } from './HeroPhoneCta'
+import { ParallaxBackground } from './ParallaxBackground'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref } from '@/lib/contact'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
@@ -50,21 +51,17 @@ export async function Hero(b: HeroBlock & { phoneOverride?: string }) {
             : 'bg-[linear-gradient(180deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.35)_40%,rgba(0,0,0,0.78)_100%)]'
 
     // Strip Unsplash's hardcoded `w=1920` so next/image can pick a size for
-    // the viewport — see src/lib/unsplash.ts for the full reasoning.
+    // the viewport. See src/lib/unsplash.ts for the full reasoning.
     const bgUrl = stripUnsplashFixedWidth(b.backgroundImageUrl as string)
     return (
       <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-20">
-          <Image
-            src={bgUrl}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
-            className="object-cover"
-            priority
-            fetchPriority="high"
-          />
-        </div>
+        {/* ParallaxBackground is a client leaf that translates the hero photo
+            on scroll. Mobile + reduced-motion fall back to a static image so
+            the perf budget (sub-200KB JS, sub-1s LCP) is preserved. */}
+        <ParallaxBackground
+          src={bgUrl}
+          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
+        />
         <div className={cn('absolute inset-0 -z-10', overlayClass)} aria-hidden />
         <Container size="xl">
           <div

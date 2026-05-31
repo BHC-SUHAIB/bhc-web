@@ -56,15 +56,20 @@ export function Pricing(b: PricingBlock) {
               ? 'flex justify-center'
               : cn(
                   'grid gap-5 md:grid-cols-2',
-                  // ≤3 tiers → 3 cols (clean single row).
+                  // 2 tiers → 2 cols at lg, max-width capped so the pair
+                  // reads as a deliberate choice (added 2026-05-26 for the
+                  // Sprint + Starter pair on the LP).
+                  // 3 tiers → 3 cols (clean single row).
                   // 4 tiers → 4 cols (no widow).
                   // 5-6 tiers → 3 cols (clean 2-row grid, no orphans).
                   // 7+ tiers → 4 cols (compact 2-row+).
-                  tiers.length === 4
-                    ? 'lg:grid-cols-4'
-                    : tiers.length >= 7
+                  tiers.length === 2
+                    ? 'lg:grid-cols-2 max-w-5xl mx-auto'
+                    : tiers.length === 4
                       ? 'lg:grid-cols-4'
-                      : 'lg:grid-cols-3',
+                      : tiers.length >= 7
+                        ? 'lg:grid-cols-4'
+                        : 'lg:grid-cols-3',
                 ),
           )}
         >
@@ -102,7 +107,18 @@ export function Pricing(b: PricingBlock) {
               <h3 className="font-serif font-semibold text-[22px] mb-2">{t.name}</h3>
               <div className="mb-4">
                 <div className="flex items-baseline flex-wrap gap-x-3">
-                  <span className="font-serif font-semibold text-[40px] tracking-[-0.025em] leading-none">{t.price}</span>
+                  {/* Brass-colored price on the highlighted tier so the LP's
+                      headline number (e.g. $999 on express-website, $2,495
+                      on houston-midmarket) pops visually against the other
+                      tier in the pair. Added 2026-05-27 per dev review. */}
+                  <span
+                    className={cn(
+                      'font-serif font-semibold text-[40px] tracking-[-0.025em] leading-none',
+                      t.highlighted && 'text-[var(--color-brass)]',
+                    )}
+                  >
+                    {t.price}
+                  </span>
                   {/* Discount display: original price renders strikethrough next
                       to the current price when set. Replaces the older "was $X"
                       pattern that lived inside priceNote. */}

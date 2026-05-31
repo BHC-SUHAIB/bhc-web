@@ -79,6 +79,11 @@ services:
       FORCE_ARTICLES_UPSERT: ${FORCE_ARTICLES_UPSERT:-}
       FORCE_PM_UPSERT: ${FORCE_PM_UPSERT:-}
       FORCE_WAYGFT_UPSERT: ${FORCE_WAYGFT_UPSERT:-}
+      # Google PageSpeed Insights API key — used by the /api/pagespeed-audit
+      # endpoint to authenticate requests against the project's own quota
+      # (25k queries/day) instead of the shared anonymous tier. Optional:
+      # endpoint falls back to anonymous PSI calls when the key is unset.
+      PAGESPEED_API_KEY: ${PAGESPEED_API_KEY:-}
       # Stripe — required for /invoice payment flow + /api/stripe/webhook.
       # Both keys come from the Stripe dashboard:
       #   STRIPE_SECRET_KEY  → Developers → API keys (sk_test_… / sk_live_…)

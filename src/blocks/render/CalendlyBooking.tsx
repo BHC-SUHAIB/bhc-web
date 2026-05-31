@@ -111,7 +111,7 @@ export function CalendlyBooking(b: CalendlyBookingBlock) {
               ) : null}
             </div>
             <span className="text-[12.5px] text-[var(--color-fg-muted)] text-center">
-              Opens Calendly in this tab — you'll come back here when you're done.
+              Opens Calendly in this tab. You'll come back here when you're done.
             </span>
           </div>
         </div>

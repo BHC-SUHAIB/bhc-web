@@ -18,6 +18,16 @@ type ContactFormProps = ContactFormBlockBlock & {
   contactPhone?: string | null
 }
 
+// Derive a section id from the eyebrow so heroes can deep-link to a specific
+// contact form on the same page (e.g. an audit form vs a generic inquiry form).
+// Mirrors anchorFromEyebrow in Pricing.tsx so both blocks share the convention.
+function anchorFromEyebrow(eyebrow?: string | null): string | undefined {
+  if (!eyebrow) return undefined
+  const slug = eyebrow.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  if (!slug) return undefined
+  return slug
+}
+
 export function ContactForm(b: ContactFormProps) {
   const contactEmail = b.contactEmail ?? ''
   const contactPhone = b.contactPhone ?? ''
@@ -106,8 +116,10 @@ export function ContactForm(b: ContactFormProps) {
   const inputCls = 'w-full px-4 py-3 rounded-[var(--radius-md)] border border-[var(--color-border-strong)] bg-[var(--color-bg)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-muted)] focus:outline-none focus:border-[var(--color-brass)] focus:ring-2 focus:ring-[var(--color-brass)] focus:ring-offset-0 transition-colors text-[15px]'
   const labelCls = 'block text-[12px] font-mono tracking-[0.12em] uppercase text-[var(--color-fg-muted)] mb-2'
 
+  const anchor = anchorFromEyebrow(b.eyebrow)
+
   return (
-    <section className="py-12 sm:py-16">
+    <section id={anchor} className="py-12 sm:py-16 scroll-mt-24">
       <Container size="md">
         <div className="mb-8 max-w-2xl">
           {b.eyebrow ? (
@@ -151,7 +163,7 @@ export function ContactForm(b: ContactFormProps) {
               <path d="M20 6L9 17l-5-5" />
             </svg>
             <p className="font-serif text-[22px] leading-[1.3] tracking-[-0.015em]">
-              {b.successMessage ?? 'Thanks \u2014 we\u2019ll reply within one business day.'}
+              {b.successMessage ?? 'Thanks. We\u2019ll reply within one business day.'}
             </p>
           </div>
         ) : (
@@ -223,7 +235,7 @@ export function ContactForm(b: ContactFormProps) {
                 autoComplete="tel"
                 inputMode="tel"
                 className={inputCls}
-                placeholder="+1 (555) 123-4567 — international welcome"
+                placeholder="+1 (555) 123-4567 · international welcome"
                 value={phoneValue}
                 onChange={(e) => setPhoneValue(e.target.value)}
               />

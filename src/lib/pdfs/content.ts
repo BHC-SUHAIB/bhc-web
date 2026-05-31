@@ -115,9 +115,9 @@ export const SERVICE_WEBSITE: PdfDoc = {
     {
       type: 'bullets',
       items: [
-        'Single Page — $795. One long-form page, 5-day delivery.',
-        'Starter Site — $1,495 founding (was $1,950). 5 pages, 14-day delivery.',
-        'Pro Site — $3,500 founding (was $4,500). 12 pages, 21-day delivery, +30 days SEO content.',
+        'Single Page — $749. One long-form page, 5-day delivery.',
+        'Starter Site — $999 founding (was $1,950). 5 pages, 14-day delivery.',
+        'Pro Site — $2,495 founding (was $4,500). 12 pages, 21-day delivery, +30 days SEO content.',
         'Custom Build — from $9,500. Web apps, multi-language, custom integrations.',
       ],
     },
@@ -167,9 +167,9 @@ export const SERVICE_SEO: PdfDoc = {
     {
       type: 'bullets',
       items: [
-        'Local SEO Sprint — $1,195 founding (was $1,495). One-time, 2-week delivery.',
-        'Local SEO Monthly — $695/mo. Single-location service businesses.',
-        'SEO Growth — $1,495/mo. Multi-location or content-heavy businesses.',
+        'Local SEO Sprint — $499 founding (was $1,495). One-time, 2-week delivery.',
+        'Local SEO Monthly — $395/mo. Single-location service businesses.',
+        'SEO Growth — $895/mo. Multi-location or content-heavy businesses.',
       ],
     },
 
@@ -248,11 +248,11 @@ export const SERVICE_ADDONS: PdfDoc = {
       type: 'bullets',
       items: [
         'Google Business Profile Setup — $295. Photos, services, hours, schema, review templates. 3-day delivery.',
-        'Site Speed Sprint — $495. Image optimization, JS audit, render-blocking removal, CDN setup. Targets Lighthouse 85+ mobile. 5-day delivery.',
-        'Schema Markup Pack — $295. LocalBusiness, Service, FAQPage, Article, BreadcrumbList. 3-day delivery.',
+        'Site Speed Sprint — $695. Image optimization, JS audit, render-blocking removal, CDN setup. Targets Lighthouse 85+ mobile. 5-day delivery.',
+        'Schema Markup Pack — $395. LocalBusiness, Service, FAQPage, Article, BreadcrumbList. 3-day delivery.',
         'GA4 + Conversion Tracking — $395. GA4, GTM, Google Ads conversions, dataLayer events. 3-day delivery.',
         '5-Page SEO Refresh — $695. Targeted SEO updates to 5 priority pages. 7-day delivery.',
-        'Mobile Audit + Fix — $495. Full mobile audit with on-the-spot fixes. 5-day delivery.',
+        'Mobile Audit + Fix — $595. Full mobile audit with on-the-spot fixes. 5-day delivery.',
       ],
     },
 
@@ -260,7 +260,7 @@ export const SERVICE_ADDONS: PdfDoc = {
       type: 'callout',
       title: 'Bundle and save',
       body:
-        'Buy 3 add-ons together → 15% off the bundle. Buy 4+ → 25% off. Most clients start with GBP Setup + Schema Pack + GA4 Tracking — the "local SEO foundation" bundle, $885 instead of $985.',
+        'Buy 3 add-ons together → 15% off the bundle. Buy 4+ → 25% off. Most clients start with GBP Setup + Schema Pack + GA4 Tracking — the "local SEO foundation" bundle, $922 instead of $1,085.',
     },
 
     // Tick suppressed here only — sits directly under the callout and the

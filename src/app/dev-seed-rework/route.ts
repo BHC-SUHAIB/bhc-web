@@ -33,7 +33,7 @@ const rt = (text: string) => ({
 
 // Founding Client banner, national framing, still credible.
 // 2026-05-26 pricing drop: Starter $1,495 → $999, Pro $3,500 → $2,495,
-// Local SEO Sprint $1,195 → $749. Roughly 50% off retail for founding cohort.
+// Local SEO Sprint $1,195 → $499. Roughly 50-67% off retail for founding cohort.
 const FOUNDING_BANNER = {
   blockType: 'foundingClient',
   eyebrow: 'Founding Client Pricing',
@@ -49,7 +49,7 @@ const FOUNDING_BANNER = {
   offers: [
     { name: 'Starter Site', priceFounding: '$999', priceRetail: '$1,950', savings: 'Save $951' },
     { name: 'Pro Site', priceFounding: '$2,495', priceRetail: '$4,500', savings: 'Save $2,005' },
-    { name: 'Local SEO Sprint', priceFounding: '$749', priceRetail: '$1,495', savings: 'Save $746' },
+    { name: 'Local SEO Sprint', priceFounding: '$499', priceRetail: '$1,495', savings: 'Save $996' },
     { name: 'All Care plans', priceFounding: '$149/mo', priceRetail: '', savings: 'First month free' },
   ],
   cta: { label: 'Claim a founding spot', href: '/contact' },
@@ -81,8 +81,8 @@ const BUNDLES = {
     {
       name: 'Site + Care + SEO Sprint',
       tagline: 'For owners who want to start ranking from day one.',
-      price: '$2,395 + $99/mo',
-      savings: 'Save $400 vs buying separately',
+      price: '$1,398 + $99/mo',
+      savings: 'Save $200 vs buying separately',
       includes: [
         { label: 'Everything in Site + Care' },
         { label: 'Local SEO Sprint: GBP optimization, 10 citations, schema markup' },
@@ -160,7 +160,7 @@ function calendly(opts: { headline?: string; description?: string; mode?: 'inlin
 
 // Site Health Sprint, productized $297 entry tier (added 2026-05-26 redesign).
 // Sits below Single Page. Designed to convert cold ad traffic that won't
-// commit to a $1,495+ rebuild yet. Pairs with the free 5-min audit CTA: the
+// commit to a $999+ rebuild yet. Pairs with the free 5-min audit CTA: the
 // audit identifies issues, the Sprint pays to fix them. Easy yes → portfolio
 // builder → upsells to Starter/Care.
 const SITE_HEALTH_SPRINT_TIER = {
@@ -183,7 +183,7 @@ const HOMEPAGE_PRICING_TIERS = [
   SITE_HEALTH_SPRINT_TIER,
   {
     name: 'Single Page',
-    price: '$795',
+    price: '$749',
     priceNote: 'fixed · 5-day build',
     description: 'For solopreneurs, contractors, and event campaigns. One long-form page that makes the case.',
     features: [
@@ -1152,7 +1152,7 @@ export async function POST() {
         tiers: [
           {
             name: 'Local SEO Sprint',
-            price: '$749',
+            price: '$499',
             originalPrice: '$1,495',
             priceNote: 'one-time · founding · 2-week delivery',
             description: 'A full local SEO setup, delivered as a one-time engagement. No monthly contract.',

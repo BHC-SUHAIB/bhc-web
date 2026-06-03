@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="color-scheme" content="light" />
+  <title>Sorenori — Email confirmed</title>
+  <style>
+    :root { --calm:#94b8c4; --accent:#6b85b3; --ink:#2e3a40; --soft:#55636b; --muted:#8a949b; --bg:#f4f1ec; --card:#ffffff; }
+    * { box-sizing:border-box; }
+    html,body { margin:0; padding:0; }
+    body {
+      background:var(--bg); color:var(--ink); min-height:100vh;
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+      display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+    .card {
+      width:100%; max-width:440px; background:var(--card); border-radius:22px; overflow:hidden;
+      box-shadow:0 4px 24px rgba(46,58,64,0.08); text-align:center;
+    }
+    .band { background:var(--calm); padding:26px 24px; }
+    .band .word { font-size:24px; font-weight:700; letter-spacing:0.5px; color:#fff; }
+    .body { padding:32px 28px 28px; }
+    .mark { width:64px; height:64px; border-radius:50%; margin:0 auto 18px; display:flex; align-items:center; justify-content:center;
+            background:#e8f0ef; }
+    .mark svg { width:34px; height:34px; }
+    h1 { margin:0 0 10px; font-size:22px; font-weight:700; color:var(--ink); }
+    p { margin:0 0 22px; font-size:16px; line-height:1.6; color:var(--soft); }
+    .btn {
+      display:inline-block; padding:15px 30px; font-size:16px; font-weight:600; color:#fff !important;
+      background:var(--accent); border-radius:14px; text-decoration:none;
+    }
+    .hint { margin:20px 0 0; font-size:13px; line-height:1.6; color:var(--muted); }
+    .foot { padding:18px 24px 26px; border-top:1px solid #eee8df; font-size:12px; color:#b0b8bd; }
+    .hidden { display:none !important; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="band"><span class="word">Sorenori</span></div>
+    <div class="body">
+
+      <!-- success state (default) -->
+      <div id="ok">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#669e80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h1>Your email is confirmed 🎉</h1>
+        <p>You're all set. Open Sorenori on your iPhone or iPad and sign in to get started.</p>
+        <a id="openBtn" class="btn" href="sorenori://auth-callback">Open Sorenori</a>
+        <p class="hint">On a computer? Just open the Sorenori app on your device and sign in with your email and password.</p>
+      </div>
+
+      <!-- error state (shown only if the link is expired/invalid) -->
+      <div id="err" class="hidden">
+        <div class="mark" aria-hidden="true" style="background:#f6ece6;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#c98a6b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <h1>This link didn't work</h1>
+        <p id="errMsg">The confirmation link may have expired or already been used. Open Sorenori and request a new confirmation email.</p>
+        <a class="btn" href="sorenori://">Open Sorenori</a>
+      </div>
+
+    </div>
+    <div class="foot">Sorenori · Calm, together.</div>
+  </div>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var hash = new URLSearchParams((window.location.hash || '').replace(/^#/, ''));
+      var error = params.get('error_description') || params.get('error') || hash.get('error_description') || hash.get('error');
+      // Forward whatever auth params arrived (code / token_hash / type) to the app so it can finish sign-in.
+      var openBtn = document.getElementById('openBtn');
+      if (openBtn) openBtn.href = 'sorenori://auth-callback' + (window.location.search || '');
+      if (error) {
+        document.getElementById('ok').classList.add('hidden');
+        var e = document.getElementById('err');
+        e.classList.remove('hidden');
+        try { document.getElementById('errMsg').textContent =
+          decodeURIComponent(error).replace(/\+/g, ' ') + ' — open Sorenori and request a new confirmation email.'; } catch (_) {}
+      }
+    })();
+  </script>
+</body>
+</html>

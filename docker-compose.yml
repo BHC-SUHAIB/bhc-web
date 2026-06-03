@@ -153,6 +153,8 @@ services:
       # Decouples dev's bespoke Caddy config from prod's so `git pull` on
       # dev never conflicts on Caddyfile changes.
       - ${CADDYFILE_PATH:-./Caddyfile}:/etc/caddy/Caddyfile:ro
+      # Sorenori email-confirmation static page → served by the sorenori.blackhartconsulting.com vhost.
+      - ./sorenori-confirm:/srv/sorenori:ro
       - caddy_data:/data
       - caddy_config:/config
 

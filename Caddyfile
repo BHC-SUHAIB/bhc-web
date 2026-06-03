@@ -83,6 +83,22 @@ blackhart.consulting, www.blackhart.consulting {
 	redir https://blackhartconsulting.com{uri} permanent
 }
 
+# ---- Sorenori email-confirmation landing (static, isolated from the Next app) ----
+# Serves the branded "Email confirmed" page from a bind-mounted dir (see the caddy volume in
+# docker-compose.yml). Caddy auto-obtains a Let's Encrypt cert once sorenori.blackhartconsulting.com
+# points at this droplet. Fully separate from the apex vhost, so it can't affect the main site.
+sorenori.blackhartconsulting.com {
+	encode gzip zstd
+	root * /srv/sorenori
+	file_server
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		X-Robots-Tag "noindex, nofollow"
+	}
+}
+
 # ---- IP-based fallback (plain HTTP, no TLS) ----
 :80 {
 	encode gzip zstd

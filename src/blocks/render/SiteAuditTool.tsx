@@ -28,11 +28,26 @@ const SCORE_LABELS: Array<{ key: keyof Scores; label: string }> = [
   { key: 'seo', label: 'SEO' },
 ]
 
+// Warm Mono score colours: green >=90, brass 50-89, red <50.
+// `.s-*` colour the numeric label (text), `.s-*-stroke` colour the SVG gauge.
 function scoreClass(score: number): string {
-  if (score >= 90) return 'text-emerald-500'
-  if (score >= 50) return 'text-amber-500'
-  return 'text-red-500'
+  if (score >= 90) return 's-good'
+  if (score >= 50) return 's-mid'
+  return 's-bad'
 }
+
+function strokeClass(score: number): string {
+  if (score >= 90) return 's-good-stroke'
+  if (score >= 50) return 's-mid-stroke'
+  return 's-bad-stroke'
+}
+
+// Ring gauge geometry. The .ring box is 96x96; the SVG is rotated -90deg in
+// CSS so the arc starts at 12 o'clock. r=42 leaves room for the 8px stroke.
+// dasharray = visible arc (score%) + the full remainder, so the stroke fills
+// proportionally to the numeric score.
+const RING_R = 42
+const RING_C = 2 * Math.PI * RING_R
 
 type Props = {
   eyebrow?: string | null
@@ -102,43 +117,62 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
     setErrorMessage(null)
   }
 
-  const inputCls = 'w-full px-4 py-3 rounded-[var(--radius-md)] border border-[var(--color-border-strong)] bg-[var(--color-bg)] text-[var(--color-fg)] placeholder:text-[var(--color-fg-muted)] focus:outline-none focus:border-[var(--color-brass)] focus:ring-2 focus:ring-[var(--color-brass)] focus:ring-offset-0 transition-colors text-[15px]'
-
   return (
     <section id={SECTION_ID} className="py-12 sm:py-16 scroll-mt-24">
       <Container size="md">
-        <div className="mb-8 max-w-2xl">
+        <div className="section-head mb-8 max-w-2xl">
           {eyebrow ? (
-            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">{eyebrow}</p>
+            <span className="eyebrow eyebrow-row mb-3"><span className="rule" />{eyebrow}</span>
           ) : null}
           <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em]">
             {headline ?? 'Run a free PageSpeed audit.'}
           </h2>
           {description ? (
-            <p className="mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">{description}</p>
+            <p className="lede mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">{description}</p>
           ) : null}
         </div>
 
         {state === 'success' && scores ? (
-          <div className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-6 sm:p-8">
-            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-2">
+          <div className="audit">
+            <p className="eyebrow font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-1.5">
               {strategy} · {auditedUrl}
             </p>
-            <h3 className="font-serif font-semibold text-[24px] mb-6">Your scores</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-8">
-              {SCORE_LABELS.map(({ key, label }) => (
-                <div key={key} className="text-center">
-                  <div className={cn('font-serif font-semibold text-[clamp(2.75rem,6vw,3.5rem)] leading-none', scoreClass(scores[key]))}>
-                    {scores[key]}
+            <h3 className="font-serif text-[1.4rem]">Your scores</h3>
+            <div className="score-grid">
+              {SCORE_LABELS.map(({ key, label }) => {
+                const value = scores[key]
+                return (
+                  <div key={key} className="score">
+                    <div className="ring">
+                      <svg viewBox="0 0 96 96" aria-hidden>
+                        <circle
+                          cx="48"
+                          cy="48"
+                          r={RING_R}
+                          fill="none"
+                          stroke="var(--color-border)"
+                          strokeWidth="8"
+                        />
+                        <circle
+                          className={strokeClass(value)}
+                          cx="48"
+                          cy="48"
+                          r={RING_R}
+                          fill="none"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray={`${(value / 100) * RING_C} ${RING_C}`}
+                        />
+                      </svg>
+                      <span className={cn('num', scoreClass(value))}>{value}</span>
+                    </div>
+                    <div className="s-k">{label}</div>
                   </div>
-                  <div className="mt-2 font-mono text-[10px] sm:text-[11px] tracking-[0.15em] uppercase text-[var(--color-fg-muted)]">
-                    {label}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
             {vitals && (vitals.lcp || vitals.cls || vitals.speedIndex) ? (
-              <div className="border-t border-[var(--color-border)] pt-5 mb-6">
+              <div className="border-t border-[var(--color-border)] pt-5 mb-2">
                 <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">Core Web Vitals</p>
                 <dl className="flex flex-wrap gap-x-8 gap-y-2 text-[14px]">
                   {vitals.lcp ? (<><dt className="text-[var(--color-fg-muted)]">LCP:</dt><dd className="font-mono">{vitals.lcp}</dd></>) : null}
@@ -147,80 +181,87 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
                 </dl>
               </div>
             ) : null}
-            <div className="border-t border-[var(--color-border)] pt-5">
-              <p className="text-[15px] leading-[1.5] mb-4">
+            <div className="audit-upsell">
+              <p>
                 Want me to fix the weak ones? The $297 Site Health Sprint covers three specific fixes shipped in five days, with a before-and-after report.
               </p>
-              <div className="flex flex-wrap gap-3">
-                <Button href="#book" variant="primary" size="lg">
+              <div className="cta-row mt-0">
+                <Button href="#book" variant="brass" size="md">
                   Start a $297 Sprint
                 </Button>
-                <Button type="button" variant="ghost" size="lg" onClick={reset}>
+                <Button type="button" variant="secondary" size="md" onClick={reset}>
                   Run another audit
                 </Button>
               </div>
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="grid gap-4">
-            {errorMessage ? (
-              <div role="alert" className="rounded-[var(--radius-md)] border border-red-500/40 bg-red-500/5 px-4 py-3 text-[14px] text-red-700 dark:text-red-300">
-                {errorMessage}
-              </div>
-            ) : null}
-            <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-              {/* type="text" (not "url") so visitors can type a bare domain
-                  like "godaddy.com" without the browser blocking submit with
-                  a protocol-validation error. The API route normalises the
-                  raw value (prepends https:// when no scheme is present)
-                  before calling PSI, so the server is the single source of
-                  truth for URL shape. */}
-              <input
-                type="text"
-                required
-                inputMode="url"
-                autoComplete="url"
-                autoCapitalize="none"
-                spellCheck={false}
-                placeholder="yoursite.com"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                disabled={state === 'running'}
-                className={inputCls}
-              />
-              <Button type="submit" variant="primary" size="lg" disabled={state === 'running' || !url.trim()}>
-                {state === 'running' ? 'Auditing…' : 'Run audit'}
-              </Button>
-            </div>
-            <div className="flex items-center gap-3 text-[13px] text-[var(--color-fg-muted)]">
-              <span>Strategy:</span>
-              {(['mobile', 'desktop'] as Strategy[]).map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setStrategy(s)}
+          <div className="audit">
+            <form onSubmit={handleSubmit} className="audit-form">
+              {errorMessage ? (
+                <div role="alert" className="rounded-[var(--radius-md)] border border-red-500/40 bg-red-500/5 px-4 py-3 text-[14px] text-red-700 dark:text-red-300">
+                  {errorMessage}
+                </div>
+              ) : null}
+              <div className="audit-input-row">
+                {/* type="text" (not "url") so visitors can type a bare domain
+                    like "godaddy.com" without the browser blocking submit with
+                    a protocol-validation error. The API route normalises the
+                    raw value (prepends https:// when no scheme is present)
+                    before calling PSI, so the server is the single source of
+                    truth for URL shape. */}
+                <input
+                  type="text"
+                  required
+                  inputMode="url"
+                  autoComplete="url"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  placeholder="yoursite.com"
+                  aria-label="Your website URL"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
                   disabled={state === 'running'}
-                  className={cn(
-                    'px-3 py-1 rounded-full border transition-colors capitalize',
-                    strategy === s
-                      ? 'border-[var(--color-brass)] text-[var(--color-fg)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))]'
-                      : 'border-[var(--color-border)] text-[var(--color-fg-muted)] hover:border-[var(--color-fg-muted)]',
+                  className="field"
+                />
+                <Button type="submit" variant="brass" size="lg" disabled={state === 'running' || !url.trim()}>
+                  {state === 'running' ? (
+                    <>
+                      <span className="audit-spinner" aria-hidden />
+                      Auditing…
+                    </>
+                  ) : (
+                    'Run audit'
                   )}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-            {state === 'running' ? (
-              <p className="text-[13px] text-[var(--color-fg-muted)] italic">
-                Auditing… this can take 20-60 seconds. Google PageSpeed is loading your site, taking screenshots, and running the same Lighthouse checks I use on every project.
-              </p>
-            ) : (
-              <p className="text-[13px] text-[var(--color-fg-muted)]">
-                Free. No email required. Powered by Google PageSpeed Insights. About 30 seconds.
-              </p>
-            )}
-          </form>
+                </Button>
+              </div>
+              <div className="strategy-row">
+                <span>Strategy:</span>
+                <span className="seg">
+                  {(['mobile', 'desktop'] as Strategy[]).map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setStrategy(s)}
+                      disabled={state === 'running'}
+                      aria-pressed={strategy === s}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </span>
+              </div>
+              {state === 'running' ? (
+                <p className="audit-note italic">
+                  Auditing… this can take 20-60 seconds. Google PageSpeed is loading your site, taking screenshots, and running the same Lighthouse checks I use on every project.
+                </p>
+              ) : (
+                <p className="audit-note">
+                  Free. No email required. Powered by Google PageSpeed Insights. About 30 seconds.
+                </p>
+              )}
+            </form>
+          </div>
         )}
       </Container>
     </section>

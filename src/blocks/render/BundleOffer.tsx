@@ -6,17 +6,18 @@ import { cn } from '@/lib/utils'
 import { PricingCta } from './PricingCta'
 import type { BundleOfferBlock } from '@/payload-types'
 
-// Bundles combine a website build with care or SEO at a discount vs buying
-// the products separately. Typical pattern: 2-3 bundles, with the middle one
-// "highlighted" as the recommended choice — same psychology as the Pricing
-// block but explicitly framed as a bundled deal so the buyer doesn't have to
-// piece together the discount math themselves.
+// Bundles combine a website build with care or SEO at a discount vs buying the
+// products separately. Each bundle is a complete, pre-priced package authored
+// in the CMS (name + tagline + price + savings + an includes list). The Warm
+// Mono design renders each bundle as a "package configurator" card: the
+// includes show as locked option rows on the left, with a dark sticky summary
+// band on the right carrying the price, savings, and CTA.
 
 export function BundleOffer(b: BundleOfferBlock) {
   const bundles = b.bundles ?? []
   const hasBg = !!b.backgroundImageUrl
   return (
-    <section className="relative isolate overflow-hidden py-14 sm:py-18 scroll-mt-24" id="bundles">
+    <section className="section relative isolate overflow-hidden scroll-mt-24" id="bundles">
       {hasBg ? (
         <>
           {/* CSS background-image → next/image so the editor-pasted Unsplash
@@ -41,83 +42,61 @@ export function BundleOffer(b: BundleOfferBlock) {
         </>
       ) : null}
       <Container size="xl">
-        <div className="max-w-2xl mb-10">
+        <div className="section-head">
           {b.eyebrow ? (
-            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">
+            <span className="eyebrow eyebrow-row">
+              <span className="rule" />
               {b.eyebrow}
-            </p>
+            </span>
           ) : null}
-          <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em]">
-            {b.headline}
-          </h2>
-          {b.description ? (
-            <p className="mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]">{b.description}</p>
-          ) : null}
+          <h2>{b.headline}</h2>
+          {b.description ? <p className="lede">{b.description}</p> : null}
         </div>
 
         <div
           className={cn(
-            'grid gap-5 md:grid-cols-2 items-stretch',
-            bundles.length >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2',
+            'grid gap-5 items-start',
+            bundles.length >= 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-1',
           )}
         >
           {bundles.map((bundle, i) => (
-            <div
-              key={i}
-              className={cn(
-                'group relative p-7 rounded-[var(--radius-lg)] border flex flex-col h-full transition-[transform,border-color,background-color,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_color-mix(in_srgb,var(--color-ink)_45%,transparent)]',
-                // Translucent backgrounds when the section has a faint image
-                // behind it, so the photo shows through the negative space
-                // around (and faintly through) the cards.
-                bundle.highlighted
-                  ? hasBg
-                    ? 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_10%,color-mix(in_srgb,var(--color-bg)_82%,transparent))] backdrop-blur-sm hover:border-[var(--color-brass-dark)]'
-                    : 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] hover:border-[var(--color-brass-dark)]'
-                  : hasBg
-                    ? 'border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg)_82%,transparent)] backdrop-blur-sm hover:border-[var(--color-brass)]'
-                    : 'border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-brass)] hover:bg-[var(--color-surface-raised)]',
-              )}
-            >
-              {bundle.highlighted ? (
-                <div className="h-7 mb-4 flex items-center">
-                  <span className="inline-flex font-mono text-[10px] tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[var(--color-brass)] text-[var(--color-ink)]">
-                    Recommended bundle
-                  </span>
+            <div key={i} className="bundle-config">
+              <div className="bundle-grid">
+                <div className="bundle-opts">
+                  {bundle.includes?.map((f, j) => (
+                    <div key={j} className="opt required">
+                      <span className="check">
+                        <Check />
+                      </span>
+                      <span className="o-body">
+                        <b>{f.label}</b>
+                      </span>
+                      <span className="o-incl">Included</span>
+                    </div>
+                  ))}
                 </div>
-              ) : (
-                <div className="h-7 mb-4" aria-hidden />
-              )}
-              <h3 className="font-serif font-semibold text-[22px] mb-2">{bundle.name}</h3>
-              {bundle.tagline ? (
-                <p className="text-[14px] leading-[1.5] text-[var(--color-fg-muted)] mb-5 min-h-[42px]">{bundle.tagline}</p>
-              ) : null}
-              <div className="mb-3">
-                <span className="font-serif font-semibold text-[32px] tracking-[-0.025em] leading-none">{bundle.price}</span>
+
+                <div className="bundle-summary">
+                  <h3>{bundle.name}</h3>
+                  {bundle.tagline ? <div className="sum-line">{bundle.tagline}</div> : null}
+                  <div className="sum-total">
+                    <span className="lbl">Bundle price</span>
+                    <b>{bundle.price}</b>
+                  </div>
+                  {bundle.savings ? <div className="sum-save">{bundle.savings}</div> : null}
+                  {bundle.cta?.label && bundle.cta?.href ? (
+                    <div className="mt-5">
+                      <PricingCta
+                        href={bundle.cta.href}
+                        label={bundle.cta.label}
+                        tierName={bundle.name ?? ''}
+                        blockEyebrow={b.eyebrow ?? 'bundle'}
+                        highlighted={!!bundle.highlighted}
+                      />
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              {bundle.savings ? (
-                <p className="text-[13px] font-mono uppercase tracking-[0.12em] text-[var(--color-brass)] font-semibold mb-6">
-                  {bundle.savings}
-                </p>
-              ) : (
-                <div className="mb-6" />
-              )}
-              <ul className="space-y-3 text-[14px] mb-8 flex-1">
-                {bundle.includes?.map((f, j) => (
-                  <li key={j} className="flex gap-3 items-start">
-                    <Check className="size-4 mt-[3px] text-[var(--color-brass)] shrink-0" />
-                    <span>{f.label}</span>
-                  </li>
-                ))}
-              </ul>
-              {bundle.cta?.label && bundle.cta?.href ? (
-                <PricingCta
-                  href={bundle.cta.href}
-                  label={bundle.cta.label}
-                  tierName={bundle.name ?? ''}
-                  blockEyebrow={b.eyebrow ?? 'bundle'}
-                  highlighted={!!bundle.highlighted}
-                />
-              ) : null}
             </div>
           ))}
         </div>

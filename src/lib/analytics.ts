@@ -21,6 +21,8 @@ type EventName =
   | 'pdf_download'               // Click on a one-pager / lead-magnet download button
   | 'pagespeed_audit_started'    // Visitor submitted a URL to the PSI audit tool
   | 'pagespeed_audit_completed'  // PSI returned scores; engagement signal
+  | 'cta_click'                  // Generic CTA click (e.g. sticky mobile bar primary action)
+  | 'exit_intent_shown'          // Exit-intent / deep-scroll lead modal was displayed
 
 type EventParams = {
   /** Page or section the event fired from. */

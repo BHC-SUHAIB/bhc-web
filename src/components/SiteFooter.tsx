@@ -5,13 +5,15 @@ import { TrackedLink } from './TrackedLink'
 import { phoneHref, mailtoHref } from '@/lib/contact'
 import type { Footer as FooterGlobal, SiteSetting } from '@/payload-types'
 
-// Social links (LinkedIn / GitHub / Email pseudo-link) intentionally NOT
-// rendered in the main site footer. The footer global may still hold legacy
-// social entries — we ignore them here so editors don't accidentally re-add
-// the cluttered bottom strip. Real contact (email + phone) lives in the
-// left column above and remains the single source for reaching us.
+// Warm Mono redesign (2026-06): footer is now a warm ink band with brass column
+// headings. Content is unchanged — logo, tagline, contact, link columns, copyright.
+// Social links are still intentionally NOT rendered (none exist in content); real
+// contact (email + phone) lives in the brand column.
 
 type FooterProps = { footer: FooterGlobal | null; siteSettings: SiteSetting | null }
+
+const contactLinkClass =
+  'text-[color-mix(in_srgb,var(--band-fg)_82%,transparent)] hover:text-[var(--color-brass)] transition-colors'
 
 export function SiteFooter({ footer, siteSettings }: FooterProps) {
   const columns = footer?.columns ?? []
@@ -23,22 +25,20 @@ export function SiteFooter({ footer, siteSettings }: FooterProps) {
   const phoneHrefVal = phoneHref(phone)
 
   return (
-    <footer className="mt-16 border-t border-[var(--color-border)] py-12 text-[var(--color-fg)]">
-      <Container size="xl" className="grid gap-12 md:grid-cols-[1.3fr_2fr]">
-        <div>
-          <Logo variant="primary" height={48} className="text-[var(--color-fg)]" />
-          <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-[var(--color-fg-muted)]">
-            {tagline}
-          </p>
+    <footer className="site-foot">
+      <Container size="xl" className="foot-grid">
+        <div className="foot-brand">
+          <Logo variant="primary" height={40} className="text-white mb-4" />
+          {tagline ? <p>{tagline}</p> : null}
           {email || phone ? (
-            <ul className="mt-6 space-y-2 text-[14px]">
+            <ul className="mt-5 space-y-2 text-[14px]">
               {email && emailHref ? (
                 <li>
                   <TrackedLink
                     href={emailHref}
                     trackEvent="email_click"
                     trackLocation="footer"
-                    className="hover:text-[var(--color-brass)] transition-colors"
+                    className={contactLinkClass}
                   >
                     {email}
                   </TrackedLink>
@@ -50,7 +50,7 @@ export function SiteFooter({ footer, siteSettings }: FooterProps) {
                     href={phoneHrefVal}
                     trackEvent="phone_click"
                     trackLocation="footer"
-                    className="font-mono tracking-[0.02em] hover:text-[var(--color-brass)] transition-colors"
+                    className={`font-mono tracking-[0.02em] ${contactLinkClass}`}
                   >
                     {phone}
                   </TrackedLink>
@@ -60,29 +60,23 @@ export function SiteFooter({ footer, siteSettings }: FooterProps) {
           ) : null}
         </div>
 
-        <div className="grid gap-10 grid-cols-2 md:grid-cols-3">
-          {columns.map((col, i) => (
-            <div key={i}>
-              <h2 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-4">
-                {col.heading}
-              </h2>
-              <ul className="space-y-2.5">
-                {col.links?.map((l, j) => (
-                  <li key={j}>
-                    <Link href={l.href} className="text-[14px] hover:text-[var(--color-brass)] transition-colors">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+        {columns.map((col, i) => (
+          <div key={i} className="foot-col">
+            <h4>{col.heading}</h4>
+            <div>
+              {col.links?.map((l, j) => (
+                <Link key={j} href={l.href}>
+                  {l.label}
+                </Link>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </Container>
 
-      <Container size="xl" className="mt-12 pt-6 border-t border-[var(--color-border)] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-[13px] text-[var(--color-fg-muted)]">
-        <span>{copyright}</span>
-        {/* No social links rendered. Contact lives in the left column above. */}
+      <Container size="xl" className="foot-bottom">
+        <span className="copy">{copyright}</span>
+        {/* No social links rendered. Contact lives in the brand column above. */}
       </Container>
     </footer>
   )

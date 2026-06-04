@@ -30,20 +30,17 @@ export async function Faq(b: FaqBlock) {
   if (items.length === 0) return null
 
   return (
-    <section className="py-12 sm:py-16">
+    <section className="section">
       <Container size="md">
         {b.eyebrow || b.headline ? (
-          <div className="mb-8">
+          <div className="section-head">
             {b.eyebrow ? (
-              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">
+              <span className="eyebrow eyebrow-row">
+                <span className="rule" />
                 {b.eyebrow}
-              </p>
+              </span>
             ) : null}
-            {b.headline ? (
-              <h2 className="font-serif font-semibold text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.1] tracking-[-0.02em]">
-                {b.headline}
-              </h2>
-            ) : null}
+            {b.headline ? <h2>{b.headline}</h2> : null}
           </div>
         ) : null}
 

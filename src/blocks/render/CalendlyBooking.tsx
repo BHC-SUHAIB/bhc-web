@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { Calendar } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { pushEvent, pushEventThenNavigate } from '@/lib/analytics'
 import { mailtoHref } from '@/lib/contact'
@@ -22,6 +23,11 @@ import type { CalendlyBookingBlock } from '@/payload-types'
 // page, and the CTA pattern lets us track a `booking_click` event before
 // navigating away (Smart Bidding signal even when the visitor abandons before
 // completing booking).
+//
+// Warm Mono markup: the CTA lives inside a `.calendly-shell` that mirrors the
+// redesign's inline-scheduler frame, with a `.calendly-placeholder` (centered
+// `.cal-ic` Calendar glyph + headline + copy + brass CTA) standing in for the
+// scheduler surface.
 
 export function CalendlyBooking(b: CalendlyBookingBlock) {
   const url = b.calendlyUrl
@@ -41,7 +47,7 @@ export function CalendlyBooking(b: CalendlyBookingBlock) {
   }
 
   return (
-    <section className="relative isolate overflow-hidden py-14 sm:py-18 scroll-mt-24" id="book">
+    <section className="section relative isolate overflow-hidden scroll-mt-24" id="book">
       {hasBg ? (
         <>
           {/* CSS background-image → next/image so the editor-pasted Unsplash
@@ -66,53 +72,60 @@ export function CalendlyBooking(b: CalendlyBookingBlock) {
         </>
       ) : null}
 
-      <Container size="lg">
-        <div className="rounded-[var(--radius-xl)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_12%,var(--color-bg))] p-9 sm:p-12 text-center">
-          {b.eyebrow ? (
-            <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">
-              {b.eyebrow}
-            </p>
-          ) : null}
-          <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em] max-w-2xl mx-auto">
-            {b.headline}
-          </h2>
-          {b.description ? (
-            <p className="mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)] max-w-2xl mx-auto">
-              {b.description}
-            </p>
-          ) : null}
-          <div className="mt-8 flex flex-col gap-3 justify-center items-center">
-            <div className="flex flex-col sm:flex-row gap-3 items-center">
-              <Link
-                href={url}
-                onClick={handleClick}
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-brass)] text-[var(--color-ink)] px-7 py-3.5 font-semibold text-[15px] hover:bg-[var(--color-brass-dark)] transition-colors"
-              >
-                {/* Strip a trailing arrow if the editor put one in the label so
-                    we never end up with two arrows side-by-side. */}
-                {buttonLabel.replace(/\s*[→➝➜⇒]\s*$/, '')}
-                <span aria-hidden>→</span>
-              </Link>
-              {/* Optional secondary "Email us instead" CTA — useful on pages
-                  without a visible contact form (e.g. the homepage Calendly
-                  section). Hardcoded to hello@blackhartconsulting.com which
-                  matches SiteSettings.contactEmail. */}
-              {b.showEmailFallback ? (
-                <a
-                  href={mailtoHref('hello@blackhartconsulting.com') ?? '#'}
-                  onClick={() => pushEvent('email_click', {
-                    source_page: typeof window !== 'undefined' ? window.location.pathname : '',
-                    location: 'calendly_email_fallback',
-                  })}
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-fg)]/25 text-[var(--color-fg)] px-7 py-3.5 font-semibold text-[15px] hover:border-[var(--color-brass)] hover:text-[var(--color-brass)] transition-colors"
-                >
-                  {b.emailLabel ?? 'Email us instead'}
-                </a>
-              ) : null}
+      <Container size="md">
+        {b.eyebrow || b.headline || b.description ? (
+          <div className="section-head center">
+            {b.eyebrow ? (
+              <span className="eyebrow eyebrow-row">
+                <span className="rule" />
+                {b.eyebrow}
+              </span>
+            ) : null}
+            {b.headline ? <h2>{b.headline}</h2> : null}
+            {b.description ? <p className="lede">{b.description}</p> : null}
+          </div>
+        ) : null}
+
+        <div className="calendly-shell">
+          <div className="calendly-placeholder">
+            <div>
+              <div className="cal-ic">
+                <Calendar />
+              </div>
+              <div className="mt-2 flex flex-col gap-3 justify-center items-center">
+                <div className="flex flex-col sm:flex-row gap-3 items-center">
+                  <Link
+                    href={url}
+                    onClick={handleClick}
+                    className="btn btn-brass btn-md"
+                  >
+                    {/* Strip a trailing arrow if the editor put one in the label so
+                        we never end up with two arrows side-by-side. */}
+                    {buttonLabel.replace(/\s*[→➝➜⇒]\s*$/, '')}
+                    <span aria-hidden>→</span>
+                  </Link>
+                  {/* Optional secondary "Email us instead" CTA — useful on pages
+                      without a visible contact form (e.g. the homepage Calendly
+                      section). Hardcoded to hello@blackhartconsulting.com which
+                      matches SiteSettings.contactEmail. */}
+                  {b.showEmailFallback ? (
+                    <a
+                      href={mailtoHref('hello@blackhartconsulting.com') ?? '#'}
+                      onClick={() => pushEvent('email_click', {
+                        source_page: typeof window !== 'undefined' ? window.location.pathname : '',
+                        location: 'calendly_email_fallback',
+                      })}
+                      className="btn btn-outline btn-md"
+                    >
+                      {b.emailLabel ?? 'Email us instead'}
+                    </a>
+                  ) : null}
+                </div>
+                <span className="placeholder-note">
+                  Opens Calendly in this tab. You&apos;ll come back here when you&apos;re done.
+                </span>
+              </div>
             </div>
-            <span className="text-[12.5px] text-[var(--color-fg-muted)] text-center">
-              Opens Calendly in this tab. You'll come back here when you're done.
-            </span>
           </div>
         </div>
       </Container>

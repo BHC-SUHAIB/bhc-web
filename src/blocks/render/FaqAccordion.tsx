@@ -1,35 +1,50 @@
 'use client'
 
-import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { useRef, useState } from 'react'
 
 type Item = { question: string; answer: string }
 
 // Client-side accordion. Pure UI — the parent server component (Faq.tsx)
 // resolves whether to use admin-collection FAQs or block-level items and
 // passes the final list down.
+//
+// Warm Mono markup: `.faq-list` > `.faq-item` (gets `.open` when expanded) >
+// `.faq-q` button (with a `.ico` whose plus→minus morph is drawn entirely in
+// CSS via ::before/::after) + `.faq-a` collapsible wrapper > `.faq-a-inner`.
+// The component CSS only declares the collapsed state (`max-height: 0`) and
+// transitions max-height, so the open height is applied inline from the
+// measured inner content height.
 export function FaqAccordion({ items }: { items: Item[] }) {
   const [open, setOpen] = useState<number | null>(0)
+  const innerRefs = useRef<Array<HTMLDivElement | null>>([])
 
   return (
-    <div className="divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
+    <div className="faq-list">
       {items.map((it, i) => {
         const isOpen = open === i
         return (
-          <div key={i}>
+          <div key={i} className={isOpen ? 'faq-item open' : 'faq-item'}>
             <button
               type="button"
+              className="faq-q"
               onClick={() => setOpen(isOpen ? null : i)}
-              className="w-full text-left flex items-center justify-between gap-4 py-5 hover:text-[var(--color-brass)] transition-colors"
               aria-expanded={isOpen}
             >
-              <span className="font-medium text-[16px] sm:text-[17px]">{it.question}</span>
-              <ChevronDown className={cn('size-4 transition-transform shrink-0', isOpen && 'rotate-180')} />
+              {it.question}
+              <span className="ico" aria-hidden />
             </button>
-            <div className={cn('grid transition-[grid-template-rows] duration-300 ease-out', isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]')}>
-              <div className="overflow-hidden">
-                <p className="pb-5 pr-10 text-[15px] leading-[1.6] text-[var(--color-fg-muted)] whitespace-pre-line">{it.answer}</p>
+            <div
+              className="faq-a"
+              style={{ maxHeight: isOpen ? innerRefs.current[i]?.scrollHeight ?? undefined : 0 }}
+            >
+              <div
+                className="faq-a-inner"
+                ref={(el) => {
+                  innerRefs.current[i] = el
+                }}
+                style={{ whiteSpace: 'pre-line' }}
+              >
+                {it.answer}
               </div>
             </div>
           </div>

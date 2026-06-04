@@ -8,8 +8,8 @@ import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
 import { getCachedProjectBySlug } from '@/lib/payload-cache'
 import { canonical } from '@/lib/seo'
-import { ArrowLeft, ArrowUpRight } from 'lucide-react'
-import type { Project, Media } from '@/payload-types'
+import { ArrowUpRight } from 'lucide-react'
+import type { Media } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,142 +36,115 @@ export default async function ProjectPage({ params }: Args) {
   if (!p) notFound()
 
   const hero = typeof p.heroImage === 'object' ? (p.heroImage as Media | null) : null
+  // Case-study label line: industry + project type, mirroring the eyebrow in
+  // bhc-redesign/Case Study.html ("Case study · Professional services").
+  const labelBits = [p.industry, p.projectType].filter(Boolean) as string[]
 
   return (
-    <article className="pb-24">
-      {/* Back link */}
-      <Container size="xl" className="pt-10">
-        <Link
-          href="/portfolio"
-          className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[var(--color-fg-muted)] hover:text-[var(--color-brass)] transition-colors"
-        >
-          <ArrowLeft className="size-3.5" /> All projects
-        </Link>
-      </Container>
-
-      {/* Title section */}
-      <Container size="lg" className="mt-10">
-        <div className="mb-10">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-5">
-            {p.client ? <span>{p.client}</span> : null}
-            {p.industry ? <span>{p.industry}</span> : null}
-            {p.year ? <span>{p.year}</span> : null}
-            {p.projectType ? <span>{p.projectType}</span> : null}
+    <article className="lp-pad-bottom">
+      {/* Hero: breadcrumb, eyebrow, title, lede, then the wide cover image. */}
+      <section className="section-tight">
+        <Container size="lg">
+          <p style={{ fontSize: '0.84rem' }}>
+            <Link href="/portfolio" style={{ color: 'var(--color-fg-muted)' }}>
+              &larr; All projects
+            </Link>
+          </p>
+          <div className="section-head" style={{ maxWidth: '60ch', marginTop: '1rem' }}>
+            <span className="eyebrow eyebrow-row">
+              <span className="rule" />
+              Case study{labelBits.length ? ` · ${labelBits.join(' · ')}` : ''}
+            </span>
+            <h2 style={{ fontSize: 'var(--step-5)' }}>{p.title}</h2>
+            {p.summary ? <p className="lede">{p.summary}</p> : null}
           </div>
-          <h1 className="font-serif font-semibold text-[clamp(2.25rem,5vw,4rem)] leading-[1.02] tracking-[-0.03em]">
-            {p.title}
-          </h1>
-          {p.summary ? (
-            <p className="mt-6 text-[clamp(1.1rem,1.4vw,1.35rem)] leading-[1.5] text-[var(--color-fg-muted)] max-w-2xl">
-              {p.summary}
-            </p>
-          ) : null}
-        </div>
-      </Container>
+        </Container>
+      </section>
 
-      {/* Hero image */}
-      <Container size="xl">
-        <div className="relative aspect-[16/9] rounded-[var(--radius-xl)] overflow-hidden border border-[var(--color-border)] my-4">
-          {hero?.url ? (
-            <Image
-              src={hero.url as string}
-              alt={(hero.alt as string) ?? p.title}
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority
-            />
-          ) : (
+      {/* Cover image — `.cs-hero-img` (16/8, rounded). */}
+      <Container size="lg">
+        {hero?.url ? (
+          // .cs-hero-img forces width:100% + aspect-ratio 16/8 + radius; the
+          // width/height props are just intrinsic-ratio hints for next/image.
+          <Image
+            src={hero.url as string}
+            alt={(hero.alt as string) ?? p.title}
+            width={1600}
+            height={800}
+            className="cs-hero-img"
+            sizes="100vw"
+            priority
+          />
+        ) : (
+          <div className="cs-hero-img relative overflow-hidden">
             <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="hero" />
-          )}
-        </div>
+          </div>
+        )}
       </Container>
 
-      {/* Meta sidebar + content */}
-      <Container size="xl" className="mt-12">
-        <div className="grid gap-12 lg:grid-cols-[1fr_2.5fr]">
-          {/* Sidebar */}
-          <aside className="space-y-8 lg:sticky lg:top-24 self-start">
-            {p.duration || p.teamSize ? (
-              <div>
-                <h2 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">Engagement</h2>
-                <dl className="space-y-1.5 text-[14px]">
-                  {p.duration ? (<div className="flex justify-between gap-3"><dt className="text-[var(--color-fg-muted)]">Duration</dt><dd>{p.duration}</dd></div>) : null}
-                  {p.teamSize ? (<div className="flex justify-between gap-3"><dt className="text-[var(--color-fg-muted)]">Team size</dt><dd>{p.teamSize}</dd></div>) : null}
-                </dl>
-              </div>
+      {/* Metrics band — `.cs-metrics` of `.stat` cells. CMS metrics carry
+          value + label; the reference's optional `.s-desc` is omitted. */}
+      {p.metrics && p.metrics.length > 0 ? (
+        <section className="section-tight">
+          <Container size="lg">
+            <div className="cs-metrics">
+              {p.metrics.map((m, i) => (
+                <div className="stat" key={i}>
+                  <div className="s-val">{m.value}</div>
+                  <div className="s-label">{m.label}</div>
+                </div>
+              ))}
+            </div>
+          </Container>
+        </section>
+      ) : null}
+
+      {/* Body prose — `.cs-body` single editorial column. Challenge, approach
+          (with inline `.cs-stack` tech chips), outcome, gallery, pull-quote. */}
+      <section className="section-tight">
+        <Container size="lg">
+          <div className="cs-body">
+            {p.challenge ? (
+              <>
+                <h2>The challenge</h2>
+                <div className="prose-content"><RichTextRenderer content={p.challenge} /></div>
+              </>
+            ) : null}
+
+            {p.approach ? (
+              <>
+                <h2>What we shipped</h2>
+                <div className="prose-content"><RichTextRenderer content={p.approach} /></div>
+              </>
             ) : null}
 
             {p.stack && p.stack.length > 0 ? (
-              <div>
-                <h2 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">Stack</h2>
-                <ul className="flex flex-wrap gap-1.5">
-                  {p.stack.map((s, i) => (
-                    <li key={i} className="px-2.5 py-1 text-[12px] rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]">
-                      {s.name}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-
-            {p.liveUrl ? (
-              <Button href={p.liveUrl} variant="secondary" size="sm" openInNewTab>
-                Visit live site <ArrowUpRight className="size-3.5" />
-              </Button>
-            ) : null}
-          </aside>
-
-          {/* Main content */}
-          <div className="space-y-14 text-[17px] leading-[1.65]">
-            {/* Metrics */}
-            {p.metrics && p.metrics.length > 0 ? (
-              <div className="grid gap-px bg-[var(--color-brass)] rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-brass)] grid-cols-2 md:grid-cols-4 shadow-[0_18px_40px_-22px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]">
-                {p.metrics.map((m, i) => (
-                  <div
-                    key={i}
-                    className="bg-[var(--color-bg)] p-6 transition-colors duration-150 ease-out hover:bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))]"
-                  >
-                    <div className="font-serif font-semibold text-[clamp(2rem,3.4vw,2.5rem)] tracking-[-0.025em] leading-none text-[var(--color-fg)]">{m.value}</div>
-                    <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-fg-muted)] leading-[1.4]">{m.label}</div>
-                  </div>
+              <div className="cs-stack">
+                {p.stack.map((s, i) => (
+                  <span className="chip" key={i}>{s.name}</span>
                 ))}
               </div>
             ) : null}
 
-            {p.challenge ? (
-              <div>
-                <h2 className="font-serif text-[26px] font-semibold tracking-[-0.02em] mb-4">The challenge</h2>
-                <div className="prose-content"><RichTextRenderer content={p.challenge} /></div>
-              </div>
-            ) : null}
-
-            {p.approach ? (
-              <div>
-                <h2 className="font-serif text-[26px] font-semibold tracking-[-0.02em] mb-4">Our approach</h2>
-                <div className="prose-content"><RichTextRenderer content={p.approach} /></div>
-              </div>
-            ) : null}
-
             {p.outcome ? (
-              <div>
-                <h2 className="font-serif text-[26px] font-semibold tracking-[-0.02em] mb-4">Outcome</h2>
+              <>
+                <h2>The result</h2>
                 <div className="prose-content"><RichTextRenderer content={p.outcome} /></div>
-              </div>
+              </>
             ) : null}
 
             {p.gallery && p.gallery.length > 0 ? (
-              <div className="space-y-6">
+              <div className="space-y-6" style={{ marginTop: '2.4rem' }}>
                 {p.gallery.map((g, i) => {
                   const img = typeof g.image === 'object' ? (g.image as Media | null) : null
                   return (
                     <figure
                       key={i}
-                      className="rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)] transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)] hover:shadow-[0_18px_40px_-22px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]"
+                      className="rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)]"
                     >
                       <div className="relative aspect-video bg-[var(--color-surface)] overflow-hidden">
                         {img?.url ? (
-                          <Image src={img.url as string} alt={(img.alt as string) ?? ''} fill className="object-cover transition-transform duration-500 hover:scale-[1.02]" sizes="100vw" />
+                          <Image src={img.url as string} alt={(img.alt as string) ?? ''} fill className="object-cover" sizes="100vw" />
                         ) : (
                           <Placeholder seed={`${p.slug ?? p.title}-${i}`} label={`${p.title} — ${i + 1}`} aspect="video" />
                         )}
@@ -186,48 +159,88 @@ export default async function ProjectPage({ params }: Args) {
             ) : null}
 
             {p.testimonial?.quote ? (
-              <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-8 sm:p-10">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="size-7 text-[var(--color-brass)] mb-5" aria-hidden>
-                  <path d="M7.2 18.7H3l4.2-9h2.4v9H7.2Zm9 0h-4.2l4.2-9h2.4v9h-2.4Z" />
-                </svg>
-                <blockquote className="font-serif text-[clamp(1.4rem,2.2vw,1.75rem)] italic leading-[1.4] text-[var(--color-fg)]">
-                  &ldquo;{p.testimonial.quote}&rdquo;
-                </blockquote>
-                <figcaption className="mt-6 pt-5 border-t border-[color-mix(in_srgb,var(--color-brass)_30%,transparent)] text-[14px] text-[var(--color-fg)]">
-                  <div className="font-semibold">{p.testimonial.author}</div>
-                  {p.testimonial.role ? (
-                    <div className="text-[var(--color-fg-muted)]">{p.testimonial.role}</div>
-                  ) : null}
-                </figcaption>
-              </figure>
+              <blockquote
+                style={{
+                  borderLeft: '3px solid var(--color-brass)',
+                  paddingLeft: '1.4rem',
+                  margin: '2rem 0',
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: '1.4rem',
+                  lineHeight: 1.4,
+                  fontStyle: 'italic',
+                }}
+              >
+                &ldquo;{p.testimonial.quote}&rdquo;
+                {p.testimonial.author ? (
+                  <span style={{ display: 'block', fontStyle: 'normal', fontSize: '0.95rem', marginTop: '0.7rem', color: 'var(--color-fg-muted)' }}>
+                    {p.testimonial.author}
+                    {p.testimonial.role ? ` · ${p.testimonial.role}` : ''}
+                  </span>
+                ) : null}
+              </blockquote>
+            ) : null}
+
+            {/* Engagement facts + live-site link, kept from the CMS record. */}
+            {p.client || p.year || p.duration || p.teamSize || p.liveUrl ? (
+              <div
+                className="hairline-top"
+                style={{ marginTop: '2.4rem', paddingTop: '1.4rem', display: 'flex', flexWrap: 'wrap', gap: '1.4rem', alignItems: 'center' }}
+              >
+                <dl style={{ display: 'flex', flexWrap: 'wrap', gap: '1.4rem 2rem', flex: 1, margin: 0 }}>
+                  {p.client ? <Fact label="Client" value={p.client} /> : null}
+                  {p.year ? <Fact label="Year" value={String(p.year)} /> : null}
+                  {p.duration ? <Fact label="Duration" value={p.duration} /> : null}
+                  {p.teamSize ? <Fact label="Team size" value={p.teamSize} /> : null}
+                </dl>
+                {p.liveUrl ? (
+                  <Button href={p.liveUrl} variant="secondary" size="sm" openInNewTab>
+                    Visit live site <ArrowUpRight className="size-3.5" />
+                  </Button>
+                ) : null}
+              </div>
             ) : null}
           </div>
-        </div>
-      </Container>
+        </Container>
+      </section>
 
-      {/* End-of-case CTA — drives conversions on every project page */}
-      <Container size="lg" className="mt-16">
-        <div className="rounded-[var(--radius-xl)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_12%,var(--color-bg))] p-8 sm:p-12 text-center">
-          <h2 className="font-serif font-semibold text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.02em] max-w-2xl mx-auto">
-            Want a build like this for your business?
-          </h2>
-          <p className="mt-4 text-[16px] leading-[1.55] text-[var(--color-fg-muted)] max-w-xl mx-auto">
-            Founding-client pricing — 30% off your first build for the next 5 paid clients in exchange for a published case study.
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3 justify-center">
-            <Button href="/contact" variant="brass" size="lg">Start a project</Button>
-            <Button href="/services" variant="ghost" size="lg">See all pricing</Button>
+      {/* End-of-case CTA — drives conversions on every project page. */}
+      <section className="section">
+        <Container size="lg">
+          <div className="cta-band emph">
+            <h2>Your site could be the next one.</h2>
+            <p>
+              Founding-client pricing — 30% off your first build for the next 5 paid clients
+              in exchange for a published case study.
+            </p>
+            <div className="cta-row">
+              <Button href="/contact" variant="brass" size="lg">Start a project</Button>
+              <Button href="/services" variant="onPhotoGhost" size="lg">See all pricing</Button>
+            </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </section>
 
+      {/* Prose styling for RichTextRenderer output (bare p/h3/ul/ol/li/a/blockquote
+          with no classes). `.cs-body p` / `.cs-body h2` already style paragraphs
+          and top-level headings; these rules fill the gaps for nested elements. */}
       <style>{`
-        .prose-content p { margin: 0 0 1em; }
-        .prose-content h3 { font-family: var(--font-serif); font-weight: 600; font-size: 1.2em; margin: 1.6em 0 0.4em; }
-        .prose-content ul, .prose-content ol { margin: 0 0 1em; padding-left: 1.4em; }
-        .prose-content li { margin: 0.3em 0; }
-        .prose-content a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+        .cs-body .prose-content h3 { font-family: var(--font-serif); font-weight: 600; font-size: var(--step-1); margin-top: 1.8rem; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+        .cs-body .prose-content ul, .cs-body .prose-content ol { margin-top: 1rem; padding-left: 1.4em; color: var(--color-fg-muted); }
+        .cs-body .prose-content li { margin: 0.4em 0; line-height: 1.7; }
+        .cs-body .prose-content blockquote { border-left: 3px solid var(--color-brass); padding-left: 1.2rem; margin: 1.6rem 0; font-style: italic; color: var(--color-fg); }
+        .cs-body .prose-content a { color: var(--color-link); text-decoration: underline; text-underline-offset: 3px; }
+        .cs-body .prose-content a:hover { color: var(--color-highlight); }
       `}</style>
     </article>
+  )
+}
+
+// Small mono label/value pair for the engagement facts row.
+function Fact({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="font-mono text-[0.6rem] tracking-[0.16em] uppercase text-[var(--color-fg-muted)]">{label}</dt>
+      <dd className="text-[0.95rem] mt-1">{value}</dd>
+    </div>
   )
 }

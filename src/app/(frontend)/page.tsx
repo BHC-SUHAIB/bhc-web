@@ -44,7 +44,7 @@ export default async function HomePage() {
           __html: JSON.stringify(localBusinessJsonLd).replace(/</g, '\\u003c'),
         }}
       />
-      <RenderBlocks blocks={page.layout ?? []} />
+      <RenderBlocks blocks={page.layout ?? []} pageSlug="home" />
     </>
   )
 }

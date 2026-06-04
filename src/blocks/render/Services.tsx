@@ -1,6 +1,7 @@
 import { Container } from '@/components/Container'
 import { Globe, Search, Smartphone, Server, Sparkles, Zap, Shield, Code, Lightbulb, Check } from 'lucide-react'
 import { PdfDownloadLink } from './PdfDownloadLink'
+import { cn } from '@/lib/utils'
 import type { ServicesBlock } from '@/payload-types'
 
 const icons = { globe: Globe, search: Search, smartphone: Smartphone, server: Server, sparkles: Sparkles, zap: Zap, shield: Shield, code: Code, lightbulb: Lightbulb } as const
@@ -20,7 +21,7 @@ export function Services(b: ServicesBlock) {
           {b.description ? <p className="lede">{b.description}</p> : null}
         </div>
 
-        <div className="svc-grid">
+        <div className={cn('svc-grid', b.items?.length === 3 && 'svc-grid--3')}>
           {b.items?.map((item, i) => {
             const Icon = item.icon ? icons[item.icon as keyof typeof icons] : null
             return (

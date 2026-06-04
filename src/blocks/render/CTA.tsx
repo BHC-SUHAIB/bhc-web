@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
+import { toContactAnchor, relabelDiscount } from '@/lib/redesign'
 import { cn } from '@/lib/utils'
 import type { CTABlock } from '@/payload-types'
 
@@ -53,20 +54,20 @@ export function CTA(b: CTABlock) {
           {b.description ? <p>{b.description}</p> : null}
           <div className="cta-row">
             {b.primaryCta?.label && b.primaryCta?.href ? (
-              <Button href={b.primaryCta.href} variant="brass" size="lg">
-                {b.primaryCta.label}
+              <Button href={toContactAnchor(b.primaryCta.href)} variant="brass" size="lg">
+                {relabelDiscount(b.primaryCta.label)}
               </Button>
             ) : null}
             {b.secondaryCta?.label && b.secondaryCta?.href ? (
               <Button
-                href={b.secondaryCta.href}
+                href={toContactAnchor(b.secondaryCta.href)}
                 // On the dark/emphasized band (or over a photo) a plain ghost
                 // button has too little contrast — use the on-photo treatment so
                 // it stays legible against the ink fill. Light surface keeps ghost.
                 variant={emphasized || hasBg ? 'onPhotoGhost' : 'ghost'}
                 size="lg"
               >
-                {b.secondaryCta.label}
+                {relabelDiscount(b.secondaryCta.label)}
               </Button>
             ) : null}
           </div>

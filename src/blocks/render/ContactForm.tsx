@@ -15,6 +15,8 @@ type State = 'idle' | 'submitting' | 'success' | 'error'
 type ContactFormProps = ContactFormBlockBlock & {
   contactEmail?: string | null
   contactPhone?: string | null
+  /** Force the section anchor id (e.g. "contact-form") regardless of eyebrow. */
+  anchorId?: string
 }
 
 // Derive a section id from the eyebrow so heroes can deep-link to a specific
@@ -112,7 +114,7 @@ export function ContactForm(b: ContactFormProps) {
     }
   }
 
-  const anchor = anchorFromEyebrow(b.eyebrow)
+  const anchor = b.anchorId ?? anchorFromEyebrow(b.eyebrow)
 
   return (
     <section id={anchor} className="py-12 sm:py-16 scroll-mt-24">

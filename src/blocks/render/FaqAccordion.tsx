@@ -15,7 +15,10 @@ type Item = { question: string; answer: string }
 // transitions max-height, so the open height is applied inline from the
 // measured inner content height.
 export function FaqAccordion({ items }: { items: Item[] }) {
-  const [open, setOpen] = useState<number | null>(0)
+  // Start fully collapsed. (Defaulting to 0 showed the first item with a
+  // "minus" icon but a 0-height body on first paint, because the inner ref
+  // isn't measured yet — it looked open but wasn't, and took two clicks.)
+  const [open, setOpen] = useState<number | null>(null)
   const innerRefs = useRef<Array<HTMLDivElement | null>>([])
 
   return (

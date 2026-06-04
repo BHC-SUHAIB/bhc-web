@@ -1,34 +1,33 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Container } from '@/components/Container'
 import { Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PricingCta } from './PricingCta'
+import { relabelDiscount } from '@/lib/redesign'
 import type { PricingBlock } from '@/payload-types'
 
-/* Map an eyebrow label like "Care plans" → "care-plans" so footer/nav anchors
-   (e.g. /services#care) can deep-link straight into a pricing section. */
 function anchorFromEyebrow(eyebrow?: string | null): string | undefined {
   if (!eyebrow) return undefined
   const slug = eyebrow.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
   if (!slug) return undefined
-  // Drop trailing "-plans" / "-retainers" so the anchor is short and stable
   return slug.replace(/-(plans|retainers)$/, '')
 }
 
-export function Pricing(b: PricingBlock) {
+// `seeAll*` is an optional footer link (used to fold the standalone
+// "full pricing menu" CTA into the home pricing section → /services anchor).
+export function Pricing(b: PricingBlock & { seeAllHref?: string; seeAllLabel?: string }) {
   const tiers = b.tiers ?? []
   const hasAnyHighlighted = tiers.some((t) => t.highlighted)
   const hasEnterprise = tiers.some((t) => t.enterpriseBadge)
   const anchor = anchorFromEyebrow(b.eyebrow)
   const isCenteredSingle = b.layoutVariant === 'centered-single' && tiers.length === 1
 
-  // Founding/retail toggle — only shown when at least one tier carries BOTH a
-  // (discounted) price and an originalPrice retail anchor. Flips the displayed
-  // number between the founding price (default, with retail struck through) and
-  // the full retail price. Pure presentation off existing CMS fields; no schema
-  // change. Tiers without an originalPrice show their single price in both modes.
+  // Discounted/retail toggle — only when a tier carries both a discounted price
+  // and an originalPrice retail anchor. Flips the displayed number; pure
+  // presentation off existing CMS fields (no schema change).
   const hasFoundingDiscount = tiers.some((t) => t.price && t.originalPrice)
   const [mode, setMode] = useState<'founding' | 'retail'>('founding')
 
@@ -48,11 +47,11 @@ export function Pricing(b: PricingBlock) {
             </p>
           ) : null}
           <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em]">
-            {b.headline}
+            {relabelDiscount(b.headline)}
           </h2>
           {b.description ? (
             <p className={cn('mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)]', isCenteredSingle && 'mx-auto max-w-2xl')}>
-              {b.description}
+              {relabelDiscount(b.description)}
             </p>
           ) : null}
         </div>
@@ -61,7 +60,7 @@ export function Pricing(b: PricingBlock) {
           <div className={cn('flex', isCenteredSingle ? 'justify-center' : 'justify-start')}>
             <div className="price-toggle" role="group" aria-label="Pricing mode">
               <button type="button" aria-pressed={mode === 'founding'} onClick={() => setMode('founding')}>
-                Founding<span className="save-tag">limited</span>
+                Discounted<span className="save-tag">limited</span>
               </button>
               <button type="button" aria-pressed={mode === 'retail'} onClick={() => setMode('retail')}>
                 Retail
@@ -89,7 +88,6 @@ export function Pricing(b: PricingBlock) {
           data-reveal-stagger
         >
           {tiers.map((t, i) => {
-            // Resolve the displayed price + optional strikethrough for the active mode.
             const foundingMode = mode === 'founding'
             const bigPrice = foundingMode ? t.price : (t.originalPrice ?? t.price)
             const struck = foundingMode && t.originalPrice ? t.originalPrice : null
@@ -98,14 +96,14 @@ export function Pricing(b: PricingBlock) {
               key={i}
               className={cn(
                 'group relative p-7 rounded-[var(--radius-lg)] border flex flex-col h-full',
-                isCenteredSingle && 'w-full max-w-2xl p-9 sm:p-11 shadow-[0_24px_60px_-30px_color-mix(in_srgb,var(--color-ink)_55%,transparent)]',
-                'transition-[transform,border-color,background-color,box-shadow] duration-200 ease-out',
-                'hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_color-mix(in_srgb,var(--color-ink)_45%,transparent)]',
+                isCenteredSingle && 'w-full max-w-2xl p-9 sm:p-11',
+                'transition-[transform,border-color,background-color] duration-200 ease-out',
+                'hover:-translate-y-0.5',
                 t.enterpriseBadge
-                  ? 'border-2 border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_10%,var(--color-bg))] hover:border-[var(--color-brass-dark)]'
+                  ? 'border-2 border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_10%,var(--color-bg))]'
                   : t.highlighted
-                    ? 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] hover:border-[var(--color-brass-dark)]'
-                    : 'border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-brass)] hover:bg-[var(--color-surface-raised)]',
+                    ? 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))]'
+                    : 'border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-brass)]',
               )}
             >
               {t.enterpriseBadge ? (
@@ -140,7 +138,7 @@ export function Pricing(b: PricingBlock) {
                   ) : null}
                 </div>
                 {t.priceNote ? (
-                  <p className="mt-1.5 text-[14px] text-[var(--color-fg-muted)]">{t.priceNote}</p>
+                  <p className="mt-1.5 text-[14px] text-[var(--color-fg-muted)]">{relabelDiscount(t.priceNote)}</p>
                 ) : null}
               </div>
               {t.description ? (
@@ -172,6 +170,18 @@ export function Pricing(b: PricingBlock) {
             </div>
           )})}
         </div>
+
+        {b.seeAllHref ? (
+          <div className="mt-10 text-center">
+            <Link
+              href={b.seeAllHref}
+              className="inline-flex items-center gap-2 font-mono text-[12px] tracking-[0.12em] uppercase text-[var(--color-brass-text)] hover:text-[var(--color-brass)] transition-colors"
+            >
+              {b.seeAllLabel ?? 'See all packages & pricing'}
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+        ) : null}
       </Container>
     </section>
   )

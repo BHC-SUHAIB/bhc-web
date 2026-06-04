@@ -188,6 +188,8 @@
 /* ---------- Services ---------- */
 .svc-grid { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
 @media (min-width: 720px) { .svc-grid { grid-template-columns: 1fr 1fr; } }
+/* Exactly 3 items (e.g. About "How we work" principles) sit 3-up on desktop. */
+@media (min-width: 900px) { .svc-grid--3 { grid-template-columns: repeat(3, 1fr); } }
 .svc { border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.6rem; background: var(--color-cream); transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out); }
 .svc:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -34px rgba(var(--shadow-color),0.45); }
 .svc .ic { width: 44px; height: 44px; border-radius: var(--radius-md); display: grid; place-items: center; background: var(--accent-soft); color: var(--color-accent); margin-bottom: 1rem; }
@@ -398,3 +400,56 @@ select.field { appearance: none; background-image: url("data:image/svg+xml,%3Csv
 /* Image containers that host a next/image `fill` need positioning + relative
    coords for the fill layout to size correctly. */
 .work .shot, .art .shot, .art-feature .shot, .quote .by .av { position: relative; }
+
+/* ── Revision 1 overrides ───────────────────────────────────────────────────
+   Subtle hover (brass border + small lift, NO drop-shadow), equal-height
+   service cards (flex column so the download link / CTA sinks to the bottom),
+   and full-width FAQ answers. Later in the file ⇒ wins on source order. */
+.svc { display: flex; flex-direction: column; }
+.svc:hover, .tier:hover, .work:hover, .art:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-brass);
+  box-shadow: none;
+}
+.faq-a-inner { max-width: none; }
+
+/* ── Revision 1: alternating section tones (home) ───────────────────────────
+   tone-a = light context, tone-b = dark context. Each tone remaps the semantic
+   tokens so ANY block rendered inside reads correctly. In dark mode both shift
+   darker (tone-a a touch lighter than tone-b) so the rhythm stays subtle. */
+.tone-a, .tone-b { transition: background-color var(--dur-med) var(--ease-out); }
+.tone-a {
+  --color-bg:#EFE9D9; --color-cream:#F3EEE1; --color-fg:#1A1713;
+  --color-fg-muted:#5A5349; --color-fg-faint:#8A8073;
+  --color-surface:#E7E0CF; --color-surface-raised:#DED6C2;
+  --color-border:rgba(26,23,19,0.14); --color-border-strong:rgba(26,23,19,0.26);
+  --accent-soft:#EBE3D2; --band-bg:#14120E; --band-fg:#F3EEE1;
+  --shadow-color:26,23,19; --logo:#1A1713;
+  --color-brass-text:#6E5530; --color-accent:#6E5530; --color-link:#6E5530;
+  background:var(--color-bg); color:var(--color-fg);
+}
+.tone-b {
+  --color-bg:#14120E; --color-cream:#1C1813; --color-fg:#EFE9D9;
+  --color-fg-muted:#ABA290; --color-fg-faint:#7E776A;
+  --color-surface:#211C16; --color-surface-raised:#2A241C;
+  --color-border:rgba(239,233,217,0.16); --color-border-strong:rgba(239,233,217,0.30);
+  --accent-soft:#241F18; --band-bg:#100D0A; --band-fg:#F3EEE1;
+  --shadow-color:0,0,0; --logo:#FFFFFF;
+  --color-brass:#C9A36B; --color-brass-dark:#B0894E; --color-brass-text:#C9A36B;
+  --color-accent:#C9A36B; --color-accent-strong:#D8B57F; --color-link:#C9A36B;
+  background:var(--color-bg); color:var(--color-fg);
+}
+@media (prefers-color-scheme: dark) {
+  .tone-a {
+    --color-bg:#1C1813; --color-cream:#211C16; --color-fg:#EFE9D9;
+    --color-fg-muted:#ABA290; --color-fg-faint:#7E776A;
+    --color-surface:#262019; --color-surface-raised:#2F2820;
+    --color-border:rgba(239,233,217,0.14); --color-border-strong:rgba(239,233,217,0.28);
+    --accent-soft:#241F18; --band-bg:#100D0A; --shadow-color:0,0,0; --logo:#FFFFFF;
+    --color-brass-text:#C9A36B; --color-accent:#C9A36B; --color-link:#C9A36B;
+  }
+  .tone-b {
+    --color-bg:#100D0A; --color-cream:#15120E; --color-surface:#1A1611; --color-surface-raised:#221D16;
+    --band-bg:#0B0907;
+  }
+}

@@ -68,6 +68,10 @@ export function RichText(b: RichTextBlock) {
                 fill
                 className={imgObjectClass}
                 sizes="(min-width:768px) 260px, 240px"
+                // Already a lean 75KB in /public — serve it raw so it doesn't
+                // depend on the production image optimizer (which fails for this
+                // local file on the dev droplet's image cache).
+                unoptimized
               />
               <span className="absolute left-3 bottom-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-pill)] bg-[rgba(16,13,10,0.62)] text-[#F3EEE1] backdrop-blur-sm font-mono text-[11px] tracking-[0.04em]">
                 Houston Heights

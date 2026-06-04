@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { AppInstallCta, type AppInstallData } from '@/components/AppInstallCta'
 import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
 import { getCachedProjectBySlug } from '@/lib/payload-cache'
@@ -39,6 +40,9 @@ export default async function ProjectPage({ params }: Args) {
   // Case-study label line: industry + project type, mirroring the eyebrow in
   // bhc-redesign/Case Study.html ("Case study · Professional services").
   const labelBits = [p.industry, p.projectType].filter(Boolean) as string[]
+  // appInstall group lives on the Projects collection; not yet in the generated
+  // payload-types, so read it via a narrow cast. Renders nothing unless set.
+  const appInstall = (p as unknown as { appInstall?: AppInstallData }).appInstall
 
   return (
     <article className="lp-pad-bottom">
@@ -98,6 +102,10 @@ export default async function ProjectPage({ params }: Args) {
           </Container>
         </section>
       ) : null}
+
+      {/* App install CTA — TestFlight (beta) / App Store (live) for mobile-app
+          case studies. Renders nothing unless appInstall.status is set. */}
+      <AppInstallCta data={appInstall} projectTitle={p.title} />
 
       {/* Body prose — `.cs-body` single editorial column. Challenge, approach
           (with inline `.cs-stack` tech chips), outcome, gallery, pull-quote. */}

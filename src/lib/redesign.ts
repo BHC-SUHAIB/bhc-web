@@ -20,5 +20,9 @@ export function toContactAnchor(href?: string | null): string {
  *  Whole-word token only, so "Founded" / "founder" are untouched. */
 export function relabelDiscount<T extends string | null | undefined>(text: T): T {
   if (typeof text !== 'string') return text
-  return text.replace(/Founding/g, 'Discounted').replace(/founding/g, 'discounted') as T
+  return text
+    .replace(/Founding/g, 'Discounted')
+    .replace(/founding/g, 'discounted')
+    // "Claim a discounted spot" overflows pill buttons — shorten the CTA.
+    .replace(/claim a discounted spot/gi, 'Claim your discount') as T
 }

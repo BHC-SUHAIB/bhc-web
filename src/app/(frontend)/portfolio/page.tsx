@@ -63,8 +63,8 @@ export default async function PortfolioPage() {
             <Button href="/express-website" variant="brass" size="lg">
               Run my free audit
             </Button>
-            <Button href="/contact" variant="onPhotoGhost" size="lg">
-              Claim a founding spot
+            <Button href="/services#website-packages" variant="onPhotoGhost" size="lg">
+              Get discounted pricing
             </Button>
           </div>
         </Container>
@@ -131,12 +131,12 @@ export default async function PortfolioPage() {
             <span className="eyebrow" style={{ color: 'var(--color-brass)' }}>Your project next</span>
             <h2>Want results like these?</h2>
             <p>
-              Start with a free audit of your current site, or claim a founding spot before
-              the cohort fills.
+              Start with a free audit of your current site, or kick off your project
+              whenever you&apos;re ready.
             </p>
             <div className="cta-row">
               <Button href="/express-website" variant="brass" size="lg">Run my free audit</Button>
-              <Button href="/contact" variant="onPhotoGhost" size="lg">Claim a founding spot</Button>
+              <Button href="/contact#contact-form" variant="onPhotoGhost" size="lg">Start your project</Button>
             </div>
           </div>
         </Container>

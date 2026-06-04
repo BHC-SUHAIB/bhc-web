@@ -209,12 +209,12 @@ export default async function ProjectPage({ params }: Args) {
           <div className="cta-band emph">
             <h2>Your site could be the next one.</h2>
             <p>
-              Founding-client pricing — 30% off your first build for the next 5 paid clients
+              Discounted pricing — 30% off your first build for the next 5 paid clients
               in exchange for a published case study.
             </p>
             <div className="cta-row">
-              <Button href="/contact" variant="brass" size="lg">Start a project</Button>
-              <Button href="/services" variant="onPhotoGhost" size="lg">See all pricing</Button>
+              <Button href="/contact#contact-form" variant="brass" size="lg">Start a project</Button>
+              <Button href="/services#website-packages" variant="onPhotoGhost" size="lg">See all pricing</Button>
             </div>
           </div>
         </Container>

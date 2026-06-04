@@ -39,7 +39,7 @@ export function PricingCta({ href, label, tierName, blockEyebrow, highlighted, c
         'tracking-[0.01em] rounded-full select-none',
         'transition-[background-color,color,border-color,transform] duration-200 ease-out',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brass)]',
-        'hover:-translate-y-0.5 active:translate-y-[1px]',
+        'active:translate-y-[1px] whitespace-nowrap',
         'h-[52px] px-7 text-[15.5px]',
         variantCls,
         className ?? '',

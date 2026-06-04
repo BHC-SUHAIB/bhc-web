@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { getCachedLandingPageBySlug } from '@/lib/payload-cache'
 import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
+import { ExpressLanding } from '@/blocks/render/ExpressLanding'
 import { LP_PHONE_DISPLAY } from '@/lib/contact'
 import type { LandingPage, Media } from '@/payload-types'
 
@@ -55,5 +56,8 @@ export default async function LandingPageRoute({ params }: Args) {
   const { slug } = await params
   const lp = await loadLandingPage(slug)
   if (!lp) notFound()
+  // Flagship LP is code-composed to match the Claude Design "Express" mockup
+  // (extra sections + interactive bundle) — sync-proof and ships to prod.
+  if (slug === 'express-website') return <ExpressLanding />
   return <RenderBlocks blocks={lp.layout ?? []} phoneOverride={LP_PHONE_DISPLAY} />
 }

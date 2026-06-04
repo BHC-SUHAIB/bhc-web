@@ -12,7 +12,7 @@ const button = cva(
     'tracking-[0.01em] rounded-full select-none',
     'transition-[background-color,color,border-color,transform,box-shadow] duration-200 ease-out',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brass)]',
-    'hover:-translate-y-0.5 active:translate-y-[1px]',
+    'active:translate-y-[1px]',
     'disabled:opacity-40 disabled:pointer-events-none',
   ].join(' '),
   {
@@ -55,7 +55,6 @@ const button = cva(
         brass: [
           'bg-[var(--color-brass)] text-[var(--color-ink)] shadow-[0_1px_0_rgba(0,0,0,0.04)]',
           'hover:bg-[var(--color-brass-dark)] hover:text-[var(--color-ivory)]',
-          'hover:shadow-[0_14px_30px_-12px_color-mix(in_srgb,var(--color-brass)_75%,transparent)]',
         ].join(' '),
       },
       size: {

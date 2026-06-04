@@ -51,11 +51,25 @@ export async function RenderBlocks({
   const effectivePhone = phoneOverride ?? siteSettings?.contactPhone ?? null
 
   // Home: fold the standalone "Want the full pricing menu?" CTA into Pricing.
-  const list = isHome
+  let list = isHome
     ? blocks.filter(
         (b) => !(b.blockType === 'cta' && typeof (b as { headline?: unknown }).headline === 'string' && PRICING_MENU_RE.test((b as { headline: string }).headline)),
       )
     : blocks
+
+  if (isHome) {
+    // Move the "Free Resource" lead magnet up to just after "What we do"
+    // (Services) so it no longer sits right next to the Calendly band — the
+    // two stacked together read too similarly.
+    const arr = [...list]
+    const lmIdx = arr.findIndex((b) => b.blockType === 'leadMagnet')
+    const svcIdx = arr.findIndex((b) => b.blockType === 'services')
+    if (lmIdx > -1 && svcIdx > -1 && lmIdx > svcIdx) {
+      const [lm] = arr.splice(lmIdx, 1)
+      arr.splice(svcIdx + 1, 0, lm)
+      list = arr
+    }
+  }
 
   function renderOne(b: RenderBlock): React.ReactNode {
     switch (b.blockType) {

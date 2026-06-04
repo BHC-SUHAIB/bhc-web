@@ -17,6 +17,9 @@ type ContactFormProps = ContactFormBlockBlock & {
   contactPhone?: string | null
   /** Force the section anchor id (e.g. "contact-form") regardless of eyebrow. */
   anchorId?: string
+  /** When set (Express LP bundle), shows a read-only "selected package" panel
+   *  and appends the selection to the submitted message so Suhaib is notified. */
+  bundleSummary?: string | null
 }
 
 // Derive a section id from the eyebrow so heroes can deep-link to a specific
@@ -53,6 +56,11 @@ export function ContactForm(b: ContactFormProps) {
       message:   String(data.get('message') ?? '').trim(),
       honeypot:  String(data.get('website') ?? ''), // bot trap
       sourcePage: typeof window !== 'undefined' ? window.location.pathname : '',
+    }
+    // Carry the Express-LP bundle selection into the message so it lands in the
+    // submission + Slack alert (no schema change needed).
+    if (b.bundleSummary) {
+      payload.message = `${payload.message}\n\n— Selected package: ${b.bundleSummary}`.trim()
     }
     const company = String(data.get('company') ?? '').trim()
     if (company) payload.company = company
@@ -144,6 +152,12 @@ export function ContactForm(b: ContactFormProps) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="form-fields" noValidate>
+            {b.bundleSummary ? (
+              <div className="rounded-[var(--radius-md)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] px-4 py-3">
+                <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-brass-text)]">Your selected package</span>
+                <div className="mt-1 text-[14px] text-[var(--color-fg)]">{b.bundleSummary}</div>
+              </div>
+            ) : null}
             {errorMessage ? (
               <div role="alert" className="rounded-[var(--radius-md)] border border-red-500/40 bg-red-500/5 px-4 py-3 text-[14px] text-red-700 dark:text-red-300">
                 {errorMessage}

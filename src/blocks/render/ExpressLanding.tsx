@@ -4,6 +4,9 @@ import { Container } from '@/components/Container'
 import { MobileCta } from '@/components/MobileCta'
 import { CountUpStat } from '@/components/CountUpStat'
 import { LP_PHONE_DISPLAY } from '@/lib/contact'
+import { relabelDiscount } from '@/lib/redesign'
+import { stripUnsplashFixedWidth } from '@/lib/unsplash'
+import { getCachedPageBySlug, getCachedLandingPageBySlug, getCachedSiteSettings } from '@/lib/payload-cache'
 import { SiteAuditTool } from './SiteAuditTool'
 import { FoundingClient } from './FoundingClient'
 import { Pricing } from './Pricing'
@@ -11,25 +14,16 @@ import { Testimonials } from './Testimonials'
 import { FaqAccordion } from './FaqAccordion'
 import { CalendlyBooking } from './CalendlyBooking'
 import { CTA } from './CTA'
-import { BundleConfigurator } from './BundleConfigurator'
+import { ExpressLeadSection } from './ExpressLeadSection'
 
 const CALENDLY_URL = 'https://calendly.com/suhaib-blackhartconsulting/discovery-call'
+const DEFAULT_HERO_BG = 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80'
 
-const FAQ_ITEMS = [
-  { question: "What if I don't like the design?", answer: "You see a Figma mockup before any code is written. If the mockup isn't right, we iterate until it is. The 14-day clock doesn't start until you approve the design direction." },
-  { question: 'Do I own the code?', answer: 'Yes. The code lives in a GitHub repo we hand over to you on launch. No proprietary lock-in. You can host it anywhere — but most clients keep us as their host because it is already optimized.' },
-  { question: 'Can you work with my existing brand?', answer: 'Yes. If you have a logo, color palette, and fonts, we use them. If not, we recommend a small design system as part of the project (typically a $300 add-on).' },
-  { question: "What's the next step?", answer: 'Send a quick note via the form, or book a call. We reply within one business day with a calendar link for a 30-minute intro call. From the call, you get a written proposal within 48 hours.' },
-]
-
-const STARTER_FEATURES = [
-  '5 bespoke pages designed for your business',
-  'Mobile-first, under 200KB JavaScript',
-  'Block-based CMS — your team edits every section',
-  'Google Business Profile setup + LocalBusiness schema',
-  'Contact form + GA4 + conversion tracking pre-wired',
-  'First month of hosting free, then $99/mo bundle price',
-  '14-day delivery, guaranteed in writing',
+const FALLBACK_FAQ = [
+  { question: "What if I don't like the design?", answer: 'You see a Figma mockup before any code is written. If the mockup is not right, we iterate until it is. The build clock does not start until you approve the direction.' },
+  { question: 'Do I own the code?', answer: 'Yes. The code lives in a GitHub repo we hand over on launch. No lock-in — though most clients keep us as their host because it is already optimized.' },
+  { question: 'Can you work with my existing brand?', answer: 'Yes. If you have a logo, colors, and fonts, we use them. If not, we recommend a small design system as a $300 add-on.' },
+  { question: "What's the next step?", answer: 'Send a note via the form, or book a call. We reply within one business day and send a written proposal within 48 hours of the intro call.' },
 ]
 
 const STEPS = [
@@ -40,71 +34,118 @@ const STEPS = [
   { n: '05', h: 'Launch', p: 'Live site, GitHub repo handed over, GBP and schema in place.' },
 ]
 
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQ_ITEMS.map((f) => ({
-    '@type': 'Question',
-    name: f.question,
-    acceptedAnswer: { '@type': 'Answer', text: f.answer },
-  })),
-}
+const FALLBACK_FEATURES = [
+  '5 bespoke pages designed for your business',
+  'Mobile-first, under 200KB JavaScript',
+  'Block-based CMS — your team edits every section',
+  'Google Business Profile setup + LocalBusiness schema',
+  'Contact form + GA4 + conversion tracking pre-wired',
+  'First month of hosting free',
+  '14-day delivery, guaranteed in writing',
+]
 
-// Code-composed flagship landing page (/lp/express-website), faithful to the
-// Claude Design "Express Website" mockup. Composed in code (not the CMS) so it
-// survives the prod→dev content sync and ships cleanly to prod with the branch.
-export function ExpressLanding() {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Code-composed flagship LP. Layout + interactivity live in code (sync-proof),
+// but the editable DATA is pulled from the CMS so it stays correct + in sync
+// with the rest of the site: pricing from the Services "Website packages"
+// Starter tier, spots from the home "Discounted" banner, hero copy + FAQ from
+// the express-website landing-page record.
+export async function ExpressLanding() {
+  const [homeDoc, servicesDoc, lpDoc, settings] = await Promise.all([
+    getCachedPageBySlug('home'),
+    getCachedPageBySlug('services'),
+    getCachedLandingPageBySlug('express-website'),
+    getCachedSiteSettings(),
+  ])
+
+  const layoutOf = (d: any): any[] => (d?.layout as any[]) ?? []
+  const homeFounding = layoutOf(homeDoc).find((b) => b.blockType === 'foundingClient')
+  const svcPricing = layoutOf(servicesDoc).find((b) => b.blockType === 'pricing' && /package/i.test(String(b.eyebrow ?? '')))
+  const starterTier = (svcPricing?.tiers as any[] | undefined)?.find((t) => /starter/i.test(String(t.name ?? ''))) ?? null
+  const lpHero = layoutOf(lpDoc).find((b) => b.blockType === 'hero')
+  const lpFaqBlock = layoutOf(lpDoc).find((b) => b.blockType === 'faq')
+
+  const starterPrice = starterTier?.price ?? '$999'
+  const starterOrig = starterTier?.originalPrice ?? '$1,950'
+  const heroBg = stripUnsplashFixedWidth(String(lpHero?.backgroundImageUrl || DEFAULT_HERO_BG))
+  const heroEyebrow = lpHero?.eyebrow ?? 'Houston Heights · 14-Day Delivery'
+  const heroLede = relabelDiscount(
+    String(lpHero?.subheadline ?? 'Built by hand, hosted by us, kept fast forever. Discounted pricing for the first 5 Heights small businesses — a lower price in exchange for a review and a case study.'),
+  )
+
+  // The offer tier — the actual Services Starter tier, with the CTA pointed at
+  // the on-page lead form so visitors stay on the LP.
+  const offerTier = {
+    ...(starterTier ?? {
+      name: 'Starter Site',
+      price: starterPrice,
+      originalPrice: starterOrig,
+      priceNote: 'discounted · 14-day build',
+      description: 'A 5-page small business website that handles 90% of what a Heights business needs — mobile-first, fast, and fully editable.',
+      features: FALLBACK_FEATURES.map((label) => ({ label, included: true })),
+      highlighted: true,
+    }),
+    highlighted: true,
+    cta: { label: 'Claim your discount', href: '#lp-start' },
+  }
+
+  // The home banner's Starter offer is stale ($1,495); normalize it to the
+  // real Services Starter price so the whole LP reads one number ($999).
+  const fixStarter = (offers: any[]) =>
+    (offers ?? []).map((o: any) =>
+      /starter/i.test(String(o.name ?? '')) ? { ...o, priceFounding: starterPrice, priceRetail: starterOrig, savings: 'Save $951' } : o,
+    )
+  const foundingProps = homeFounding
+    ? { ...homeFounding, offers: fixStarter(homeFounding.offers), cta: { ...(homeFounding.cta ?? {}), label: homeFounding.cta?.label ?? 'Claim a founding spot', href: '#lp-start' } }
+    : {
+        blockType: 'foundingClient',
+        eyebrow: 'Heights Founding Client Pricing',
+        headline: 'First 5 small businesses save up to $1,000.',
+        description: 'A temporary discount for our first cohort of Heights clients, in exchange for a review and a case study.',
+        spotsTotal: 5,
+        spotsRemaining: 5,
+        offers: [{ name: 'Starter Site', priceFounding: starterPrice, priceRetail: starterOrig, savings: 'Save $951' }],
+        cta: { label: 'Claim a founding spot', href: '#lp-start' },
+      }
+
+  const faqItems = ((lpFaqBlock?.items as any[] | undefined) ?? FALLBACK_FAQ).map((f: any) => ({
+    question: relabelDiscount(String(f.question ?? '')),
+    answer: relabelDiscount(String(f.answer ?? '')),
+  }))
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+  }
+
   return (
     <div className="lp-pad-bottom">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }} />
 
-      {/* HERO — editorial */}
-      <section className="hero">
-        <Container size="xl">
-          <div className="hero-grid">
-            <div className="hero-copy reveal-up">
-              <span className="pill">
-                <span className="dot" />
-                <span>Houston Heights · 14-Day Delivery</span>
-              </span>
-              <h1>
-                A custom small business website. <span className="accent">In 14 days.</span> From $1,495.
-              </h1>
-              <p className="lede">
-                Built by hand, hosted by us, kept fast forever. Discounted pricing for the first 5
-                Heights small businesses — a lower price in exchange for a review and a case study.
-              </p>
-              <div className="cta-row">
-                <a className="btn btn-brass btn-lg" href="#audit">
-                  Run my free site audit <span aria-hidden>→</span>
-                </a>
-                <a className="btn btn-outline btn-lg" href="#offer">See the deliverables</a>
-              </div>
-              <div className="trust-row">
-                <span className="trust-item"><ShieldCheck aria-hidden /> Fixed price, in writing</span>
-                <span className="trust-item"><Check aria-hidden /> You own the code</span>
-                <span className="trust-item"><Zap aria-hidden /> Under 1-second loads</span>
-              </div>
-            </div>
-            <div className="hero-media reveal-up reveal-d2">
-              <div className="photo-frame">
-                <Image
-                  src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1100&q=80"
-                  alt="A warm, full local restaurant in the Heights at dinner service"
-                  fill
-                  className="object-cover"
-                  sizes="(min-width:980px) 45vw, 100vw"
-                  priority
-                />
-                <span className="photo-tag">Sample · Heights local business</span>
-              </div>
-              <div className="float-card">
-                <div className="fc-head"><b>PageSpeed · after</b><b style={{ color: 'var(--color-brass-text)' }}>live</b></div>
-                <div className="scoreline"><span className="lbl">Performance</span><span className="bar"><i style={{ width: '94%' }} /></span><span className="val">94</span></div>
-                <div className="scoreline"><span className="lbl">SEO</span><span className="bar"><i style={{ width: '98%' }} /></span><span className="val">98</span></div>
-                <div className="scoreline"><span className="lbl">Best prac.</span><span className="bar warn"><i style={{ width: '92%' }} /></span><span className="val">92</span></div>
-              </div>
-            </div>
+      {/* HERO — full-bleed photo background (matches Services/About/Portfolio) */}
+      <section className="hero-photo" aria-label="Express website offer">
+        <div className="hp-bg">
+          <Image src={heroBg} alt="" fill sizes="100vw" className="object-cover" priority fetchPriority="high" />
+        </div>
+        <Container size="xl" className="hp-inner">
+          <span className="eyebrow eyebrow-row">
+            <span className="rule" />
+            {heroEyebrow}
+          </span>
+          <h1>
+            A custom small business website. <em>In 14 days.</em> From {starterPrice}.
+          </h1>
+          <p className="lede">{heroLede}</p>
+          <div className="cta-row">
+            <a className="btn btn-brass btn-lg" href="#audit">
+              Run my free site audit <span aria-hidden>→</span>
+            </a>
+            <a className="btn btn-onphoto btn-lg" href="#offer">See the deliverables</a>
+          </div>
+          <div className="trust-row">
+            <span className="trust-item"><ShieldCheck aria-hidden /> Fixed price, in writing</span>
+            <span className="trust-item"><Check aria-hidden /> You own the code</span>
+            <span className="trust-item"><Zap aria-hidden /> Under 1-second loads</span>
           </div>
         </Container>
       </section>
@@ -112,13 +153,13 @@ export function ExpressLanding() {
       {/* GUARANTEE STRIP */}
       <div className="guarantee-strip reveal-up">
         <div className="g"><b>14 days</b><span>Kickoff to launch, guaranteed</span></div>
-        <div className="g"><b>$1,495</b><span>Discounted price · was $1,950</span></div>
+        <div className="g"><b>{starterPrice}</b><span>Discounted price · was {starterOrig}</span></div>
         <div className="g"><b>&lt;200KB</b><span>First-paint JavaScript</span></div>
         <div className="g"><b>1 dev</b><span>One person, one bill, no agency layers</span></div>
       </div>
 
-      {/* AUDIT TOOL */}
-      <div id="audit" style={{ scrollMarginTop: '90px' }}>
+      {/* AUDIT TOOL — #audit anchor target for the hero CTA */}
+      <div id="audit" style={{ scrollMarginTop: '24px' }}>
         <SiteAuditTool
           eyebrow="Free · no email required"
           headline="See exactly what's holding your current site back."
@@ -126,57 +167,25 @@ export function ExpressLanding() {
         />
       </div>
 
-      {/* DISCOUNTED BANNER */}
-      <FoundingClient
-        {...({
-          blockType: 'foundingClient',
-          eyebrow: 'Heights Founding Client Pricing',
-          headline: 'First 5 small businesses save up to $1,000.',
-          description:
-            'A temporary discount for our first cohort of Heights clients. Trades a lower price for a Google review, a written testimonial, and case-study permission — exactly the assets we need most right now.',
-          spotsTotal: 5,
-          spotsRemaining: 2,
-          offers: [
-            { name: 'Starter Site', priceFounding: '$1,495', priceRetail: '$1,950', savings: 'Save $455' },
-            { name: 'The Pro Site', priceFounding: '$3,500', priceRetail: '$4,500', savings: 'Save $1,000' },
-            { name: 'Local SEO Sprint', priceFounding: '$1,195', priceRetail: '$1,495', savings: 'Save $300' },
-            { name: 'Care plans', priceFounding: 'Free first month', priceRetail: null, savings: '$149 value' },
-          ],
-          cta: { label: 'Claim a founding spot', href: '/contact' },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any)}
-      />
+      {/* DISCOUNTED BANNER — spots + offers mirror the homepage CMS block */}
+      <FoundingClient {...(foundingProps as any)} />
 
-      {/* THE OFFER — single tier */}
-      <div id="offer" style={{ scrollMarginTop: '80px' }}>
+      {/* THE OFFER — single tier from the Services CMS pricing ($999) */}
+      <div id="offer" style={{ scrollMarginTop: '24px' }}>
         <Pricing
           {...({
             blockType: 'pricing',
             eyebrow: 'The offer',
             headline: 'One package, one price, fourteen days.',
-            description:
-              'No hourly bills, no scope creep. Fixed price, fixed timeline, senior-engineer sign-off on every line of code.',
+            description: 'No hourly bills, no scope creep. Fixed price, fixed timeline, senior-engineer sign-off on every line of code.',
             layoutVariant: 'centered-single',
-            tiers: [
-              {
-                name: 'Starter Site',
-                price: '$1,495',
-                originalPrice: '$1,950',
-                priceNote: 'founding price · 14-day build',
-                highlighted: true,
-                description:
-                  'A 5-page small business website that handles 90% of what a Heights business needs — mobile-first, fast, and fully editable.',
-                features: STARTER_FEATURES.map((label) => ({ label, included: true })),
-                cta: { label: 'Claim a founding spot', href: '/contact' },
-              },
-            ],
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            tiers: [offerTier],
           } as any)}
         />
       </div>
 
-      {/* BUNDLE CONFIGURATOR */}
-      <BundleConfigurator />
+      {/* BUNDLE CONFIGURATOR + LEAD FORM (captures the selected bundle) */}
+      <ExpressLeadSection contactEmail={settings?.contactEmail ?? null} contactPhone={LP_PHONE_DISPLAY} />
 
       {/* HOW IT WORKS */}
       <section className="section surface">
@@ -215,9 +224,7 @@ export function ExpressLanding() {
 
       {/* TESTIMONIALS */}
       <section className="surface">
-        <Testimonials
-          {...({ blockType: 'testimonials', eyebrow: 'What clients said', headline: 'Real work, real businesses.', mode: 'latest', limit: 3 } as any)}
-        />
+        <Testimonials {...({ blockType: 'testimonials', eyebrow: 'What clients said', headline: 'Real work, real businesses.', mode: 'latest', limit: 3 } as any)} />
       </section>
 
       {/* FAQ */}
@@ -228,7 +235,7 @@ export function ExpressLanding() {
             <h2>Everything you wanted to ask.</h2>
           </div>
           <div className="reveal-up reveal-d1">
-            <FaqAccordion items={FAQ_ITEMS} />
+            <FaqAccordion items={faqItems} />
           </div>
         </Container>
       </section>
@@ -243,7 +250,6 @@ export function ExpressLanding() {
           calendlyUrl: CALENDLY_URL,
           popupButtonLabel: 'Book a 30-min discovery call',
           showEmailFallback: true,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)}
       />
 
@@ -252,15 +258,13 @@ export function ExpressLanding() {
         {...({
           blockType: 'cta',
           variant: 'emphasized',
-          headline: 'Founding pricing ends at 5 clients.',
-          description: 'Right now, that means a lower price and a faster project. Two spots left.',
-          primaryCta: { label: 'Claim a founding spot', href: '/contact' },
+          headline: 'Discounted pricing ends at 5 clients.',
+          description: 'Right now, that means a lower price and a faster project. Start your project before the cohort fills.',
+          primaryCta: { label: 'Claim your discount', href: '#lp-start' },
           secondaryCta: { label: 'See recent work', href: '/portfolio' },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)}
       />
 
-      {/* Sticky mobile bar — scrolls to the audit tool */}
       <MobileCta primaryLabel="Run free audit" primaryHref="#audit" phone={LP_PHONE_DISPLAY} />
     </div>
   )

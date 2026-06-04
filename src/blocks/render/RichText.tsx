@@ -23,7 +23,10 @@ export function RichText(b: RichTextBlock) {
 
   const img = typeof b.image === 'object' ? (b.image as Media | null) : null
   const imageUrlRaw = img?.url ?? b.imageUrl ?? null
-  const imageUrl = imageUrlRaw ?? (isBio ? ABOUT_BIO_PORTRAIT : null)
+  // The About bio's CMS upload references a Spaces CDN file that isn't reliably
+  // served on dev (fails to fetch), so the portrait came up blank. Always use
+  // the in-repo headshot for the bio — sync-proof and fast (optimized to ~75KB).
+  const imageUrl = isBio ? ABOUT_BIO_PORTRAIT : imageUrlRaw
   const hasImage = !!imageUrl
   const focus = (b.imageFocus as 'face' | 'center' | undefined) ?? 'face'
   const variant = (b.variant as 'default' | 'lede' | 'card' | undefined) ?? 'default'

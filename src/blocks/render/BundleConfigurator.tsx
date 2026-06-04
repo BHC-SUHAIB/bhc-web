@@ -1,15 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { Check } from 'lucide-react'
 import { Container } from '@/components/Container'
-import { pushEvent } from '@/lib/analytics'
 
-// Interactive "build your package" configurator for the Express landing page —
-// the showcase piece from the Claude Design mockup. Toggle add-ons and the
-// one-time total, monthly add, and savings recompute live. Starter Site is a
-// locked/required line.
+// Interactive "build your package" configurator for the Express LP. Toggling
+// add-ons recomputes the one-time total, monthly add, and savings live, and the
+// current selection is reported up via onSummaryChange so the lead form below
+// can submit it (so Suhaib is notified which bundle a visitor chose). The CTA
+// scrolls to that form rather than navigating away.
 type Opt = {
   id: string
   name: string
@@ -22,7 +21,7 @@ type Opt = {
 }
 
 const OPTIONS: Opt[] = [
-  { id: 'starter', name: 'Starter Site', desc: '5-page site, 14-day delivery. The foundation.', once: 1495, cost: '$1,495', required: true },
+  { id: 'starter', name: 'Starter Site', desc: '5-page site, 14-day delivery. The foundation.', once: 999, cost: '$999', required: true },
   { id: 'care', name: 'Care plan', desc: 'Hosting, backups, monitoring, 1hr/mo edits. Drops to $99/mo for 12 months.', monthly: 99, save: 600, cost: '$99/mo' },
   { id: 'seo', name: 'Local SEO Sprint', desc: 'GBP optimization, 10 citations, schema, 1 cornerstone page.', once: 900, save: 295, cost: '+$900' },
   { id: 'brand', name: 'Brand mini system', desc: "Logo cleanup, color + type system, if you don't have one yet.", once: 300, cost: '+$300' },
@@ -30,7 +29,12 @@ const OPTIONS: Opt[] = [
 
 const money = (n: number) => '$' + n.toLocaleString('en-US')
 
-export function BundleConfigurator() {
+type Props = {
+  onSummaryChange?: (summary: string) => void
+  ctaTargetId?: string
+}
+
+export function BundleConfigurator({ onSummaryChange, ctaTargetId = 'lp-start' }: Props) {
   const [selected, setSelected] = useState<Record<string, boolean>>({ starter: true, care: true })
 
   const toggle = (o: Opt) => {
@@ -42,6 +46,16 @@ export function BundleConfigurator() {
   const oneTime = chosen.reduce((s, o) => s + (o.once ?? 0), 0)
   const monthly = chosen.reduce((s, o) => s + (o.monthly ?? 0), 0)
   const save = chosen.reduce((s, o) => s + (o.save ?? 0), 0)
+
+  const summary = `${chosen.map((o) => o.name).join(' + ')} — ${money(oneTime)}${monthly > 0 ? ` + ${money(monthly)}/mo` : ''}${save > 0 ? ` (save ${money(save)})` : ''}`
+
+  useEffect(() => {
+    onSummaryChange?.(summary)
+  }, [summary, onSummaryChange])
+
+  const scrollToForm = () => {
+    document.getElementById(ctaTargetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <section className="section">
@@ -110,13 +124,10 @@ export function BundleConfigurator() {
                 </b>
               </div>
               <div className="sum-save">{save > 0 ? `You save ${money(save)}` : ''}</div>
-              <Link
-                href="/contact#contact-form"
-                className="btn btn-brass btn-md"
-                onClick={() => pushEvent('cta_click', { location: 'bundle_configurator', value: oneTime, currency: 'USD' })}
-              >
-                Start this package
-              </Link>
+              <button type="button" className="btn btn-brass btn-md" onClick={scrollToForm}>
+                Continue with this package
+                <span aria-hidden>↓</span>
+              </button>
             </div>
           </div>
         </div>

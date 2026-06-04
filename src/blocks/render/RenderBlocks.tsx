@@ -15,6 +15,12 @@ import { MediaBlock } from './MediaBlock'
 import { Faq } from './Faq'
 import { ContactForm } from './ContactForm'
 import { SiteAuditTool } from './SiteAuditTool'
+import { HeroPhoto, type HeroPhotoProps } from './HeroPhoto'
+import { GuaranteeStrip, type GuaranteeStripProps } from './GuaranteeStrip'
+import { ProcessSteps, type ProcessStepsProps } from './ProcessSteps'
+import { AnimatedStats, type AnimatedStatsProps } from './AnimatedStats'
+import { BundleConfiguratorBlock, type BundleConfiguratorBlockProps } from './BundleConfiguratorBlock'
+import { MobileCta } from '@/components/MobileCta'
 
 // Sentinel eyebrow that flips a contactForm block over to the interactive
 // PageSpeed audit tool.
@@ -46,7 +52,9 @@ export async function RenderBlocks({
   const isHome = pageSlug === 'home'
   const isContact = pageSlug === 'contact'
 
-  const needsSiteSettings = blocks.some((b) => b.blockType === 'contactForm' || b.blockType === 'hero')
+  const needsSiteSettings = blocks.some(
+    (b) => b.blockType === 'contactForm' || b.blockType === 'hero' || b.blockType === 'bundleConfigurator',
+  )
   const siteSettings: SiteSetting | null = needsSiteSettings ? await getCachedSiteSettings() : null
   const effectivePhone = phoneOverride ?? siteSettings?.contactPhone ?? null
 
@@ -135,6 +143,37 @@ export async function RenderBlocks({
             contactEmail={siteSettings?.contactEmail ?? null}
             contactPhone={effectivePhone}
             anchorId={isContact ? 'contact-form' : undefined}
+          />
+        )
+      }
+      // ── Express landing-page blocks ─────────────────────────────────────
+      case 'heroPhoto':
+        return <HeroPhoto {...(b as unknown as HeroPhotoProps)} />
+      case 'guaranteeStrip':
+        return <GuaranteeStrip {...(b as unknown as GuaranteeStripProps)} />
+      case 'processSteps':
+        return <ProcessSteps {...(b as unknown as ProcessStepsProps)} />
+      case 'animatedStats':
+        return <AnimatedStats {...(b as unknown as AnimatedStatsProps)} />
+      case 'siteAuditTool': {
+        const s = b as unknown as { eyebrow?: string | null; headline?: string | null; description?: string | null }
+        return <SiteAuditTool eyebrow={s.eyebrow} headline={s.headline} description={s.description} />
+      }
+      case 'bundleConfigurator':
+        return (
+          <BundleConfiguratorBlock
+            {...(b as unknown as BundleConfiguratorBlockProps)}
+            contactEmail={siteSettings?.contactEmail ?? null}
+            contactPhone={effectivePhone ?? undefined}
+          />
+        )
+      case 'mobileCta': {
+        const m = b as unknown as { primaryLabel?: string | null; primaryHref?: string | null; phone?: string | null }
+        return (
+          <MobileCta
+            primaryLabel={m.primaryLabel ?? undefined}
+            primaryHref={m.primaryHref ?? undefined}
+            phone={m.phone || effectivePhone || null}
           />
         )
       }

@@ -22,7 +22,9 @@ export function Pricing(b: PricingBlock & { seeAllHref?: string; seeAllLabel?: s
   const tiers = b.tiers ?? []
   const hasAnyHighlighted = tiers.some((t) => t.highlighted)
   const hasEnterprise = tiers.some((t) => t.enterpriseBadge)
-  const anchor = anchorFromEyebrow(b.eyebrow)
+  // An explicit anchorId (e.g. "offer") wins over the eyebrow-derived slug so
+  // hero/CTA links like "#offer" land on this section.
+  const anchor = (b as { anchorId?: string | null }).anchorId || anchorFromEyebrow(b.eyebrow)
   const isCenteredSingle = b.layoutVariant === 'centered-single' && tiers.length === 1
 
   // Discounted/retail toggle — only when a tier carries both a discounted price

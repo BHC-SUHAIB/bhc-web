@@ -73,9 +73,6 @@ export function RichText(b: RichTextBlock) {
                 // local file on the dev droplet's image cache).
                 unoptimized
               />
-              <span className="absolute left-3 bottom-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-pill)] bg-[rgba(16,13,10,0.62)] text-[#F3EEE1] backdrop-blur-sm font-mono text-[11px] tracking-[0.04em]">
-                Houston Heights
-              </span>
             </div>
             <div>
               {b.eyebrow ? (

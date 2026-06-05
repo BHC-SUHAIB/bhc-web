@@ -937,6 +937,131 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: waygft (FORCE_WAYGFT_UPSERT)')
     }
 
+    // --- Misbah media uploads (composited iOS-simulator captures on warm panels) ---
+    const misbahMediaHero = await ensureMedia(
+      'Misbah — three-screen hero: Quran, the live prayer-countdown Home, and Duas',
+      'public/seed-assets/misbah/hero.png',
+    )
+    const misbahMediaQibla = await ensureMedia(
+      'Misbah — Qibla compass with live bearing and distance to the Kaaba in Makkah',
+      'public/seed-assets/misbah/qibla.png',
+    )
+    const misbahMediaQuran = await ensureMedia(
+      'Misbah — full offline Quran: searchable surah list with per-surah recitation downloads',
+      'public/seed-assets/misbah/quran.png',
+    )
+    const misbahMediaDuas = await ensureMedia(
+      'Misbah — Hisn al-Muslim dua collection grouped into eight everyday categories',
+      'public/seed-assets/misbah/duas.png',
+    )
+    const misbahMediaMonthly = await ensureMedia(
+      'Misbah — full-month prayer timetable with region-aware calculation methods',
+      'public/seed-assets/misbah/monthly.png',
+    )
+
+    // --- Misbah project (first-party iOS app, in TestFlight beta) ---
+    const misbahProject: any = {
+      title: 'Misbah — Prayer, Qibla & Quran',
+      slug: 'misbah',
+      summary: 'A warm, privacy-first iOS companion for daily Muslim worship — accurate prayer times with a no-server Live Activity countdown, a Qibla compass, the full offline Quran, and the complete Hisn al-Muslim dua collection. Built in SwiftUI with a framework-light core for a future Android port. Collects nothing; works on-device.',
+      client: 'Black Hart Consulting (first-party app)',
+      industry: 'Muslim lifestyle / Consumer iOS',
+      projectType: 'mobile',
+      year: 2026,
+      duration: 'In open TestFlight beta',
+      teamSize: 1,
+      ...(misbahMediaHero?.id ? { heroImage: misbahMediaHero.id } : {}),
+      stack: [
+        { name: 'SwiftUI', category: 'framework' },
+        { name: 'Swift 6 (strict concurrency)', category: 'language' },
+        { name: 'MisbahCore (Swift Package)', category: 'framework' },
+        { name: 'WidgetKit', category: 'framework' },
+        { name: 'ActivityKit / Live Activities', category: 'framework' },
+        { name: 'SwiftData', category: 'db' },
+        { name: 'StoreKit 2', category: 'tool' },
+        { name: 'Core Location', category: 'tool' },
+        { name: 'Adhan (prayer-time engine)', category: 'tool' },
+      ],
+      challenge: rtDoc([
+        ['p', 'The Muslim prayer-app category is crowded, ad-heavy, and — as a string of well-documented investigations between 2020 and 2025 showed — a place where some of the most popular apps quietly sold users’ precise location to data brokers, with the data ending up in the hands of military and immigration agencies. For an app opened during worship, that is a profound breach of trust.'],
+        ['p', 'The brief was to build the opposite: a warm, beautiful daily companion for the five prayers, the Qibla, the Quran, and the everyday duas — with an architecture that is privacy-first by construction. No account, no ads, no analytics, no tracking, and nothing about the user collected or sold. And it had to feel calm and premium, not utilitarian.'],
+        ['p', 'The hardest constraint followed straight from that stance: the signature feature — a live countdown to the next prayer on the Lock Screen — had to work with no push server (which would mean running a backend that sees every user’s location and schedule). Apple’s Live Activities are designed to be driven by push. Doing it server-free is swimming upstream.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'Privacy-first, by construction'],
+        ['p', 'Prayer times and the Qibla are computed entirely on-device from Core Location and an open-source astronomical engine. There is no backend, no analytics SDK, and no advertising SDK anywhere in the app. The only network call is optional Quran-recitation audio, streamed from a public host and cached locally. The App Store privacy label is, truthfully, “Data Not Collected.”'],
+        ['h3', 'A no-server Live Activity that survives the night'],
+        ['p', 'The next-prayer countdown runs on the Lock Screen, Dynamic Island, CarPlay, and Apple Watch — with no push server. The trick: the Live Activity bakes the whole upcoming prayer schedule into its state, and the widget recomputes the current prayer at render time, counting down from the device clock. So when iOS re-renders the activity at its stale-date boundary, it advances to the next prayer on its own — even while the phone is asleep. A WidgetKit timeline and a best-effort background refresh layer on top for reliability.'],
+        ['h3', 'A framework-light core for a future Android port'],
+        ['p', 'All of the logic, content, and design tokens live in MisbahCore — a SwiftUI-free Swift package — with every platform capability (location, notifications, purchases) behind a protocol. That keeps the door open to a native Jetpack Compose rebuild against the same core, without re-deriving prayer math or re-authoring content.'],
+        ['h3', 'The full Quran and an authentic dua library, offline'],
+        ['p', 'The complete Quran ships offline — Uthmani Arabic plus a public-domain translation, all 114 surahs — with stream-and-cache recitation, so each verse is available offline after its first play. The full Hisn al-Muslim collection (267 duas across eight everyday categories, 233 with bundled audio) is searchable down to the individual supplication.'],
+        ['h3', 'Calm, premium design'],
+        ['p', 'A warm palette, a serif display face for the countdown, hand-tuned Arabic typography, and four sky-phase gradients that shift with the time of day. Monetization is a one-time “Misbah Plus” unlock plus an optional tip jar — no ads, no subscription traps.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'A complete, polished v1 now in open TestFlight beta — roughly 123 Swift files behind a calm five-tab interface, with a reusable Swift-package core ready for Android.'],
+        ['ul', [
+          'Five daily prayers with adhan audio, per-prayer reminders, and a full-month timetable (region-aware calculation methods).',
+          'A no-server next-prayer Live Activity engineered to roll over overnight — on Lock Screen, Dynamic Island, CarPlay, and Apple Watch.',
+          'A magnetometer Qibla compass with live bearing and distance to Makkah.',
+          'The full offline Quran with translation, bookmarks, translation search, and stream-and-cache recitation.',
+          '267 Hisn al-Muslim duas in eight categories, 233 with audio, searchable to the individual dua.',
+          'A Ramadan suite, tasbih counter, qada (missed-prayer) tracker, and Home / Lock-Screen widgets.',
+        ]],
+        ['p', 'Every one of those features runs without collecting a single byte of user data — the very thing the category’s biggest names gave up.'],
+      ]),
+      metrics: [
+        { value: '0', label: 'trackers, ads, or data sold' },
+        { value: '100%', label: 'on-device — works offline' },
+        { value: '114', label: 'surahs, full Quran offline' },
+        { value: '267', label: 'Hisn al-Muslim duas' },
+      ],
+      gallery: [
+        ...(misbahMediaQibla?.id ? [{
+          image: misbahMediaQibla.id,
+          caption: 'The Qibla compass — live bearing and distance to the Kaaba, computed on-device from the magnetometer.',
+        }] : []),
+        ...(misbahMediaQuran?.id ? [{
+          image: misbahMediaQuran.id,
+          caption: 'The full Quran ships offline — a searchable surah list with per-surah recitation downloads for offline listening.',
+        }] : []),
+        ...(misbahMediaDuas?.id ? [{
+          image: misbahMediaDuas.id,
+          caption: 'The complete Hisn al-Muslim collection, grouped into eight everyday categories and searchable to the individual dua.',
+        }] : []),
+        ...(misbahMediaMonthly?.id ? [{
+          image: misbahMediaMonthly.id,
+          caption: 'A full-month prayer timetable with region-aware calculation methods (ISNA shown).',
+        }] : []),
+      ],
+      appInstall: {
+        status: 'beta',
+        appName: 'Misbah',
+        testFlightUrl: 'https://testflight.apple.com/join/jsSRjzV4',
+        platformNote: 'iPhone & iPad — iOS 17+',
+      },
+      featured: true,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingMisbah = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: misbahProject.slug } },
+      limit: 1,
+    })
+    if (existingMisbah.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: misbahProject })
+      payload.logger.info('[seed] project created: misbah')
+    } else if (process.env.FORCE_MISBAH_UPSERT === 'true') {
+      await payload.update({
+        collection: 'projects',
+        id: existingMisbah.docs[0].id,
+        data: misbahProject,
+      })
+      payload.logger.info('[seed] project upserted: misbah (FORCE_MISBAH_UPSERT)')
+    }
+
     // --- Article hero images (Unsplash, downloaded into public/seed-assets/articles/) ---
     const articleHeroNextjs = await ensureMedia(
       'Why Next.js over WordPress \u2014 laptop displaying source code on a dark background',

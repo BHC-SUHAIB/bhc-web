@@ -70,7 +70,7 @@ export function BundleConfiguratorBlock(b: BundleConfiguratorBlockProps) {
             b.formDescription ||
             'Build a package above if you like, then send a note. We reply within one business day with next steps.',
           showCompanyField: true,
-          showProjectTypeField: false,
+          showProjectTypeField: true,
           showBudgetField: false,
           submitLabel: b.submitLabel || 'Send my request',
           successMessage: b.successMessage || "Thanks — we've got your request. We'll reply within one business day.",

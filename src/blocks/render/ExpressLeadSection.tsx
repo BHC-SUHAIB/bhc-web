@@ -21,7 +21,7 @@ export function ExpressLeadSection({ contactEmail, contactPhone }: { contactEmai
           description:
             'Build a package above if you like, then send a note. We reply within one business day with next steps.',
           showCompanyField: true,
-          showProjectTypeField: false,
+          showProjectTypeField: true,
           showBudgetField: false,
           submitLabel: 'Send my request',
           successMessage:

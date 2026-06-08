@@ -16,7 +16,7 @@ import { pushEvent } from '@/lib/analytics'
 // ────────────────────────────────────────────────────────────────────────────
 //
 // Behavior: arms 4s after load, then opens ONCE PER SESSION on either a desktop
-// pointer-exit at the top of the window OR scrolling past 55% of the page.
+// pointer-exit at the top of the window OR scrolling past 75% of the page.
 // Stored in sessionStorage so it never nags a visitor twice in one visit.
 
 const ENABLED = process.env.NEXT_PUBLIC_EXIT_INTENT_ENABLED !== 'false'
@@ -61,8 +61,11 @@ export function ExitIntentModal() {
       if (!e.relatedTarget && e.clientY <= 0) trigger()
     }
     const onScroll = () => {
+      // 75% (not the midpoint): on mobile there's no pointer exit-intent, so this
+      // scroll depth is the ONLY trigger — keep it late enough that it doesn't
+      // interrupt an active read.
       const depth = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight
-      if (depth >= 0.55) trigger()
+      if (depth >= 0.75) trigger()
     }
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false)

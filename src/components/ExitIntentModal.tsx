@@ -25,6 +25,8 @@ const SESSION_KEY = 'bhc_exit_modal_seen'
 export function ExitIntentModal() {
   const [open, setOpen] = useState(false)
   const [done, setDone] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const armed = useRef(false)
   const shown = useRef(false)
 
@@ -77,16 +79,48 @@ export function ExitIntentModal() {
     }
   }, [])
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (submitting) return
     const data = new FormData(e.currentTarget)
     const email = String(data.get('email') ?? '').trim()
     if (!email) return
-    // Lightweight capture: fire the lead event for GA4/Ads attribution and show
-    // a thank-you. (Wiring to the contact-submissions API can be added later;
-    // kept event-only for now so the test run has no backend dependency.)
-    pushEvent('generate_lead', { source: 'exit_intent', method: 'email' })
-    setDone(true)
+    setSubmitting(true)
+    setError(null)
+    const sourcePage = typeof window !== 'undefined' ? window.location.pathname : ''
+    // Persist a REAL lead first (so it lands in the inbox + Slack and the
+    // "we'll send your audit" promise is keepable), THEN fire the conversion.
+    // Firing generate_lead without a saved lead would pollute Google Ads with
+    // phantom conversions, so the event is gated on a successful create.
+    try {
+      const res = await fetch('/api/contact-submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'Website audit request (exit-intent)',
+          email,
+          message: `Requested a free website audit via the exit-intent popup${sourcePage ? ` on ${sourcePage}` : ''}. Please send the audit to ${email}.`,
+          sourcePage,
+        }),
+      })
+      if (!res.ok) {
+        let msg = `Submission failed (${res.status})`
+        try {
+          const body = await res.json()
+          if (body?.errors?.[0]?.message) msg = body.errors[0].message
+        } catch {
+          /* noop */
+        }
+        throw new Error(msg)
+      }
+      // Real lead captured — this is now a genuine primary conversion.
+      pushEvent('generate_lead', { source: 'exit_intent', method: 'email', source_page: sourcePage })
+      setDone(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (!ENABLED) return null
@@ -118,17 +152,21 @@ export function ExitIntentModal() {
               We&rsquo;ll show you exactly what&rsquo;s costing you customers: speed, search ranking, and the
               leaks in your funnel. Five minutes, no call required.
             </p>
+            {error ? (
+              <p role="alert" className="text-[13px] text-red-700 dark:text-red-300 mb-2">{error}</p>
+            ) : null}
             <form className="modal-form" onSubmit={onSubmit}>
               <input
                 className="field"
                 type="email"
                 name="email"
                 required
+                disabled={submitting}
                 placeholder="you@yourbusiness.com"
                 aria-label="Email address"
               />
-              <button type="submit" className="btn btn-brass btn-md">
-                Send it
+              <button type="submit" className="btn btn-brass btn-md" disabled={submitting}>
+                {submitting ? 'Sending…' : 'Send it'}
               </button>
             </form>
             <p className="fineprint">No spam. One audit, then it&rsquo;s up to you.</p>

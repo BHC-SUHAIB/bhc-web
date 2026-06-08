@@ -142,7 +142,7 @@ const EXPRESS_LAYOUT = [
     items: [
       { value: 14, decimals: 0, suffix: ' days', label: 'From kickoff to launch', description: 'Discounted clients delivered first.' },
       { value: 0.9, decimals: 1, suffix: 's', label: 'Typical load time', description: 'Down from 8s on the sites we replace.' },
-      { value: 140, decimals: 0, suffix: '%', label: 'More organic traffic', description: 'Six months in, on a sample rebuild.', note: 'sample' },
+      { value: 100, decimals: 0, suffix: '%', label: 'You own the code', description: 'GitHub repo handed over at launch. No lock-in, ever.' },
       { value: 0, decimals: 0, prefix: '$', label: 'In hidden fees', description: 'Fixed price. No scope-creep clauses.' },
     ],
   },

@@ -20,7 +20,7 @@ type MobileCtaProps = {
 
 export function MobileCta({
   primaryLabel = 'Get my free audit',
-  primaryHref = '/express-website',
+  primaryHref = '/lp/express-website',
   phone,
 }: MobileCtaProps) {
   const [show, setShow] = useState(false)

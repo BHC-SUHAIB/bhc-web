@@ -18,6 +18,7 @@ import { pushEvent } from '@/lib/analytics'
 
 type Strategy = 'mobile' | 'desktop'
 type State = 'idle' | 'running' | 'success' | 'error'
+type LeadState = 'idle' | 'sending' | 'sent' | 'error'
 type Scores = { performance: number; accessibility: number; bestPractices: number; seo: number }
 type Vitals = { lcp: string | null; cls: string | null; speedIndex: string | null }
 
@@ -67,6 +68,9 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
   const [vitals, setVitals] = useState<Vitals | null>(null)
   const [auditedUrl, setAuditedUrl] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [leadState, setLeadState] = useState<LeadState>('idle')
+  const [leadEmail, setLeadEmail] = useState('')
+  const [leadError, setLeadError] = useState<string | null>(null)
 
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
@@ -109,12 +113,60 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
     }
   }
 
+  // Optional lead capture shown WITH the scores: turns an anonymous audit run
+  // into a real lead. Persists to the contact API first (so it reaches the
+  // inbox + Slack and we can actually send the report), then fires the genuine
+  // generate_lead conversion. The audited URL + scores ride along in the message
+  // so the follow-up has full context.
+  async function handleLead(ev: FormEvent<HTMLFormElement>) {
+    ev.preventDefault()
+    if (leadState === 'sending') return
+    const email = leadEmail.trim()
+    if (!email) return
+    setLeadState('sending')
+    setLeadError(null)
+    const sourcePage = typeof window !== 'undefined' ? window.location.pathname : ''
+    const scoreLine = scores
+      ? `Performance ${scores.performance}, Accessibility ${scores.accessibility}, Best Practices ${scores.bestPractices}, SEO ${scores.seo}`
+      : 'scores unavailable'
+    try {
+      const res = await fetch('/api/contact-submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'Audit report request',
+          email,
+          message: `Requested the full PageSpeed report + fix list for ${auditedUrl ?? 'their site'} (${strategy} run). Lighthouse scores — ${scoreLine}.`,
+          sourcePage,
+        }),
+      })
+      if (!res.ok) {
+        let msg = `Submission failed (${res.status})`
+        try {
+          const body = await res.json()
+          if (body?.errors?.[0]?.message) msg = body.errors[0].message
+        } catch {
+          /* noop */
+        }
+        throw new Error(msg)
+      }
+      pushEvent('generate_lead', { source_page: sourcePage, source: 'audit_report', audited_url: auditedUrl ?? undefined })
+      setLeadState('sent')
+    } catch (err) {
+      setLeadError(err instanceof Error ? err.message : 'Something went wrong. Try again.')
+      setLeadState('error')
+    }
+  }
+
   function reset() {
     setState('idle')
     setScores(null)
     setVitals(null)
     setAuditedUrl(null)
     setErrorMessage(null)
+    setLeadState('idle')
+    setLeadEmail('')
+    setLeadError(null)
   }
 
   return (
@@ -182,8 +234,40 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
               </div>
             ) : null}
             <div className="audit-upsell">
+              {leadState === 'sent' ? (
+                <p>
+                  <strong>Done.</strong> Check your inbox — we&rsquo;ll send the full report with a prioritized, plain-English fix list within one business day.
+                </p>
+              ) : (
+                <>
+                  <p>Want the full breakdown? Get a prioritized fix list for your site emailed to you. Free, no obligation.</p>
+                  {leadError ? (
+                    <p role="alert" className="text-[13px] text-red-700 dark:text-red-300 mb-3">{leadError}</p>
+                  ) : null}
+                  <form onSubmit={handleLead} className="audit-input-row">
+                    <input
+                      type="email"
+                      required
+                      autoComplete="email"
+                      inputMode="email"
+                      placeholder="you@yourbusiness.com"
+                      aria-label="Your email"
+                      value={leadEmail}
+                      onChange={(e) => setLeadEmail(e.target.value)}
+                      disabled={leadState === 'sending'}
+                      className="field"
+                    />
+                    <Button type="submit" variant="brass" size="md" disabled={leadState === 'sending' || !leadEmail.trim()}>
+                      {leadState === 'sending' ? 'Sending…' : 'Email me the report'}
+                    </Button>
+                  </form>
+                </>
+              )}
+            </div>
+
+            <div className="audit-upsell">
               <p>
-                Want me to fix the weak ones? The $297 Site Health Sprint covers three specific fixes shipped in five days, with a before-and-after report.
+                Prefer we just fix it? The $297 Site Health Sprint covers three specific fixes shipped in five days, with a before-and-after report.
               </p>
               <div className="cta-row mt-0">
                 <Button href="#book" variant="brass" size="md">

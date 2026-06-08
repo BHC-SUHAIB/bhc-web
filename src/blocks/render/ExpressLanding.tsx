@@ -216,7 +216,7 @@ export async function ExpressLanding() {
           <div className="stats-grid reveal-up reveal-d1">
             <div className="stat"><div className="s-val"><CountUpStat value={14} suffix=" days" /></div><div className="s-label">From kickoff to launch</div><div className="s-desc">Discounted clients delivered first.</div></div>
             <div className="stat"><div className="s-val"><CountUpStat value={0.9} decimals={1} suffix="s" /></div><div className="s-label">Typical load time</div><div className="s-desc">Down from 8s on the sites we replace.</div></div>
-            <div className="stat"><div className="s-val"><CountUpStat value={140} suffix="%" /></div><div className="s-label">More organic traffic</div><div className="s-desc">Six months in, on a sample rebuild. <span className="placeholder-note">sample</span></div></div>
+            <div className="stat"><div className="s-val"><CountUpStat value={100} suffix="%" /></div><div className="s-label">You own the code</div><div className="s-desc">GitHub repo handed over at launch. No lock-in, ever.</div></div>
             <div className="stat"><div className="s-val"><CountUpStat value={0} prefix="$" /></div><div className="s-label">In hidden fees</div><div className="s-desc">Fixed price. No scope-creep clauses.</div></div>
           </div>
         </Container>

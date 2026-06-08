@@ -93,6 +93,31 @@ export const Projects: CollectionConfig = {
       { name: 'role', type: 'text' },
     ] },
 
+    // Mobile-app case studies: a "try it" install CTA (TestFlight while in beta,
+    // App Store once live), rendered by <AppInstallCta> on the project page with
+    // a QR code + collapsible install steps. Hidden unless status is beta/live.
+    { name: 'appInstall', type: 'group',
+      label: 'App install CTA',
+      admin: { description: 'For mobile-app case studies — shows a TestFlight (beta) or App Store (live) install CTA with a QR code. Hidden unless set to Beta or Live.' },
+      fields: [
+        { name: 'status', type: 'select', defaultValue: 'none', options: [
+          { label: 'Hidden', value: 'none' },
+          { label: 'Beta — TestFlight', value: 'beta' },
+          { label: 'Live — App Store', value: 'live' },
+        ] },
+        { name: 'appName', type: 'text', admin: { description: 'Defaults to the project title.' } },
+        { name: 'testFlightUrl', type: 'text', admin: {
+          description: 'https://testflight.apple.com/join/XXXXXXXX',
+          condition: (_, sibling) => sibling?.status === 'beta',
+        } },
+        { name: 'appStoreUrl', type: 'text', admin: {
+          description: 'App Store product link (https://apps.apple.com/…)',
+          condition: (_, sibling) => sibling?.status === 'live',
+        } },
+        { name: 'platformNote', type: 'text', admin: { description: 'Defaults to "iPhone & iPad · iOS 17+".' } },
+      ],
+    },
+
     { name: 'featured', type: 'checkbox', defaultValue: false, admin: { position: 'sidebar', description: 'Show on the home page "featured projects" block' } },
     { name: 'publishedAt', type: 'date', admin: { position: 'sidebar' } },
 

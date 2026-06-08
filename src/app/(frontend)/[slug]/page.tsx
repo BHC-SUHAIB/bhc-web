@@ -33,5 +33,5 @@ export default async function DynamicPage({ params }: Args) {
   const { slug } = await params
   const page = await loadPage(slug)
   if (!page) notFound()
-  return <RenderBlocks blocks={page.layout ?? []} />
+  return <RenderBlocks blocks={page.layout ?? []} pageSlug={slug} />
 }

@@ -1,16 +1,9 @@
 import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
-import { cn } from '@/lib/utils'
 import type { StatsBlock } from '@/payload-types'
 
 export function Stats(b: StatsBlock) {
-  const count = b.items?.length ?? 0
-  const gridCols =
-    count <= 1 ? 'grid-cols-1' :
-    count === 2 ? 'grid-cols-1 sm:grid-cols-2' :
-    count === 3 ? 'grid-cols-1 sm:grid-cols-3' :
-    'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4'
   // Faint background — image at 30% opacity over a translucent bg-color tint
   // (50% top → 65% bottom) so the photograph is visibly present but never
   // competes with the foreground stats. The overlay is a vertical gradient
@@ -18,7 +11,7 @@ export function Stats(b: StatsBlock) {
   // into the next section.
   const hasBg = !!b.backgroundImageUrl
   return (
-    <section className="relative isolate overflow-hidden py-10 sm:py-14">
+    <section className="section relative isolate overflow-hidden">
       {hasBg ? (
         <>
           {/* Was a CSS `background-image` — bypassed next/image, shipped the
@@ -46,44 +39,23 @@ export function Stats(b: StatsBlock) {
       ) : null}
       <Container size="xl">
         {b.eyebrow || b.headline ? (
-          <div className="max-w-2xl mb-10">
+          <div className="section-head">
             {b.eyebrow ? (
-              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">
+              <span className="eyebrow eyebrow-row">
+                <span className="rule" />
                 {b.eyebrow}
-              </p>
+              </span>
             ) : null}
-            {b.headline ? (
-              <h2 className="font-serif font-semibold text-[clamp(1.5rem,2.5vw,2rem)] leading-[1.15] tracking-[-0.015em]">
-                {b.headline}
-              </h2>
-            ) : null}
+            {b.headline ? <h2>{b.headline}</h2> : null}
           </div>
         ) : null}
 
-        <div
-          className={cn(
-            'grid gap-px rounded-[var(--radius-lg)] overflow-hidden border border-[var(--color-border)]',
-            // When the section has a faint background image we let it bleed
-            // through the grid by making the cell separators transparent and
-            // the cells themselves a translucent bg-color tint. Without bg,
-            // we keep solid borders + cells for the original chunky look.
-            hasBg
-              ? 'gap-px bg-transparent'
-              : 'gap-px bg-[var(--color-border)]',
-            gridCols,
-          )}
-        >
+        <div className="stats-grid">
           {b.items?.map((s, i) => (
-            <div key={i} className={cn('p-7', hasBg ? 'bg-[color-mix(in_srgb,var(--color-bg)_75%,transparent)] backdrop-blur-sm border-r border-b border-[color-mix(in_srgb,var(--color-border)_50%,transparent)]' : 'bg-[var(--color-bg)]')}>
-              <div className="font-serif font-semibold text-[clamp(2rem,4vw,3rem)] tracking-[-0.025em] leading-none">
-                {s.value}
-              </div>
-              <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-                {s.label}
-              </div>
-              {s.description ? (
-                <p className="mt-3 text-[13px] text-[var(--color-fg-muted)] leading-[1.5]">{s.description}</p>
-              ) : null}
+            <div key={i} className="stat">
+              <div className="s-val">{s.value}</div>
+              <div className="s-label">{s.label}</div>
+              {s.description ? <div className="s-desc">{s.description}</div> : null}
             </div>
           ))}
         </div>

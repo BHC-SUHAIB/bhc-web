@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
+import { toContactAnchor, relabelDiscount } from '@/lib/redesign'
 import { cn } from '@/lib/utils'
 import type { CTABlock } from '@/payload-types'
 
@@ -36,35 +37,37 @@ export function CTA(b: CTABlock) {
         </>
       ) : null}
       <Container size="lg">
-        <div className={cn(
-          'rounded-[var(--radius-xl)] border p-8 sm:p-12 text-center',
-          // Translucent backgrounds when a faint section image is set, so
-          // the photo bleeds through the card edges/shadow zone.
-          emphasized
-            ? hasBg
-              ? 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_15%,color-mix(in_srgb,var(--color-bg)_80%,transparent))] backdrop-blur-sm'
-              : 'border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_12%,var(--color-bg))]'
-            : hasBg
-              ? 'border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg)_82%,transparent)] backdrop-blur-sm'
-              : 'border-[var(--color-border)] bg-[var(--color-surface)]',
-        )}>
-          <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.5vw,2.75rem)] leading-[1.1] tracking-[-0.02em] max-w-2xl mx-auto">
-            {b.headline}
-          </h2>
-          {b.description ? (
-            <p className="mt-4 text-[17px] leading-[1.55] text-[var(--color-fg-muted)] max-w-xl mx-auto">
-              {b.description}
-            </p>
-          ) : null}
-          <div className="mt-7 flex flex-wrap gap-3 justify-center">
+        <div
+          className={cn(
+            'cta-band',
+            // `.emph` paints the dark ink band (var(--band-bg) / --band-fg).
+            emphasized && 'emph',
+            // When a faint section photo is set, let it bleed through the band
+            // edges instead of fully covering it.
+            hasBg && 'backdrop-blur-sm',
+          )}
+          style={hasBg && !emphasized
+            ? { background: 'color-mix(in srgb, var(--color-bg) 82%, transparent)' }
+            : undefined}
+        >
+          <h2>{b.headline}</h2>
+          {b.description ? <p>{b.description}</p> : null}
+          <div className="cta-row">
             {b.primaryCta?.label && b.primaryCta?.href ? (
-              <Button href={b.primaryCta.href} variant={emphasized ? 'brass' : 'primary'} size="lg">
-                {b.primaryCta.label}
+              <Button href={toContactAnchor(b.primaryCta.href)} variant="brass" size="lg">
+                {relabelDiscount(b.primaryCta.label)}
               </Button>
             ) : null}
             {b.secondaryCta?.label && b.secondaryCta?.href ? (
-              <Button href={b.secondaryCta.href} variant="ghost" size="lg">
-                {b.secondaryCta.label}
+              <Button
+                href={toContactAnchor(b.secondaryCta.href)}
+                // On the dark/emphasized band (or over a photo) a plain ghost
+                // button has too little contrast — use the on-photo treatment so
+                // it stays legible against the ink fill. Light surface keeps ghost.
+                variant={emphasized || hasBg ? 'onPhotoGhost' : 'ghost'}
+                size="lg"
+              >
+                {relabelDiscount(b.secondaryCta.label)}
               </Button>
             ) : null}
           </div>

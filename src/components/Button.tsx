@@ -4,12 +4,13 @@ import { cn } from '@/lib/utils'
 
 /* Buttons use the global semantic tokens --color-fg / --color-bg / --color-surface / --color-brass,
    so they automatically read correctly in both light and dark mode. Every variant below has been
-   contrast-checked for WCAG AA in both themes. */
+   contrast-checked for WCAG AA in both themes. Warm Mono redesign (2026-06): pill radius, soft
+   hover lift, matched 1:1 to the ported .btn-* classes used inside the redesigned blocks. */
 const button = cva(
   [
-    'inline-flex items-center justify-center gap-2 font-medium no-underline',
+    'inline-flex items-center justify-center gap-2 font-semibold no-underline',
     'tracking-[0.01em] rounded-full select-none',
-    'transition-[background-color,color,border-color,transform] duration-150 ease-out',
+    'transition-[background-color,color,border-color,transform,box-shadow] duration-200 ease-out',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brass)]',
     'active:translate-y-[1px]',
     'disabled:opacity-40 disabled:pointer-events-none',
@@ -39,9 +40,7 @@ const button = cva(
 
         /* On-photo ghost / outlined — for use against dark photo overlays
            (heroes with backgroundImageUrl). Always white-on-translucent so
-           they read regardless of photo content. The configured Hero CTA
-           "ghost" variant on a photo hero would be invisible (dark text on
-           dark overlay) — use this instead for any CTA pinned over media. */
+           they read regardless of photo content. */
         onPhotoGhost: [
           'bg-white/10 text-white border border-white/35 backdrop-blur-sm',
           'hover:bg-white hover:text-[var(--color-ink)] hover:border-white',
@@ -51,16 +50,17 @@ const button = cva(
           'hover:bg-white hover:text-[var(--color-ink)] hover:border-white',
         ].join(' '),
 
-        /* Brass — warm accent button. Always ink text on brass bg for max contrast. */
+        /* Brass — warm accent / lead-magnet button. Ink text on brass for max contrast;
+           deepens + glows on hover. This is the primary conversion CTA color. */
         brass: [
-          'bg-[var(--color-brass)] text-[var(--color-ink)]',
+          'bg-[var(--color-brass)] text-[var(--color-ink)] shadow-[0_1px_0_rgba(0,0,0,0.04)]',
           'hover:bg-[var(--color-brass-dark)] hover:text-[var(--color-ivory)]',
         ].join(' '),
       },
       size: {
-        sm: 'h-9 px-4 text-[13px]',
-        md: 'h-11 px-5 text-[14.5px]',
-        lg: 'h-[52px] px-7 text-[15.5px]',
+        sm: 'h-10 px-4 text-[13px]',
+        md: 'h-12 px-5 text-[14.5px]',
+        lg: 'h-14 px-7 text-[15.5px]',
       },
     },
     defaultVariants: { variant: 'primary', size: 'md' },

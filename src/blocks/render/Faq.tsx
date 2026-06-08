@@ -29,21 +29,34 @@ export async function Faq(b: FaqBlock) {
 
   if (items.length === 0) return null
 
+  // Emit FAQPage structured data so these questions are eligible for rich
+  // results. Built from the same items rendered below, so it never drifts.
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  }
+
   return (
-    <section className="py-12 sm:py-16">
+    <section className="section">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }}
+      />
       <Container size="md">
         {b.eyebrow || b.headline ? (
-          <div className="mb-8">
+          <div className="section-head">
             {b.eyebrow ? (
-              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-3">
+              <span className="eyebrow eyebrow-row">
+                <span className="rule" />
                 {b.eyebrow}
-              </p>
+              </span>
             ) : null}
-            {b.headline ? (
-              <h2 className="font-serif font-semibold text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.1] tracking-[-0.02em]">
-                {b.headline}
-              </h2>
-            ) : null}
+            {b.headline ? <h2>{b.headline}</h2> : null}
           </div>
         ) : null}
 

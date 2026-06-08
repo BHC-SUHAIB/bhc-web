@@ -238,6 +238,13 @@ export const Pricing: Block = {
       // 3-tier grid above it on /services.
       { name: 'enterpriseBadge', type: 'checkbox', defaultValue: false, admin: { description: 'Renders a brass "Enterprise" corner badge + inset tinted band so this card visually stands apart from regular tier rows.' } },
     ] },
+    {
+      name: 'anchorId',
+      type: 'text',
+      admin: {
+        description: 'Optional HTML id for in-page anchor links. Set "offer" so a hero CTA pointing at "#offer" scrolls here. Leave blank for no anchor.',
+      },
+    },
   ],
 }
 
@@ -514,16 +521,176 @@ export const CalendlyBooking: Block = {
   ],
 }
 
+// ── Express landing-page blocks ────────────────────────────────────────────
+// These power the editable "Express Website" landing page. Each section that
+// used to be hardcoded in code is now a real, composable block so the whole LP
+// is editable in the admin like any other page. The render components reuse the
+// exact CSS classes the original mockup shipped with (see app/components.css),
+// so making them CMS-driven does not change the look.
+
+export const HeroPhoto: Block = {
+  slug: 'heroPhoto',
+  labels: { singular: 'Hero — full-bleed photo', plural: 'Heros — full-bleed photo' },
+  interfaceName: 'HeroPhotoBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text', admin: { description: 'Small kicker above the headline, e.g. "Houston Heights · 14-Day Delivery".' } },
+    { name: 'headline', type: 'text', required: true, admin: { description: 'Main H1 (plain text).' } },
+    { name: 'subheadline', type: 'textarea', admin: { description: 'Supporting lede paragraph under the headline.' } },
+    { name: 'backgroundImageUrl', type: 'text', admin: { description: 'Full-bleed background photo URL (e.g. an Unsplash link). A fixed darkening overlay keeps text readable.' } },
+    {
+      name: 'ctas', type: 'array', maxRows: 2,
+      admin: { description: 'Up to two buttons. Point hrefs at on-page anchors like "#audit" or "#offer".' },
+      fields: [
+        { name: 'label', type: 'text', required: true },
+        { name: 'href', type: 'text', required: true, admin: { description: 'e.g. "#audit", "#offer", "/contact".' } },
+        { name: 'style', type: 'select', defaultValue: 'brass', options: [
+          { label: 'Brass (primary)', value: 'brass' },
+          { label: 'Outline on photo', value: 'onphoto' },
+        ] },
+      ],
+    },
+    {
+      name: 'trustItems', type: 'array', maxRows: 4,
+      admin: { description: 'Small trust row under the buttons (icon + short label).' },
+      fields: [
+        { name: 'icon', type: 'select', defaultValue: 'check', options: [
+          { label: 'Shield', value: 'shield' },
+          { label: 'Check', value: 'check' },
+          { label: 'Lightning (zap)', value: 'zap' },
+        ] },
+        { name: 'label', type: 'text', required: true },
+      ],
+    },
+  ],
+}
+
+export const GuaranteeStrip: Block = {
+  slug: 'guaranteeStrip',
+  labels: { singular: 'Guarantee strip', plural: 'Guarantee strips' },
+  interfaceName: 'GuaranteeStripBlock',
+  fields: [
+    {
+      name: 'items', type: 'array', minRows: 1, maxRows: 6,
+      admin: { description: 'Big value + small caption, shown as one horizontal strip.' },
+      fields: [
+        { name: 'value', type: 'text', required: true, admin: { description: 'e.g. "14 days", "$999", "<200KB", "1 dev".' } },
+        { name: 'label', type: 'text', required: true, admin: { description: 'Caption under the value.' } },
+      ],
+    },
+  ],
+}
+
+export const SiteAuditToolBlock: Block = {
+  slug: 'siteAuditTool',
+  labels: { singular: 'Site audit tool', plural: 'Site audit tools' },
+  interfaceName: 'SiteAuditToolBlock',
+  admin: { group: 'Content' },
+  fields: [
+    { name: 'eyebrow', type: 'text', defaultValue: 'Free · no email required' },
+    { name: 'headline', type: 'text', required: true, defaultValue: "See exactly what's holding your current site back." },
+    { name: 'description', type: 'textarea', admin: { description: 'Short copy under the headline. The interactive PageSpeed widget renders below it. This section always gets the id "audit" for "#audit" links.' } },
+  ],
+}
+
+export const ProcessSteps: Block = {
+  slug: 'processSteps',
+  labels: { singular: 'Process steps', plural: 'Process steps' },
+  interfaceName: 'ProcessStepsBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text', defaultValue: 'How it works' },
+    { name: 'headline', type: 'text' },
+    {
+      name: 'steps', type: 'array', minRows: 1, maxRows: 8,
+      fields: [
+        { name: 'number', type: 'text', admin: { description: 'e.g. "01". Leave blank to auto-number by position.' } },
+        { name: 'title', type: 'text', required: true },
+        { name: 'description', type: 'textarea' },
+      ],
+    },
+  ],
+}
+
+export const AnimatedStats: Block = {
+  slug: 'animatedStats',
+  labels: { singular: 'Animated stats', plural: 'Animated stats' },
+  interfaceName: 'AnimatedStatsBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text' },
+    { name: 'headline', type: 'text' },
+    {
+      name: 'items', type: 'array', minRows: 1, maxRows: 6,
+      admin: { description: 'Each number counts up when scrolled into view.' },
+      fields: [
+        { name: 'value', type: 'number', required: true, admin: { description: 'Number to count up to, e.g. 14, 0.9, 140, 0.' } },
+        { name: 'decimals', type: 'number', defaultValue: 0, admin: { description: 'Decimal places to show (e.g. 1 → "0.9").' } },
+        { name: 'prefix', type: 'text', admin: { description: 'Text before the number, e.g. "$".' } },
+        { name: 'suffix', type: 'text', admin: { description: 'Text after the number, e.g. " days", "s", "%".' } },
+        { name: 'label', type: 'text', required: true },
+        { name: 'description', type: 'text' },
+        { name: 'note', type: 'text', admin: { description: 'Optional small tag rendered after the description, e.g. "sample".' } },
+      ],
+    },
+  ],
+}
+
+export const MobileCtaBlock: Block = {
+  slug: 'mobileCta',
+  labels: { singular: 'Sticky mobile CTA bar', plural: 'Sticky mobile CTA bars' },
+  interfaceName: 'MobileCtaBlock',
+  fields: [
+    { name: 'primaryLabel', type: 'text', required: true, defaultValue: 'Run free audit' },
+    { name: 'primaryHref', type: 'text', required: true, defaultValue: '#audit' },
+    { name: 'phone', type: 'text', admin: { description: 'Optional tap-to-call number for the mobile bar. Defaults to the landing-page phone if left blank.' } },
+  ],
+}
+
+export const BundleConfigurator: Block = {
+  slug: 'bundleConfigurator',
+  labels: { singular: 'Bundle configurator + lead form', plural: 'Bundle configurators' },
+  interfaceName: 'BundleConfiguratorBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text', defaultValue: 'Build your package' },
+    { name: 'headline', type: 'text', required: true, defaultValue: 'Bundle the build with what comes after.' },
+    { name: 'description', type: 'textarea', admin: { description: 'Lede under the headline.' } },
+    {
+      name: 'options', type: 'array', minRows: 1, maxRows: 8,
+      admin: { description: 'Selectable add-ons. The first is usually the required base (e.g. the Starter site).' },
+      fields: [
+        { name: 'name', type: 'text', required: true },
+        { name: 'description', type: 'text' },
+        { name: 'cost', type: 'text', required: true, admin: { description: 'Display cost, e.g. "$999", "+$900", "$99/mo".' } },
+        { name: 'once', type: 'number', admin: { description: 'One-time dollars added to the total (omit for monthly-only options).' } },
+        { name: 'monthly', type: 'number', admin: { description: 'Monthly dollars added (e.g. 99).' } },
+        { name: 'save', type: 'number', admin: { description: 'Dollars this option contributes to the "you save" line.' } },
+        { name: 'required', type: 'checkbox', defaultValue: false, admin: { description: 'Always included, cannot be toggled off.' } },
+        { name: 'defaultOn', type: 'checkbox', defaultValue: false, admin: { description: 'Pre-selected when the page loads.' } },
+      ],
+    },
+    { name: 'formId', type: 'text', defaultValue: 'lp-start', admin: { description: 'HTML id used as the in-page anchor + scroll target for the lead form (e.g. "lp-start"). Hero/pricing CTAs pointing at "#lp-start" land here.' } },
+    { name: 'formHeading', type: 'text', defaultValue: 'Tell us what you need.' },
+    { name: 'formDescription', type: 'textarea' },
+    { name: 'submitLabel', type: 'text', defaultValue: 'Send my request' },
+    { name: 'successMessage', type: 'textarea', defaultValue: "Thanks — we've got your request. We'll reply within one business day." },
+  ],
+}
+
 export const allBlocks = [
   Hero,
+  HeroPhoto,
   FoundingClient,
   BundleOffer,
+  BundleConfigurator,
   CalendlyBooking,
   Services,
   Pricing,
   FeaturedProjects,
   Testimonials,
   Stats,
+  AnimatedStats,
+  GuaranteeStrip,
+  ProcessSteps,
+  SiteAuditToolBlock,
+  MobileCtaBlock,
   CTA,
   LeadMagnet,
   RichTextBlock,

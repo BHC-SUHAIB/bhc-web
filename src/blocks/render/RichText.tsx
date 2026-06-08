@@ -4,41 +4,42 @@ import { RichTextRenderer } from './RichTextRenderer'
 import { cn } from '@/lib/utils'
 import type { RichTextBlock, Media } from '@/payload-types'
 
-/* Single source of truth for inner text width.
-   Every variant (default, lede, card, with-image) uses the SAME clamp at the
-   same maxWidth setting, so stacked rich-text blocks share a vertical reading
-   gutter rather than zig-zagging at different indents.
-   Using rem (not ch) so font-size changes inside child variants don't shift
-   the gutter — every rich-text block at the same maxWidth lines up exactly. */
 const innerWidthCls = (size: 'prose' | 'medium' | 'wide'): string => {
   if (size === 'wide') return 'max-w-none'
   if (size === 'medium') return 'max-w-[48rem] mx-auto'
   return 'max-w-[42rem] mx-auto'
 }
 
+// About-page bio headshot lives in the repo; the CMS "Who you'll work with"
+// block doesn't reference it (and dev content is sync-locked), so we default
+// it here. Replace by attaching an image to that block in the CMS when ready.
+const ABOUT_BIO_PORTRAIT = '/seed-assets/about/suhaib-headshot.jpg'
+
 export function RichText(b: RichTextBlock) {
   const size = (b.maxWidth ?? 'prose') as 'prose' | 'medium' | 'wide'
+  const eyebrowLower = (b.eyebrow ?? '').toLowerCase()
+  const isBio = eyebrowLower.includes('work with')
+  const isMission = eyebrowLower.includes('mission')
+
   const img = typeof b.image === 'object' ? (b.image as Media | null) : null
-  // Upload wins over the imageUrl text field. Editors expect the upload they
-  // just attached to take effect — having a stale `imageUrl` silently override
-  // a fresh upload broke the /about headshot 2026-05-06 (uploaded image had
-  // no effect because a leftover URL was still in the text field).
-  // imageUrl remains as a fallback for the seed/CDN path where there's no
-  // upload to attach.
-  const imageUrl = img?.url ?? b.imageUrl ?? null
+  const imageUrlRaw = img?.url ?? b.imageUrl ?? null
+  // The About bio's CMS upload references a Spaces CDN file that isn't reliably
+  // served on dev (fails to fetch), so the portrait came up blank. Always use
+  // the in-repo headshot for the bio — sync-proof and fast (optimized to ~75KB).
+  const imageUrl = isBio ? ABOUT_BIO_PORTRAIT : imageUrlRaw
   const hasImage = !!imageUrl
   const focus = (b.imageFocus as 'face' | 'center' | undefined) ?? 'face'
   const variant = (b.variant as 'default' | 'lede' | 'card' | undefined) ?? 'default'
-  // Anchor the circular crop to the top of the photo for portrait subjects so
-  // the head doesn't get cut off (object-cover defaults to centering both axes).
   const imgObjectClass = focus === 'face' ? 'object-cover object-top' : 'object-cover object-center'
 
-  const inner = innerWidthCls(size)
+  // "Our mission" reads wider per the 2026-06 revision (tighter side margins).
+  const inner = isMission ? 'max-w-[56rem] mx-auto' : innerWidthCls(size)
   const proseCls = cn('prose-content text-[17px] leading-[1.6]', inner)
+  const containerSize = isBio || isMission ? 'lg' : size === 'wide' ? 'xl' : size === 'medium' ? 'md' : 'sm'
 
   return (
     <section className="py-10 sm:py-14">
-      <Container size={size === 'wide' ? 'xl' : size === 'medium' ? 'md' : 'sm'}>
+      <Container size={containerSize}>
         <style>{`
           .prose-content p { margin: 0 0 1.1em; }
           .prose-content h2 { font-family: var(--font-serif); font-weight: 600; font-size: 1.8em; margin: 2em 0 0.5em; letter-spacing: -0.02em; }
@@ -49,25 +50,45 @@ export function RichText(b: RichTextBlock) {
           .prose-content blockquote { margin: 1.5em 0; padding-left: 1.2em; border-left: 3px solid var(--color-brass); font-family: var(--font-serif); font-style: italic; color: var(--color-fg-muted); }
           .prose-content a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
           .prose-content a:hover { color: var(--color-brass); }
-
-          /* Lede: an oversized opening statement set inside a brass-bordered
-             surface card. The eyebrow + accent rule signal "this is a manifesto,
-             not a paragraph". */
           .lede-content { font-family: var(--font-serif); font-weight: 500; font-size: clamp(1.2rem, 1.7vw, 1.4rem); line-height: 1.45; letter-spacing: -0.01em; color: var(--color-fg); }
           .lede-content p { margin: 0 0 0.9em; }
           .lede-content p:last-child { margin-bottom: 0; }
           .lede-content em { font-style: italic; color: var(--color-brass-dark); }
-
-          /* Card: bordered surface that lifts a paragraph or two off the page. */
           .card-content p { margin: 0 0 1em; }
           .card-content p:last-child { margin-bottom: 0; }
         `}</style>
 
-        {variant === 'lede' ? (
+        {isBio ? (
+          /* "Who you'll work with" — portrait + bio, two columns on desktop. */
+          <div className="grid gap-8 sm:gap-12 md:grid-cols-[260px_1fr] md:items-center max-w-5xl mx-auto">
+            <div className="relative w-[200px] sm:w-[240px] md:w-full aspect-[4/5] rounded-[var(--radius-xl)] overflow-hidden border border-[var(--color-border-strong)] shadow-[0_30px_60px_-36px_rgba(var(--shadow-color),0.5)] mx-auto md:mx-0">
+              <Image
+                src={imageUrl as string}
+                alt={(img?.alt as string) || 'Suhaib Chaudhry, founder of Black Hart Consulting'}
+                fill
+                className={imgObjectClass}
+                sizes="(min-width:768px) 260px, 240px"
+                // Already a lean 75KB in /public — serve it raw so it doesn't
+                // depend on the production image optimizer (which fails for this
+                // local file on the dev droplet's image cache).
+                unoptimized
+              />
+            </div>
+            <div>
+              {b.eyebrow ? (
+                <span className="eyebrow eyebrow-row mb-4">
+                  <span className="rule" />
+                  {b.eyebrow}
+                </span>
+              ) : null}
+              <div className="prose-content text-[17px] leading-[1.65] mt-3">
+                <RichTextRenderer content={b.content} />
+              </div>
+            </div>
+          </div>
+        ) : variant === 'lede' ? (
           <div className={inner}>
             <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-7 sm:p-10 shadow-[0_18px_40px_-24px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]">
-              {/* Eyebrow defaults to "Our mission" for backward compat with the
-                  pre-eyebrow seed data on the live site, but is editor-overridable. */}
               <div className="flex items-center gap-3 mb-5">
                 <span className="h-[2px] w-8 bg-[var(--color-brass)] rounded-full" aria-hidden />
                 <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-brass-text)]">
@@ -94,9 +115,6 @@ export function RichText(b: RichTextBlock) {
               <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-fg-muted)] mb-6 text-center">{b.eyebrow}</p>
             ) : null}
             <div className="relative aspect-square w-[180px] sm:w-[200px] rounded-full overflow-hidden border-2 border-[var(--color-brass)] shadow-[0_18px_40px_-22px_color-mix(in_srgb,var(--color-ink)_45%,transparent)] mx-auto mb-8">
-              {/* `unoptimized` removed 2026-05-05: source headshot was 3.18MB
-                  raw on /about, dominated mobile LCP. With Next image
-                  optimization the same image renders at ~25KB on mobile. */}
               <Image src={imageUrl as string} alt={(img?.alt as string) ?? ''} fill className={imgObjectClass} sizes="(min-width:640px) 200px, 180px" />
             </div>
             <div className="prose-content text-[17px] leading-[1.6]">

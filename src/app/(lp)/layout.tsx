@@ -6,6 +6,8 @@ import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref, mailtoHref, LP_PHONE_DISPLAY } from '@/lib/contact'
+import { ScrollFx } from '@/components/ScrollFx'
+import { ExitIntentModal } from '@/components/ExitIntentModal'
 import '../globals.css'
 
 // LP layout — visually quieter than (frontend) but with the brand minimums
@@ -167,6 +169,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
           </Container>
         </footer>
+        <ScrollFx />
+        <ExitIntentModal />
       </body>
     </html>
   )

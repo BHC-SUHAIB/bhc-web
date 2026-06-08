@@ -9,6 +9,7 @@ import { Button } from './Button'
 import { Menu, X, Phone } from 'lucide-react'
 import { phoneHref } from '@/lib/contact'
 import { pushEvent } from '@/lib/analytics'
+import { toContactAnchor, relabelDiscount } from '@/lib/redesign'
 import type { Header as HeaderGlobal, SiteSetting } from '@/payload-types'
 
 type HeaderProps = { header: HeaderGlobal | null; siteSettings: SiteSetting | null }
@@ -35,8 +36,8 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
     <>
       <header className="sticky top-0 z-40 backdrop-blur-lg bg-[color-mix(in_srgb,var(--color-bg)_82%,transparent)] border-b border-[var(--color-border)]">
         <Container size="xl" className="flex items-center justify-between gap-6 py-4">
-          <Link href="/" className="flex items-center gap-3 shrink-0">
-            <Logo variant="primary" height={36} className="text-[var(--color-fg)]" />
+          <Link href="/" className="flex items-center gap-3 shrink-0 transition-opacity hover:opacity-75">
+            <Logo variant="primary" height={36} className="text-[var(--logo)]" />
             <span className="flex flex-col leading-none">
               <span className="font-serif text-[16px] sm:text-[18px] font-semibold tracking-[-0.015em]">
                 Black Hart
@@ -48,17 +49,28 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
           </Link>
 
           <nav className="hidden md:flex items-center gap-7" aria-label="Primary">
-            {nav.map((item, i) => (
-              <Link
-                key={i}
-                href={item.href}
-                target={item.openInNewTab ? '_blank' : undefined}
-                rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
-                className="text-[14px] font-medium text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {nav.map((item, i) => {
+              const active = pathname === item.href
+              return (
+                <Link
+                  key={i}
+                  href={item.href}
+                  target={item.openInNewTab ? '_blank' : undefined}
+                  rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
+                  aria-current={active ? 'page' : undefined}
+                  className={[
+                    'relative text-[14px] font-medium transition-colors hover:text-[var(--color-accent)]',
+                    'after:absolute after:left-0 after:-bottom-1.5 after:h-[1.5px] after:bg-[var(--color-accent)]',
+                    'after:transition-[width] after:duration-300 after:ease-out',
+                    active
+                      ? 'text-[var(--color-accent)] after:w-full'
+                      : 'text-[var(--color-fg)] after:w-0 hover:after:w-full',
+                  ].join(' ')}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
 
           <div className="flex items-center gap-3 shrink-0">
@@ -66,15 +78,15 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
               <a
                 href={phoneHrefVal}
                 onClick={() => pushEvent('phone_click', { source_page: pathname, location: 'header' })}
-                className="hidden lg:inline-flex items-center gap-2 font-mono text-[13px] tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
+                className="hidden lg:inline-flex items-center gap-2 font-mono text-[13px] tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-accent)] transition-colors"
               >
                 <Phone className="size-3.5" aria-hidden />
                 <span>{phoneDisplay}</span>
               </a>
             ) : null}
             {cta?.show && cta.label && cta.href ? (
-              <Button href={cta.href} variant="primary" size="sm" className="hidden sm:inline-flex">
-                {cta.label}
+              <Button href={toContactAnchor(cta.href)} variant="brass" size="sm" className="hidden sm:inline-flex">
+                {relabelDiscount(cta.label)}
               </Button>
             ) : null}
             <button
@@ -83,7 +95,7 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
               aria-expanded={open}
               aria-controls="mobile-menu"
               onClick={() => setOpen((v) => !v)}
-              className="md:hidden inline-flex items-center justify-center size-10 rounded-[var(--radius)] border border-[var(--color-border)] text-[var(--color-fg)] hover:border-[var(--color-fg-muted)] transition-colors"
+              className="md:hidden inline-flex items-center justify-center size-10 rounded-[var(--radius-sm)] border border-[var(--color-border)] text-[var(--color-fg)] hover:border-[var(--color-fg-muted)] transition-colors"
             >
               {open ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
@@ -107,7 +119,7 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
                   target={item.openInNewTab ? '_blank' : undefined}
                   rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
                   onClick={() => setOpen(false)}
-                  className="font-serif text-[28px] font-semibold tracking-[-0.02em] py-3 border-b border-[var(--color-border)] hover:text-[var(--color-brass)] transition-colors"
+                  className="font-serif text-[28px] font-semibold tracking-[-0.02em] py-3 border-b border-[var(--color-border)] hover:text-[var(--color-accent)] transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -115,8 +127,8 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
             </nav>
             {cta?.show && cta.label && cta.href ? (
               <div className="mt-8">
-                <Button href={cta.href} variant="primary" size="lg" className="w-full justify-center">
-                  {cta.label}
+                <Button href={toContactAnchor(cta.href)} variant="brass" size="lg" className="w-full justify-center">
+                  {relabelDiscount(cta.label)}
                 </Button>
               </div>
             ) : null}
@@ -127,7 +139,7 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
                   pushEvent('phone_click', { source_page: pathname, location: 'mobile_menu' })
                   setOpen(false)
                 }}
-                className="mt-6 inline-flex items-center gap-3 font-mono text-[14px] tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-brass)] transition-colors"
+                className="mt-6 inline-flex items-center gap-3 font-mono text-[14px] tracking-[0.02em] text-[var(--color-fg)] hover:text-[var(--color-accent)] transition-colors"
               >
                 <Phone className="size-4" aria-hidden />
                 <span>{phoneDisplay}</span>

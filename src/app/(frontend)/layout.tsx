@@ -4,6 +4,9 @@ import { manrope, fraunces, jetbrains } from '@/lib/fonts'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { getCachedHeader, getCachedFooter, getCachedSiteSettings } from '@/lib/payload-cache'
+import { ScrollFx } from '@/components/ScrollFx'
+import { MobileCta } from '@/components/MobileCta'
+import { ExitIntentModal } from '@/components/ExitIntentModal'
 import '../globals.css'
 
 // Search engine ownership verification. Tokens come from each console's
@@ -141,6 +144,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <SiteHeader header={header} siteSettings={siteSettings} />
         <main id="main-content" className="flex-1">{children}</main>
         <SiteFooter footer={footer} siteSettings={siteSettings} />
+        <ScrollFx />
+        <MobileCta phone={siteSettings?.contactPhone ?? null} />
+        <ExitIntentModal />
       </body>
     </html>
   )

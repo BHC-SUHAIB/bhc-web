@@ -1,69 +1,124 @@
 @import "tailwindcss";
+@import "./components.css";
+
+/* ============================================================
+   Black Hart — "Warm Mono" identity (redesign 2026-06).
+   One warm brass-brown monochrome in two modes: light (warm
+   ivory) and dark (warm ink), following the visitor's OS via
+   `prefers-color-scheme` (no JS, no flash, no toggle).
+   Values lifted verbatim from the redesign bundle's theme.css.
+   Forest green has been retired in favor of brass accents.
+   ============================================================ */
 
 @theme {
-  /* Heritage palette */
+  /* ----- Brand bases (absolute, mode-independent) ----- */
   --color-ink: #1A1713;
-  --color-forest: #2F4A35;
-  --color-lichen: #8A9A7B;
-  --color-parchment: #D6D0C2;
   --color-ivory: #EFE9D9;
+  --color-cream: #F3EEE1;
   --color-brass: #B08D57;
   --color-brass-dark: #8E6E3F;
   /* Body-text variant of brass that meets WCAG AA (4.5:1) on the cream
-     ivory/parchment surfaces — including the slightly-darker
-     `--color-surface` (~#E4DECF) used for cards. Use this for any sub-18pt
-     brass-colored copy (eyebrows, "Download the one-pager" links).
-     Lighthouse 2026-05-05 + 2026-05-05-rerun flagged `text-[var(--color-brass)]`
-     and `text-[var(--color-brass-dark)]` as failing contrast on small text. */
+     ivory/parchment surfaces. Use for any sub-18pt brass copy
+     (eyebrows, inline links). Light-mode flagged by Lighthouse 2026-05-05. */
   --color-brass-text: #6E5530;
 
-  /* Semantic tokens (light mode defaults) */
-  --color-bg: var(--color-ivory);
-  --color-fg: var(--color-ink);
-  /* WCAG AA requires 4.5:1 against surface. Solid mix (not transparent)
-     guarantees the same contrast on both body bg and card surface. */
-  --color-fg-muted: color-mix(in srgb, var(--color-ink) 70%, var(--color-ivory));
-  --color-surface: color-mix(in srgb, var(--color-ink) 5%, var(--color-ivory));
-  --color-surface-raised: color-mix(in srgb, var(--color-ink) 9%, var(--color-ivory));
-  --color-border: color-mix(in srgb, var(--color-ink) 14%, transparent);
-  --color-border-strong: color-mix(in srgb, var(--color-ink) 28%, transparent);
-  --color-accent: var(--color-forest);
-  --color-accent-fg: var(--color-ivory);
-  --color-highlight: var(--color-brass);
-  --color-link: var(--color-forest);
+  /* ----- Semantic tokens — Warm Mono LIGHT (default) ----- */
+  --color-bg: #EFE9D9;
+  --color-fg: #1A1713;
+  --color-fg-muted: #5A5349;
+  --color-fg-faint: #8A8073;
+  --color-surface: #E7E0CF;
+  --color-surface-raised: #DED6C2;
+  --color-border: rgba(26, 23, 19, 0.14);
+  --color-border-strong: rgba(26, 23, 19, 0.26);
 
-  /* Fonts */
+  /* Accent = warm brass-brown (replaces the retired forest green) */
+  --color-accent: #6E5530;
+  --color-accent-strong: #8E6E3F;
+  --color-accent-fg: #F3EEE1;
+  --color-highlight: #B08D57;
+  --color-link: #6E5530;
+
+  /* Fonts (next/font sets the --font-* vars on <html>; these add fallbacks) */
   --font-sans: var(--font-sans, 'Manrope'), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-serif, 'Fraunces'), Georgia, 'Times New Roman', serif;
   --font-mono: var(--font-mono, 'JetBrains Mono'), ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Radii */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
+  /* Radii — softer, rounder forms per the redesign */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
+  --radius-pill: 999px;
 }
 
-/* Dark mode \u2014 follows OS preference automatically. No toggle, no JS. */
+/* ----- Plumbing tokens + scales (light defaults; not Tailwind utilities) ----- */
+:root {
+  /* Dark "proof" band used to break up the warm-ivory page */
+  --band-bg: #1A1713;
+  --band-fg: #F3EEE1;
+  --accent-soft: #EBE3D2;
+
+  --logo: #1A1713;            /* near-black antler on light */
+  --shadow-color: 26, 23, 19;
+
+  /* Fluid type scale (mobile-first; clamp scales up to desktop) */
+  --step--1: clamp(0.78rem, 0.74rem + 0.18vw, 0.86rem);
+  --step-0:  clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  --step-1:  clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+  --step-2:  clamp(1.35rem, 1.15rem + 0.95vw, 1.85rem);
+  --step-3:  clamp(1.7rem, 1.3rem + 1.9vw, 2.6rem);
+  --step-4:  clamp(2.1rem, 1.5rem + 3vw, 3.6rem);
+  --step-5:  clamp(2.6rem, 1.6rem + 4.8vw, 5rem);
+  --step-6:  clamp(3.1rem, 1.6rem + 7vw, 6.6rem);
+
+  /* Motion — calm, organic easing */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-soft: cubic-bezier(0.33, 0.1, 0.25, 1);
+  --dur-fast: 180ms;
+  --dur-med: 420ms;
+  --dur-slow: 820ms;
+
+  --maxw: 1240px;
+  --gutter: clamp(1.25rem, 1rem + 3vw, 4rem);
+}
+
+/* Dark mode — follows OS preference automatically. No toggle, no JS. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: var(--color-ink);
-    --color-fg: var(--color-ivory);
-    --color-fg-muted: color-mix(in srgb, var(--color-ivory) 72%, var(--color-ink));
-    --color-surface: color-mix(in srgb, var(--color-ivory) 6%, var(--color-ink));
-    --color-surface-raised: color-mix(in srgb, var(--color-ivory) 10%, var(--color-ink));
-    --color-border: color-mix(in srgb, var(--color-ivory) 16%, transparent);
-    --color-border-strong: color-mix(in srgb, var(--color-ivory) 32%, transparent);
-    --color-accent: var(--color-brass);
-    --color-accent-fg: var(--color-ink);
-    --color-link: var(--color-brass);
-    /* On the dark ink background, the regular brass already meets AA;
-       restore it so brass-text bodies don't look needlessly muddy. */
-    --color-brass-text: var(--color-brass);
+    --color-cream: #1C1813;
+
+    --color-bg: #15120E;
+    --color-fg: #EFE9D9;
+    --color-fg-muted: #ABA290;
+    --color-fg-faint: #7E776A;
+    --color-surface: #211C16;
+    --color-surface-raised: #2A241C;
+    --color-border: rgba(239, 233, 217, 0.16);
+    --color-border-strong: rgba(239, 233, 217, 0.30);
+
+    --color-brass: #C9A36B;
+    --color-brass-dark: #B0894E;
+    --color-brass-text: #C9A36B;
+    --color-accent: #C9A36B;
+    --color-accent-strong: #D8B57F;
+    --color-accent-fg: #15120E;
+    --color-highlight: #C9A36B;
+    --color-link: #C9A36B;
+
+    --band-bg: #100D0A;
+    --band-fg: #F3EEE1;
+    --accent-soft: #241F18;
+
+    --logo: #FFFFFF;           /* white antler on dark */
+    --shadow-color: 0, 0, 0;
   }
 }
 
-/* Base */
+/* ============================================================
+   Base
+   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 
@@ -71,6 +126,9 @@ html {
   color-scheme: dark light;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 body {
@@ -80,12 +138,25 @@ body {
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.55;
+  font-size: var(--step-0);
+  line-height: 1.6;
   letter-spacing: -0.005em;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color var(--dur-med) var(--ease-out),
+              color var(--dur-med) var(--ease-out);
 }
 
-::selection { background: var(--color-forest); color: var(--color-ivory); }
+/* Headings now run in Fraunces (editorial warmth) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+::selection { background: var(--color-accent); color: var(--color-accent-fg); }
 
 :focus-visible {
   outline: 2px solid var(--color-brass);
@@ -98,16 +169,24 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-fg-muted); }
 
-h1, h2, h3, h4, h5, h6 { letter-spacing: -0.02em; line-height: 1.1; }
+/* ============================================================
+   Shared utility primitives
+   ============================================================ */
 
-/* Multi-paragraph testimonial quotes: render with deliberate spacing
-   between paragraphs so multi-paragraph reviews don't collapse into
-   one wall of text. */
+/* Mono eyebrow / kicker label */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-brass-text);
+  font-weight: 500;
+}
+
+/* Multi-paragraph testimonial quotes keep deliberate paragraph spacing */
 .testimonial-quote p + p { margin-top: 1em; }
 
-/* Link color rule is scoped — it applies only to prose content, NOT every anchor.
-   Buttons, nav items, and cards handle their own colors. This prevents the global
-   rule from overriding Tailwind text color utilities on <a>-based buttons. */
+/* Prose link color is scoped to rich content only (never buttons/nav/cards) */
 .prose-content a,
 .rich-text a {
   color: var(--color-link);
@@ -117,4 +196,43 @@ h1, h2, h3, h4, h5, h6 { letter-spacing: -0.02em; line-height: 1.1; }
 .prose-content a:hover,
 .rich-text a:hover {
   color: var(--color-highlight);
+}
+
+/* ----- Reveal-on-scroll primitives -----
+   The hidden state is gated behind `html.js` (set by an inline head script) and
+   `:not(.in)`, so without JS every element renders fully visible — no FOUC, no
+   invisible content. ScrollFx adds `.in` when the element scrolls into view. */
+.reveal {
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+  will-change: opacity, transform;
+}
+.reveal-d1 { transition-delay: 90ms; }
+.reveal-d2 { transition-delay: 180ms; }
+.reveal-d3 { transition-delay: 270ms; }
+.reveal-d4 { transition-delay: 360ms; }
+
+/* Line-mask reveal for editorial headlines */
+.line-mask { display: block; overflow: hidden; }
+.line-mask > span { display: block; transition: transform var(--dur-slow) var(--ease-out); }
+
+/* Pre-reveal hidden state applies ONLY when scripting is enabled AND motion is
+   allowed. So no-JS visitors and reduced-motion visitors always see fully
+   visible content, and there's no inline html-class script (zero hydration
+   risk). ScrollFx adds `.in` to play the entrance once the element is in view. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .reveal:not(.in) { opacity: 0; transform: translateY(26px); }
+  .line-mask:not(.in) > span { transform: translateY(110%); }
+}
+
+/* Subtle paper-grain overlay (apply .grain to a positioned, isolated parent) */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
 }

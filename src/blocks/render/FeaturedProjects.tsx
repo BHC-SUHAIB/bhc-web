@@ -3,9 +3,20 @@ import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { Placeholder } from '@/components/Placeholder'
-import { ArrowUpRight } from 'lucide-react'
+import { TrendingUp } from 'lucide-react'
 import { getCachedFeaturedProjects } from '@/lib/payload-cache'
 import type { FeaturedProjectsBlock, Project, Media } from '@/payload-types'
+
+// Humanize the `projectType` select value for the .chip tags.
+const PROJECT_TYPE_LABELS: Record<string, string> = {
+  website: 'Website',
+  webapp: 'Web app',
+  mobile: 'Mobile app',
+  seo: 'SEO',
+  brand: 'Brand / design',
+  infra: 'Hosting',
+  other: 'Project',
+}
 
 export async function FeaturedProjects(b: FeaturedProjectsBlock) {
   let projects: Project[] = []
@@ -48,12 +59,14 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
             </div>
           ) : null}
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+          <div className="work-grid max-w-5xl mx-auto">
             {projects.slice(0, 3).map((p) => {
               const hero = typeof p.heroImage === 'object' ? (p.heroImage as Media | null) : null
               return (
-                <div key={p.id} className="text-center">
-                  <div className="relative aspect-[4/3] rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden mb-4">
+                // Non-link card (no funnel exit on LPs). `.work` supplies the
+                // framed shot + hover lift; the title sits in `.meta`, centered.
+                <div key={p.id} className="work">
+                  <div className="shot">
                     {hero?.url ? (
                       <Image
                         src={hero.url as string}
@@ -66,9 +79,9 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
                       <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="video" />
                     )}
                   </div>
-                  <h3 className="font-serif font-semibold text-[18px] leading-[1.2] text-[var(--color-fg)]">
-                    {p.title}
-                  </h3>
+                  <div className="meta" style={{ textAlign: 'center' }}>
+                    <h3>{p.title}</h3>
+                  </div>
                 </div>
               )
             })}
@@ -104,18 +117,28 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
           ) : null}
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="work-grid">
           {projects.map((p, idx) => {
             const hero = typeof p.heroImage === 'object' ? (p.heroImage as Media | null) : null
+            // .tags map from the project's industry + humanized projectType.
+            const chips = [p.industry, p.projectType ? (PROJECT_TYPE_LABELS[p.projectType] ?? p.projectType) : null]
+              .filter(Boolean) as string[]
+            // .result maps from the first highlighted metric (value + label).
+            const metric = Array.isArray(p.metrics)
+              ? p.metrics.find((m) => m && (m.value || m.label))
+              : null
+            const result = metric
+              ? [metric.value, metric.label].filter(Boolean).join(' ')
+              : null
             const Inner = (
               <>
-                <div className="relative aspect-[4/3] bg-[var(--color-bg)] overflow-hidden">
+                <div className="shot">
                   {hero?.url ? (
                     <Image
                       src={hero.url as string}
                       alt={(hero.alt as string) ?? p.title}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="object-cover"
                       sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
                       // First card on the home/landing FeaturedProjects grid
                       // is a likely mobile LCP candidate (largest visible
@@ -124,39 +147,34 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
                       fetchPriority={idx === 0 ? 'high' : 'auto'}
                     />
                   ) : (
-                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.03]">
-                      <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="video" />
-                    </div>
+                    <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="video" />
                   )}
                 </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    {p.client ? (
-                      <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-fg-muted)]">
-                        {p.client}
-                      </span>
-                    ) : null}
-                  </div>
-                  <h3 className="font-serif font-semibold text-[20px] leading-[1.2] mb-2 group-hover:text-[var(--color-brass)] transition-colors flex items-start justify-between gap-3">
-                    <span>{p.title}</span>
-                    {linked ? <ArrowUpRight className="size-4 shrink-0 mt-1 opacity-50 group-hover:opacity-100 transition-opacity" /> : null}
-                  </h3>
-                  {p.summary ? (
-                    <p className="text-[14px] leading-[1.55] text-[var(--color-fg-muted)]">{p.summary}</p>
+                <div className="meta">
+                  {chips.length ? (
+                    <div className="tags">
+                      {chips.map((c) => (
+                        <span key={c} className="chip">{c}</span>
+                      ))}
+                    </div>
+                  ) : null}
+                  <h3>{p.title}</h3>
+                  {p.summary ? <p>{p.summary}</p> : null}
+                  {result ? (
+                    <span className="result">
+                      <TrendingUp width={14} height={14} aria-hidden />
+                      {result}
+                    </span>
                   ) : null}
                 </div>
               </>
             )
             return linked ? (
-              <Link
-                key={p.id}
-                href={`/portfolio/${p.slug}`}
-                className="group block rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)] hover:shadow-[0_14px_30px_-18px_color-mix(in_srgb,var(--color-ink)_35%,transparent)]"
-              >
+              <Link key={p.id} href={`/portfolio/${p.slug}`} className="work">
                 {Inner}
               </Link>
             ) : (
-              <div key={p.id} className="group block rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden">
+              <div key={p.id} className="work">
                 {Inner}
               </div>
             )

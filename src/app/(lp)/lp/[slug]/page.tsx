@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { getCachedLandingPageBySlug } from '@/lib/payload-cache'
 import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
+import { ExpressLanding } from '@/blocks/render/ExpressLanding'
 import { LP_PHONE_DISPLAY } from '@/lib/contact'
 import type { LandingPage, Media } from '@/payload-types'
 
@@ -55,5 +56,23 @@ export default async function LandingPageRoute({ params }: Args) {
   const { slug } = await params
   const lp = await loadLandingPage(slug)
   if (!lp) notFound()
-  return <RenderBlocks blocks={lp.layout ?? []} phoneOverride={LP_PHONE_DISPLAY} />
+  const layout = lp.layout ?? []
+
+  // Express LP: every section is now a real, editable Payload block. Once the
+  // record has been converted to that block set (signalled by a heroPhoto
+  // block), render it from the CMS like any other LP so it's fully editable in
+  // the admin. Until the one-shot content migration runs, fall back to the
+  // code-composed page so prod never regresses between the code deploy and the
+  // content migration. Remove this fallback once the migration has run.
+  if (slug === 'express-website') {
+    const converted = layout.some((b) => (b as { blockType?: string }).blockType === 'heroPhoto')
+    if (!converted) return <ExpressLanding />
+    return (
+      <div className="lp-pad-bottom">
+        <RenderBlocks blocks={layout} phoneOverride={LP_PHONE_DISPLAY} />
+      </div>
+    )
+  }
+
+  return <RenderBlocks blocks={layout} phoneOverride={LP_PHONE_DISPLAY} />
 }

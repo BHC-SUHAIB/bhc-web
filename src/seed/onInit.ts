@@ -1062,6 +1062,134 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: misbah (FORCE_MISBAH_UPSERT)')
     }
 
+    // --- EstimatedTax media uploads (live captures of estimatedtax.io, light theme) ---
+    const etHero = await ensureMedia(
+      'EstimatedTax — homepage hero: the set-aside question beside a live 2026 estimate preview card',
+      'public/seed-assets/estimatedtax/hero.png',
+    )
+    const etEstimate = await ensureMedia(
+      'EstimatedTax — the guided calculator: federal + self-employment tax, effective rate, and four quarterly payments',
+      'public/seed-assets/estimatedtax/estimate.png',
+    )
+    const etStates = await ensureMedia(
+      'EstimatedTax — a per-state page (California) showing the combined federal + state estimate',
+      'public/seed-assets/estimatedtax/states.png',
+    )
+    const etScorp = await ensureMedia(
+      'EstimatedTax — the built-in S-Corp vs sole-proprietor comparison with a break-even verdict',
+      'public/seed-assets/estimatedtax/scorp.png',
+    )
+    const etProfessions = await ensureMedia(
+      'EstimatedTax — programmatic SEO: twelve profession-specific tax calculator pages',
+      'public/seed-assets/estimatedtax/professions.png',
+    )
+    const etGuides = await ensureMedia(
+      'EstimatedTax — the guides hub: fifteen plain-language self-employed tax guides',
+      'public/seed-assets/estimatedtax/guides.png',
+    )
+
+    // --- EstimatedTax project (first-party product, live at estimatedtax.io) ---
+    const estimatedTaxProject: any = {
+      title: 'EstimatedTax — 2026 Self-Employment Tax Estimator',
+      slug: 'estimatedtax',
+      summary: 'A free, SEO-first 2026 tax estimator for freelancers and the self-employed — federal + self-employment tax, all 50 states and D.C., an S-Corp break-even, and a real paid email-reminder service. 84 statically-generated pages, every tax calculation client-side, shipped to estimatedtax.io.',
+      client: 'Black Hart Consulting (first-party product)',
+      industry: 'FinTech / Tax',
+      projectType: 'webapp',
+      year: 2026,
+      duration: 'days, not weeks',
+      teamSize: 1,
+      liveUrl: 'https://estimatedtax.io',
+      ...(etHero?.id ? { heroImage: etHero.id } : {}),
+      stack: [
+        { name: 'Next.js 15 (App Router)', category: 'framework' },
+        { name: 'React 19', category: 'framework' },
+        { name: 'TypeScript', category: 'language' },
+        { name: 'Tailwind CSS v3', category: 'design' },
+        { name: 'Vitest', category: 'tool' },
+        { name: 'Stripe (subscriptions)', category: 'tool' },
+        { name: 'Resend', category: 'tool' },
+        { name: 'Vercel (hosting + Cron)', category: 'hosting' },
+      ],
+      challenge: rtDoc([
+        ['p', 'Freelancers and the self-employed have to estimate and pre-pay their own taxes four times a year — and the existing tools are either ad-choked, inaccurate, or quietly harvesting the income figures people type in. The goal was a free 2026 estimator that is fast, genuinely accurate, completely private, and built to rank in search so it compounds on its own.'],
+        ['p', 'Three constraints shaped everything. The tax math had to be exactly right for 2026 — real IRS figures, self-employment tax, the QBI deduction, all fifty states. Nothing a user typed could ever leave the browser. And it had to monetize without the sleaze the category is known for: no ad walls, no fake “free” that paywalls the actual answer.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'Static-first Next.js, with the tax engine 100% in the browser'],
+        ['p', 'The whole site is statically generated — 84 pages — and the tax engine is a pure, dependency-free TypeScript module that runs entirely client-side. Nothing the user types is ever sent anywhere, the result is instant, and hosting is effectively free. The calculator itself is a guided three-step wizard whose numbers update live as you type.'],
+        ['h3', 'One locked tax config, pinned by regression tests'],
+        ['p', 'Every 2026 figure — brackets, the standard deduction, the Social Security wage base, the QBI thresholds — lives in a single locked config file that is the only source of truth; no number is hardcoded anywhere else. 67 Vitest tests pin the math against hand-derived anchors (a $120k sole proprietor owes exactly $28,462), so a refactor can never silently change someone’s tax.'],
+        ['h3', 'Programmatic SEO at real scale'],
+        ['p', 'All 50 states plus D.C. ship with verified 2026 brackets, alongside 15 plain-language guides and 12 profession-specific calculator pages (rideshare driver, real estate agent, consultant, and more). Every page is generated from data with tailored metadata, JSON-LD, an explainer, and an FAQ — the prose surface that earns search rankings and AI citations.'],
+        ['h3', 'The hard tax details, done properly'],
+        ['p', 'Beyond the basics: the §199A QBI deduction with its high-income phase-out and specified-service-business rules, an S-Corp vs sole-proprietor comparison with a real break-even verdict, the safe-harbor rule, a W-2 withholding offset for people with a day job, and a one-tap .ics export of the four due dates.'],
+        ['h3', 'Monetization that is actually a product'],
+        ['p', 'Three honest revenue streams: CPA and payroll (Gusto) affiliate placements that adapt to the user’s situation, and a real Pro tier. Pro is not a paywall on free features — it is a backend-gated email reminder service (a Stripe subscription feeds a daily Vercel Cron job that emails only active subscribers, via Resend, before each due date), something free users genuinely cannot replicate.'],
+        ['h3', 'A calm “financial instrument” design'],
+        ['p', 'A custom Sage design system with full light/dark support, three layered typefaces, and a results ledger that reads like a statement rather than a form. No ads, no sign-up, no clutter — the kind of tool people actually trust with a money question.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'Shipped to estimatedtax.io: a free, fast, private 2026 tax estimator that already monetizes.'],
+        ['ul', [
+          '84 statically-generated pages — the calculator, all 50 states + D.C., 15 guides, and 12 profession pages.',
+          'A guided calculator: federal income tax, self-employment tax, the QBI deduction with its high-earner phase-out, and the four quarterly payments with safe-harbor sizing.',
+          'A built-in S-Corp vs sole-proprietor break-even, a W-2 withholding offset, .ics calendar export, and shareable result links.',
+          'A real Pro subscription — backend-gated email reminders via Stripe → Vercel Cron → Resend.',
+          'CPA + payroll affiliate placements that adapt to the user’s numbers.',
+          'Verified in Google Search Console with an 84-URL sitemap; light/dark, fully responsive, zero ads.',
+        ]],
+        ['p', 'Every calculation runs in the browser — not a single byte of anyone’s financial data is collected — and the SEO surface is built to compound over time. A free tool that respects its users and still pays for itself.'],
+      ]),
+      metrics: [
+        { value: '84', label: 'statically-generated pages' },
+        { value: '51', label: 'states + D.C. covered' },
+        { value: '67', label: 'tests pinning the tax math' },
+        { value: '0', label: 'bytes of user data collected' },
+      ],
+      gallery: [
+        ...(etEstimate?.id ? [{
+          image: etEstimate.id,
+          caption: 'The guided calculator — federal + self-employment tax, your effective rate, and the four quarterly payments, all computed live in the browser.',
+        }] : []),
+        ...(etStates?.id ? [{
+          image: etStates.id,
+          caption: 'Every state has its own page: choose California and the estimate folds in state income tax for a combined federal + state total ($34,757 here).',
+        }] : []),
+        ...(etScorp?.id ? [{
+          image: etScorp.id,
+          caption: 'A built-in S-Corp vs sole-proprietor comparison nets the self-employment-tax saving against payroll costs and returns a plain break-even verdict.',
+        }] : []),
+        ...(etProfessions?.id ? [{
+          image: etProfessions.id,
+          caption: 'Programmatic SEO: twelve profession-specific calculator pages, each with the deductions and S-Corp math that actually apply to that line of work.',
+        }] : []),
+        ...(etGuides?.id ? [{
+          image: etGuides.id,
+          caption: 'Fifteen plain-language guides — set-aside math, the safe harbor, QBI, the S-Corp break-even — each backed by the same free calculator.',
+        }] : []),
+      ],
+      featured: true,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingET = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: estimatedTaxProject.slug } },
+      limit: 1,
+    })
+    if (existingET.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: estimatedTaxProject })
+      payload.logger.info('[seed] project created: estimatedtax')
+    } else if (process.env.FORCE_ESTIMATEDTAX_UPSERT === 'true') {
+      await payload.update({
+        collection: 'projects',
+        id: existingET.docs[0].id,
+        data: estimatedTaxProject,
+      })
+      payload.logger.info('[seed] project upserted: estimatedtax (FORCE_ESTIMATEDTAX_UPSERT)')
+    }
+
     // --- Article hero images (Unsplash, downloaded into public/seed-assets/articles/) ---
     const articleHeroNextjs = await ensureMedia(
       'Why Next.js over WordPress \u2014 laptop displaying source code on a dark background',

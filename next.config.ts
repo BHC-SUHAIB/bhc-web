@@ -91,6 +91,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: '/p/:slug/:tier', destination: '/p/:slug/:tier.html' },
+      // Sidecar product pages — clean URLs over the static files in public/sidecar/kajabi/.
+      { source: '/sidecar/kajabi', destination: '/sidecar/kajabi/index.html' },
+      { source: '/sidecar/kajabi/support', destination: '/sidecar/kajabi/support.html' },
+      { source: '/sidecar/kajabi/privacy', destination: '/sidecar/kajabi/privacy.html' },
     ]
   },
 

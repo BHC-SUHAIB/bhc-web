@@ -95,6 +95,9 @@ const nextConfig: NextConfig = {
       { source: '/sidecar/kajabi', destination: '/sidecar/kajabi/index.html' },
       { source: '/sidecar/kajabi/support', destination: '/sidecar/kajabi/support.html' },
       { source: '/sidecar/kajabi/privacy', destination: '/sidecar/kajabi/privacy.html' },
+      { source: '/sidecar/teachable', destination: '/sidecar/teachable/index.html' },
+      { source: '/sidecar/teachable/support', destination: '/sidecar/teachable/support.html' },
+      { source: '/sidecar/teachable/privacy', destination: '/sidecar/teachable/privacy.html' },
     ]
   },
 

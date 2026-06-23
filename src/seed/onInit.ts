@@ -938,9 +938,15 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     // --- Misbah media uploads (composited iOS-simulator captures on warm panels) ---
+    // ⚠️ Hero uses a UNIQUE filename (`misbah-hero.png`, NOT the generic `hero.png`):
+    // every project ships a `hero.png` seed-asset, and on the flat Spaces bucket they
+    // collide — Misbah's was overwritten by MergeBird's `hero.png`, so the portfolio
+    // card showed MergeBird's image. The alt is changed too, so `ensureMedia` creates a
+    // FRESH media record (the old one points at the clobbered `hero.png`). Keep app
+    // seed-assets uniquely named to avoid this.
     const misbahMediaHero = await ensureMedia(
-      'Misbah — three-screen hero: Quran, the live prayer-countdown Home, and Duas',
-      'public/seed-assets/misbah/hero.png',
+      'Misbah app hero — Quran, Home prayer-countdown, and Duas (3-up composite)',
+      'public/seed-assets/misbah/misbah-hero.png',
     )
     const misbahMediaQibla = await ensureMedia(
       'Misbah — Qibla compass with live bearing and distance to the Kaaba in Makkah',

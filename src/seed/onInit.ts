@@ -1190,6 +1190,115 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: estimatedtax (FORCE_ESTIMATEDTAX_UPSERT)')
     }
 
+    // --- Sidecar media uploads (designed store assets for the flagship "Sidecar for Kajabi") ---
+    const scHero = await ensureMedia(
+      'Sidecar for Kajabi — product banner: export your Kajabi data in one click',
+      'public/seed-assets/sidecar/hero-banner.jpg',
+    )
+    const scExportBar = await ensureMedia(
+      'Sidecar — the one-click export bar injected above a Kajabi contacts table',
+      'public/seed-assets/sidecar/product-1.jpg',
+    )
+    const scFields = await ensureMedia(
+      'Sidecar — Full export recovers all 15 contact fields from the 6 Kajabi shows',
+      'public/seed-assets/sidecar/product-2.jpg',
+    )
+    const scPricing = await ensureMedia(
+      'Sidecar — free one-click CSV, with JSON and Full export on the Pro tier',
+      'public/seed-assets/sidecar/product-3.jpg',
+    )
+
+    // --- Sidecar project (first-party product, flagship live at blackhartconsulting.com/sidecar/kajabi) ---
+    const sidecarProject: any = {
+      title: 'Sidecar — One-Click Data Export for Kajabi',
+      slug: 'sidecar',
+      summary: 'A Manifest V3 browser extension that overlays Kajabi and adds the one-click CSV, JSON and full-profile export its dashboard refuses to give you — built on a reusable engine designed to ship the same fix across a whole portfolio of locked-in platforms. Every export runs in the browser; nothing leaves the device. Built, validated on a live account, and submitted to the Chrome Web Store.',
+      client: 'Black Hart Consulting (first-party product)',
+      industry: 'Creator Economy / SaaS Tools',
+      projectType: 'webapp',
+      year: 2026,
+      duration: 'days, not weeks',
+      teamSize: 1,
+      liveUrl: 'https://blackhartconsulting.com/sidecar/kajabi',
+      ...(scHero?.id ? { heroImage: scHero.id } : {}),
+      stack: [
+        { name: 'TypeScript', category: 'language' },
+        { name: 'Manifest V3 (Chrome Extension)', category: 'framework' },
+        { name: 'Vite 8 + @crxjs/vite-plugin', category: 'tool' },
+        { name: 'Shadow DOM (isolated UI)', category: 'framework' },
+        { name: 'ExtensionPay + Stripe', category: 'tool' },
+        { name: 'npm workspaces (monorepo)', category: 'tool' },
+        { name: 'Chrome Web Store', category: 'hosting' },
+      ],
+      challenge: rtDoc([
+        ['p', 'Kajabi runs the businesses of hundreds of thousands of creators on $200–400/month plans, but it will not let them take their own data with them. There is no public API, the contact list shows only a fraction of the fields it actually stores, and the one built-in export is a slow CSV that gets emailed to you and expires in three days. Plenty of people end up copy-pasting rows by hand.'],
+        ['p', 'The brief had two layers. Build the export Kajabi withholds — cleanly and safely, inside a dashboard we do not control and must not break. And build it so the same fix can ship for the next locked-in platform, and the one after that, without starting from scratch each time.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'An overlay, not an integration'],
+        ['p', 'Kajabi has no API to connect to, so Sidecar does not try. A Manifest V3 content script injects a small export bar directly above Kajabi’s own tables — People, Sales, Analytics — inside the dashboard the user is already logged into. The whole UI lives in a Shadow DOM, so the host’s styles can’t break it and it can’t break Kajabi.'],
+        ['h3', 'The real product is a reusable engine'],
+        ['p', 'The valuable part isn’t the Kajabi extension — it’s @sidecar/core: a shared engine for mounting, Shadow-DOM widgets, settings, a centralized selector registry with a self-check, scraping, export, and ExtensionPay licensing. A whole new target is roughly six thin files — config, selectors, manifest and entry points — layered over that core. Kajabi is the flagship; Teachable, Thinkific and an email-billing cluster ride the same rails.'],
+        ['h3', 'Resilient to a host you don’t control'],
+        ['p', 'Every selector for a platform lives in one registry behind a self-check and a kill-switch, so when Kajabi ships a DOM change the extension degrades safely instead of silently exporting garbage. The targets are validated on a live account, never guessed — Kajabi’s contact table is a table.sage-table that sits outside the page’s main element, exactly the kind of detail you only learn by checking.'],
+        ['h3', 'Full export — the Pro feature that earns its price'],
+        ['p', 'Kajabi’s list shows six columns; the other nine — phone, mobile, address, city, state, country, zip, tags and custom fields — live on each contact’s profile page. Full export fetches each profile in the user’s own logged-in session, parses the server-rendered fields, and assembles all fifteen with bounded concurrency. Instant and on-device, versus Kajabi’s slow, emailed, three-day-expiry file.'],
+        ['h3', 'Privacy as a hard constraint — and a real business model'],
+        ['p', 'Everything runs in the browser: no servers, no analytics, no data off the device — the only network calls are to the user’s own Kajabi pages. Free one-click CSV is the hook; Pro ($5/mo or $39 lifetime) unlocks JSON and Full export, gated by ExtensionPay on top of Black Hart’s existing Stripe. Each platform ships as its own Chrome Web Store listing, with scoped permissions and isolated payouts.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'Shipped the flagship — Sidecar for Kajabi — built, validated on a live Kajabi account, and submitted to the Chrome Web Store, with the reusable engine behind it ready for the next platform.'],
+        ['ul', [
+          'A Manifest V3 extension that injects a one-click export bar over every Kajabi table — People, Sales and Analytics.',
+          'Free CSV; a Pro tier adding JSON and Full export, which recovers all 15 contact fields from the 6 the list shows.',
+          '@sidecar/core — a shared engine (selectors + self-check, kill-switch, scraping, export, licensing) that turns a new target into roughly six files.',
+          'ExtensionPay + Stripe billing at $5/mo or $39 lifetime, with per-extension store listings and isolated payouts.',
+          'A Black Hart–themed marketing, support and privacy site, plus a full set of Chrome Web Store assets, submitted for review.',
+          'Six platforms mapped on the roadmap: Kajabi → Teachable → Thinkific, then an email-billing cluster.',
+        ]],
+        ['p', 'Honest status: the flagship is submitted and awaiting Chrome Web Store review. The bet isn’t a single extension — it’s the engine that turns each approval into a repeatable, privacy-first product line.'],
+      ]),
+      metrics: [
+        { value: '15', label: 'contact fields recovered, vs Kajabi’s 6' },
+        { value: '~6', label: 'files to ship the next platform' },
+        { value: '6', label: 'platforms on the roadmap' },
+        { value: '100%', label: 'on-device — no servers, no tracking' },
+      ],
+      gallery: [
+        ...(scExportBar?.id ? [{
+          image: scExportBar.id,
+          caption: 'The injected export bar sits directly above Kajabi’s own contacts table — one click writes a clean CSV to your downloads, with no copy-paste and no waiting on an emailed file.',
+        }] : []),
+        ...(scFields?.id ? [{
+          image: scFields.id,
+          caption: 'Kajabi’s list shows six columns; the Pro Full export gathers all fifteen — phone, address, tags and custom fields — by reading each contact’s profile in the user’s own session.',
+        }] : []),
+        ...(scPricing?.id ? [{
+          image: scPricing.id,
+          caption: 'Free one-click CSV is the hook; Pro ($5/mo or $39 lifetime) unlocks JSON and Full export, billed through ExtensionPay on the existing Stripe account.',
+        }] : []),
+      ],
+      featured: true,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingSidecar = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: sidecarProject.slug } },
+      limit: 1,
+    })
+    if (existingSidecar.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: sidecarProject })
+      payload.logger.info('[seed] project created: sidecar')
+    } else if (process.env.FORCE_SIDECAR_UPSERT === 'true') {
+      await payload.update({
+        collection: 'projects',
+        id: existingSidecar.docs[0].id,
+        data: sidecarProject,
+      })
+      payload.logger.info('[seed] project upserted: sidecar (FORCE_SIDECAR_UPSERT)')
+    }
+
     // --- Article hero images (Unsplash, downloaded into public/seed-assets/articles/) ---
     const articleHeroNextjs = await ensureMedia(
       'Why Next.js over WordPress \u2014 laptop displaying source code on a dark background',

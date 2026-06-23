@@ -1401,6 +1401,113 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: scrubbr (FORCE_SCRUBBR_UPSERT)')
     }
 
+    // --- Sidecar for Teachable media uploads (store captures of the shipped extension) ---
+    const stHero = await ensureMedia(
+      'Sidecar for Teachable — the one-click export bar above the students table',
+      'public/seed-assets/sidecar-teachable/hero.jpg',
+    )
+    const stFull = await ensureMedia(
+      'Sidecar for Teachable — Full export pulls every field across every page (10 → 15)',
+      'public/seed-assets/sidecar-teachable/full-export.jpg',
+    )
+    const stPain = await ensureMedia(
+      'Sidecar for Teachable — instant on-device export vs Teachable’s 24-minute emailed CSV',
+      'public/seed-assets/sidecar-teachable/pain-point.jpg',
+    )
+    const stPricing = await ensureMedia(
+      'Sidecar for Teachable — free CSV, Pro unlocks the full toolkit',
+      'public/seed-assets/sidecar-teachable/pricing.jpg',
+    )
+
+    // --- Sidecar for Teachable project (first-party product — the engine’s second platform) ---
+    const sidecarTeachableProject: any = {
+      title: 'Sidecar — One-Click Student Export for Teachable',
+      slug: 'sidecar-teachable',
+      summary:
+        'The second extension in the Sidecar line: a Manifest V3 browser extension that adds one-click CSV, Excel, PDF and JSON export to the Teachable admin — plus a Pro “Full export” that taps Teachable’s own API to pull every student, across every page, with every field. Built in a day on the shared @sidecar/core engine, dependency-free, entirely on-device, and submitted to the Chrome Web Store.',
+      client: 'Black Hart Consulting (first-party product)',
+      industry: 'Online Course Platforms / Creator Tools',
+      projectType: 'webapp',
+      year: 2026,
+      duration: '1 day on the shared engine',
+      teamSize: 1,
+      liveUrl: 'https://blackhartconsulting.com/sidecar/teachable',
+      ...(stHero?.id ? { heroImage: stHero.id } : {}),
+      stack: [
+        { name: 'TypeScript', category: 'language' },
+        { name: 'Manifest V3 (Chrome Extension)', category: 'framework' },
+        { name: 'Vite 8 + @crxjs/vite-plugin', category: 'tool' },
+        { name: 'Shadow DOM (isolated UI)', category: 'framework' },
+        { name: 'Hand-rolled OOXML + PDF writers', category: 'tool' },
+        { name: 'ExtensionPay + Stripe', category: 'tool' },
+        { name: 'Chrome Web Store', category: 'hosting' },
+      ],
+      challenge: rtDoc([
+        ['p', 'Teachable runs the course businesses of hundreds of thousands of creators, but getting your own student list out is a chore. The built-in export emails you a CSV that expires in about 24 minutes; the admin paginates 25 students at a time; and the richer fields — phone, tags, sign-up source, sign-in history, address — never appear in the list at all. Even the bulk tools sit behind a paywall.'],
+        ['p', 'The deeper goal was to prove a thesis. Sidecar for Kajabi had shipped on a reusable engine we claimed could deliver the same fix across platform after platform. Teachable was the test: build a second, more capable extension in a fraction of the time, on the same core, without starting over.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'A second platform on the same engine'],
+        ['p', 'The whole extension is a thin layer over @sidecar/core — config, selectors, a manifest and entry points. We validated the live admin rather than guessing: Teachable’s students list is a real table.tch-table.student-table that paginates 25 rows at a time, and the shared scraper handled its header-in-the-body markup with no core change.'],
+        ['h3', 'Reverse-engineering Teachable’s own API'],
+        ['p', 'Unlike Kajabi’s server-rendered profiles, Teachable’s admin is a client-rendered single-page app — fetching a page just returns an empty shell. So we traced the dashboard’s own network calls to /api/v1/users?page=N, a JSON endpoint that returns every field for every user with clean pagination metadata. Full export pages through it in the user’s own logged-in session, filters to enrolled students, and assembles all fifteen fields across every page — collapsing “all pages” and “all fields” into one feature.'],
+        ['h3', 'Dependency-free Excel and PDF, written by hand'],
+        ['p', 'Rather than inject hundreds of kilobytes of SheetJS and jsPDF into a content script, we hand-rolled the writers: a minimal ZIP plus an OOXML worksheet for real .xlsx, and a from-scratch PDF generator (Helvetica, WinAnsi encoding, true pagination) for the branded report. The whole extension is about 11 KB gzipped — and there is no remote code for Chrome’s reviewers to question.'],
+        ['h3', 'A richer Pro tier, validated live'],
+        ['p', 'Free one-click CSV is the hook; Pro adds JSON and Excel export, a branded PDF report, an on-page Insights panel (revenue, roles, top students), and the Full export. Every feature was validated on a live Teachable account — the exported workbook checked field-by-field against the dashboard before submitting. Privacy stays absolute: nothing leaves the browser except the call to Teachable’s own API, on the user’s click.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'Shipped Sidecar’s second extension — built in a day on the shared engine, validated live, and submitted to the Chrome Web Store.'],
+        ['ul', [
+          'A Manifest V3 extension that adds a one-click export bar above the Teachable students table — CSV free; JSON, Excel, a PDF report and an Insights panel on Pro.',
+          'Full export — pages through Teachable’s /api/v1/users API to pull every student across every page with all 15 fields, far beyond the 10 columns the dashboard shows.',
+          'Dependency-free .xlsx and PDF writers added to @sidecar/core, so the whole bundle stays ~11 KB gzipped with zero remote code.',
+          'A Black Hart–themed marketing, support and privacy site at blackhartconsulting.com/sidecar/teachable, plus a complete Chrome Web Store listing, submitted for review.',
+          'Proof of the thesis: a second platform shipped on the same core, validating the engine that makes each new target cheap.',
+        ]],
+        ['p', 'Two extensions now sit in the Chrome Web Store pipeline from a single engine. Next on the same rails: Thinkific.'],
+      ]),
+      metrics: [
+        { value: '15', label: 'student fields, across every page' },
+        { value: '~11 KB', label: 'bundle gzipped — xlsx & PDF hand-rolled' },
+        { value: '1 day', label: 'to ship on the shared engine' },
+        { value: '100%', label: 'on-device — no servers, no tracking' },
+      ],
+      gallery: [
+        ...(stFull?.id ? [{
+          image: stFull.id,
+          caption: 'The dashboard shows ten columns on one page; the Pro Full export gathers all fifteen fields — phone, tags, sign-up source, sign-in stats, address — for every student across every page, by paging through Teachable’s own API.',
+        }] : []),
+        ...(stPain?.id ? [{
+          image: stPain.id,
+          caption: 'Teachable’s built-in export emails a CSV that expires in about 24 minutes. Sidecar writes the file to your downloads instantly, on your device, with no email round-trip.',
+        }] : []),
+        ...(stPricing?.id ? [{
+          image: stPricing.id,
+          caption: 'Free one-click CSV is the hook; Pro ($5/mo or $39 lifetime) unlocks JSON and Excel export, a PDF report, Insights, and the Full export — billed through ExtensionPay on the existing Stripe account.',
+        }] : []),
+      ],
+      featured: false,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingSidecarTeachable = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: sidecarTeachableProject.slug } },
+      limit: 1,
+    })
+    if (existingSidecarTeachable.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: sidecarTeachableProject })
+      payload.logger.info('[seed] project created: sidecar-teachable')
+    } else if (process.env.FORCE_SIDECAR_TEACHABLE_UPSERT === 'true') {
+      await payload.update({
+        collection: 'projects',
+        id: existingSidecarTeachable.docs[0].id,
+        data: sidecarTeachableProject,
+      })
+      payload.logger.info('[seed] project upserted: sidecar-teachable (FORCE_SIDECAR_TEACHABLE_UPSERT)')
+    }
+
     // --- Article hero images (Unsplash, downloaded into public/seed-assets/articles/) ---
     const articleHeroNextjs = await ensureMedia(
       'Why Next.js over WordPress \u2014 laptop displaying source code on a dark background',

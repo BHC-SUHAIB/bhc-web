@@ -1299,6 +1299,108 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: sidecar (FORCE_SIDECAR_UPSERT)')
     }
 
+    // --- Scrubbr media uploads (captures of the live tool at scrubbr.pro) ---
+    const scrubHero = await ensureMedia('Scrubbr — homepage hero', 'public/seed-assets/scrubbr/hero.png')
+    const scrubMeta = await ensureMedia('Scrubbr — metadata inspection panel', 'public/seed-assets/scrubbr/metadata.png')
+    const scrubRedact = await ensureMedia('Scrubbr — true PDF redaction canvas', 'public/seed-assets/scrubbr/redact.png')
+    const scrubVerify = await ensureMedia('Scrubbr — removal verification report', 'public/seed-assets/scrubbr/verify.png')
+    const scrubPro = await ensureMedia('Scrubbr — Pro unlock', 'public/seed-assets/scrubbr/pro.png')
+
+    // --- Scrubbr project (first-party product, live at scrubbr.pro) ---
+    const scrubbrProject: any = {
+      title: 'Scrubbr — In-Browser Metadata Scrubber & True Redactor',
+      slug: 'scrubbr',
+      summary:
+        'A 100%-in-browser tool that strips hidden metadata from PDFs and images and performs true redaction — destroying the text and pixels under your boxes, not just covering them — then re-parses the output to prove removal. No upload endpoint exists; files never leave the device. Built and launched in a single session: live, taking real payments, and scoring a perfect 100 across Lighthouse.',
+      client: 'Black Hart Consulting (first-party product)',
+      industry: 'Privacy / Security Tools',
+      projectType: 'webapp',
+      year: 2026,
+      duration: 'one session (10 commits, build to launch)',
+      teamSize: 1,
+      liveUrl: 'https://scrubbr.pro',
+      ...(scrubHero?.id ? { heroImage: scrubHero.id } : {}),
+      stack: [
+        { name: 'React 19 + Vite 8', category: 'framework' },
+        { name: 'TypeScript', category: 'language' },
+        { name: 'pdf-lib + pdf.js', category: 'tool' },
+        { name: 'exifr + piexifjs (EXIF)', category: 'tool' },
+        { name: 'Stripe Checkout + serverless', category: 'tool' },
+        { name: 'Resend (license email)', category: 'tool' },
+        { name: 'Vercel', category: 'hosting' },
+      ],
+      challenge: rtDoc([
+        ['p', 'The “private PDF tool” space is crowded, but the two operations people actually need to do safely — strip a file’s hidden metadata, and redact it so the underlying text is truly gone — were missing client-side. Every online option uploads your file to a server, asking you to trust a deletion policy you can’t verify.'],
+        ['p', 'And most “redaction” is a black rectangle drawn on top: the original text sits underneath, fully selectable and extractable — a well-documented way sensitive documents leak. We wanted a tool that removes the data for real, never uploads the file, and can prove both.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'Everything in the browser — no upload endpoint exists'],
+        ['p', 'Metadata reading, scrubbing, redaction and verification all run locally in JavaScript and WebAssembly. There is no server that receives files. Even pdf.js’s worker, fonts and CMaps are bundled as local assets, so the heavy PDF path makes no third-party request either — the only network calls the app can make are licensing, which carry a key and never a file. You can confirm it in the network tab.'],
+        ['h3', 'True redaction by flattening, not covering'],
+        ['p', 'For each marked PDF page we render it to a high-resolution raster, paint the redaction boxes onto the image, and rebuild the page from that flattened raster — so the underlying text and vector objects no longer exist in the file. Images are burned in at the pixel level. Pages you don’t mark are copied through untouched, so their text stays selectable.'],
+        ['h3', 'Verification that re-parses the real bytes'],
+        ['p', 'The differentiator is the verify step. After scrubbing, we re-open the output and confirm each removed field is gone; after redaction, we re-extract the text that sat under the boxes and prove none of it survived, and that flattened pages yield zero extractable text. It checks the output, not the intention.'],
+        ['h3', 'Lossless image stripping'],
+        ['p', 'For JPEG and PNG we rewrite the container — dropping the EXIF, GPS, IPTC and XMP segments and chunks — without recompressing, so the image is byte-for-byte preserved and GPS can be removed on its own while keeping the rest of EXIF.'],
+        ['h3', 'Built to be found, and to pay for itself'],
+        ['p', 'Eight high-intent routes are prerendered to static HTML — with SoftwareApplication, HowTo and FAQ JSON-LD — via a custom prerender step, no SSG framework, so the tool ranks and AI assistants can cite it. A $5 one-time Pro tier (batch + PDF/A) runs on Stripe Checkout through three small Vercel serverless functions with a stateless HMAC license, and Resend emails the key on purchase.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'Built and launched in a single working session: live at scrubbr.pro, taking real payments, and scoring a perfect 100/100/100/100 on Lighthouse.'],
+        ['ul', [
+          'Metadata scrub for PDFs (info dictionary, XMP, thumbnails) and images (EXIF, GPS, IPTC, XMP) — lossless for JPEG/PNG — with every field shown before removal.',
+          'True redaction for PDFs and images that destroys the content under each box, verified by re-extracting text from the output.',
+          'A verification step that re-parses the real output bytes to prove metadata is gone and redacted text is unrecoverable.',
+          'Eight prerendered SEO routes with JSON-LD, a 0.3s desktop load, and zero file-bearing network requests — confirmed in the network tab.',
+          'A $5 Pro tier (batch + PDF/A) on Stripe Checkout with serverless licensing and emailed keys via Resend.',
+        ]],
+        ['p', 'The whole premise is verifiable, not asserted: open your network tab and watch nothing leave your device.'],
+      ]),
+      metrics: [
+        { value: '0', label: 'files uploaded — 100% in your browser' },
+        { value: '4×100', label: 'Lighthouse: perf, a11y, SEO, best-practices' },
+        { value: '8', label: 'prerendered SEO routes' },
+        { value: '0.3s', label: 'desktop load (LCP)' },
+      ],
+      gallery: [
+        ...(scrubMeta?.id ? [{
+          image: scrubMeta.id,
+          caption: 'Drop in a file and every hidden field surfaces — author, software, GPS, timestamps — flagged and individually removable. Here, a confidential PDF’s eight metadata blocks, ready to strip.',
+        }] : []),
+        ...(scrubRedact?.id ? [{
+          image: scrubRedact.id,
+          caption: 'True redaction: drag a box over anything sensitive and the page is flattened so the text underneath is destroyed, not covered. No selectable text survives.',
+        }] : []),
+        ...(scrubVerify?.id ? [{
+          image: scrubVerify.id,
+          caption: 'The trust differentiator — Scrubbr re-parses the output bytes and confirms each field is actually gone. It verifies the result, not the intent.',
+        }] : []),
+        ...(scrubPro?.id ? [{
+          image: scrubPro.id,
+          caption: 'Free for single-file scrub, redact and verify; a $5 one-time Pro unlock adds batch processing and PDF/A export, billed through Stripe.',
+        }] : []),
+      ],
+      featured: true,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingScrubbr = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: scrubbrProject.slug } },
+      limit: 1,
+    })
+    if (existingScrubbr.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: scrubbrProject })
+      payload.logger.info('[seed] project created: scrubbr')
+    } else if (process.env.FORCE_SCRUBBR_UPSERT === 'true') {
+      await payload.update({
+        collection: 'projects',
+        id: existingScrubbr.docs[0].id,
+        data: scrubbrProject,
+      })
+      payload.logger.info('[seed] project upserted: scrubbr (FORCE_SCRUBBR_UPSERT)')
+    }
+
     // --- Article hero images (Unsplash, downloaded into public/seed-assets/articles/) ---
     const articleHeroNextjs = await ensureMedia(
       'Why Next.js over WordPress \u2014 laptop displaying source code on a dark background',

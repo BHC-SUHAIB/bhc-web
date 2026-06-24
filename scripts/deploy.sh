@@ -62,6 +62,17 @@ fi
 log "Building web image (Turbopack cache persists via BuildKit cache mounts)"
 docker compose build web
 
+# Clear containers left in 'created'/'exited' by a previously aborted deploy.
+# Compose won't reuse a half-created container, so `up` fails with "container
+# name already in use" and set -e aborts the whole deploy (recurring on prod).
+# Only removes NON-running containers — a healthy stack is untouched, since
+# compose rotates the running web container itself.
+log "Clearing any stale containers from a prior aborted deploy"
+STALE_WEB="$(docker ps -aq --filter name=bhc-web --filter status=created --filter status=exited)"
+if [[ -n "$STALE_WEB" ]]; then
+  docker rm -f $STALE_WEB >/dev/null 2>&1 || true
+fi
+
 log "Bringing the stack up"
 docker compose up -d
 

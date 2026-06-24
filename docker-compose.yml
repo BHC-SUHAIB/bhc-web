@@ -80,6 +80,8 @@ services:
       FORCE_PM_UPSERT: ${FORCE_PM_UPSERT:-}
       FORCE_WAYGFT_UPSERT: ${FORCE_WAYGFT_UPSERT:-}
       FORCE_MISBAH_UPSERT: ${FORCE_MISBAH_UPSERT:-}
+      FORCE_SIDECAR_UPSERT: ${FORCE_SIDECAR_UPSERT:-}
+      FORCE_SIDECAR_TEACHABLE_UPSERT: ${FORCE_SIDECAR_TEACHABLE_UPSERT:-}
       # Google PageSpeed Insights API key — used by the /api/pagespeed-audit
       # endpoint to authenticate requests against the project's own quota
       # (25k queries/day) instead of the shared anonymous tier. Optional:

@@ -1218,7 +1218,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     const sidecarProject: any = {
       title: 'Sidecar — One-Click Data Export for Kajabi',
       slug: 'sidecar',
-      summary: 'A Manifest V3 browser extension that overlays Kajabi and adds the one-click CSV, JSON and full-profile export its dashboard refuses to give you — built on a reusable engine designed to ship the same fix across a whole portfolio of locked-in platforms. Every export runs in the browser; nothing leaves the device. Built, validated on a live account, and submitted to the Chrome Web Store.',
+      summary: 'A Manifest V3 browser extension that overlays Kajabi and adds the one-click CSV, JSON and full-profile export its dashboard refuses to give you — built on a reusable engine designed to ship the same fix across a whole portfolio of locked-in platforms. Every export runs in the browser; nothing leaves the device. Built, validated on a live account, and now live on the Chrome Web Store.',
       client: 'Black Hart Consulting (first-party product)',
       industry: 'Creator Economy / SaaS Tools',
       projectType: 'webapp',
@@ -1253,16 +1253,16 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         ['p', 'Everything runs in the browser: no servers, no analytics, no data off the device — the only network calls are to the user’s own Kajabi pages. Free one-click CSV is the hook; Pro ($5/mo or $39 lifetime) unlocks JSON and Full export, gated by ExtensionPay on top of Black Hart’s existing Stripe. Each platform ships as its own Chrome Web Store listing, with scoped permissions and isolated payouts.'],
       ]),
       outcome: rtDoc([
-        ['p', 'Shipped the flagship — Sidecar for Kajabi — built, validated on a live Kajabi account, and submitted to the Chrome Web Store, with the reusable engine behind it ready for the next platform.'],
+        ['p', 'Shipped the flagship — Sidecar for Kajabi — built, validated on a live Kajabi account, and now published on the Chrome Web Store, with the reusable engine behind it ready for the next platform.'],
         ['ul', [
           'A Manifest V3 extension that injects a one-click export bar over every Kajabi table — People, Sales and Analytics.',
           'Free CSV; a Pro tier adding JSON and Full export, which recovers all 15 contact fields from the 6 the list shows.',
           '@sidecar/core — a shared engine (selectors + self-check, kill-switch, scraping, export, licensing) that turns a new target into roughly six files.',
           'ExtensionPay + Stripe billing at $5/mo or $39 lifetime, with per-extension store listings and isolated payouts.',
-          'A Black Hart–themed marketing, support and privacy site, plus a full set of Chrome Web Store assets, submitted for review.',
+          'A Black Hart–themed marketing, support and privacy site, plus a full set of Chrome Web Store assets; the listing is now live.',
           'Six platforms mapped on the roadmap: Kajabi → Teachable → Thinkific, then an email-billing cluster.',
         ]],
-        ['p', 'Honest status: the flagship is submitted and awaiting Chrome Web Store review. The bet isn’t a single extension — it’s the engine that turns each approval into a repeatable, privacy-first product line.'],
+        ['p', 'The flagship is live on the Chrome Web Store, installable today. The bet isn’t a single extension — it’s the engine that turns each approval into a repeatable, privacy-first product line.'],
       ]),
       metrics: [
         { value: '15', label: 'contact fields recovered, vs Kajabi’s 6' },
@@ -1430,7 +1430,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       title: 'Sidecar — One-Click Student Export for Teachable',
       slug: 'sidecar-teachable',
       summary:
-        'The second extension in the Sidecar line: a Manifest V3 browser extension that adds one-click CSV, Excel, PDF and JSON export to the Teachable admin — plus a Pro “Full export” that taps Teachable’s own API to pull every student, across every page, with every field. Built in a day on the shared @sidecar/core engine, dependency-free, entirely on-device, and submitted to the Chrome Web Store.',
+        'The second extension in the Sidecar line: a Manifest V3 browser extension that adds one-click CSV, Excel, PDF and JSON export to the Teachable admin — plus a Pro “Full export” that taps Teachable’s own API to pull every student, across every page, with every field. Built in a day on the shared @sidecar/core engine, dependency-free, entirely on-device, and now live on the Chrome Web Store.',
       client: 'Black Hart Consulting (first-party product)',
       industry: 'Online Course Platforms / Creator Tools',
       projectType: 'webapp',
@@ -1463,15 +1463,15 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         ['p', 'Free one-click CSV is the hook; Pro adds JSON and Excel export, a branded PDF report, an on-page Insights panel (revenue, roles, top students), and the Full export. Every feature was validated on a live Teachable account — the exported workbook checked field-by-field against the dashboard before submitting. Privacy stays absolute: nothing leaves the browser except the call to Teachable’s own API, on the user’s click.'],
       ]),
       outcome: rtDoc([
-        ['p', 'Shipped Sidecar’s second extension — built in a day on the shared engine, validated live, and submitted to the Chrome Web Store.'],
+        ['p', 'Shipped Sidecar’s second extension — built in a day on the shared engine, validated live, and now published on the Chrome Web Store.'],
         ['ul', [
           'A Manifest V3 extension that adds a one-click export bar above the Teachable students table — CSV free; JSON, Excel, a PDF report and an Insights panel on Pro.',
           'Full export — pages through Teachable’s /api/v1/users API to pull every student across every page with all 15 fields, far beyond the 10 columns the dashboard shows.',
           'Dependency-free .xlsx and PDF writers added to @sidecar/core, so the whole bundle stays ~11 KB gzipped with zero remote code.',
-          'A Black Hart–themed marketing, support and privacy site at blackhartconsulting.com/sidecar/teachable, plus a complete Chrome Web Store listing, submitted for review.',
+          'A Black Hart–themed marketing, support and privacy site at blackhartconsulting.com/sidecar/teachable, plus a complete Chrome Web Store listing, now live.',
           'Proof of the thesis: a second platform shipped on the same core, validating the engine that makes each new target cheap.',
         ]],
-        ['p', 'Two extensions now sit in the Chrome Web Store pipeline from a single engine. Next on the same rails: Thinkific.'],
+        ['p', 'Two extensions are now live in the Chrome Web Store from a single engine. Next on the same rails: Thinkific.'],
       ]),
       metrics: [
         { value: '15', label: 'student fields, across every page' },

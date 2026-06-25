@@ -5,6 +5,11 @@
 export const LP_PHONE_DISPLAY = '(346) 560-5430'
 export const LP_PHONE_HREF = 'tel:+13465605430'
 
+// Confirmed Calendly booking link (discovery call). Single source of truth for
+// the "book a call" CTA shown alongside the contact form. Button.tsx forces
+// same-tab navigation for Calendly URLs so the redirect-back flow still works.
+export const BOOKING_URL = 'https://calendly.com/suhaib-blackhartconsulting/discovery-call'
+
 // Turn a display phone number like "(866) 434-9777" into a tel: href.
 // Keeps a leading + if present; strips everything else non-digit.
 export function phoneHref(display: string | null | undefined): string | null {

@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import { getCachedPageBySlug } from '@/lib/payload-cache'
 import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
+import { JsonLd } from '@/components/JsonLd'
+import { buildBreadcrumbJsonLd } from '@/lib/schema'
 import type { Page, Media } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
@@ -33,5 +35,15 @@ export default async function DynamicPage({ params }: Args) {
   const { slug } = await params
   const page = await loadPage(slug)
   if (!page) notFound()
-  return <RenderBlocks blocks={page.layout ?? []} pageSlug={slug} />
+  return (
+    <>
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: page.title, path: `/${slug}` },
+        ])}
+      />
+      <RenderBlocks blocks={page.layout ?? []} pageSlug={slug} />
+    </>
+  )
 }

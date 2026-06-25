@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { denyIfCrossOrigin, rateLimitFivePerHour } from '@/lib/api-guards'
 
 export const ContactSubmissions: CollectionConfig = {
   slug: 'contact-submissions',
@@ -21,18 +22,40 @@ export const ContactSubmissions: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      ({ data, req }) => {
+      ({ data, req, operation }) => {
         if (!data) return data
+        const ipKey = (req.headers?.get?.('x-forwarded-for')?.split(',')[0] ?? '').trim() || 'unknown'
+
+        // Spam hardening for the PUBLIC create path only. Admin-created or
+        // server-side records carry an authenticated user (or no HTTP method),
+        // so they skip the origin + rate-limit checks. A honeypot alone is
+        // weak for a lead form that attracts bot spam.
+        const isPublicHttpPost =
+          !req.user && typeof req.method === 'string' && req.method.toUpperCase() === 'POST'
+        if (operation === 'create' && isPublicHttpPost) {
+          // CSRF / cross-origin: reject POSTs whose Origin/Referer is not our
+          // own domain. Same-origin form posts and non-browser tools pass.
+          if (denyIfCrossOrigin(req as unknown as Request)) {
+            req.payload.logger.warn({ ip: ipKey }, '[contact] cross-origin POST blocked')
+            throw new Error('Invalid submission')
+          }
+          // Rate limit: 5 submissions per hour per IP. Blunts bulk bot spam
+          // with no third-party dependency or CAPTCHA.
+          if (!rateLimitFivePerHour(`contact:${ipKey}`)) {
+            req.payload.logger.warn({ ip: ipKey }, '[contact] rate limit exceeded')
+            throw new Error('Too many submissions. Please wait a bit and try again.')
+          }
+        }
+
         // Honeypot: real humans never see this field, so any non-empty value
         // flags a bot and we reject it without creating a record.
         if (typeof data.honeypot === 'string' && data.honeypot.trim().length > 0) {
-          req.payload.logger.warn({ ip: req.headers?.get?.('x-forwarded-for'), email: data.email }, '[contact] spam dropped (honeypot)')
+          req.payload.logger.warn({ ip: ipKey, email: data.email }, '[contact] spam dropped (honeypot)')
           throw new Error('Invalid submission')
         }
         // Capture the source IP so we can rate-limit / block later.
         if (!data.ipAddress) {
-          const fwd = req.headers?.get?.('x-forwarded-for')
-          data.ipAddress = (fwd?.split(',')[0] ?? '').trim() || undefined
+          data.ipAddress = ipKey === 'unknown' ? undefined : ipKey
         }
         return data
       },

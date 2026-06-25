@@ -9,6 +9,8 @@ import { Placeholder } from '@/components/Placeholder'
 import { RichTextRenderer } from '@/blocks/render/RichTextRenderer'
 import { getCachedProjectBySlug } from '@/lib/payload-cache'
 import { canonical } from '@/lib/seo'
+import { JsonLd } from '@/components/JsonLd'
+import { buildBreadcrumbJsonLd, buildCreativeWorkJsonLd } from '@/lib/schema'
 import { ArrowUpRight } from 'lucide-react'
 import type { Media } from '@/payload-types'
 
@@ -46,6 +48,14 @@ export default async function ProjectPage({ params }: Args) {
 
   return (
     <article className="lp-pad-bottom">
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Portfolio', path: '/portfolio' },
+          { name: p.title, path: `/portfolio/${slug}` },
+        ])}
+      />
+      <JsonLd data={buildCreativeWorkJsonLd({ title: p.title, slug: p.slug ?? slug, excerpt: p.summary })} />
       {/* Hero: breadcrumb, eyebrow, title, lede, then the wide cover image. */}
       <section className="section-tight">
         <Container size="lg">

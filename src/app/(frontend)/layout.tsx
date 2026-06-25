@@ -7,6 +7,8 @@ import { getCachedHeader, getCachedFooter, getCachedSiteSettings } from '@/lib/p
 import { ScrollFx } from '@/components/ScrollFx'
 import { MobileCta } from '@/components/MobileCta'
 import { ExitIntentModal } from '@/components/ExitIntentModal'
+import { JsonLd } from '@/components/JsonLd'
+import { buildLocalBusinessJsonLd } from '@/lib/schema'
 import '../globals.css'
 
 // Search engine ownership verification. Tokens come from each console's
@@ -67,6 +69,10 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       className={`${manrope.variable} ${fraunces.variable} ${jetbrains.variable}`}
     >
       <head>
+        {/* Sitewide LocalBusiness (ProfessionalService) structured data, built
+            from SiteSettings so NAP stays consistent across every page and
+            areaServed is the Houston metro, not "Worldwide". */}
+        <JsonLd data={buildLocalBusinessJsonLd(siteSettings)} />
         {cdnOrigin ? (
           <>
             <link rel="preconnect" href={cdnOrigin} crossOrigin="" />

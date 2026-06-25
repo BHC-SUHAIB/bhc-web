@@ -471,9 +471,9 @@ export const CalendlyBooking: Block = {
       name: 'calendlyUrl',
       type: 'text',
       required: true,
-      defaultValue: 'https://calendly.com/blackhartconsulting/30min',
+      defaultValue: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call',
       admin: {
-        description: 'Your full Calendly event URL (e.g. https://calendly.com/blackhartconsulting/30min). Update once in your account, paste here.',
+        description: 'Your full Calendly event URL (e.g. https://calendly.com/suhaib-blackhartconsulting/discovery-call). Update once in your account, paste here.',
       },
     },
     {

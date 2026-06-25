@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import { useState, type FormEvent } from 'react'
-import { Mail, Phone, MapPin, Clock, Check } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Check, Calendar } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
-import { phoneHref, mailtoHref } from '@/lib/contact'
+import { phoneHref, mailtoHref, BOOKING_URL } from '@/lib/contact'
 import { SMS_DISCLAIMER_TEXT, SMS_CHECKBOX_LABEL } from '@/lib/sms-disclaimer'
 import { pushEvent } from '@/lib/analytics'
 import type { ContactFormBlockBlock } from '@/payload-types'
@@ -290,6 +290,31 @@ export function ContactForm(b: ContactFormProps) {
           </div>
 
           <div className="contact-aside">
+            {/* Co-primary booking path (Model A hybrid): high-intent visitors
+                can grab a time without typing. Sits right beside the form. */}
+            <div className="rounded-[var(--radius-md)] border border-[var(--color-border-strong)] bg-[var(--color-surface)] p-5">
+              <div className="flex items-center gap-2">
+                <Calendar aria-hidden className="size-4 text-[var(--color-brass)]" />
+                <b className="font-medium text-[var(--color-fg)]">Prefer to talk first?</b>
+              </div>
+              <p className="mt-1.5 text-[13px] leading-[1.5] text-[var(--color-fg-muted)]">
+                Grab a 30-minute intro call. We cover what you need, what it costs, and whether it is a fit. No hard sell.
+              </p>
+              <Button
+                href={BOOKING_URL}
+                variant="brass"
+                size="sm"
+                className="mt-3 w-full sm:w-auto"
+                onClick={() =>
+                  pushEvent('booking_click', {
+                    source_page: typeof window !== 'undefined' ? window.location.pathname : '',
+                    location: 'contact_form_aside',
+                  })
+                }
+              >
+                Book a 30-min call
+              </Button>
+            </div>
             {contactEmail && emailHref ? (
               <a
                 href={emailHref}

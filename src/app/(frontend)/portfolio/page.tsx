@@ -6,6 +6,8 @@ import { Button } from '@/components/Button'
 import { Placeholder } from '@/components/Placeholder'
 import { getCachedProjectsList } from '@/lib/payload-cache'
 import { canonical } from '@/lib/seo'
+import { JsonLd } from '@/components/JsonLd'
+import { buildBreadcrumbJsonLd } from '@/lib/schema'
 import type { Media } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
@@ -32,6 +34,12 @@ export default async function PortfolioPage() {
 
   return (
     <div className="lp-pad-bottom">
+      <JsonLd
+        data={buildBreadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Portfolio', path: '/portfolio' },
+        ])}
+      />
       {/* Full-bleed photo hero — Warm Mono `.hero-photo` treatment. The dark
           gradient that keeps the headline legible is baked into the CSS
           (`.hero-photo .hp-bg::after`), so no inline overlay is needed. */}

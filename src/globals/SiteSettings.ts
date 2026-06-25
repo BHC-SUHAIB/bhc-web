@@ -68,5 +68,33 @@ export const SiteSettings: GlobalConfig = {
       ],
       admin: { description: 'Timezone used for displaying dates in the admin dashboard + branded emails.' },
     },
+
+    // Local SEO / NAP. Drives the sitewide LocalBusiness (ProfessionalService)
+    // JSON-LD built in src/lib/schema.ts. Keep these identical to the Google
+    // Business Profile so Google reads one consistent NAP everywhere.
+    {
+      type: 'group',
+      name: 'localSeo',
+      label: 'Local SEO / NAP',
+      admin: { description: 'Name, address, geo, hours, and social profiles used to build LocalBusiness structured data for the Google Local Pack. Keep identical to your Google Business Profile.' },
+      fields: [
+        { name: 'streetAddress', type: 'text', admin: { description: 'Street address. Leave blank if you operate as a service-area business with no public storefront.' } },
+        { name: 'addressLocality', type: 'text', defaultValue: 'Houston' },
+        { name: 'addressRegion', type: 'text', defaultValue: 'TX' },
+        { name: 'postalCode', type: 'text', admin: { description: 'ZIP code. Leave blank if no public address is published.' } },
+        { name: 'addressCountry', type: 'text', defaultValue: 'US' },
+        { name: 'latitude', type: 'number', defaultValue: 29.7989, admin: { description: 'Service-area center latitude. Default is the Houston Heights centroid.' } },
+        { name: 'longitude', type: 'number', defaultValue: -95.3989, admin: { description: 'Service-area center longitude. Default is the Houston Heights centroid.' } },
+        { name: 'serviceRadiusMiles', type: 'number', defaultValue: 25, admin: { description: 'Service radius in miles, used for the GeoCircle areaServed.' } },
+        { name: 'openingHours', type: 'text', defaultValue: 'Mo-Fr 09:00-18:00', admin: { description: 'Schema.org openingHours string, e.g. "Mo-Fr 09:00-18:00".' } },
+        {
+          name: 'sameAs',
+          type: 'array',
+          label: 'Social / profile links (sameAs)',
+          admin: { description: 'Full https URLs for Google Business Profile, Clutch, LinkedIn, Instagram, etc. Feeds schema.org sameAs. Add these once they exist.' },
+          fields: [{ name: 'url', type: 'text' }],
+        },
+      ],
+    },
   ],
 }

@@ -66,9 +66,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   // Override the framework's default `Cache-Control: no-store` on dynamic
   // routes so browsers can use bf-cache for instant back/forward navigation
   // (Lighthouse audit 2026-05-05). The page is still revalidated on each

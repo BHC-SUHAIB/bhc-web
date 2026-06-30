@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       // Private, token-gated client ops tools. These already emit per-page
       // noindex and are absent from the sitemap; listing them here makes the
       // boundary explicit so the billing subsystem stays off the public site.
-      disallow: ['/admin', '/api/', '/p/', '/app-content/', '/privacy/misbahapp', '/misbah/', '/invoice/', '/portal/', '/care-plan/'],
+      disallow: ['/admin', '/api/', '/p/', '/app-content/', '/privacy/misbahapp', '/support/misbahapp', '/misbah/', '/invoice/', '/portal/', '/care-plan/'],
     },
     sitemap: `${SITE_URL.replace(/\/$/, '')}/sitemap.xml`,
   }

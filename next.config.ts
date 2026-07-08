@@ -95,6 +95,9 @@ const nextConfig: NextConfig = {
       { source: '/sidecar/teachable', destination: '/sidecar/teachable/index.html' },
       { source: '/sidecar/teachable/support', destination: '/sidecar/teachable/support.html' },
       { source: '/sidecar/teachable/privacy', destination: '/sidecar/teachable/privacy.html' },
+      { source: '/sidecar/thinkific', destination: '/sidecar/thinkific/index.html' },
+      { source: '/sidecar/thinkific/support', destination: '/sidecar/thinkific/support.html' },
+      { source: '/sidecar/thinkific/privacy', destination: '/sidecar/thinkific/privacy.html' },
     ]
   },
 

@@ -19,5 +19,12 @@
     "tiers": ["main"],
     "defaultTier": "main",
     "created": "2026-05-30"
+  },
+  "prometheuseq": {
+    "password": "Philip$11",
+    "label": "Prometheus EQ",
+    "tiers": ["main"],
+    "defaultTier": "main",
+    "created": "2026-07-09"
   }
 }

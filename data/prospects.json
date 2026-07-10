@@ -26,5 +26,12 @@
     "tiers": ["main"],
     "defaultTier": "main",
     "created": "2026-07-09"
+  },
+  "medtracker": {
+    "password": "Sooby$11",
+    "label": "Med Tracker",
+    "tiers": ["app"],
+    "defaultTier": "app",
+    "created": "2026-07-09"
   }
 }

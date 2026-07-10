@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#EFE9D9">
+<title>Antibiotic Course Tracker</title>
+<style>
+  /* ---- Black Hart "Heritage" palette (no CDN; system font stacks stand in
+         for Manrope / Fraunces / JetBrains Mono so the file runs offline) ---- */
+  :root{
+    --ivory:#EFE9D9;      /* primary warm surface */
+    --paper:#F6F2E7;      /* lifted card surface */
+    --ink:#1A1713;        /* primary text */
+    --ink-soft:#524a3f;   /* secondary text */
+    --green:#2F4A35;      /* racing green: brand, headings, links */
+    --green-deep:#243a29;
+    --lichen:#8A9A7B;     /* muted accent */
+    --parchment:#D6D0C2;  /* dividers, borders */
+    --brass:#B08D57;      /* single conversion / highlight accent */
+    --brass-deep:#8f6f3f;
+    --rust:#B0492E;       /* overdue (warm red) */
+    --rust-tint:#f3ded4;
+
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+
+    --r-sm:8px; --r-md:14px; --r-lg:20px;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 env(safe-area-inset-bottom);
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 16px 64px;}
+
+  /* ---------- Header ---------- */
+  header.top{
+    position:sticky;top:0;z-index:20;
+    background:rgba(239,233,217,0.94);
+    backdrop-filter:saturate(1.1) blur(8px);
+    border-bottom:1px solid var(--parchment);
+  }
+  .top-inner{max-width:640px;margin:0 auto;padding:12px 16px 12px;}
+  .brand{
+    font-family:var(--mono);
+    font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--brass-deep);margin:0 0 2px;display:flex;align-items:center;gap:7px;
+  }
+  .brand .heart{color:var(--green);font-size:12px;}
+  h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(22px,6vw,30px);
+    line-height:1.1;letter-spacing:-0.01em;
+    margin:0;color:var(--ink);
+  }
+  .subtitle{font-size:13px;color:var(--ink-soft);margin:3px 0 10px;}
+
+  /* overall progress */
+  .progress-overall{display:flex;align-items:center;gap:10px;}
+  .bar{
+    flex:1;height:9px;border-radius:999px;background:var(--parchment);overflow:hidden;
+  }
+  .bar > span{
+    display:block;height:100%;width:0;border-radius:999px;
+    background:linear-gradient(90deg,var(--green),var(--lichen));
+    transition:width .35s ease;
+  }
+  .progress-label{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.04em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .progress-label b{color:var(--green);font-weight:700;}
+
+  /* ---------- Day sections ---------- */
+  .day{margin-top:26px;scroll-margin-top:120px;}
+  .day-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    padding:0 2px 8px;border-bottom:1px solid var(--parchment);margin-bottom:12px;
+  }
+  .day-date{
+    font-family:var(--serif);font-weight:600;font-size:19px;color:var(--green);
+    letter-spacing:-0.01em;
+  }
+  .day-count{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .day.is-today .day-date::after{
+    content:"Today";
+    font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+    color:#fff;background:var(--brass);padding:2px 7px;border-radius:999px;
+    margin-left:9px;vertical-align:middle;
+  }
+  .day.is-today .day-head{border-bottom-color:var(--brass);}
+
+  /* ---------- Dose row ---------- */
+  .dose{
+    display:flex;gap:13px;align-items:flex-start;
+    background:var(--paper);
+    border:1px solid var(--parchment);
+    border-radius:var(--r-md);
+    padding:14px 15px;margin-bottom:10px;
+    cursor:pointer;user-select:none;
+    min-height:64px;
+    transition:border-color .2s ease, background .2s ease, box-shadow .2s ease, opacity .2s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .dose input{position:absolute;opacity:0;width:0;height:0;pointer-events:none;}
+
+  .dose-check{
+    flex:none;width:30px;height:30px;border-radius:9px;
+    border:2px solid var(--lichen);background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    margin-top:1px;transition:background .18s ease,border-color .18s ease,transform .12s ease;
+  }
+  .dose-check svg{width:18px;height:18px;stroke:#fff;stroke-width:3.2;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.6);
+    transition:opacity .15s ease,transform .15s ease;}
+  .dose:active .dose-check{transform:scale(.92);}
+
+  .dose-main{flex:1;min-width:0;}
+  .dose-line1{display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
+  .dose-time{font-weight:700;font-size:17px;letter-spacing:-0.01em;}
+  .dose-flag{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+    padding:2px 8px;border-radius:999px;font-weight:600;
+  }
+  .dose-med{
+    display:flex;align-items:center;gap:7px;
+    font-size:14px;color:var(--ink-soft);margin-top:3px;
+  }
+  .dose-med .dot{width:9px;height:9px;border-radius:999px;flex:none;}
+  .dot.clinda{background:var(--green);}
+  .dot.smztmp{background:var(--brass);}
+  .dose-note{
+    font-size:12.5px;color:var(--ink-soft);margin-top:6px;line-height:1.4;
+    display:flex;flex-wrap:wrap;gap:4px 12px;
+  }
+  .dose-note span{display:inline-flex;align-items:center;gap:5px;}
+  .dose-note .ic{color:var(--lichen);font-size:12px;}
+  .dose-taken{
+    display:none;margin-top:7px;
+    font-family:var(--mono);font-size:12px;letter-spacing:0.02em;
+    color:var(--green);font-weight:600;
+  }
+
+  /* ---- states ---- */
+  .dose.upcoming{}
+  .dose.upcoming .dose-flag{display:none;}
+
+  .dose.next-due{
+    border-color:var(--brass);
+    box-shadow:0 0 0 2px rgba(176,141,87,0.28), 0 6px 18px -12px rgba(176,141,87,0.6);
+    background:#fbf6ea;
+  }
+  .dose.next-due .dose-flag{display:inline-block;background:var(--brass);color:#fff;}
+  .dose.next-due .dose-check{border-color:var(--brass);}
+
+  .dose.overdue{
+    border-color:var(--rust);background:var(--rust-tint);
+  }
+  .dose.overdue .dose-flag{display:inline-block;background:var(--rust);color:#fff;}
+  .dose.overdue .dose-check{border-color:var(--rust);}
+  /* an overdue dose that is also the next one to take keeps the rust look
+     but shows an "Overdue" flag (handled in JS) */
+
+  .dose.taken{
+    background:#eef1e8;border-color:#cdd6c0;opacity:0.86;
+  }
+  .dose.taken .dose-check{background:var(--green);border-color:var(--green);}
+  .dose.taken .dose-check svg{opacity:1;transform:scale(1);}
+  .dose.taken .dose-time{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--lichen);}
+  .dose.taken .dose-flag{display:none;}
+  .dose.taken .dose-note{display:none;}
+  .dose.taken .dose-taken{display:block;}
+
+  /* ---------- Footer / reminders ---------- */
+  footer{margin-top:40px;border-top:1px solid var(--parchment);padding-top:18px;}
+  details.reminders{
+    background:var(--paper);border:1px solid var(--parchment);
+    border-radius:var(--r-md);padding:2px 16px;
+  }
+  details.reminders summary{
+    list-style:none;cursor:pointer;padding:13px 0;
+    font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--green);font-weight:700;display:flex;align-items:center;justify-content:space-between;
+  }
+  details.reminders summary::-webkit-details-marker{display:none;}
+  details.reminders summary .chev{transition:transform .2s ease;color:var(--brass-deep);}
+  details.reminders[open] summary .chev{transform:rotate(180deg);}
+  .reminders ul{margin:2px 0 16px;padding-left:18px;}
+  .reminders li{font-size:13.5px;color:var(--ink-soft);margin-bottom:11px;line-height:1.5;}
+  .reminders li strong{color:var(--ink);font-weight:700;}
+  .reminders li.warn strong{color:var(--rust);}
+
+  .foot-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin-top:18px;padding:0 2px;
+  }
+  .foot-note{font-size:11px;color:var(--ink-soft);line-height:1.4;}
+  .reset-btn{
+    flex:none;background:transparent;border:1px solid var(--parchment);
+    color:var(--ink-soft);font-family:var(--mono);font-size:10px;letter-spacing:0.08em;
+    text-transform:uppercase;padding:8px 12px;border-radius:999px;cursor:pointer;
+    transition:border-color .2s ease,color .2s ease;
+  }
+  .reset-btn:hover{border-color:var(--rust);color:var(--rust);}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;}
+  }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <p class="brand"><span class="heart">&#9829;</span> Black Hart &middot; Med Tracker</p>
+      <h1>Antibiotic Course</h1>
+      <p class="subtitle" id="range-sub"></p>
+      <div class="progress-overall">
+        <div class="bar"><span id="bar-fill"></span></div>
+        <div class="progress-label"><b id="p-taken">0</b> of <span id="p-total">0</span> doses</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="schedule"></div>
+
+    <footer>
+      <details class="reminders">
+        <summary>Reminders for this course <span class="chev">&#9662;</span></summary>
+        <ul>
+          <li><strong>Finish the full course</strong> even after the wound looks healed.</li>
+          <li>Keep your <strong>fluids up</strong> while on the Sulfamethoxazole / Trimethoprim.</li>
+          <li class="warn"><strong>Clindamycin:</strong> if frequent watery or bloody diarrhea develops, call the doctor and do not take anti-diarrheals.</li>
+          <li class="warn"><strong>Sulfamethoxazole / Trimethoprim is a sulfa drug:</strong> if a spreading rash, hives, facial swelling, or mouth sores develop, stop it and get seen.</li>
+        </ul>
+      </details>
+
+      <div class="foot-row">
+        <p class="foot-note">Saved on this device only. Times shown in your local time zone.</p>
+        <button class="reset-btn" id="reset">Reset</button>
+      </div>
+    </footer>
+  </main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     CONFIG  (edit these to shorten / extend the course)
+     ============================================================ */
+  var TREATMENT_DAYS = 7;          // number of FULL days that follow the July 9 evening start
+  var START_YEAR  = 2026;
+  var START_MONTH = 6;             // 0-indexed: 6 = July
+  var START_DAY   = 9;             // July 9, 2026
+  var FIRST_HOUR  = 18, FIRST_MIN = 30;   // first dose: 6:30 PM on the start day
+
+  var STORAGE_KEY = "medtracker_v1";
+
+  var CLINDA = "Clindamycin";
+  var SMZTMP = "Sulfamethoxazole / Trimethoprim";
+
+  // The five fixed daily dose times (local clock), one entry per dose.
+  var DAILY_SLOTS = [
+    { hour:0,  min:30, med:SMZTMP },   // 12:30 AM
+    { hour:2,  min:30, med:CLINDA },   //  2:30 AM
+    { hour:10, min:30, med:CLINDA },   // 10:30 AM
+    { hour:12, min:30, med:SMZTMP },   // 12:30 PM
+    { hour:18, min:30, med:CLINDA }    //  6:30 PM
+  ];
+
+  /* ============================================================
+     STATE  (persisted in localStorage)
+     ============================================================ */
+  var state = loadState();
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        var obj = JSON.parse(raw);
+        if(obj && obj.takenAt) return obj;
+      }
+    }catch(e){}
+    return { version:1, takenAt:{} };  // takenAt: { doseId: ISO string of when it was checked }
+  }
+  function saveState(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+
+  /* ============================================================
+     BUILD THE DOSE LIST  (generated from start + slots + length)
+     ============================================================ */
+  function pad(n){ return n < 10 ? "0"+n : ""+n; }
+
+  function buildDoses(){
+    var firstDose = new Date(START_YEAR, START_MONTH, START_DAY, FIRST_HOUR, FIRST_MIN, 0, 0);
+    // The course runs through the early morning of (start + TREATMENT_DAYS + 1).
+    // That final calendar day only carries its early-hours doses (12:30 AM, 2:30 AM).
+    var lastDay = START_DAY + TREATMENT_DAYS + 1;
+    var endDose = new Date(START_YEAR, START_MONTH, lastDay, 2, 30, 0, 0);
+
+    var doses = [];
+    for(var d = 0; d <= TREATMENT_DAYS + 1; d++){
+      for(var s = 0; s < DAILY_SLOTS.length; s++){
+        var slot = DAILY_SLOTS[s];
+        var t = new Date(START_YEAR, START_MONTH, START_DAY + d, slot.hour, slot.min, 0, 0);
+        if(t.getTime() < firstDose.getTime()) continue;  // skip slots already passed on the start day
+        if(t.getTime() > endDose.getTime()) continue;     // stop after the final early-morning dose
+        var code = (slot.med === CLINDA) ? "C" : "S";
+        var id = "" + t.getFullYear() + pad(t.getMonth()+1) + pad(t.getDate())
+                    + "-" + pad(t.getHours()) + pad(t.getMinutes()) + "-" + code;
+        doses.push({
+          id:   id,
+          time: t,
+          med:  slot.med,
+          isClinda: slot.med === CLINDA,
+          dateKey: t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate())
+        });
+      }
+    }
+    doses.sort(function(a,b){ return a.time - b.time; });
+    return doses;
+  }
+
+  var DOSES = buildDoses();
+
+  /* ============================================================
+     FORMATTING HELPERS
+     ============================================================ */
+  function fmtTime(dt){ return dt.toLocaleTimeString([], { hour:"numeric", minute:"2-digit" }); }
+  function fmtDayLong(dt){ return dt.toLocaleDateString([], { weekday:"long", month:"long", day:"numeric" }); }
+
+  function todayKey(){
+    var n = new Date();
+    return n.getFullYear()+"-"+pad(n.getMonth()+1)+"-"+pad(n.getDate());
+  }
+
+  /* ============================================================
+     RENDER  (structure built once, then updated dynamically)
+     ============================================================ */
+  var checkSvg = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+  function render(){
+    var root = document.getElementById("schedule");
+    var html = "";
+    var groups = [];      // preserve order
+    var seen = {};
+    DOSES.forEach(function(d){
+      if(!seen[d.dateKey]){ seen[d.dateKey] = []; groups.push(d.dateKey); }
+      seen[d.dateKey].push(d);
+    });
+
+    groups.forEach(function(key){
+      var list = seen[key];
+      var dayLabel = fmtDayLong(list[0].time);
+      html += '<section class="day" id="day-'+key+'" data-daykey="'+key+'">';
+      html +=   '<div class="day-head">';
+      html +=     '<span class="day-date">'+dayLabel+'</span>';
+      html +=     '<span class="day-count" id="count-'+key+'"></span>';
+      html +=   '</div>';
+
+      list.forEach(function(d){
+        var dotClass = d.isClinda ? "clinda" : "smztmp";
+        var note = '<span><span class="ic">&#9679;</span>Full glass of water</span>';
+        if(d.isClinda){
+          note += '<span><span class="ic">&#9679;</span>Stay upright ~10 min after</span>';
+        }
+        html += '<label class="dose" id="dose-'+d.id+'" for="cb-'+d.id+'">';
+        html +=   '<input type="checkbox" id="cb-'+d.id+'" data-id="'+d.id+'">';
+        html +=   '<span class="dose-check">'+checkSvg+'</span>';
+        html +=   '<span class="dose-main">';
+        html +=     '<span class="dose-line1">';
+        html +=       '<span class="dose-time">'+fmtTime(d.time)+'</span>';
+        html +=       '<span class="dose-flag"></span>';
+        html +=     '</span>';
+        html +=     '<span class="dose-med"><span class="dot '+dotClass+'"></span>'+d.med+'</span>';
+        html +=     '<span class="dose-note">'+note+'</span>';
+        html +=     '<span class="dose-taken"></span>';
+        html +=   '</span>';
+        html += '</label>';
+      });
+      html += '</section>';
+    });
+
+    root.innerHTML = html;
+
+    // wire up checkboxes
+    root.querySelectorAll('input[type="checkbox"]').forEach(function(cb){
+      cb.addEventListener("change", function(){
+        var id = cb.getAttribute("data-id");
+        if(cb.checked){ state.takenAt[id] = new Date().toISOString(); }
+        else { delete state.takenAt[id]; }
+        saveState();
+        updateDynamic();
+      });
+    });
+
+    // range subtitle
+    var first = DOSES[0].time, last = DOSES[DOSES.length-1].time;
+    document.getElementById("range-sub").textContent =
+      fmtDayLong(first)+", "+fmtTime(first)+"  to  "+fmtDayLong(last)+", "+fmtTime(last);
+    document.getElementById("p-total").textContent = DOSES.length;
+  }
+
+  /* ============================================================
+     DYNAMIC UPDATE  (states, next-due, progress, today)
+     ============================================================ */
+  function computeNextDueId(now){
+    var i, d;
+    // Prefer the soonest untaken dose still in the future (or due right now).
+    for(i=0;i<DOSES.length;i++){
+      d = DOSES[i];
+      if(!state.takenAt[d.id] && d.time.getTime() >= now.getTime()) return d.id;
+    }
+    // Otherwise fall back to the earliest untaken overdue dose you still owe.
+    for(i=0;i<DOSES.length;i++){
+      d = DOSES[i];
+      if(!state.takenAt[d.id]) return d.id;
+    }
+    return null;
+  }
+
+  function updateDynamic(){
+    var now = new Date();
+    var nextId = computeNextDueId(now);
+    var takenCount = 0;
+    var perDay = {};
+    var tKey = todayKey();
+
+    DOSES.forEach(function(d){
+      var el = document.getElementById("dose-"+d.id);
+      var isTaken = !!state.takenAt[d.id];
+      var isOverdue = !isTaken && d.time.getTime() < now.getTime();
+      var isNext = (d.id === nextId);
+
+      el.classList.toggle("taken", isTaken);
+      el.classList.toggle("overdue", isOverdue);
+      el.classList.toggle("next-due", isNext && !isTaken);
+      el.classList.toggle("upcoming", !isTaken && !isOverdue && !isNext);
+
+      var cb = el.querySelector("input");
+      if(cb.checked !== isTaken) cb.checked = isTaken;
+
+      var flag = el.querySelector(".dose-flag");
+      if(isOverdue){ flag.textContent = "Overdue"; }
+      else if(isNext && !isTaken){ flag.textContent = "Next dose"; }
+      else { flag.textContent = ""; }
+
+      var takenEl = el.querySelector(".dose-taken");
+      if(isTaken){
+        takenEl.textContent = "Taken " + fmtTime(new Date(state.takenAt[d.id]));
+      } else {
+        takenEl.textContent = "";
+      }
+
+      if(isTaken) takenCount++;
+      if(!perDay[d.dateKey]) perDay[d.dateKey] = { taken:0, total:0 };
+      perDay[d.dateKey].total++;
+      if(isTaken) perDay[d.dateKey].taken++;
+    });
+
+    // per-day counts + today highlight
+    Object.keys(perDay).forEach(function(key){
+      var c = document.getElementById("count-"+key);
+      if(c) c.textContent = perDay[key].taken + " / " + perDay[key].total;
+      var sec = document.getElementById("day-"+key);
+      if(sec) sec.classList.toggle("is-today", key === tKey);
+    });
+
+    // overall progress
+    document.getElementById("p-taken").textContent = takenCount;
+    var pct = DOSES.length ? Math.round((takenCount/DOSES.length)*100) : 0;
+    document.getElementById("bar-fill").style.width = pct + "%";
+  }
+
+  /* ============================================================
+     INITIAL SCROLL  (emphasize + scroll to today, else next dose)
+     ============================================================ */
+  function scrollToFocus(){
+    var tKey = todayKey();
+    var target = document.getElementById("day-"+tKey);
+    if(!target){
+      var nextId = computeNextDueId(new Date());
+      if(nextId){
+        var d = DOSES.filter(function(x){ return x.id === nextId; })[0];
+        if(d) target = document.getElementById("day-"+d.dateKey);
+      }
+    }
+    if(target){
+      try{ target.scrollIntoView({ behavior:"smooth", block:"start" }); }
+      catch(e){ target.scrollIntoView(); }
+    }
+  }
+
+  /* ============================================================
+     RESET
+     ============================================================ */
+  document.getElementById("reset").addEventListener("click", function(){
+    if(confirm("Clear all checked doses and start fresh? This cannot be undone.")){
+      state = { version:1, takenAt:{} };
+      saveState();
+      updateDynamic();
+    }
+  });
+
+  /* ============================================================
+     GO
+     ============================================================ */
+  render();
+  updateDynamic();
+  setInterval(updateDynamic, 30000);        // keep overdue / next-due fresh
+  window.setTimeout(scrollToFocus, 120);     // let layout settle, then scroll
+})();
+</script>
+</body>
+</html>

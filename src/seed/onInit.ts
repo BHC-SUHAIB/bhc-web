@@ -1516,6 +1516,156 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: sidecar-teachable (FORCE_SIDECAR_TEACHABLE_UPSERT)')
     }
 
+    // --- Certo media uploads (light-theme captures of the iOS app) ---
+    const certoHero = await ensureMedia(
+      'Certo — hero: three app screens (a graded question, the scaled-score mock result, and the readiness dashboard) on the brand navy',
+      'public/seed-assets/certo/hero.png',
+    )
+    const certoSimulation = await ensureMedia(
+      'Certo — the scaled-score mock-exam result: 761 of 1000, above the 700 pass line, with a per-topic breakdown',
+      'public/seed-assets/certo/simulation.png',
+    )
+    const certoQuestion = await ensureMedia(
+      'Certo — an original scenario question graded in place, with the correct answer highlighted',
+      'public/seed-assets/certo/question.png',
+    )
+    const certoReadiness = await ensureMedia(
+      'Certo — the readiness dashboard: a calibrated score, mastery by topic, and an accuracy trend',
+      'public/seed-assets/certo/readiness.png',
+    )
+    const certoCatalog = await ensureMedia(
+      'Certo — the certification catalog: 26 exams across five industries, progress tracked separately',
+      'public/seed-assets/certo/catalog.png',
+    )
+    const certoGuarantee = await ensureMedia(
+      'Certo — the readiness-gated pass guarantee screen',
+      'public/seed-assets/certo/guarantee.png',
+    )
+
+    // --- Certo project (first-party product, submitted to the App Store) ---
+    const certoProject: any = {
+      title: 'Certo — Exam Prep & Practice',
+      slug: 'certo',
+      summary:
+        'A native iOS exam-prep app spanning 26 professional certifications across five industries — technology, business & project management, finance, legal, and healthcare — with 3,281 original scenario questions, a scaled-score mock-exam simulation, spaced-repetition review, and deep per-option explanations. 100% original content, written to the public exam blueprints: no leaked or brain-dump questions, no ban risk. Built in SwiftUI with over-the-air content updates and a full StoreKit 2 catalog.',
+      client: 'Black Hart Consulting (first-party app)',
+      industry: 'EdTech / Professional certification',
+      projectType: 'mobile',
+      year: 2026,
+      duration: 'Submitted — in App Store review',
+      teamSize: 1,
+      ...(certoHero?.id ? { heroImage: certoHero.id } : {}),
+      stack: [
+        { name: 'SwiftUI', category: 'framework' },
+        { name: 'Swift', category: 'language' },
+        { name: 'SwiftData', category: 'db' },
+        { name: 'StoreKit 2', category: 'tool' },
+        { name: 'Swift Charts', category: 'framework' },
+        { name: 'Xcode Cloud (CI/CD)', category: 'hosting' },
+        { name: 'App Store Connect API', category: 'tool' },
+        { name: 'Python (content pipeline)', category: 'tool' },
+        { name: 'Next.js (remote content host)', category: 'framework' },
+      ],
+      challenge: rtDoc([
+        ['p', 'Certification prep is dominated by “brain-dump” sites that traffic in leaked, real exam questions. Using them violates the certification bodies’ NDAs, can get a candidate’s result revoked or their account banned, and is legally infringing — yet they persist, because learners genuinely want realistic, exam-shaped practice and the honest alternatives are thin and scattered.'],
+        ['p', 'The brief was to build the credible, native alternative: one iOS app covering 26 certifications across five very different professional worlds — cloud and security, project management, finance and accounting, legal, and healthcare — with practice good enough to actually predict exam readiness, under a hard rule that every question is original. No leaked content, no ban risk.'],
+        ['p', 'That rule is also the hardest constraint. Originality has to hold at the scale of thousands of questions; a single wrong answer key erodes trust instantly across a paid catalog; and one monetization model has to work for audiences as different as a DevOps engineer and a paralegal.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'Original content, written to the public blueprints'],
+        ['p', 'Every question is authored from scratch against each exam’s publicly published skills outline — never copied or paraphrased from real items. The content lives in a versioned JSON pipeline with Python validators that enforce structure and a consistent explanation template, so all 26 banks stay uniform. We then ran a citation-grounded answer-key audit across every question, verifying keys against authoritative public sources — Microsoft Learn, AWS and Google Cloud docs, the IRS, FDA/CMS, PMI, the Scrum Guide, ASQ — with brain-dump sites explicitly excluded.'],
+        ['h3', 'A real scaled-score simulation, not a quiz'],
+        ['p', 'The signature feature is a timed, blueprint-weighted mock exam that reports a scaled score against a true pass line, with a per-domain breakdown — so readiness is something you measure, not something you guess at. Practice, spaced-repetition review, and the full simulation all draw from the same bank but score and pace differently.'],
+        ['h3', 'Learning that actually sticks'],
+        ['p', 'Every question carries a worked explanation of why the right answer is right and why each distractor is wrong. A real SM-2 spaced-repetition scheduler resurfaces missed items just as you’re about to forget them, and built-in plus user-authored flashcards cover the rote layer.'],
+        ['h3', 'Ship content without shipping an app update'],
+        ['p', 'Question banks are versioned and served from a remote content host, so a corrected or expanded exam reaches users over the air — no App Store release required. The app downloads a bank only when its version is strictly higher, then swaps it in place.'],
+        ['h3', 'Monetization across five industries'],
+        ['p', 'A full StoreKit 2 catalog: per-exam one-time unlocks, five industry bundles, a lifetime all-access, and an auto-renewing yearly subscription with a free trial. Free “funnel” exams drive installs, and a readiness-gated pass guarantee — study, clear a full mock, and if the real exam doesn’t go your way your next exam is on us — doubles as a conversion lever.'],
+        ['h3', 'Shipped from a beta-OS machine via Xcode Cloud'],
+        ['p', 'The development Mac runs a macOS beta that can’t archive for the App Store locally, so the entire release path — archive, upload, and submit — is driven through Xcode Cloud and the App Store Connect API from the command line, including the full in-app-purchase catalog and every store asset.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'A complete, polished v1 — submitted to the App Store with its full in-app-purchase catalog — built around a study loop (practice → simulate → review) that measures real readiness instead of just tallying a score.'],
+        ['ul', [
+          '26 certification banks across technology, business & PM, finance, legal, and healthcare — 3,281 original scenario questions.',
+          'Timed, blueprint-weighted exam simulations with a scaled score, a true pass line, and a per-domain breakdown.',
+          'SM-2 spaced-repetition review, a worked “why each option” explanation on every question, and built-in plus custom flashcards.',
+          'A citation-grounded answer-key audit across all 26 banks — zero wrong keys, and zero leaked or brain-dump content.',
+          'Over-the-air content updates through a versioned remote host, so fixes ship without an App Store release.',
+          'A complete StoreKit 2 catalog — per-exam unlocks, five industry bundles, lifetime all-access, and a yearly subscription with a free trial.',
+        ]],
+        ['p', 'The whole product rests on one promise the category’s biggest names can’t make: every question is original, written to the public outlines — no leaked content, no ban risk.'],
+      ]),
+      metrics: [
+        { value: '26', label: 'certifications, one app' },
+        { value: '3,281', label: 'original practice questions' },
+        { value: '5', label: 'industries covered' },
+        { value: '0', label: 'leaked or brain-dump items' },
+      ],
+      gallery: [
+        ...(certoSimulation?.id
+          ? [{
+              image: certoSimulation.id,
+              caption:
+                'The signature feature — a timed, scaled-score mock exam with a true pass line, a per-domain breakdown, and elapsed time. Readiness you can measure.',
+            }]
+          : []),
+        ...(certoQuestion?.id
+          ? [{
+              image: certoQuestion.id,
+              caption:
+                'Every question is an original scenario written to the public exam blueprint, graded in place with a worked explanation of why each option is right or wrong.',
+            }]
+          : []),
+        ...(certoReadiness?.id
+          ? [{
+              image: certoReadiness.id,
+              caption:
+                'A calibrated readiness score, mastery by topic, and an accuracy trend over time — so you know when you’re actually ready to sit the exam.',
+            }]
+          : []),
+        ...(certoCatalog?.id
+          ? [{
+              image: certoCatalog.id,
+              caption:
+                '26 certifications across five industries — technology, business & PM, finance, legal, and healthcare — each tracked separately, in one app.',
+            }]
+          : []),
+        ...(certoGuarantee?.id
+          ? [{
+              image: certoGuarantee.id,
+              caption:
+                'A readiness-gated pass guarantee: study, clear a full in-app mock, and if the real exam doesn’t go your way, your next exam is on us.',
+            }]
+          : []),
+      ],
+      appInstall: {
+        status: 'none',
+        appName: 'Certo',
+        platformNote: 'iPhone & iPad — iOS 17+',
+      },
+      featured: true,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingCerto = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: certoProject.slug } },
+      limit: 1,
+    })
+    if (existingCerto.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: certoProject })
+      payload.logger.info('[seed] project created: certo')
+    } else if (process.env.FORCE_CERTO_UPSERT === 'true') {
+      await payload.update({
+        collection: 'projects',
+        id: existingCerto.docs[0].id,
+        data: certoProject,
+      })
+      payload.logger.info('[seed] project upserted: certo (FORCE_CERTO_UPSERT)')
+    }
+
     // --- Article hero images (Unsplash, downloaded into public/seed-assets/articles/) ---
     const articleHeroNextjs = await ensureMedia(
       'Why Next.js over WordPress \u2014 laptop displaying source code on a dark background',

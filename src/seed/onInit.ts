@@ -965,7 +965,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       'public/seed-assets/misbah/monthly.png',
     )
 
-    // --- Misbah project (first-party iOS app, in TestFlight beta) ---
+    // --- Misbah project (first-party iOS app, live on the App Store) ---
     const misbahProject: any = {
       title: 'Misbah — Prayer, Qibla & Quran',
       slug: 'misbah',
@@ -974,7 +974,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       industry: 'Muslim lifestyle / Consumer iOS',
       projectType: 'mobile',
       year: 2026,
-      duration: 'In open TestFlight beta',
+      duration: 'Launched July 2026',
       teamSize: 1,
       ...(misbahMediaHero?.id ? { heroImage: misbahMediaHero.id } : {}),
       stack: [
@@ -1006,14 +1006,14 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         ['p', 'A warm palette, a serif display face for the countdown, hand-tuned Arabic typography, and four sky-phase gradients that shift with the time of day. Monetization is a one-time “Misbah Plus” unlock plus an optional tip jar — no ads, no subscription traps.'],
       ]),
       outcome: rtDoc([
-        ['p', 'A complete, polished v1 now in open TestFlight beta — roughly 123 Swift files behind a calm five-tab interface, with a reusable Swift-package core ready for Android.'],
+        ['p', 'Version 1.0 shipped to the App Store in July 2026 and is live in 174 countries — roughly 85 Swift files behind a calm five-tab interface, with a reusable Swift-package core ready for Android.'],
         ['ul', [
           'Five daily prayers with adhan audio, per-prayer reminders, and a full-month timetable (region-aware calculation methods).',
           'A no-server next-prayer Live Activity engineered to roll over overnight — on Lock Screen, Dynamic Island, CarPlay, and Apple Watch.',
-          'A magnetometer Qibla compass with live bearing and distance to Makkah.',
+          'A magnetometer Qibla compass with live bearing and distance to Makkah, plus an AR Qibla mode.',
           'The full offline Quran with translation, bookmarks, translation search, and stream-and-cache recitation.',
           '267 Hisn al-Muslim duas in eight categories, 233 with audio, searchable to the individual dua.',
-          'A Ramadan suite, tasbih counter, qada (missed-prayer) tracker, and Home / Lock-Screen widgets.',
+          'A first-run feature tour, a daily prayer log with qada (missed-prayer) make-up, a Ramadan suite, a tasbih counter, and Home / Lock-Screen widgets.',
         ]],
         ['p', 'Every one of those features runs without collecting a single byte of user data — the very thing the category’s biggest names gave up.'],
       ]),
@@ -1042,9 +1042,9 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         }] : []),
       ],
       appInstall: {
-        status: 'beta',
+        status: 'live',
         appName: 'Misbah',
-        testFlightUrl: 'https://testflight.apple.com/join/jsSRjzV4',
+        appStoreUrl: 'https://apps.apple.com/app/id6776505999',
         platformNote: 'iPhone & iPad — iOS 17+',
       },
       featured: true,

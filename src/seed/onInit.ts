@@ -1641,8 +1641,9 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           : []),
       ],
       appInstall: {
-        status: 'none',
+        status: 'live',
         appName: 'Certo',
+        appStoreUrl: 'https://apps.apple.com/app/id6776512986',
         platformNote: 'iPhone & iPad — iOS 17+',
       },
       featured: true,

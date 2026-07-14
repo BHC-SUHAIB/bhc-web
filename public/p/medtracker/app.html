@@ -218,6 +218,53 @@
   }
   .reset-btn:hover{border-color:var(--rust);color:var(--rust);}
 
+  /* ---------- Pills remaining (header) ---------- */
+  .pills-remaining{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:11px;}
+  .pill-counter{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);}
+  .pill-counter .dot{width:10px;height:10px;border-radius:999px;flex:none;}
+  .pill-counter b{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--green);}
+  .pill-counter.low b{color:var(--rust);}
+
+  /* ---------- Storage banner ---------- */
+  .storage-banner{
+    background:var(--rust-tint);border:1px solid var(--rust);color:var(--rust);
+    font-size:12.5px;line-height:1.4;border-radius:var(--r-sm);padding:9px 12px;margin:18px 0 0;
+  }
+
+  /* ---------- Course so far ---------- */
+  .course-so-far{
+    margin-top:22px;background:var(--paper);border:1px solid var(--parchment);
+    border-radius:var(--r-md);padding:2px 16px;
+  }
+  .course-so-far summary{
+    list-style:none;cursor:pointer;padding:13px 0;
+    font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--green);font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  }
+  .course-so-far summary::-webkit-details-marker{display:none;}
+  .course-so-far summary .chev{transition:transform .2s ease;color:var(--brass-deep);flex:none;}
+  .course-so-far[open] summary .chev{transform:rotate(180deg);}
+  .csf-body{padding:2px 0 15px;}
+  .csf-row{display:flex;align-items:center;gap:9px;font-size:14px;margin:9px 0;color:var(--ink);}
+  .csf-row .dot{width:10px;height:10px;border-radius:999px;flex:none;}
+  .csf-row b{font-weight:700;}
+  .csf-note{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:12px 0 2px;}
+
+  /* ---------- Pill number, static tags, overdue timer (dose row) ---------- */
+  .pillno{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.03em;color:var(--ink-soft);
+    border:1px solid var(--parchment);border-radius:999px;padding:1px 8px;margin-left:auto;white-space:nowrap;
+  }
+  .dose-tag{
+    font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+    padding:2px 8px;border-radius:999px;font-weight:600;background:var(--green);color:#fff;
+  }
+  .dose-tag.late{background:var(--rust);}
+  .dose-tag.final{background:var(--brass);}
+  .dose-tag.last{background:var(--green-deep);}
+  .dose-timer{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--rust);letter-spacing:0.02em;}
+  .dose.taken .dose-timer{display:none;}
+
   @media (prefers-reduced-motion:reduce){
     *{transition:none!important;}
   }
@@ -233,10 +280,25 @@
         <div class="bar"><span id="bar-fill"></span></div>
         <div class="progress-label"><b id="p-taken">0</b> of <span id="p-total">0</span> doses</div>
       </div>
+      <div class="pills-remaining">
+        <span class="pill-counter" id="pc-clinda"><span class="dot clinda"></span>Clindamycin <b id="clinda-left">8</b> of 21 left</span>
+        <span class="pill-counter" id="pc-bactrim"><span class="dot smztmp"></span>Bactrim <b id="bactrim-left">7</b> of 14 left</span>
+      </div>
     </div>
   </header>
 
   <main class="wrap">
+    <div class="storage-banner" id="storage-banner" hidden>Storage is unavailable on this device, so checkmarks will not persist between visits.</div>
+
+    <details class="course-so-far">
+      <summary>Course so far: Jul 9 to Jul 14, 12:30 AM <span class="chev">&#9662;</span></summary>
+      <div class="csf-body">
+        <div class="csf-row"><span class="dot clinda"></span><span>Clindamycin: <b>13 of 21 taken</b>, no doses missed.</span></div>
+        <div class="csf-row"><span class="dot smztmp"></span><span>Bactrim: <b>7 of 14 taken</b>, 2 doses missed.</span></div>
+        <p class="csf-note">One missed Bactrim dose is tonight's 12:30 AM slot, being taken late. The other happened earlier on an unknown date. Missed antibiotic doses are never doubled up, so both pills move to the back of the line, which is why the Bactrim course now runs about six hours past the seven day mark.</p>
+      </div>
+    </details>
+
     <div id="schedule"></div>
 
     <footer>
@@ -262,32 +324,76 @@
   "use strict";
 
   /* ============================================================
-     CONFIG  (edit these to shorten / extend the course)
+     CONFIG
+     The schedule is no longer derived from a start date and a day
+     count. Course length is set by the actual pills in the bottles,
+     so the remaining doses are listed explicitly below.
      ============================================================ */
-  var TREATMENT_DAYS = 7;          // number of FULL days that follow the July 9 evening start
-  var START_YEAR  = 2026;
-  var START_MONTH = 6;             // 0-indexed: 6 = July
-  var START_DAY   = 9;             // July 9, 2026
-  var FIRST_HOUR  = 18, FIRST_MIN = 30;   // first dose: 6:30 PM on the start day
-
-  var STORAGE_KEY = "medtracker_v1";
+  var STORAGE_KEY = "medtracker_v3";   // bumped so stale checks from the old buggy schedule do not carry over
 
   var CLINDA = "Clindamycin";
-  var SMZTMP = "Sulfamethoxazole / Trimethoprim";
+  var BACTRIM = "Sulfamethoxazole / Trimethoprim";
 
-  // The five fixed daily dose times (local clock), one entry per dose.
-  var DAILY_SLOTS = [
-    { hour:0,  min:30, med:SMZTMP },   // 12:30 AM
-    { hour:2,  min:30, med:CLINDA },   //  2:30 AM
-    { hour:10, min:30, med:CLINDA },   // 10:30 AM
-    { hour:12, min:30, med:SMZTMP },   // 12:30 PM
-    { hour:18, min:30, med:CLINDA }    //  6:30 PM
+  // Totals in the bottles, and what was already taken before this list starts.
+  var CLINDA_TOTAL = 21, BACTRIM_TOTAL = 14;
+  var PRIOR_CLINDA_TAKEN = 13;         // pills 1 to 13 already taken
+  var PRIOR_BACTRIM_TAKEN = 7;         // pills 1 to 7 already taken
+  var PRIOR_TAKEN = PRIOR_CLINDA_TAKEN + PRIOR_BACTRIM_TAKEN;   // 20
+  var COURSE_TOTAL = CLINDA_TOTAL + BACTRIM_TOTAL;              // 35
+
+  function pad(n){ return n < 10 ? "0"+n : ""+n; }
+
+  // Build one dose. code "C" = Clindamycin, "S" = Bactrim. Month is 0-indexed (July = 6).
+  function mkDose(code, med, pill, total, mo, day, h, min, tag, tagClass){
+    var t = new Date(2026, mo, day, h, min, 0, 0);
+    return {
+      id:       code + pill,          // stable, unique per pill (e.g. "S8", "C21")
+      code:     code,
+      med:      med,
+      isClinda: code === "C",
+      pill:     pill,
+      total:    total,
+      time:     t,
+      tag:      tag || "",
+      tagClass: tagClass || "",
+      dateKey:  t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate())
+    };
+  }
+
+  /* ============================================================
+     THE 15 REMAINING DOSES  (explicit; 8 Clindamycin + 7 Bactrim)
+     ============================================================ */
+  var DOSES = [
+    mkDose("S", BACTRIM,  8, 14, 6, 14,  0, 30, "Late", "late"),
+    mkDose("C", CLINDA,  14, 21, 6, 14,  2, 30),
+    mkDose("C", CLINDA,  15, 21, 6, 14, 10, 30),
+    mkDose("S", BACTRIM,  9, 14, 6, 14, 12, 30),
+    mkDose("C", CLINDA,  16, 21, 6, 14, 18, 30),
+    mkDose("S", BACTRIM, 10, 14, 6, 15,  0, 30),
+    mkDose("C", CLINDA,  17, 21, 6, 15,  2, 30),
+    mkDose("C", CLINDA,  18, 21, 6, 15, 10, 30),
+    mkDose("S", BACTRIM, 11, 14, 6, 15, 12, 30),
+    mkDose("C", CLINDA,  19, 21, 6, 15, 18, 30),
+    mkDose("S", BACTRIM, 12, 14, 6, 16,  0, 30),
+    mkDose("C", CLINDA,  20, 21, 6, 16,  2, 30),
+    mkDose("C", CLINDA,  21, 21, 6, 16, 10, 30, "Last Clindamycin", "last"),
+    mkDose("S", BACTRIM, 13, 14, 6, 16, 12, 30),
+    mkDose("S", BACTRIM, 14, 14, 6, 17,  0, 30, "Final dose of course", "final")
   ];
 
   /* ============================================================
-     STATE  (persisted in localStorage)
+     STATE  (persisted in localStorage, wrapped in try/catch)
      ============================================================ */
-  var state = loadState();
+  var storageOk = true;
+
+  function storageAvailable(){
+    try{
+      var k = "__mt_probe__";
+      localStorage.setItem(k, "1");
+      localStorage.removeItem(k);
+      return true;
+    }catch(e){ return false; }
+  }
 
   function loadState(){
     try{
@@ -296,55 +402,37 @@
         var obj = JSON.parse(raw);
         if(obj && obj.takenAt) return obj;
       }
-    }catch(e){}
-    return { version:1, takenAt:{} };  // takenAt: { doseId: ISO string of when it was checked }
+    }catch(e){ storageOk = false; }
+    return { version:3, takenAt:{} };   // takenAt: { doseId: ISO string of when it was checked }
   }
   function saveState(){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch(e){ storageOk = false; showStorageBanner(); }
+  }
+  function showStorageBanner(){
+    var b = document.getElementById("storage-banner");
+    if(b) b.hidden = false;
   }
 
-  /* ============================================================
-     BUILD THE DOSE LIST  (generated from start + slots + length)
-     ============================================================ */
-  function pad(n){ return n < 10 ? "0"+n : ""+n; }
-
-  function buildDoses(){
-    var firstDose = new Date(START_YEAR, START_MONTH, START_DAY, FIRST_HOUR, FIRST_MIN, 0, 0);
-    // The course runs through the early morning of (start + TREATMENT_DAYS + 1).
-    // That final calendar day only carries its early-hours doses (12:30 AM, 2:30 AM).
-    var lastDay = START_DAY + TREATMENT_DAYS + 1;
-    var endDose = new Date(START_YEAR, START_MONTH, lastDay, 2, 30, 0, 0);
-
-    var doses = [];
-    for(var d = 0; d <= TREATMENT_DAYS + 1; d++){
-      for(var s = 0; s < DAILY_SLOTS.length; s++){
-        var slot = DAILY_SLOTS[s];
-        var t = new Date(START_YEAR, START_MONTH, START_DAY + d, slot.hour, slot.min, 0, 0);
-        if(t.getTime() < firstDose.getTime()) continue;  // skip slots already passed on the start day
-        if(t.getTime() > endDose.getTime()) continue;     // stop after the final early-morning dose
-        var code = (slot.med === CLINDA) ? "C" : "S";
-        var id = "" + t.getFullYear() + pad(t.getMonth()+1) + pad(t.getDate())
-                    + "-" + pad(t.getHours()) + pad(t.getMinutes()) + "-" + code;
-        doses.push({
-          id:   id,
-          time: t,
-          med:  slot.med,
-          isClinda: slot.med === CLINDA,
-          dateKey: t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate())
-        });
-      }
-    }
-    doses.sort(function(a,b){ return a.time - b.time; });
-    return doses;
-  }
-
-  var DOSES = buildDoses();
+  storageOk = storageAvailable();
+  var state = loadState();
 
   /* ============================================================
      FORMATTING HELPERS
      ============================================================ */
   function fmtTime(dt){ return dt.toLocaleTimeString([], { hour:"numeric", minute:"2-digit" }); }
   function fmtDayLong(dt){ return dt.toLocaleDateString([], { weekday:"long", month:"long", day:"numeric" }); }
+
+  function fmtDuration(ms){
+    var s = Math.floor(ms / 1000);
+    var h = Math.floor(s / 3600); s -= h * 3600;
+    var m = Math.floor(s / 60);   s -= m * 60;
+    var out = [];
+    if(h > 0){ out.push(h + "h"); out.push(pad(m) + "m"); }
+    else { out.push(m + "m"); }
+    out.push(pad(s) + "s");
+    return out.join(" ");
+  }
 
   function todayKey(){
     var n = new Date();
@@ -381,6 +469,7 @@
         if(d.isClinda){
           note += '<span><span class="ic">&#9679;</span>Stay upright ~10 min after</span>';
         }
+        var tagHtml = d.tag ? '<span class="dose-tag '+d.tagClass+'">'+d.tag+'</span>' : '';
         html += '<label class="dose" id="dose-'+d.id+'" for="cb-'+d.id+'">';
         html +=   '<input type="checkbox" id="cb-'+d.id+'" data-id="'+d.id+'">';
         html +=   '<span class="dose-check">'+checkSvg+'</span>';
@@ -388,8 +477,10 @@
         html +=     '<span class="dose-line1">';
         html +=       '<span class="dose-time">'+fmtTime(d.time)+'</span>';
         html +=       '<span class="dose-flag"></span>';
+        html +=       '<span class="dose-timer"></span>';
+        html +=       tagHtml;
         html +=     '</span>';
-        html +=     '<span class="dose-med"><span class="dot '+dotClass+'"></span>'+d.med+'</span>';
+        html +=     '<span class="dose-med"><span class="dot '+dotClass+'"></span>'+d.med+'<span class="pillno">'+d.pill+' / '+d.total+'</span></span>';
         html +=     '<span class="dose-note">'+note+'</span>';
         html +=     '<span class="dose-taken"></span>';
         html +=   '</span>';
@@ -415,31 +506,27 @@
     var first = DOSES[0].time, last = DOSES[DOSES.length-1].time;
     document.getElementById("range-sub").textContent =
       fmtDayLong(first)+", "+fmtTime(first)+"  to  "+fmtDayLong(last)+", "+fmtTime(last);
-    document.getElementById("p-total").textContent = DOSES.length;
+    document.getElementById("p-total").textContent = COURSE_TOTAL;
+
+    if(!storageOk) showStorageBanner();
   }
 
   /* ============================================================
-     DYNAMIC UPDATE  (states, next-due, progress, today)
+     DYNAMIC UPDATE  (states, next-due, timers, counters, progress)
      ============================================================ */
-  function computeNextDueId(now){
-    var i, d;
-    // Prefer the soonest untaken dose still in the future (or due right now).
-    for(i=0;i<DOSES.length;i++){
-      d = DOSES[i];
-      if(!state.takenAt[d.id] && d.time.getTime() >= now.getTime()) return d.id;
-    }
-    // Otherwise fall back to the earliest untaken overdue dose you still owe.
-    for(i=0;i<DOSES.length;i++){
-      d = DOSES[i];
-      if(!state.takenAt[d.id]) return d.id;
+  function computeNextDueId(){
+    // The next dose due is simply the first unchecked dose in the list.
+    for(var i=0;i<DOSES.length;i++){
+      if(!state.takenAt[DOSES[i].id]) return DOSES[i].id;
     }
     return null;
   }
 
   function updateDynamic(){
     var now = new Date();
-    var nextId = computeNextDueId(now);
+    var nextId = computeNextDueId();
     var takenCount = 0;
+    var clindaLeft = 0, bactrimLeft = 0;
     var perDay = {};
     var tKey = todayKey();
 
@@ -451,7 +538,7 @@
 
       el.classList.toggle("taken", isTaken);
       el.classList.toggle("overdue", isOverdue);
-      el.classList.toggle("next-due", isNext && !isTaken);
+      el.classList.toggle("next-due", isNext);
       el.classList.toggle("upcoming", !isTaken && !isOverdue && !isNext);
 
       var cb = el.querySelector("input");
@@ -459,17 +546,21 @@
 
       var flag = el.querySelector(".dose-flag");
       if(isOverdue){ flag.textContent = "Overdue"; }
-      else if(isNext && !isTaken){ flag.textContent = "Next dose"; }
+      else if(isNext){ flag.textContent = "Next dose"; }
       else { flag.textContent = ""; }
 
-      var takenEl = el.querySelector(".dose-taken");
-      if(isTaken){
-        takenEl.textContent = "Taken " + fmtTime(new Date(state.takenAt[d.id]));
-      } else {
-        takenEl.textContent = "";
-      }
+      // Overdue timer shows on the next-due dose once its time has passed.
+      var timer = el.querySelector(".dose-timer");
+      if(isNext && isOverdue){ timer.textContent = "Overdue by " + fmtDuration(now.getTime() - d.time.getTime()); }
+      else { timer.textContent = ""; }
 
-      if(isTaken) takenCount++;
+      var takenEl = el.querySelector(".dose-taken");
+      takenEl.textContent = isTaken ? ("Taken " + fmtTime(new Date(state.takenAt[d.id]))) : "";
+
+      // tallies
+      if(isTaken){ takenCount++; }
+      else if(d.isClinda){ clindaLeft++; } else { bactrimLeft++; }
+
       if(!perDay[d.dateKey]) perDay[d.dateKey] = { taken:0, total:0 };
       perDay[d.dateKey].total++;
       if(isTaken) perDay[d.dateKey].taken++;
@@ -483,9 +574,16 @@
       if(sec) sec.classList.toggle("is-today", key === tKey);
     });
 
-    // overall progress
-    document.getElementById("p-taken").textContent = takenCount;
-    var pct = DOSES.length ? Math.round((takenCount/DOSES.length)*100) : 0;
+    // pills remaining per medication (counts down live as doses are checked)
+    document.getElementById("clinda-left").textContent = clindaLeft;
+    document.getElementById("bactrim-left").textContent = bactrimLeft;
+    document.getElementById("pc-clinda").classList.toggle("low", clindaLeft <= 1);
+    document.getElementById("pc-bactrim").classList.toggle("low", bactrimLeft <= 1);
+
+    // overall progress across the whole course (prior doses + newly checked)
+    var doneTotal = PRIOR_TAKEN + takenCount;
+    document.getElementById("p-taken").textContent = doneTotal;
+    var pct = Math.round((doneTotal / COURSE_TOTAL) * 100);
     document.getElementById("bar-fill").style.width = pct + "%";
   }
 
@@ -496,7 +594,7 @@
     var tKey = todayKey();
     var target = document.getElementById("day-"+tKey);
     if(!target){
-      var nextId = computeNextDueId(new Date());
+      var nextId = computeNextDueId();
       if(nextId){
         var d = DOSES.filter(function(x){ return x.id === nextId; })[0];
         if(d) target = document.getElementById("day-"+d.dateKey);
@@ -513,7 +611,7 @@
      ============================================================ */
   document.getElementById("reset").addEventListener("click", function(){
     if(confirm("Clear all checked doses and start fresh? This cannot be undone.")){
-      state = { version:1, takenAt:{} };
+      state = { version:3, takenAt:{} };
       saveState();
       updateDynamic();
     }
@@ -524,7 +622,7 @@
      ============================================================ */
   render();
   updateDynamic();
-  setInterval(updateDynamic, 30000);        // keep overdue / next-due fresh
+  setInterval(updateDynamic, 1000);          // tick the overdue timer and keep states fresh
   window.setTimeout(scrollToFocus, 120);     // let layout settle, then scroll
 })();
 </script>

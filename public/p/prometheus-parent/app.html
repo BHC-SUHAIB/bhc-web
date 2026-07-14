@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prometheus Parent — Interactive Prototype</title>
+<style>
+  :root{
+    --bg:#ece4d7;            /* warm sand page */
+    --bg-2:#e3d8c6;
+    --ink:#1b2b28;           /* near-black green ink */
+    --ink-soft:#5b6b64;
+    --ink-faint:#8a978f;
+    --card:#fbf8f2;          /* warm off-white surface */
+    --card-2:#f4eee3;
+    --line:#e7ddcd;
+    --primary:#1f4a41;       /* deep calm teal-green */
+    --primary-600:#27564b;
+    --primary-050:#e7efeb;
+    --sage:#7f9c8d;
+    --ember:#e07a3f;         /* warm ember accent (Prometheus fire) */
+    --ember-soft:#f6e2d3;
+    --gold:#e6b34a;
+    --shadow:0 22px 60px -20px rgba(24,45,40,.45);
+    --shadow-sm:0 6px 20px -8px rgba(24,45,40,.25);
+    --r-lg:26px;
+    --r-md:18px;
+    --r-sm:13px;
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  html,body{height:100%}
+  body{
+    font-family:var(--font);
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 15% -10%, #f3ead9 0%, transparent 55%),
+      radial-gradient(1000px 800px at 110% 10%, #efe3d0 0%, transparent 50%),
+      var(--bg);
+    min-height:100vh;
+    padding:44px 20px 80px;
+    display:flex;flex-direction:column;align-items:center;gap:34px;
+  }
+
+  /* ---------- intro / header ---------- */
+  .masthead{max-width:720px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .brandmark{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:.2px;color:var(--primary)}
+  .brandmark .flame{width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,var(--ember),#c85f2c);display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+  .brandmark .flame svg{width:17px;height:17px}
+  .masthead h1{font-size:27px;line-height:1.15;letter-spacing:-.6px;font-weight:700}
+  .masthead p{color:var(--ink-soft);font-size:15.5px;line-height:1.55;max-width:560px}
+  .tag{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--primary);background:var(--primary-050);border:1px solid #d3e2db;padding:6px 13px;border-radius:100px}
+  .tag .dot{width:7px;height:7px;border-radius:50%;background:var(--ember)}
+
+  /* ---------- device ---------- */
+  .stage{display:flex;flex-direction:column;align-items:center;gap:20px}
+  .phone{
+    position:relative;width:392px;height:812px;border-radius:56px;
+    background:#0f1a17;padding:13px;box-shadow:var(--shadow), 0 0 0 2px #cabfac;
+  }
+  .phone::after{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:126px;height:32px;background:#0f1a17;border-radius:0 0 20px 20px;z-index:40}
+  .screen-wrap{position:relative;width:100%;height:100%;border-radius:44px;overflow:hidden;background:var(--card)}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:52px;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 30px 0 34px;font-size:14px;font-weight:600;color:var(--ink);pointer-events:none}
+  .statusbar.on-dark{color:#fff}
+  .statusbar .r{display:flex;align-items:center;gap:6px}
+  .statusbar svg{display:block}
+
+  .screens{position:absolute;inset:0}
+  .screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .34s ease,transform .34s ease,visibility .34s;padding-bottom:104px;-webkit-overflow-scrolling:touch}
+  .screen::-webkit-scrollbar{display:none}
+  .screen.active{opacity:1;visibility:visible;transform:none}
+  .screen .pad{padding:64px 22px 0}
+
+  h2.title{font-size:26px;letter-spacing:-.5px;font-weight:700;line-height:1.1}
+  .sub{color:var(--ink-soft);font-size:14.5px;line-height:1.5}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--sage)}
+
+  /* ---------- tab bar ---------- */
+  .tabbar{position:absolute;left:0;right:0;bottom:0;height:90px;z-index:35;background:linear-gradient(180deg,rgba(251,248,242,.4),var(--card) 42%);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-around;padding:12px 14px 0}
+  .tab{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:var(--font);color:var(--ink-faint);font-size:10.5px;font-weight:600;letter-spacing:.2px;padding:2px 6px;flex:1}
+  .tab svg{width:23px;height:23px;stroke:var(--ink-faint);fill:none;stroke-width:1.9}
+  .tab.active{color:var(--primary)}
+  .tab.active svg{stroke:var(--primary)}
+  .tab.coach{position:relative;top:-16px}
+  .tab.coach .fab{width:60px;height:60px;border-radius:22px;background:linear-gradient(160deg,var(--primary-600),#163a33);display:grid;place-items:center;box-shadow:0 14px 26px -8px rgba(31,74,65,.6);border:3px solid var(--card)}
+  .tab.coach .fab svg{width:27px;height:27px;stroke:#fff;stroke-width:2}
+  .tab.coach.active .fab{background:linear-gradient(160deg,var(--ember),#c85f2c);box-shadow:0 14px 26px -8px rgba(224,122,63,.6)}
+  .tab.coach span{color:var(--ink-faint);margin-top:2px}
+  .tab.coach.active span{color:var(--ember)}
+
+  /* ---------- shared ui ---------- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:18px;box-shadow:var(--shadow-sm)}
+  .btn{width:100%;border:none;border-radius:15px;padding:16px;font-family:var(--font);font-size:15.5px;font-weight:650;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .12s ease, filter .12s ease}
+  .btn:active{transform:scale(.98)}
+  .btn-primary{background:var(--primary);color:#fff}
+  .btn-primary:active{filter:brightness(1.08)}
+  .btn-ghost{background:var(--card);color:var(--primary);border:1.5px solid #d3e2db}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;padding:5px 11px;border-radius:100px}
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap}
+  .divider{height:1px;background:var(--line);margin:16px 0}
+
+  /* ---------- COACH ---------- */
+  .coach-head{background:linear-gradient(165deg,#27564b,#173b34);color:#fff;border-radius:0 0 30px 30px;padding:64px 22px 26px}
+  .coach-head .row{display:flex;align-items:center;justify-content:space-between}
+  .avatar{width:44px;height:44px;border-radius:14px;background:linear-gradient(160deg,var(--ember),#c85f2c);display:grid;place-items:center;box-shadow:0 8px 18px -6px rgba(0,0,0,.4)}
+  .avatar svg{width:24px;height:24px}
+  .coach-head h2{font-size:23px;font-weight:700;letter-spacing:-.4px;margin-top:20px}
+  .coach-head .who{color:#bcd3ca;font-size:13.5px;margin-top:4px;display:flex;align-items:center;gap:7px}
+  .coach-head .who b{color:#fff;font-weight:600}
+  .streak{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);padding:7px 12px;border-radius:100px;font-size:12.5px;font-weight:650}
+
+  .msg{max-width:82%;padding:13px 15px;border-radius:16px;font-size:14.5px;line-height:1.5;box-shadow:var(--shadow-sm)}
+  .msg.coach{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+  .msg.me{background:var(--primary-050);border:1px solid #d3e2db;color:#1c3a33;margin-left:auto;border-bottom-right-radius:5px}
+  .msg .lbl{font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--sage);text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+
+  .moment-cta{margin:4px 0 2px;background:linear-gradient(150deg,#fff,#fdf1e8);border:1.5px solid #f0d3bd;border-radius:var(--r-md);padding:18px;cursor:pointer;transition:transform .12s ease,box-shadow .2s ease;box-shadow:0 14px 30px -16px rgba(224,122,63,.6)}
+  .moment-cta:active{transform:scale(.985)}
+  .moment-cta .top{display:flex;align-items:center;gap:13px}
+  .moment-cta .ic{width:46px;height:46px;border-radius:14px;background:linear-gradient(160deg,var(--ember),#c85f2c);display:grid;place-items:center;flex-shrink:0;box-shadow:0 10px 20px -8px rgba(224,122,63,.7)}
+  .moment-cta .ic svg{width:25px;height:25px}
+  .moment-cta h3{font-size:16.5px;font-weight:700;color:#b4551f;letter-spacing:-.2px}
+  .moment-cta p{font-size:13px;color:#a06a4a;margin-top:2px}
+
+  .quick{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .quick .q{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;cursor:pointer;box-shadow:var(--shadow-sm)}
+  .quick .q svg{width:22px;height:22px;stroke:var(--primary);fill:none;stroke-width:1.9}
+  .quick .q p{font-size:13.5px;font-weight:650;margin-top:9px;color:var(--ink)}
+  .quick .q span{font-size:11.5px;color:var(--ink-faint)}
+
+  /* ---------- MOMENT screen ---------- */
+  .moment-screen{background:linear-gradient(180deg,#1f4a41,#132e29)}
+  .moment-screen .pad{color:#eaf1ee}
+  .moment-screen .back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);color:#fff;border:none;font-family:var(--font);font-size:13px;font-weight:600;padding:8px 13px;border-radius:100px;cursor:pointer}
+  .breathe{margin:26px auto 8px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 50% 45%,rgba(224,122,63,.55),rgba(224,122,63,0) 70%);display:grid;place-items:center;animation:breathe 5.5s ease-in-out infinite}
+  .breathe .core{width:78px;height:78px;border-radius:50%;background:linear-gradient(160deg,var(--ember),#c85f2c);display:grid;place-items:center;box-shadow:0 12px 34px -6px rgba(224,122,63,.7)}
+  @keyframes breathe{0%,100%{transform:scale(.86)}50%{transform:scale(1.06)}}
+  .moment-screen h2{font-size:22px;font-weight:700;text-align:center;letter-spacing:-.3px}
+  .moment-screen .lead{text-align:center;color:#bcd3ca;font-size:14px;margin-top:6px;line-height:1.5}
+  .script{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:var(--r-md);padding:6px 18px 18px;margin-top:22px}
+  .step{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+  .step:last-child{border-bottom:none}
+  .step .n{width:27px;height:27px;border-radius:9px;background:rgba(224,122,63,.22);color:#f6c9a9;font-weight:700;font-size:13.5px;display:grid;place-items:center;flex-shrink:0;border:1px solid rgba(224,122,63,.4)}
+  .step h4{font-size:15px;font-weight:650;color:#fff}
+  .step p{font-size:13.5px;color:#c3d6ce;line-height:1.5;margin-top:3px}
+  .say{color:#fff;font-style:italic;background:rgba(224,122,63,.14);border-left:3px solid var(--ember);padding:8px 12px;border-radius:0 8px 8px 0;margin-top:8px;font-size:13.5px}
+
+  /* ---------- TRACK ---------- */
+  .stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .stat3 .s{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px 10px;text-align:center;box-shadow:var(--shadow-sm)}
+  .stat3 .s b{display:block;font-size:24px;font-weight:750;letter-spacing:-.5px;color:var(--primary)}
+  .stat3 .s span{font-size:11px;color:var(--ink-faint);font-weight:600;letter-spacing:.2px}
+  .bars{display:flex;align-items:flex-end;justify-content:space-between;height:120px;gap:8px;padding-top:8px}
+  .bars .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .bars .b i{width:100%;border-radius:7px 7px 4px 4px;background:linear-gradient(180deg,var(--sage),#5f7d6f);display:block}
+  .bars .b.peak i{background:linear-gradient(180deg,var(--ember),#c85f2c)}
+  .bars .b span{font-size:10.5px;color:var(--ink-faint);font-weight:600}
+  .logrow{display:flex;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .logrow:last-child{border-bottom:none}
+  .logrow .t{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;font-size:19px}
+  .logrow h4{font-size:14.5px;font-weight:650}
+  .logrow p{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+  .logrow .meta{margin-left:auto;text-align:right;font-size:11px;color:var(--ink-faint);white-space:nowrap}
+  .insight{background:linear-gradient(150deg,var(--primary-050),#dcebe4);border:1px solid #cbe0d7;border-radius:var(--r-md);padding:16px}
+  .insight .h{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--primary);font-size:14px}
+  .insight .h svg{width:19px;height:19px}
+  .insight p{font-size:13.5px;color:#2c4a42;line-height:1.55;margin-top:9px}
+
+  /* ---------- LEARN ---------- */
+  .feature{position:relative;border-radius:var(--r-lg);overflow:hidden;min-height:172px;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;color:#fff;box-shadow:var(--shadow-sm)}
+  .feature .bgwrap{position:absolute;inset:0;background:linear-gradient(150deg,#2b5a4f,#16352e)}
+  .feature .bgwrap::after{content:"";position:absolute;inset:0;background:radial-gradient(200px 120px at 85% 12%,rgba(224,122,63,.4),transparent 70%)}
+  .feature .rel{position:relative;z-index:2}
+  .feature .k{font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f2c6a8}
+  .feature h3{font-size:19px;font-weight:700;letter-spacing:-.3px;margin-top:6px;line-height:1.2}
+  .feature p{font-size:13px;color:#cfe0d8;margin-top:5px}
+  .lcard{display:flex;gap:14px;align-items:center;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);box-shadow:var(--shadow-sm)}
+  .lcard .th{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;flex-shrink:0;font-size:23px}
+  .lcard h4{font-size:14.5px;font-weight:650;letter-spacing:-.2px}
+  .lcard p{font-size:12.5px;color:var(--ink-soft);margin-top:3px}
+  .lcard .go{margin-left:auto;color:var(--ink-faint)}
+  .catrow{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+  .catrow::-webkit-scrollbar{display:none}
+  .cat{white-space:nowrap;font-size:12.5px;font-weight:650;padding:8px 14px;border-radius:100px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);cursor:pointer}
+  .cat.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+  /* ---------- GROW ---------- */
+  .ring-card{display:flex;align-items:center;gap:18px;background:linear-gradient(160deg,#27564b,#173b34);color:#fff;border-radius:var(--r-lg);padding:20px}
+  .ring{width:88px;height:88px;flex-shrink:0}
+  .ring-card h3{font-size:17px;font-weight:700}
+  .ring-card p{font-size:13px;color:#bcd3ca;margin-top:4px;line-height:1.5}
+  .goal{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:16px;box-shadow:var(--shadow-sm)}
+  .goal .top{display:flex;align-items:center;gap:11px}
+  .goal .gi{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+  .goal h4{font-size:15px;font-weight:650}
+  .goal .pct{margin-left:auto;font-size:13px;font-weight:700;color:var(--primary)}
+  .track-line{height:9px;border-radius:100px;background:var(--card-2);margin-top:13px;overflow:hidden;border:1px solid var(--line)}
+  .track-line i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,var(--sage),var(--primary))}
+  .habit{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .habit:last-child{border-bottom:none}
+  .check{width:26px;height:26px;border-radius:9px;border:2px solid var(--sage);display:grid;place-items:center;flex-shrink:0}
+  .check.done{background:var(--primary);border-color:var(--primary)}
+  .check.done svg{width:15px;height:15px;stroke:#fff;stroke-width:3;fill:none}
+  .habit h4{font-size:14.5px;font-weight:600}
+  .habit.doneT h4{color:var(--ink-faint);text-decoration:line-through}
+  .habit .days{margin-left:auto;font-size:11px;color:var(--ink-faint);font-weight:600}
+
+  /* ---------- ONBOARDING ---------- */
+  .ob{background:linear-gradient(180deg,#ece4d7,#e3d8c6)}
+  .ob .pad{padding-top:74px}
+  .ob-hero{width:104px;height:104px;border-radius:30px;background:linear-gradient(160deg,var(--ember),#c85f2c);display:grid;place-items:center;margin:0 auto 24px;box-shadow:0 20px 40px -12px rgba(224,122,63,.6)}
+  .ob-hero svg{width:52px;height:52px}
+  .ob h2{text-align:center;font-size:25px;letter-spacing:-.5px}
+  .ob .sub{text-align:center;margin-top:8px}
+  .field{margin-top:16px}
+  .field label{font-size:12.5px;font-weight:700;color:var(--ink-soft);letter-spacing:.2px}
+  .field .inp{margin-top:7px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 15px;font-size:15px;color:var(--ink);display:flex;align-items:center;justify-content:space-between}
+  .field .inp.ph{color:var(--ink-faint)}
+  .seg{display:flex;gap:8px;margin-top:7px}
+  .seg .o{flex:1;text-align:center;padding:12px 6px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font-size:13.5px;font-weight:650;color:var(--ink-soft);cursor:pointer}
+  .seg .o.on{background:var(--primary-050);border-color:var(--primary);color:var(--primary)}
+  .trait{display:inline-flex;font-size:12.5px;font-weight:650;padding:8px 13px;border-radius:100px;border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);cursor:pointer}
+  .trait.on{background:var(--ember-soft);border-color:#e6b48f;color:#b4551f}
+  .dots{display:flex;gap:7px;justify-content:center;margin:22px 0 14px}
+  .dots i{width:7px;height:7px;border-radius:50%;background:var(--ink-faint);opacity:.4}
+  .dots i.on{opacity:1;width:22px;border-radius:100px;background:var(--primary)}
+
+  /* ---------- YOU ---------- */
+  .profile-top{display:flex;align-items:center;gap:15px}
+  .profile-top .pic{width:60px;height:60px;border-radius:20px;background:linear-gradient(160deg,var(--sage),#5f7d6f);display:grid;place-items:center;color:#fff;font-size:24px;font-weight:700}
+  .profile-top h3{font-size:19px;font-weight:700}
+  .profile-top p{font-size:13px;color:var(--ink-soft)}
+  .setrow{display:flex;align-items:center;gap:13px;padding:15px 0;border-bottom:1px solid var(--line)}
+  .setrow:last-child{border-bottom:none}
+  .setrow .si{width:36px;height:36px;border-radius:11px;background:var(--primary-050);display:grid;place-items:center;flex-shrink:0}
+  .setrow .si svg{width:18px;height:18px;stroke:var(--primary);fill:none;stroke-width:1.9}
+  .setrow h4{font-size:14.5px;font-weight:600}
+  .setrow p{font-size:12px;color:var(--ink-faint)}
+  .setrow .go{margin-left:auto;color:var(--ink-faint)}
+  .promo{background:linear-gradient(150deg,#2b5a4f,#16352e);border-radius:var(--r-lg);padding:20px;color:#fff;text-align:center}
+  .promo .pm{width:46px;height:46px;border-radius:14px;background:linear-gradient(160deg,var(--ember),#c85f2c);display:grid;place-items:center;margin:0 auto 12px}
+  .promo h3{font-size:17px;font-weight:700}
+  .promo p{font-size:13px;color:#bcd3ca;margin-top:6px;line-height:1.5}
+
+  /* ---------- screen nav legend ---------- */
+  .legend{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;max-width:560px}
+  .legend button{font-family:var(--font);font-size:12.5px;font-weight:600;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);padding:8px 14px;border-radius:100px;cursor:pointer;transition:all .15s ease}
+  .legend button:hover{border-color:var(--sage);color:var(--primary)}
+  .legend button.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .foot{color:var(--ink-faint);font-size:12px;text-align:center;max-width:520px;line-height:1.6}
+  .foot b{color:var(--ink-soft)}
+  .flow-hint{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft);background:var(--ember-soft);border:1px solid #e6cbb3;padding:8px 14px;border-radius:100px}
+  .flow-hint svg{width:15px;height:15px}
+  @media (max-width:460px){
+    body{padding:24px 10px 60px}
+    .phone{transform:scale(.9);transform-origin:top center;margin-bottom:-70px}
+  }
+</style>
+</head>
+<body>
+
+  <div class="masthead">
+    <div class="brandmark">
+      <span class="flame"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2c1 3-1 4-2 6s-1 4 1 5c1-2 1-3 2-4 2 2 3 4 3 6a6 6 0 11-12 0c0-4 3-6 4-9 1 2 2 3 3 4 1-3-1-5-2-8z"/></svg></span>
+      Prometheus Parent
+    </div>
+    <span class="tag"><span class="dot"></span> Interactive Prototype · v1 concept</span>
+    <h1>An AI coach in every ADHD parent's pocket.</h1>
+    <p>A working click-through of the core experience — the coach that knows your child, the in-the-moment help, and the tools that back it up. Tap the tab bar, the buttons, and the highlighted flows below.</p>
+    <span class="flow-hint"><svg viewBox="0 0 24 24" fill="none" stroke="#c85f2c" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg> Try the signature flow: open Coach → tap “I'm in a hard moment”</span>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="screen-wrap">
+
+        <!-- STATUS BAR -->
+        <div class="statusbar" id="statusbar">
+          <span>9:41</span>
+          <span class="r">
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1.5" width="3" height="10.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity=".35"/></svg>
+            <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.5c2 0 3.8.8 5.2 2.1l1.2-1.3A9.4 9.4 0 008.5.8 9.4 9.4 0 002.1 3.3l1.2 1.3A7.4 7.4 0 018.5 2.5zM8.5 6c1 0 2 .4 2.7 1.1l1.2-1.3A6 6 0 008.5 4a6 6 0 00-3.9 1.8l1.2 1.3A3.9 3.9 0 018.5 6zm0 3.4l1.9-2a2.6 2.6 0 00-3.8 0z"/></svg>
+            <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x="1" y="1" width="21" height="10" rx="3" stroke="currentColor" stroke-opacity=".5"/><rect x="3" y="3" width="16" height="6" rx="1.5" fill="currentColor"/><rect x="23" y="4" width="2" height="4" rx="1" fill="currentColor" fill-opacity=".5"/></svg>
+          </span>
+        </div>
+
+        <div class="screens">
+
+          <!-- ============ ONBOARDING ============ -->
+          <section class="screen ob" id="s-onboarding">
+            <div class="pad">
+              <div class="ob-hero">
+                <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2c1 3-1 4-2 6s-1 4 1 5c1-2 1-3 2-4 2 2 3 4 3 6a6 6 0 11-12 0c0-4 3-6 4-9 1 2 2 3 3 4 1-3-1-5-2-8z"/></svg>
+              </div>
+              <h2>Let's meet your child</h2>
+              <p class="sub">Your coach uses this to give advice built around <b>your</b> family — not generic tips.</p>
+
+              <div class="field">
+                <label>Child's first name</label>
+                <div class="inp">Milo <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7f9c8d" stroke-width="2"><path d="M4 20h4L18 10l-4-4L4 16z"/></svg></div>
+              </div>
+              <div class="field">
+                <label>Age</label>
+                <div class="seg">
+                  <div class="o">5–7</div><div class="o on">8–10</div><div class="o">11–13</div><div class="o">14+</div>
+                </div>
+              </div>
+              <div class="field">
+                <label>What's hardest right now? <span style="font-weight:500;color:var(--ink-faint)">(pick any)</span></label>
+                <div class="chip-row" style="margin-top:8px">
+                  <span class="trait on">Homework battles</span>
+                  <span class="trait on">Morning routine</span>
+                  <span class="trait">Meltdowns</span>
+                  <span class="trait on">Transitions</span>
+                  <span class="trait">Screen time</span>
+                  <span class="trait">Focus</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>Milo's strengths <span style="font-weight:500;color:var(--ink-faint)">(we build on these)</span></label>
+                <div class="chip-row" style="margin-top:8px">
+                  <span class="trait on">Creative</span>
+                  <span class="trait">Funny</span>
+                  <span class="trait on">Kind</span>
+                  <span class="trait">Curious</span>
+                </div>
+              </div>
+
+              <div class="dots"><i></i><i></i><i class="on"></i><i></i></div>
+              <button class="btn btn-primary" onclick="go('coach')">Meet your coach →</button>
+              <p class="sub" style="text-align:center;margin-top:14px;font-size:12px">🔒 Private to you. Encrypted. Delete anytime.</p>
+            </div>
+          </section>
+
+          <!-- ============ COACH (home) ============ -->
+          <section class="screen" id="s-coach">
+            <div class="coach-head">
+              <div class="row">
+                <div class="avatar"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2c1 3-1 4-2 6s-1 4 1 5c1-2 1-3 2-4 2 2 3 4 3 6a6 6 0 11-12 0c0-4 3-6 4-9 1 2 2 3 3 4 1-3-1-5-2-8z"/></svg></div>
+                <div class="streak">🔥 6-day streak</div>
+              </div>
+              <h2>Good evening, Sarah.</h2>
+              <div class="who"><span>Coaching you with</span> <b>Milo, 9</b> · <span>Prometheus Method</span></div>
+            </div>
+
+            <div class="pad" style="padding-top:20px">
+              <!-- signature CTA -->
+              <div class="moment-cta" onclick="go('moment')">
+                <div class="top">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2c1 3-1 4-2 6s-1 4 1 5c1-2 1-3 2-4 2 2 3 4 3 6a6 6 0 11-12 0c0-4 3-6 4-9 1 2 2 3 3 4 1-3-1-5-2-8z"/></svg></div>
+                  <div>
+                    <h3>I'm in a hard moment right now</h3>
+                    <p>Get a calm, specific plan in 30 seconds →</p>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px">
+                <div class="msg coach">
+                  <div class="lbl"><span class="avatar" style="width:16px;height:16px;border-radius:5px"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2c1 3-1 4-2 6s-1 4 1 5c1-2 1-3 2-4 2 2 3 4 3 6a6 6 0 11-12 0c0-4 3-6 4-9 1 2 2 3 3 4 1-3-1-5-2-8z"/></svg></span> Coach</div>
+                  Mornings have been the hard spot this week — 3 of the last 5. Want to try one small change tomorrow before Milo's up?
+                </div>
+                <div class="msg me">Yes. Something simple though, I'm exhausted.</div>
+                <div class="msg coach">
+                  <div class="lbl">Coach</div>
+                  Totally fair. One thing: lay his clothes out <b>tonight</b> and let him pick the order of getting ready. Kids with ADHD fight less when they hold the control. I'll check in at 7:40am. 💛
+                </div>
+              </div>
+
+              <p class="eyebrow" style="margin:22px 0 12px">Tonight's check-in</p>
+              <div class="quick">
+                <div class="q" onclick="go('track')">
+                  <svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+                  <p>Log today</p><span>How did it go?</span>
+                </div>
+                <div class="q" onclick="go('learn')">
+                  <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M4 9h16"/></svg>
+                  <p>2-min lesson</p><span>Calmer mornings</span>
+                </div>
+              </div>
+
+              <div class="card" style="margin-top:14px;display:flex;align-items:center;gap:12px">
+                <div style="width:40px;height:40px;border-radius:12px;background:var(--ember-soft);display:grid;place-items:center;font-size:20px">🎙️</div>
+                <div style="flex:1"><h4 style="font-size:14px;font-weight:650">Talk to your coach</h4><p style="font-size:12px;color:var(--ink-faint)">Tap and just speak — no typing.</p></div>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1f4a41" stroke-width="2"><path d="M9 5v14l11-7z"/></svg>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ MOMENT ============ -->
+          <section class="screen moment-screen" id="s-moment">
+            <div class="pad" style="padding-top:60px">
+              <button class="back" onclick="go('coach')">← Back</button>
+              <div class="breathe"><div class="core"><svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M12 2c1 3-1 4-2 6s-1 4 1 5c1-2 1-3 2-4 2 2 3 4 3 6a6 6 0 11-12 0c0-4 3-6 4-9 1 2 2 3 3 4 1-3-1-5-2-8z"/></svg></div></div>
+              <h2>First, you. Breathe with this.</h2>
+              <p class="lead">Milo is melting down over homework again. Here's your 30-second plan — you've got this.</p>
+
+              <div class="script">
+                <div class="step">
+                  <div class="n">1</div>
+                  <div>
+                    <h4>Steady yourself first (10 sec)</h4>
+                    <p>Drop your shoulders, unclench your jaw. Milo is co-regulating off <i>your</i> body. Calm is contagious.</p>
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="n">2</div>
+                  <div>
+                    <h4>Name it, don't fix it</h4>
+                    <p>Get low, soft voice. Validate before redirecting — it lowers the alarm in his brain.</p>
+                    <div class="say">“This homework feels like too much right now. That makes sense. I'm right here.”</div>
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="n">3</div>
+                  <div>
+                    <h4>Shrink the task</h4>
+                    <p>His working memory is flooded. Offer one tiny next step, not the whole worksheet.</p>
+                    <div class="say">“Let's just do the first problem together. That's it for now.”</div>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn" style="background:var(--ember);color:#fff;margin-top:18px" onclick="go('coach')">This helped ✓</button>
+              <button class="btn" style="background:rgba(255,255,255,.1);color:#fff;margin-top:10px" onclick="go('track')">Still hard — talk it through</button>
+              <p style="text-align:center;color:#9fb8ae;font-size:11.5px;margin-top:16px;line-height:1.5">Grounded in the Prometheus Method. Not a medical service — if you're worried about safety, tap for real-time resources.</p>
+            </div>
+          </section>
+
+          <!-- ============ TRACK ============ -->
+          <section class="screen" id="s-track">
+            <div class="pad">
+              <p class="eyebrow">Track</p>
+              <h2 class="title" style="margin-top:4px">Milo's week</h2>
+              <p class="sub" style="margin-top:6px">The more you log, the sharper your coach gets.</p>
+
+              <div class="stat3" style="margin-top:18px">
+                <div class="s"><b>5</b><span>MOMENTS</span></div>
+                <div class="s"><b>↓ 30%</b><span>VS LAST WK</span></div>
+                <div class="s"><b>3</b><span>WINS</span></div>
+              </div>
+
+              <div class="card" style="margin-top:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <h4 style="font-size:14.5px;font-weight:700">When it happens</h4>
+                  <span class="pill" style="background:var(--ember-soft);color:#b4551f">Mornings peak</span>
+                </div>
+                <div class="bars">
+                  <div class="b"><i style="height:38px"></i><span>Wake</span></div>
+                  <div class="b peak"><i style="height:104px"></i><span>AM</span></div>
+                  <div class="b"><i style="height:24px"></i><span>School</span></div>
+                  <div class="b"><i style="height:50px"></i><span>Dinner</span></div>
+                  <div class="b peak"><i style="height:84px"></i><span>H'work</span></div>
+                  <div class="b"><i style="height:32px"></i><span>Bed</span></div>
+                </div>
+              </div>
+
+              <div class="insight" style="margin-top:14px">
+                <div class="h"><svg viewBox="0 0 24 24" fill="none" stroke="#1f4a41" stroke-width="2"><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/><path d="M9 21h6"/></svg> Coach insight</div>
+                <p>Milo's toughest moments cluster around <b>transitions</b> — waking up and starting homework. Two-thirds happen before 8am. Want to build a morning routine together in <b>Grow</b>?</p>
+              </div>
+
+              <p class="eyebrow" style="margin:22px 0 4px">Recent moments</p>
+              <div class="card">
+                <div class="logrow">
+                  <div class="t" style="background:var(--ember-soft)">😤</div>
+                  <div><h4>Homework refusal</h4><p>Named it, shrank the task → calmed in 5 min</p></div>
+                  <div class="meta">Today<br>6:40pm</div>
+                </div>
+                <div class="logrow">
+                  <div class="t" style="background:#e7efeb">🌅</div>
+                  <div><h4>Rough wake-up</h4><p>Rushed morning, missed breakfast</p></div>
+                  <div class="meta">Today<br>7:10am</div>
+                </div>
+                <div class="logrow">
+                  <div class="t" style="background:#eaf3ed">🎉</div>
+                  <div><h4>Win: got dressed solo</h4><p>Picked his own order — no fight</p></div>
+                  <div class="meta">Yest.<br>7:30am</div>
+                </div>
+              </div>
+              <button class="btn btn-ghost" style="margin-top:14px">＋ Log a moment</button>
+            </div>
+          </section>
+
+          <!-- ============ LEARN ============ -->
+          <section class="screen" id="s-learn">
+            <div class="pad">
+              <p class="eyebrow">Learn</p>
+              <h2 class="title" style="margin-top:4px">For you, tonight</h2>
+              <div class="catrow" style="margin-top:14px">
+                <div class="cat on">For you</div>
+                <div class="cat">Meltdowns</div>
+                <div class="cat">Homework</div>
+                <div class="cat">Routines</div>
+                <div class="cat">Focus</div>
+                <div class="cat">Screens</div>
+              </div>
+
+              <div class="feature" style="margin-top:16px">
+                <div class="bgwrap"></div>
+                <div class="rel">
+                  <span class="k">Prometheus Method · 4 min</span>
+                  <h3>The ABCs of a meltdown</h3>
+                  <p>Why validation calms the brain faster than logic ever will.</p>
+                </div>
+              </div>
+
+              <p class="eyebrow" style="margin:22px 0 12px">Strategy cards</p>
+              <div style="display:flex;flex-direction:column;gap:11px">
+                <div class="lcard">
+                  <div class="th" style="background:var(--ember-soft)">🌅</div>
+                  <div><h4>Calmer mornings, 3 steps</h4><p>Cut the biggest daily flashpoint</p></div>
+                  <span class="go">›</span>
+                </div>
+                <div class="lcard">
+                  <div class="th" style="background:#e7efeb">🧩</div>
+                  <div><h4>Give control to get cooperation</h4><p>The choice trick that ends power struggles</p></div>
+                  <span class="go">›</span>
+                </div>
+                <div class="lcard">
+                  <div class="th" style="background:#eaf3ed">⏱️</div>
+                  <div><h4>Beating “time blindness”</h4><p>Make time visible for an ADHD brain</p></div>
+                  <span class="go">›</span>
+                </div>
+                <div class="lcard">
+                  <div class="th" style="background:#f3ecdb">🗣️</div>
+                  <div><h4>Words that de-escalate</h4><p>Swap 5 phrases that quietly make it worse</p></div>
+                  <span class="go">›</span>
+                </div>
+              </div>
+
+              <div class="card" style="margin-top:16px;display:flex;gap:13px;align-items:center;background:var(--primary-050);border-color:#cbe0d7">
+                <div style="width:44px;height:44px;border-radius:13px;background:#fff;display:grid;place-items:center;font-size:22px">▶️</div>
+                <div style="flex:1"><h4 style="font-size:14px;font-weight:700;color:var(--primary)">Watch: Philip on executive function</h4><p style="font-size:12px;color:#2c4a42">6-min video · Prometheus Minds</p></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ GROW ============ -->
+          <section class="screen" id="s-grow">
+            <div class="pad">
+              <p class="eyebrow">Grow</p>
+              <h2 class="title" style="margin-top:4px">Progress</h2>
+
+              <div class="ring-card" style="margin-top:16px">
+                <svg class="ring" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="10"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#e07a3f" stroke-width="10" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="80" transform="rotate(-90 50 50)"/>
+                  <text x="50" y="47" text-anchor="middle" fill="#fff" font-size="21" font-weight="700">68%</text>
+                  <text x="50" y="63" text-anchor="middle" fill="#bcd3ca" font-size="9">this week</text>
+                </svg>
+                <div>
+                  <h3>You're building real skills</h3>
+                  <p>You've handled 5 hard moments with your new tools this week. That's the work. 💪</p>
+                </div>
+              </div>
+
+              <p class="eyebrow" style="margin:22px 0 12px">Active goals</p>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div class="goal">
+                  <div class="top">
+                    <div class="gi" style="background:var(--ember-soft)">🌅</div>
+                    <h4>Calmer mornings</h4>
+                    <span class="pct">4 / 7 days</span>
+                  </div>
+                  <div class="track-line"><i style="width:57%"></i></div>
+                  <p class="sub" style="margin-top:9px;font-size:12.5px">Next step: lay clothes out the night before</p>
+                </div>
+                <div class="goal">
+                  <div class="top">
+                    <div class="gi" style="background:#e7efeb">📚</div>
+                    <h4>Homework without a battle</h4>
+                    <span class="pct">2 / 5 days</span>
+                  </div>
+                  <div class="track-line"><i style="width:40%"></i></div>
+                  <p class="sub" style="margin-top:9px;font-size:12.5px">Next step: 10-min timer + one problem at a time</p>
+                </div>
+              </div>
+
+              <p class="eyebrow" style="margin:22px 0 8px">Tonight's habits</p>
+              <div class="card">
+                <div class="habit doneT">
+                  <div class="check done"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></div>
+                  <h4>Lay out Milo's clothes</h4><span class="days">🔥 6</span>
+                </div>
+                <div class="habit doneT">
+                  <div class="check done"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></div>
+                  <h4>10-min wind-down, no screens</h4><span class="days">🔥 4</span>
+                </div>
+                <div class="habit">
+                  <div class="check"></div>
+                  <h4>One-line reflection with coach</h4><span class="days">🔥 6</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ YOU ============ -->
+          <section class="screen" id="s-you">
+            <div class="pad">
+              <p class="eyebrow">You</p>
+              <div class="profile-top" style="margin-top:8px">
+                <div class="pic">S</div>
+                <div><h3>Sarah Whitfield</h3><p>Parent of Milo, 9 · Member since June</p></div>
+              </div>
+
+              <div class="promo" style="margin-top:20px">
+                <div class="pm"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M12 2c1 3-1 4-2 6s-1 4 1 5c1-2 1-3 2-4 2 2 3 4 3 6a6 6 0 11-12 0c0-4 3-6 4-9 1 2 2 3 3 4 1-3-1-5-2-8z"/></svg></div>
+                <h3>Connected to Prometheus Minds</h3>
+                <p>Milo's tutoring plan is linked. Your coach aligns its advice with what his Prometheus tutor is working on.</p>
+              </div>
+
+              <p class="eyebrow" style="margin:22px 0 6px">Your children</p>
+              <div class="card">
+                <div class="setrow">
+                  <div class="si" style="background:var(--ember-soft)"><span style="font-size:16px">🧒</span></div>
+                  <div><h4>Milo, 9</h4><p>Homework · mornings · transitions</p></div>
+                  <span class="go">›</span>
+                </div>
+                <div class="setrow">
+                  <div class="si"><svg viewBox="0 0 24 24" fill="none" stroke="#1f4a41" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                  <div><h4>Add another child</h4><p>Each gets their own coach memory</p></div>
+                  <span class="go">›</span>
+                </div>
+              </div>
+
+              <p class="eyebrow" style="margin:22px 0 6px">Settings</p>
+              <div class="card">
+                <div class="setrow">
+                  <div class="si"><svg viewBox="0 0 24 24" fill="none" stroke="#1f4a41" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></div>
+                  <div><h4>Check-in reminders</h4><p>Daily at 7:40am</p></div>
+                  <span class="go">›</span>
+                </div>
+                <div class="setrow">
+                  <div class="si"><svg viewBox="0 0 24 24" fill="none" stroke="#1f4a41" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div>
+                  <div><h4>Privacy & data</h4><p>Export or delete anytime</p></div>
+                  <span class="go">›</span>
+                </div>
+                <div class="setrow">
+                  <div class="si"><svg viewBox="0 0 24 24" fill="none" stroke="#1f4a41" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+                  <div><h4>Prometheus+ membership</h4><p>Bundled with tutoring · active</p></div>
+                  <span class="go">›</span>
+                </div>
+              </div>
+              <button class="btn btn-ghost" style="margin-top:16px" onclick="go('onboarding')">↺ Restart onboarding</button>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- TAB BAR -->
+        <div class="tabbar">
+          <button class="tab" data-tab="learn" onclick="go('learn')">
+            <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M12 5v14"/></svg><span>Learn</span>
+          </button>
+          <button class="tab" data-tab="track" onclick="go('track')">
+            <svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg><span>Track</span>
+          </button>
+          <button class="tab coach active" data-tab="coach" onclick="go('coach')">
+            <div class="fab"><svg viewBox="0 0 24 24" fill="none" stroke="#fff"><path d="M12 2c1 3-1 4-2 6s-1 4 1 5c1-2 1-3 2-4 2 2 3 4 3 6a6 6 0 11-12 0c0-4 3-6 4-9 1 2 2 3 3 4 1-3-1-5-2-8z"/></svg></div>
+            <span>Coach</span>
+          </button>
+          <button class="tab" data-tab="grow" onclick="go('grow')">
+            <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg><span>Grow</span>
+          </button>
+          <button class="tab" data-tab="you" onclick="go('you')">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>You</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- screen legend -->
+    <div class="legend" id="legend">
+      <button data-go="onboarding">1 · Onboarding</button>
+      <button data-go="coach" class="on">2 · Coach (home)</button>
+      <button data-go="moment">3 · Hard moment ✦</button>
+      <button data-go="track">4 · Track</button>
+      <button data-go="learn">5 · Learn</button>
+      <button data-go="grow">6 · Grow</button>
+      <button data-go="you">7 · You</button>
+    </div>
+    <p class="foot">Concept prototype for <b>Prometheus Minds</b> · prepared by <b>Black Hart Consulting</b>. Content and screens are illustrative — the real app centers on a Claude-powered coach with per-family memory, grounded in the Prometheus Method.</p>
+  </div>
+
+<script>
+  var TABS = {learn:1, track:1, coach:1, grow:1, you:1};
+  function setStatusDark(on){
+    document.getElementById('statusbar').classList.toggle('on-dark', !!on);
+  }
+  function go(name){
+    // screens
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+    var el = document.getElementById('s-'+name);
+    if(el){ el.classList.add('active'); el.scrollTop = 0; }
+    // dark status bar on dark-headed screens
+    setStatusDark(name==='moment');
+    // tab active state — moment maps to coach; onboarding clears
+    var tabName = (name==='moment') ? 'coach' : name;
+    document.querySelectorAll('.tab').forEach(function(t){
+      t.classList.toggle('active', t.dataset.tab===tabName && TABS[tabName]);
+    });
+    // legend active state
+    document.querySelectorAll('#legend button').forEach(function(b){
+      b.classList.toggle('on', b.dataset.go===name);
+    });
+  }
+  document.querySelectorAll('#legend button').forEach(function(b){
+    b.addEventListener('click', function(){ go(b.dataset.go); });
+  });
+  // start on Coach home (the heart of the app)
+  go('coach');
+</script>
+</body>
+</html>

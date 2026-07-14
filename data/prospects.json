@@ -33,5 +33,12 @@
     "tiers": ["app"],
     "defaultTier": "app",
     "created": "2026-07-09"
+  },
+  "prometheus-parent": {
+    "password": "Philip$11",
+    "label": "Prometheus Parent",
+    "tiers": ["app"],
+    "defaultTier": "app",
+    "created": "2026-07-14"
   }
 }

@@ -35,11 +35,14 @@ else
   [[ -f "$DATA_DIR/jobhunt.db-wal" ]] && cp "$DATA_DIR/jobhunt.db-wal" "$SNAP-wal" || true
 fi
 
-# Archive DB snapshot + the files directory together.
+# Archive DB snapshot (+ its WAL sidecar if the fallback branch produced one)
+# and the files directory together.
 ARCHIVE="$DEST/jobhunt-$STAMP.tar.gz"
-tar -czf "$ARCHIVE" -C "$DEST" "$(basename "$SNAP")" -C "$DATA_DIR" files 2>/dev/null || \
-  tar -czf "$ARCHIVE" -C "$DEST" "$(basename "$SNAP")"
-rm -f "$SNAP"
+SNAP_FILES=("$(basename "$SNAP")")
+[[ -f "$SNAP-wal" ]] && SNAP_FILES+=("$(basename "$SNAP")-wal")
+tar -czf "$ARCHIVE" -C "$DEST" "${SNAP_FILES[@]}" -C "$DATA_DIR" files 2>/dev/null || \
+  tar -czf "$ARCHIVE" -C "$DEST" "${SNAP_FILES[@]}"
+rm -f "$SNAP" "$SNAP-wal"
 
 echo "[backup] wrote $ARCHIVE"
 

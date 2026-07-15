@@ -8,15 +8,25 @@
 // The token-authenticated ingest routes (create + file upload) live in
 // ingest.js, mounted separately so the human session can never write via them.
 import express from 'express';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   listRecommendations, getRecommendation, updateRecommendation, deleteRecommendation,
-  getApplication, insertApplication, updateApplication,
+  getApplication, insertApplication, updateApplication, FILES_DIR,
 } from '../db.js';
 import { makeId } from '../shared.js';
 
 const router = express.Router();
 
 function todayStr() { return new Date().toISOString().slice(0, 10); }
+
+// Remove a recommendation's uploaded-files directory (best-effort). Guarded to
+// stay strictly inside FILES_DIR so a malformed id can't escape the tree.
+function removeRecFiles(recId) {
+  const dir = path.resolve(FILES_DIR, recId);
+  if (!dir.startsWith(path.resolve(FILES_DIR) + path.sep)) return;
+  fs.rm(dir, { recursive: true, force: true }, () => {});
+}
 
 router.get('/', (req, res) => {
   res.json(listRecommendations());
@@ -77,6 +87,7 @@ router.post('/:id/apply', (req, res) => {
     result = insertApplication(app);
   }
   deleteRecommendation(rec.id);
+  removeRecFiles(rec.id);
   res.status(201).json({ application: result, removed_recommendation: rec.id });
 });
 
@@ -91,6 +102,7 @@ router.post('/:id/dismiss', (req, res) => {
 router.delete('/:id', (req, res) => {
   const ok = deleteRecommendation(req.params.id);
   if (!ok) return res.status(404).json({ error: 'Not found' });
+  removeRecFiles(req.params.id);
   res.json({ ok: true });
 });
 

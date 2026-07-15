@@ -20,6 +20,11 @@ FROM node:20-bookworm-slim AS runtime
 ENV NODE_ENV=production
 WORKDIR /app
 
+# sqlite3 CLI so scripts/backup-jobhunt.sh can take a consistent .backup
+# snapshot (folds the WAL in) instead of a lossy file copy.
+RUN apt-get update && apt-get install -y --no-install-recommends sqlite3 \
+  && rm -rf /var/lib/apt/lists/*
+
 # Only production deps in the runtime image.
 COPY package.json ./
 RUN npm install --omit=dev && npm cache clean --force

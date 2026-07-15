@@ -1,0 +1,27 @@
+{
+  "name": "jobhunt-cockpit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Password-protected, database-backed job-search cockpit for jobhunt.blackhartconsulting.com",
+  "scripts": {
+    "dev:client": "vite",
+    "dev:server": "node --watch server/index.js",
+    "build": "vite build",
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "multer": "^2.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^6.0.7"
+  }
+}

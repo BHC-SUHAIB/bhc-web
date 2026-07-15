@@ -137,12 +137,40 @@ services:
       # serve immediately.
       - next_image_cache:/app/.next/cache/images
 
+  # Job-hunt cockpit — isolated Express+SQLite app served at
+  # jobhunt.blackhartconsulting.com. Own build context (./jobhunt), own data
+  # volume (bind-mounted for easy backup), only reachable inside the compose
+  # network. Caddy terminates TLS and proxies to it. Shares nothing with the
+  # main site (no Postgres, no Payload, no shared secrets).
+  jobhunt:
+    build:
+      context: ./jobhunt
+      dockerfile: Dockerfile
+    container_name: bhc-jobhunt
+    restart: unless-stopped
+    expose:
+      - "8080"
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      DATA_DIR: /data
+      # Secrets live in /opt/bhc-web/.env (never committed). The :? guards make
+      # a deploy fail loudly if any is missing rather than booting insecure.
+      APP_PASSWORD: ${JOBHUNT_APP_PASSWORD:?set JOBHUNT_APP_PASSWORD in .env}
+      SESSION_SECRET: ${JOBHUNT_SESSION_SECRET:?set JOBHUNT_SESSION_SECRET in .env}
+      INGEST_TOKEN: ${JOBHUNT_INGEST_TOKEN:?set JOBHUNT_INGEST_TOKEN in .env}
+    volumes:
+      # SQLite DB + uploaded resume/cover files. Host path is backed up nightly
+      # by scripts/backup-jobhunt.sh.
+      - ./jobhunt-data:/data
+
   caddy:
     image: caddy:2-alpine
     container_name: bhc-caddy
     restart: unless-stopped
     depends_on:
       - web
+      - jobhunt
     ports:
       - "80:80"
       - "443:443"

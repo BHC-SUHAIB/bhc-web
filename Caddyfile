@@ -99,6 +99,41 @@ sorenori.blackhartconsulting.com {
 	}
 }
 
+# ---- Job-hunt cockpit (jobhunt.blackhartconsulting.com) ----
+# Password-protected job-search dashboard, fully isolated from the apex Next
+# app. Caddy auto-obtains a Let's Encrypt cert for this subdomain once its DNS
+# A record points at the droplet (same automatic flow as sorenori above). The
+# app is base-path-free (served at the subdomain root) and handles its own auth.
+jobhunt.blackhartconsulting.com {
+	encode gzip zstd
+
+	# Allow multipart resume/cover uploads from the daily ingest agent (the app
+	# caps each file at 8MB; 40MB covers four files plus overhead).
+	request_body {
+		max_size 40MB
+	}
+
+	reverse_proxy jobhunt:8080 {
+		header_up Host {host}
+		header_up X-Real-IP {remote}
+		header_up X-Forwarded-For {remote}
+		header_up X-Forwarded-Proto {scheme}
+	}
+
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# The whole tool is private; keep it out of search indexes.
+		X-Robots-Tag "noindex, nofollow"
+	}
+
+	log {
+		output stdout
+		format json
+	}
+}
+
 # ---- IP-based fallback (plain HTTP, no TLS) ----
 :80 {
 	encode gzip zstd

@@ -62,6 +62,12 @@ fi
 log "Building web image (Turbopack cache persists via BuildKit cache mounts)"
 docker compose build web
 
+# Job-hunt cockpit lives in its own build context (./jobhunt). `up -d` below
+# would auto-build it only on first deploy (when no image exists yet); building
+# it explicitly here ensures code changes ship on every subsequent deploy too.
+log "Building jobhunt image"
+docker compose build jobhunt
+
 # Clear containers left in 'created'/'exited' by a previously aborted deploy.
 # Compose won't reuse a half-created container, so `up` fails with "container
 # name already in use" and set -e aborts the whole deploy (recurring on prod).

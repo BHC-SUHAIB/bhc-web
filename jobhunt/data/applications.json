@@ -1,0 +1,822 @@
+[
+  {
+    "id": "2026-07-08-attentive-strategy-operations-associate",
+    "company": "Attentive",
+    "role_title": "Strategy & Operations Associate",
+    "track": "Analyst/Strategy",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "Salary: $100K to $125K + equity",
+    "source_url": "https://www.linkedin.com/jobs/view/4392056639/",
+    "date_applied": "2026-07-10",
+    "status": "Applied",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-08"
+      },
+      {
+        "status": "Applied",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Analyst/Strategy",
+    "contact": "",
+    "next_action": "Await recruiter screen or reply; follow up with a short note if no response by 2026-07-24",
+    "next_action_due": "2026-07-24",
+    "notes": "Stretch / low probability. Hard gate: posting requires minimum 2 years at a management consulting firm, which Suhaib lacks on paper. Double bind on level (COO/CTO history vs Associate rung). 200+ applicants in 5 days. Role substance is corporate strategy plus corporate development, hence Analyst/Strategy track. Materials prepared; not yet submitted."
+  },
+  {
+    "id": "2026-07-08-datum-technologies-senior-analyst-supply-chain-consulting",
+    "company": "Datum Technologies Group",
+    "role_title": "Senior Analyst (Supply Chain and Consulting)",
+    "track": "Analyst/Strategy",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "Not disclosed",
+    "source_url": "https://www.linkedin.com/jobs/view/4425852313/",
+    "date_applied": "2026-07-10",
+    "status": "Applied",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-08"
+      },
+      {
+        "status": "Applied",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Analyst/Strategy",
+    "contact": "Uttam Kumar, Talent Acquisition Lead (job poster)",
+    "next_action": "Await recruiter screen or reply; follow up with a short note if no response by 2026-07-24",
+    "next_action_due": "2026-07-24",
+    "notes": "Moderate fit, stronger than the Attentive stretch: no hard credential gate, right rung (Senior Analyst), small owner-operated firm. JD function says Supply Chain but substance is data-to-recommendation strategy (analytics, market research, data visualization, M&A synergy, business process and technology assessment), hence Analyst/Strategy. Frictions: Power BI gap (not on resume, not fabricated), no formal supply-chain title (adjacency only via facility procurement and manufacturing capacity), overqualification optics for a COO/CTO, and an aging high-volume req (200+ applicants, approx 4 weeks old). Client-embedded consulting seat via a staffing firm; confirm W-2 vs C2H vs C2C. Materials prepared; not yet submitted."
+  },
+  {
+    "id": "2026-07-08-legrand-zpe-technical-customer-success-manager",
+    "company": "Legrand (ZPE Systems)",
+    "role_title": "Technical Customer Success Manager",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "Salary: $150K to $170K OTE (base $150K to $170K)",
+    "source_url": "https://www.linkedin.com/jobs/view/4425319484/",
+    "date_applied": "2026-07-10",
+    "status": "Applied",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-08"
+      },
+      {
+        "status": "Applied",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "Mazal Menasche, Esq., HR (job poster)",
+    "next_action": "Await recruiter screen or reply; follow up with a short note if no response by 2026-07-24",
+    "next_action_due": "2026-07-24",
+    "notes": "Real target, not a stretch. IT/Solutions track: Technical Customer Success Manager is a solutions-engineering / technical-pre-sales / TAM hybrid (selective pre-sales solution validation + primary post-sales ownership of deployment, onboarding, enablement, long-term advisory). Core reqs are honestly his: networking (TCP/IP, VLANs, routing, VPNs), customer-facing technical conversations, managing across pre/post-sales; B.S. CS meets the education gate; posting values non-traditional backgrounds and 'most, but not all.' Explicitly NOT quota-carrying, which suits an inbound, delivery-oriented operator. Frictions: deep OOB/NetOps product depth (Nodegrid, console/KVM/IPMI, observability stack) he lacks on paper (not required; positioned as fast ramp, not claimed); Python listed but he has Bash only (not added); travel up to ~50% is the biggest variable (not committed in cover letter, his call); overqualification optics (LinkedIn tags Associate but title=Manager, $150K+, 3+ yrs = senior IC). Comp disclosed and strong. ZPE = OOB/Nodegrid, ~51-200 employees, acquired by Legrand early 2024; parent Legrand NA ~$2.5B rev, 9,200+ employees, public. Cover letter created (not required) at Suhaib's request. Materials prepared; not yet submitted."
+  },
+  {
+    "id": "2026-07-09-inceed-it-project-manager",
+    "company": "Inceed",
+    "role_title": "IT Project Manager",
+    "track": "IT/Solutions",
+    "engagement_type": "Contract",
+    "platform": "LinkedIn",
+    "location_type": "Hybrid",
+    "comp": "Hourly: $60 to $70/hr",
+    "source_url": "https://www.linkedin.com/jobs/view/4418850477/",
+    "date_applied": "2026-07-10",
+    "status": "Applied",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-09"
+      },
+      {
+        "status": "Applied",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Await recruiter screen or reply; follow up with a short note if no response by 2026-07-24",
+    "next_action_due": "2026-07-24",
+    "notes": "Strong, clean fit and one of the better odds in the pipeline. Track IT/Solutions (IT Project Manager maps to Technical PM; job function is IT); Operations/Project Delivery was the close runner-up since the role is pure project delivery. Every required qualification is a PM competency he genuinely has: lead projects inception to completion, waterfall and agile, manage multiple projects at once, stakeholder reporting, on time and within budget, PM tools. The engineering/construction nice-to-have is a differentiator, not a gap, via the 135,000 sq ft facility delivered 15% under budget and on schedule. Houston-local and hybrid (his home metro). Contract lane sidesteps the overqualification screen; bill via Black Hart, confirm W-2 vs C2C with CPA. Frictions: no PMP (nice-to-have only, not claimed), no floating-production-systems domain experience (nice-to-have only), and overqualification optics. Fresh req: 31 applicants at capture, ~5 hours old, so speed is the main lever. End client undisclosed by Inceed; the description (engineering and construction of floating production systems) points to a Houston offshore-energy EPC such as SBM Offshore, MODEC, McDermott, or TechnipFMC, not confirmed. Materials prepared (resume IT/Solutions, cover letter created at his request); not yet submitted."
+  },
+  {
+    "id": "2026-07-09-17a-director-of-technology",
+    "company": "17A (Group 17a)",
+    "role_title": "Director of Technology",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "Salary: $140K to $175K base + performance-based incentives",
+    "source_url": "https://www.linkedin.com/jobs/view/4438692492/",
+    "date_applied": "2026-07-10",
+    "status": "Applied",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-09"
+      },
+      {
+        "status": "Applied",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "Katie Egan, Senior Manager of Network Growth (job poster); recruiting@group17a.com",
+    "next_action": "Await recruiter screen or reply; follow up with a short note if no response by 2026-07-24",
+    "next_action_due": "2026-07-24",
+    "notes": "IT/Solutions track. Director of Technology is a direct title match to Suhaib's Director of IT to CTO arc, so this is one of the cleaner fits in the pipeline, not a stretch. The role is INTERNAL IT (own internal tech strategy end to end while staying hands-on), so his private-sector IT/ops experience transfers cleanly and the lack of a government-domain background matters little. Employer profile fits his best case: small (~50 people), founder-owned (Annie Rittgers, ex-McKinsey), report to a principal, growth-stage where structure is being built, not inherited. Remote US, no travel stated, comp disclosed $140K-$175K base + incentives. Considered Operations track (PMO / ops-partner language) but IT is the spine, so IT/Solutions wins; Analyst does not fit. Tailoring: tagline mirrors the JD pillars (IT Strategy & Roadmap / Infrastructure & Support / AI & Automation); summary rewritten around building internal tech from the ground up and staying hands-on; Core Skills regrouped into IT Strategy & Operations, Infrastructure & Support, Delivery & Automation; experience reframed to a lead bullet on building the IT function, an infrastructure/support/access/vendor bullet, a PMO bullet carrying the 135,000 sq ft facility (scoping to implementation), and the Bitcoin feasibility bullet reframed as pragmatic, right-sized judgment. Kept COO/CTO/Director titles, year-only dates, Private Investment Firm (Confidential), em dashes in resume; no address or IDs; one page. Honest flags: (1) overqualification / step-down optic (former COO to Director IC) is the main thing to manage, addressed head-on in the cover letter; (2) tooling keywords (Zapier, Make, Notion, Airtable, Slack, Google Workspace) mirrored at category level only (no-code/workflow automation, modern SaaS administration, AI agents via Claude Code/Copilot which are genuinely his); Suhaib should add any specific named tools he has actually used for stronger ATS match and cut what he has not, and confirm Google Workspace vs Microsoft 365. Timing: fresh req (~6 hours old at capture, 186 applicants), apply fast. Cover letter created at Suhaib's request (md, docx, pdf), matched to resume letterhead, em-dash-free. Materials prepared; not yet submitted."
+  },
+  {
+    "id": "2026-07-09-jiffy-lube-technology-project-manager",
+    "company": "Jiffy Lube International",
+    "role_title": "Technology Project Manager",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "On-site (Houston, TX)",
+    "comp": "Not disclosed (market estimate ~$110K to $150K)",
+    "source_url": "https://www.linkedin.com/jobs/view/4434654734/",
+    "date_applied": "2026-07-10",
+    "status": "Applied",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-09"
+      },
+      {
+        "status": "Applied",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Await recruiter screen or reply; follow up with a short note if no response by 2026-07-24",
+    "next_action_due": "2026-07-24",
+    "notes": "Strongest-fit posting in the pipeline so far on geography and substance. Local, office-based Houston (his best geographic fit; on-site thins the applicant pool toward locals). IT/Solutions track: title Technology Project Manager equals Technical Project Manager, and the hard technical gate (SQL required, enterprise/POS apps, Jira, .NET) is IT; Operations was the alternate. Tailored toward operational ownership and delivery. No hard credential gate; right rung on paper (Mid-Senior, 6+ years, which he clears). SQL honest via MySQL DBA. Honest gaps (not fabricated): specific POS platform (fast ramp; retail/T-Mobile and enterprise-application adjacency), Power BI (used Excel and KPI reporting), Python (has .NET and Bash), ServiceNow (has Jira), PCI (framed as regulated-environment healthcare and financial services plus governance support, not a credential). Overqualification optics: former COO/CTO to a PM seat; mitigated by genuine local, on-site, hands-on intent; be ready to answer directly. Ownership just changed: Monomoy Capital Partners (middle-market PE) closed its $1.3B buyout of Jiffy Lube from Shell on 2026-07-01, so it is a newly independent carve-out standing up its own technology operations, which favors a standardize-and-stabilize operator and sits closer to his lean, principal-led best-fit. Comp undisclosed (market estimate ~$110K to $150K). 153 applicants, approx 1 week old. Cover letter created at Suhaib's request (md, docx, pdf), matched to resume letterhead, em-dash-free. Materials prepared; not yet submitted."
+  },
+  {
+    "id": "2026-07-09-searce-technical-project-manager",
+    "company": "Searce Inc",
+    "role_title": "Technical Project Manager (Client Success Director)",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "Onsite/Hybrid (Houston, TX)",
+    "comp": "Not disclosed",
+    "source_url": "https://www.linkedin.com/jobs/view/4431575038/",
+    "date_applied": "2026-07-10",
+    "status": "Applied",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-09"
+      },
+      {
+        "status": "Applied",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Await recruiter screen or reply; follow up with a short note if no response by 2026-07-24",
+    "next_action_due": "2026-07-24",
+    "notes": "LinkedIn title is Technical Project Manager (function: Project Management, seniority: Director), but the JD is a Client Success Director role: forward-deployed, own the client outcome end to end as the DRI, run Agile programs, lead change and adoption, hold CXO relationships, tie to ROI. IT/Solutions track (that title is on the IT/Solutions list; role is technical solution delivery at a Cloud/AI consultancy); Operations/Project Delivery was the close runner-up, so the resume pulls program-and-change framing forward on the technical base. Level fit is the standout: Director matches a COO/CTO, so no overqualification screen for once. Core reqs are honestly his (single-threaded/DRI delivery ownership, cross-functional leadership, change management and adoption, executive communication, first-principles problem solving, data-driven decisioning, ROI). Founder-led (Hardik Parekh, bootstrapped), US HQ in North Houston (local, no relocation), fresh req (about 1 week, 133 applicants), and they explicitly ask for a statement (cover letter created as one). Frictions (not fabricated): JD wants 8+ years senior external client-facing influencing C-suite, but his exec experience is largely internal C-suite plus small-scale consulting; GCP-first shop while he is Azure-centered (did not add GCP); JD says strict Agile/Scrum and transformations, he has Agile tools not formal Scrum and no cert. Comp not disclosed. Materials prepared (resume + statement), not yet submitted."
+  },
+  {
+    "id": "2026-07-10-qnergy-director-of-operations-and-project-delivery",
+    "company": "Qnergy",
+    "role_title": "Director of Operations and Project Delivery",
+    "track": "Operations/Project Delivery",
+    "engagement_type": "W-2",
+    "platform": "ZipRecruiter",
+    "location_type": "Remote",
+    "comp": "Salary: $77,300 to $138,700",
+    "source_url": "https://www.ziprecruiter.com/job-redirect?match_token=CowBChZTNVdSWlZlRHY4LVdKRWNaQ3lLWGJREiQwMTlmNGFjNS1jYzllLTdkNjEtOGY3My1iZTYzYTQ3MWViNWYaSEFBRkJzMHozWHRfZDVPX0VxdnMtVGlwZFBfT3dGZ3FpeDFDSm1FcUJuSVhDNzc0TDBReFJoelItdElCYTd0V05HWnBMUEM2bCDJrQUQARjJrQU%3D&tsid=100000502",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Operations/Project Delivery",
+    "contact": "",
+    "next_action": "Apply on ZipRecruiter with resume-Operations; confirm reporting line and whether the Houston office is an option.",
+    "next_action_due": "2026-07-13",
+    "notes": "Strong fit. Title maps directly to your Operations/Project Delivery track (operations plus project delivery in one seat). Qnergy is a clean-energy hardware company (Stirling engine, methane mitigation), so your 135,000 sq ft facility delivery and technical operations background transfer. Comp midpoint modest. Fresh, 1 day old at capture. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-ikon-environmental-executive-director-of-operations",
+    "company": "IKON Environmental Solutions LP",
+    "role_title": "Executive Director of Operations",
+    "track": "Operations/Project Delivery",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $105,000 to $135,000",
+    "source_url": "https://to.indeed.com/aac4rrg9tsdg",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Operations/Project Delivery",
+    "contact": "",
+    "next_action": "Apply on Indeed with resume-Operations; qualify the employer identity, size, and reporting line.",
+    "next_action_due": "2026-07-13",
+    "notes": "Good fit. Operations leadership at an environmental services firm, rung matches (Executive Director of Operations at a small-to-mid company). Fresh (Jul 4). Flag: confirm company size and reporting line, verify it is a lean operator seat and not a large bureaucracy. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-the-chicago-school-director-business-operations",
+    "company": "The Chicago School",
+    "role_title": "Director, Business Operations",
+    "track": "Operations/Project Delivery",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $100,000 to $125,000",
+    "source_url": "https://to.indeed.com/aapqkxc9h9yf",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Operations/Project Delivery",
+    "contact": "",
+    "next_action": "Apply on Indeed with resume-Operations; be ready to address the higher-education and Power BI/Workday gaps directly.",
+    "next_action_due": "2026-07-14",
+    "notes": "Upgraded after reading the full JD: stronger fit than the initial screen suggested. The role is process governance and operational effectiveness (operational calendar ownership, cross-functional accountability, enterprise risk and business continuity, policy and procedure administration, operational and financial analysis tied to near-term budgets and long-range planning, recurring executive reporting, and team leadership), which is the substance of his COO seat. Meets every basic qualification honestly: Bachelor's degree, 5+ years progressively responsible operations and project management, cross-functional process ownership. Comp disclosed at $100K to $125K plus strong benefits (retirement with employer contribution, tuition reimbursement). Remote US, occasional campus travel, reports to the AVP Business Operations. Flags: higher-education experience is preferred and he has none; Power BI and Workday are preferred and he has neither (Excel and SQL instead, addressed candidly in the cover letter, not fabricated); larger layered institution, so a slower cycle than his owner-operated sweet spot; management rating 3.1. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-aura-director-of-operations",
+    "company": "Aura",
+    "role_title": "Director of Operations",
+    "track": "Operations/Project Delivery",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $160,000 to $195,000",
+    "source_url": "https://to.indeed.com/aabc6jjjpypz",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Operations/Project Delivery",
+    "contact": "",
+    "next_action": "Review JD and decide whether to tailor the resume and apply",
+    "next_action_due": "2026-07-15",
+    "notes": "Higher-comp stretch. Aura is a venture-backed digital safety company, more competitive and process-heavy than your owner-operated sweet spot. Strong comp, remote. Worth a tailored shot if you want to aim up, expect volume competition."
+  },
+  {
+    "id": "2026-07-10-lindblad-expeditions-senior-manager-corporate-development-ma",
+    "company": "Lindblad Expeditions",
+    "role_title": "Senior Manager, Corporate Development M&A",
+    "track": "Analyst/Strategy",
+    "engagement_type": "W-2",
+    "platform": "ZipRecruiter",
+    "location_type": "Remote",
+    "comp": "Salary: $120,000 to $135,000",
+    "source_url": "https://www.ziprecruiter.com/job-redirect?match_token=CowBChZ0SkJ2cER2Y01CaTZBaXB0M2ROOVF3EiQwMTlmNGFjNS1kNzI1LTdjMzMtYWMwYi05MTdlYmM5MzU3YWUaSEFBRXhuM0NEWWI2WXJ0RWh4Mi1qT2dPazNCYTZrSE5xY0t0MjktdE9KRnhvX0xnX1d6cHdYQXRiaDVMSV9EOXVUMGctV1lxbiDJrQUQARjJrQU%3D&tsid=100000502",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Analyst/Strategy",
+    "contact": "",
+    "next_action": "Apply on ZipRecruiter with resume-Analyst_Strategy; in the note, reference their land-experience roll-up and operating-business diligence.",
+    "next_action_due": "2026-07-13",
+    "notes": "Strong track fit. Corporate Development M&A maps directly to your due diligence anchor ($350K to $5M acquisitions). Senior Manager rung fits your calibration. Fresh (2 days). Flag: they may want prior in-house M&A or banking reps, lead with the diligence work and the Bitcoin feasibility analysis. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-ontrac-sr-financial-analyst",
+    "company": "OnTrac",
+    "role_title": "Sr Financial Analyst",
+    "track": "Analyst/Strategy",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $105,000 to $157,000",
+    "source_url": "https://to.indeed.com/aaf8xzvgdxnz",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Analyst/Strategy",
+    "contact": "",
+    "next_action": "Apply on Indeed with resume-Analyst_Strategy; be ready to speak to the Power BI / Oracle ramp.",
+    "next_action_due": "2026-07-13",
+    "notes": "Solid fit. Senior Financial Analyst, remote, strong comp band, logistics company. Fresh (Jul 6). Flag: mirror the modeling and forecasting keywords, confirm no hard requirement you lack such as a specific ERP. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-jd-power-senior-analyst-fpa",
+    "company": "JD Power",
+    "role_title": "Senior Analyst, FP&A",
+    "track": "Analyst/Strategy",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Not disclosed",
+    "source_url": "https://to.indeed.com/aamfpxyw8bbd",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Analyst/Strategy",
+    "contact": "",
+    "next_action": "Review JD and decide whether to tailor the resume and apply",
+    "next_action_due": "2026-07-14",
+    "notes": "Good fit and reputable brand. Senior Analyst FP&A, remote, fresh (Jul 7), rung matches. Flag: comp not disclosed, FP&A shops often want a prior FP&A title, so anchor to your budgeting (facility delivered 15 percent under budget) and data-to-recommendation work."
+  },
+  {
+    "id": "2026-07-10-insurance-group-director-of-it",
+    "company": "Insurance Group (recruiter-masked)",
+    "role_title": "Director of IT",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "ZipRecruiter",
+    "location_type": "Remote",
+    "comp": "Salary: $155,000 to $175,000",
+    "source_url": "https://www.ziprecruiter.com/job-redirect?match_token=CpcBChZ6V1hWTnZCNmFKS3dzSlFpdUFUN1ZREiQwMTlmNGFjNS1lMTk1LTdjNWMtOWQ2Ni1jMTdlYjhhMWM1NDEaU0FBR3NaOTlYdERCVUZ0cWw4MVRVUnlXam9uNU1xZ2hweGNMd2x2bkFtOFk5elFJRGFTVGVZSmhDRFdBYkUyVVgwUno0MFlhcWRXRUJjQXljOGFjIMmtBRABGMmtBQ%3D%3D&tsid=100000502",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Apply on ZipRecruiter with resume-IT_Solutions; qualify the actual employer and company size before deeper investment.",
+    "next_action_due": "2026-07-13",
+    "notes": "Direct title match to your Director of IT to CTO arc, remote, strong comp, very fresh (1 day). One of the cleaner fits in this batch. Flag: employer listed only as Insurance Group (recruiter-masked), qualify the actual company, size, and reporting line before investing. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-davis-technology-management-it-project-manager",
+    "company": "Davis Technology Management",
+    "role_title": "IT Project Manager",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "ZipRecruiter",
+    "location_type": "Remote",
+    "comp": "Salary: $120,000 to $130,000",
+    "source_url": "https://www.ziprecruiter.com/job-redirect?match_token=CowBChZPY3RUbzk0cmVVcUNfMHU4NVQzWEFBEiQwMTlmNGFjNS1lMTk1LTdiYzEtYTgyMi0zOTg5YzIzMGRjZjMaSEFBRVFUc21ndEJSZFdlYWxsVUw5b0Nia2lzNjB3QmdSOERuVnRuVEtPUTRpQzh3MjYwWGtKcHVQYjVHXzFXNkx2VHJyd3huOCDJrQUQARjJrQU%3D&tsid=100000502",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Apply on ZipRecruiter with resume-IT_Solutions; ask Davis about end client, W-2 vs C2C, and contract-to-hire.",
+    "next_action_due": "2026-07-14",
+    "notes": "Good fit. IT Project Manager, remote, comp disclosed. Maps to your Technical PM strength and the facility delivery (on time, 15 percent under budget). Flag: likely a staffing or managed-services firm, confirm end client, W-2 vs C2C, and whether contract-to-hire. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-gvo-partners-it-manager",
+    "company": "GVO Partners",
+    "role_title": "IT Manager",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "ZipRecruiter",
+    "location_type": "Remote",
+    "comp": "Salary: $100,000 to $150,000",
+    "source_url": "https://www.ziprecruiter.com/job-redirect?match_token=CosBChZKSDFHQk15aWFsbmw1bVduQ2dueUJBEiQwMTlmNGFjNS1lMTk1LTdiOTUtYjQ2MS1hODFmMDY4MzBhZTkaR0FBR3p2ZlY0c3NKU01GdjFnaUlVRjlpeFV3YkFNLVg0bjI3M0lWS1NtNTQ1M28zVXdRME1VSjBnY2VXb2Jjem1vWWItaEZrIMmtBRABGMmtBQ%3D%3D&tsid=100000502",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and decide whether to tailor the resume and apply",
+    "next_action_due": "2026-07-14",
+    "notes": "Good rung fit. IT Manager, remote. Maps to your infrastructure and vendor management experience. Flag: GVO Partners reads like a search or consulting firm, qualify the actual employer and whether it is direct or staffing."
+  },
+  {
+    "id": "2026-07-10-zoom-mass-market-solutions-engineer",
+    "company": "Zoom",
+    "role_title": "Mass Market Solutions Engineer",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $131,200 to $262,400 (OTE range)",
+    "source_url": "https://to.indeed.com/aanwmfpjcrxw",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and decide whether to tailor the resume and apply",
+    "next_action_due": "2026-07-15",
+    "notes": "Covers your Solutions Engineer sub-lane (like the Legrand ZPE TCSM). Remote, wide comp band, fresh (Jul 7). Flag: big-company, high applicant volume, likely some quota or pre-sales expectation, and depth on Zoom stack is a ramp. Aim here only if you want the SE lane."
+  },
+  {
+    "id": "2026-07-10-kw-relocation-director-of-operations",
+    "company": "KW Relocation (Keller Williams)",
+    "role_title": "Director of Operations",
+    "track": "Operations/Project Delivery",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "Not disclosed (benefits: Medical, 401(k))",
+    "source_url": "https://www.linkedin.com/jobs/view/4438366247/",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Operations/Project Delivery",
+    "contact": "",
+    "next_action": "Apply via LinkedIn Easy Apply with resume-Operations today while applicant count is low; qualify comp and confirm KW corporate relocation department.",
+    "next_action_due": "2026-07-11",
+    "notes": "LinkedIn Easy Apply. Keller Williams corporate relocation department (Maple Grove, MN). Real estate operations fit: his firm held real estate and he ran real estate due diligence; process and compliance and multi-stakeholder coordination map to relocation operations. Very fresh req (about 34 minutes, 10 applicants at capture), so speed matters. Flags: comp undisclosed; relocation-industry workflows (IRS gross-up, TPA coordination) are a ramp; confirm it is the KW corporate dept. LinkedIn JD client-rendered, tailored to role type. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-nextgen-kelly-telecom-project-manager-field-support",
+    "company": "NextGen | GTA (Kelly Telecom)",
+    "role_title": "Project Manager, Field Support",
+    "track": "Operations/Project Delivery",
+    "engagement_type": "Contract",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "$90,000 - $91,000 / year (qualify W-2 vs C2C)",
+    "source_url": "https://www.linkedin.com/jobs/view/4439356678/",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "Operations/Project Delivery",
+    "contact": "",
+    "next_action": "Apply via LinkedIn Easy Apply with resume-Operations; ask NextGen about end client, W-2 vs C2C rate, and contract length.",
+    "next_action_due": "2026-07-13",
+    "notes": "LinkedIn Easy Apply. Kelly Telecom staffing placement, likely supporting a telecom client's field or deployment program. Fit: project delivery plus genuine telecom field experience (T-Mobile district management) and infrastructure rollouts. Flags: staffing intermediary, end client unknown, likely contract (qualify structure and duration); telecom-deployment specifics a ramp. LinkedIn JD client-rendered, tailored to role type. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-10-insight-global-infrastructure-project-manager",
+    "company": "Insight Global",
+    "role_title": "Infrastructure Project Manager",
+    "track": "IT/Solutions",
+    "engagement_type": "Contract",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "$100,000 - $125,000 / year (qualify W-2 vs C2C)",
+    "source_url": "https://www.linkedin.com/jobs/view/4438358406/",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-10"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Apply via LinkedIn Easy Apply with resume-IT_Solutions; ask Insight Global about end client, tech stack, W-2 vs C2C, and duration.",
+    "next_action_due": "2026-07-13",
+    "notes": "LinkedIn Easy Apply. Insight Global staffing placement for an end client's infrastructure program. Strong fit: his network and infrastructure deployments across sites, migrations, and IT project delivery. Comp $100K to $125K, 4 benefits. Flags: staffing intermediary, end client and infra stack unknown, contract (qualify structure, duration, conversion). LinkedIn JD client-rendered, tailored to role type. PACKAGE BUILT 2026-07-10: tailored resume, cover letter, and company brief filed in the application folder."
+  },
+  {
+    "id": "2026-07-15-lockstep-technology-group-pre-sales-solutions-architect",
+    "company": "Lockstep Technology Group",
+    "role_title": "Pre-Sales Solutions Architect (Network Infrastructure/Security)",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "On-site (Houston, TX)",
+    "comp": "Not disclosed (Houston market ~$119K to $138K base; likely base + variable at a VAR)",
+    "source_url": "https://www.indeed.com/viewjob?jk=8a29a4f4d1a687bf",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Decide whether to submit; if yes, apply on Indeed with resume-IT_Solutions plus cover letter, and qualify comp structure (base + variable + OTE), certification expectations, and typical deal scale.",
+    "next_action_due": "2026-07-18",
+    "notes": "Strongest title match in the pipeline: Pre-Sales Solutions Architect is squarely on the IT/Solutions list and pre-sales/solution architecture are named skills on the master resume. Local (west Houston, 5747 Brittmoore, no relocation). Company is Wescott Technologies dba Lockstep, a Renovus Capital PE-backed roll-up (6 legacy IT firms consolidated since 2023; ~$325M continuation fund Feb 2024 with ~$60M for add-ons), serving K-12/gov/healthcare public sector plus commercial. Green flags: hands-on network+security infra (switching, routing, wireless, firewalls, access), scope-assess-recommend-value story (Bitcoin feasibility), stakeholder-approval evidence (due-diligence memos), sales-target proof (T-Mobile district P&L). Honest frictions: experience gate (10+ yrs enterprise networking/data center OR 5+ yrs manufacturer pre-sales) not cleanly met, his networking is commercial/multi-site not enterprise DC; holds none of the desired Aruba/Cisco/Juniper certs (not fabricated; named as ramp in letter); COO/CTO applying to an IC SE seat risks overqualification optics; PE roll-up vs his owner-operated preference. Odds: moderate, trending stretch on cert/enterprise-DC depth. PACKAGE BUILT 2026-07-15: tailored resume-IT_Solutions (docx+pdf), cover letter (md+docx+pdf), company brief, and application log filed in the folder."
+  },
+  {
+    "id": "2026-07-15-8x8-professional-services-solution-architect",
+    "company": "8x8",
+    "role_title": "Professional Services Solution Architect",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $114K to $171K",
+    "source_url": "https://to.indeed.com/aaqdmm9ccnjn",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD; if fit holds, tailor resume-IT_Solutions and apply. Confirm Easy Apply vs company ATS.",
+    "next_action_due": "2026-07-18",
+    "notes": "Post-sales solution design and delivery (Professional Services) at 8x8 (public UCaaS/CCaaS). Remote, comp disclosed and strong. Good lane fit; depth on the 8x8 stack is a ramp and big-company applicant volume is high. Verify application path."
+  },
+  {
+    "id": "2026-07-15-kore-ai-senior-solutions-consultant",
+    "company": "Kore.ai",
+    "role_title": "Senior Solutions Consultant",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $140K to $155K",
+    "source_url": "https://to.indeed.com/aavkhfztz7n7",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and decide whether to tailor resume-IT_Solutions and apply.",
+    "next_action_due": "2026-07-18",
+    "notes": "Senior rung (fits your calibration), remote, comp disclosed. Kore.ai = enterprise/conversational AI platform; solutions consultant blends pre-sales solutioning, demos, and enablement, squarely your lane. Ramp on their AI stack; expect some demo and presentation load."
+  },
+  {
+    "id": "2026-07-15-kensium-pre-sales-solution-engineer",
+    "company": "Kensium Solutions",
+    "role_title": "Pre-Sales Solution Engineer",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Not disclosed",
+    "source_url": "https://to.indeed.com/aacg7zdwqf4r",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and decide whether to tailor and apply; confirm Easy Apply vs company site.",
+    "next_action_due": "2026-07-18",
+    "notes": "On-the-nose title match to your preferred pre-sales lane. Kensium = Acumatica ERP / Adobe Commerce implementation partner, so pre-sales pairs solution design with integration and implementation (fits your build-and-advise strengths). Comp undisclosed; verify application path."
+  },
+  {
+    "id": "2026-07-15-outform-technology-solutions-engineer",
+    "company": "Outform Group",
+    "role_title": "Technology Solutions Engineer",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $120K to $140K",
+    "source_url": "https://to.indeed.com/aaxwqz9r2kpp",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD; verify hardware/field exposure before tailoring and applying.",
+    "next_action_due": "2026-07-18",
+    "notes": "Remote, comp disclosed. Outform = retail-tech / experiential hardware plus software; SE spans pre-sales design and delivery. Decent SE-lane fit; verify how hardware-heavy it is and whether any on-site or field retail work is implied (you prefer none)."
+  },
+  {
+    "id": "2026-07-15-guidewire-delivery-assurance-lead-consultant",
+    "company": "Guidewire",
+    "role_title": "Delivery Assurance Lead Consultant (AMER)",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $124K to $223K",
+    "source_url": "https://to.indeed.com/aaxmvl8jkt26",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and decide whether to tailor resume-IT_Solutions and apply.",
+    "next_action_due": "2026-07-18",
+    "notes": "Strong comp, remote. Guidewire (P&C insurance platform); delivery assurance = oversight of implementation quality and risk across partner-led projects, mapping to your PMO / delivery-governance and diligence strengths. Likely wants prior Guidewire or consulting delivery; position via the 135,000 sq ft delivery (15% under budget) and diligence work."
+  },
+  {
+    "id": "2026-07-15-epicor-consulting-services-consultant-edi",
+    "company": "Epicor Software",
+    "role_title": "Consulting Services Consultant (EDI)",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $94K to $151K",
+    "source_url": "https://to.indeed.com/aa2q8rgsnx8w",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD; confirm Easy Apply vs company site, then decide whether to tailor and apply.",
+    "next_action_due": "2026-07-18",
+    "notes": "Remote, comp disclosed. Epicor ERP implementation and consulting with an EDI focus; fits your implementation-and-advise lane and systems background. EDI-specific experience is the likely gate; position via integration and IT delivery."
+  },
+  {
+    "id": "2026-07-15-insurity-solution-architect",
+    "company": "Insurity",
+    "role_title": "Solution Architect",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "Indeed",
+    "location_type": "Remote",
+    "comp": "Salary: $83K to $160K",
+    "source_url": "https://to.indeed.com/aassvbhddf7d",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD; if pursuing, apply via company careers site (not Easy Apply) with resume-IT_Solutions.",
+    "next_action_due": "2026-07-18",
+    "notes": "Professional Services solution architect for P&C insurance software (Insurity Pro Suite). Remote, occasional in-person. Wants 5+ yrs SA or Implementation Consultant and P&C core-system experience (the main gap; adjacent via your IT and ops delivery). Applies via company careers site, NOT Easy Apply. Comp disclosed."
+  },
+  {
+    "id": "2026-07-15-presales-solutions-architect-vmware-vcf-li",
+    "company": "Undisclosed (LinkedIn Easy Apply)",
+    "role_title": "Presales Solutions Architect (VMware Cloud Foundation)",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "Not disclosed",
+    "source_url": "https://www.linkedin.com/jobs/view/4441204811/",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and Easy Apply with resume-IT_Solutions; confirm employer and comp. Fresh post, apply promptly.",
+    "next_action_due": "2026-07-17",
+    "notes": "Live LinkedIn Easy Apply find (keyword 'Presales', Remote, past week). VMware Cloud Foundation infrastructure presales, the closest of the LinkedIn presales hits to your IT and infrastructure background. JD not yet reviewed; verify employer (some are recruiter-posted), VCF/vSphere depth expectations, and comp."
+  },
+  {
+    "id": "2026-07-15-presales-solutions-architect-msit-salestalent-li",
+    "company": "Sales Talent Inc. (recruiter)",
+    "role_title": "Presales Solutions Architect (AI | Data | D365), Microsoft-focused IT services",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "LinkedIn",
+    "location_type": "Remote",
+    "comp": "Not disclosed",
+    "source_url": "https://www.linkedin.com/jobs/view/4440261423/",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and Easy Apply with resume-IT_Solutions; confirm end employer and W-2 direct vs placement.",
+    "next_action_due": "2026-07-17",
+    "notes": "Live LinkedIn Easy Apply find (keyword 'Presales'). Broad Microsoft-focused IT services presales (AI/Data/D365). Recruiter-posted (Sales Talent Inc.), so confirm end employer. D365/Dynamics presales depth is a likely gap; your Microsoft, IT-services and solutioning background is the bridge. JD not yet reviewed."
+  },
+  {
+    "id": "2026-07-15-mendix-presales-solutions-architect-zr",
+    "company": "Mendix (Siemens)",
+    "role_title": "Presales Solutions Architect",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "ZipRecruiter",
+    "location_type": "Remote (verify; listed Boston, MA)",
+    "comp": "Not disclosed",
+    "source_url": "https://www.ziprecruiter.com/co/Mendix/Jobs",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and use 1-Click Apply; verify remote eligibility (card showed Boston, MA) and low-code platform expectations.",
+    "next_action_due": "2026-07-17",
+    "notes": "Live ZipRecruiter 1-Click find (keyword 'Presales Solutions Architect'). Mendix = Siemens-owned low-code platform; genuine presales SA role and a strong lane fit. Card showed Boston, MA under a remote search, so confirm remote. JD not yet reviewed."
+  },
+  {
+    "id": "2026-07-15-ttec-digital-presales-solution-architect-amazon-connect-zr",
+    "company": "TTEC Digital",
+    "role_title": "Presales Solution Architect (Amazon Connect)",
+    "track": "IT/Solutions",
+    "engagement_type": "W-2",
+    "platform": "ZipRecruiter",
+    "location_type": "Remote (verify; listed Austin, TX)",
+    "comp": "Not disclosed",
+    "source_url": "https://www.ziprecruiter.com/co/TTEC-Digital/Jobs",
+    "date_applied": "",
+    "status": "Saved",
+    "status_history": [
+      {
+        "status": "Saved",
+        "date": "2026-07-15"
+      }
+    ],
+    "resume_version_used": "IT/Solutions",
+    "contact": "",
+    "next_action": "Review JD and use 1-Click Apply; verify remote eligibility (card showed Austin, TX).",
+    "next_action_due": "2026-07-17",
+    "notes": "Live ZipRecruiter 1-Click find. TTEC Digital presales SA for Amazon Connect (CCaaS / contact center). On-lane; Amazon Connect and contact-center depth is a ramp. Card showed Austin, TX under a remote search, so confirm remote. JD not yet reviewed."
+  }
+]

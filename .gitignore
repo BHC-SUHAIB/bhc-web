@@ -57,6 +57,15 @@ next-env.d.ts
 /prospects/
 /performance_analysis/
 
+# Job-hunt cockpit (jobhunt.blackhartconsulting.com) — build output, installed
+# deps, and the bind-mounted SQLite/files data volume. Source under jobhunt/ IS
+# tracked; these are machine/runtime artifacts.
+/jobhunt/node_modules
+/jobhunt/dist
+/jobhunt/jobhunt-data
+/jobhunt/data/*.db
+/jobhunt/data/*.db-*
+
 # IDE
 .vscode/
 .idea/

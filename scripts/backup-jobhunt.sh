@@ -24,9 +24,12 @@ fi
 # host sqlite3 if present, else a WAL-checkpointed file copy.
 SNAP="$DEST/jobhunt-$STAMP.db"
 if docker exec bhc-jobhunt sh -c 'command -v sqlite3 >/dev/null 2>&1'; then
+  # Consistent snapshot written inside the container (root-owned in the bind
+  # mount). The host reads it into $SNAP, then the temp is removed via
+  # docker exec because it's root-owned and this script runs as the deploy user.
   docker exec bhc-jobhunt sqlite3 /data/jobhunt.db ".backup '/data/.backup-tmp.db'"
   cp "$DATA_DIR/.backup-tmp.db" "$SNAP"
-  rm -f "$DATA_DIR/.backup-tmp.db"
+  docker exec bhc-jobhunt rm -f /data/.backup-tmp.db
 elif command -v sqlite3 >/dev/null 2>&1; then
   sqlite3 "$DATA_DIR/jobhunt.db" ".backup '$SNAP'"
 else

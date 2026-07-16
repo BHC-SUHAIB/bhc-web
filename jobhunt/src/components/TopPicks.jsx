@@ -27,9 +27,8 @@ function Pick({ rec, onChanged }) {
   async function apply() {
     setBusy(true);
     try {
-      // Open the posting in a new tab (never auto-submits anything), then
-      // record it as applied in the pipeline.
-      if (rec.source_url) window.open(rec.source_url, '_blank', 'noopener');
+      // Only record the application and refresh — opening the posting is the
+      // separate "Open posting" button's job.
       await api.applyRecommendation(rec.id);
       onChanged();
     } catch (e) { alert(e.message); setBusy(false); }

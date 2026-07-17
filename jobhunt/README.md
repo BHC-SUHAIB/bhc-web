@@ -127,7 +127,9 @@ Base: `https://jobhunt.blackhartconsulting.com`
   **application** already exists for the posting, it's not re-queued.
   Body fields: `date_surfaced, company, role_title, source, source_url,
   location_type, comp, engagement_type, chosen_track, fit_score (0–100),
-  rationale, green_flags[], red_flags[]`.
+  rationale, green_flags[], red_flags[], brief` (optional markdown/plain-text
+  company deep-dive; renders as an expandable section on the card and is
+  carried into the application's notes on "Mark applied").
 - `POST /api/ingest/recommendations/:id/files` — `multipart/form-data` with any
   of `resume_pdf, resume_docx, cover_pdf, cover_docx` (≤ 8MB each).
 

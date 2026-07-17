@@ -63,6 +63,9 @@ router.post('/:id/apply', (req, res) => {
     next_action_due: '',
     notes: rec.rationale ? `From daily rec. ${rec.rationale}` : 'Applied from daily recommendation.',
   };
+  // Preserve the deep-dive company brief through the promotion so it's still
+  // on hand at interview-prep time.
+  if (rec.brief) app.notes += `\n\n--- Company brief ---\n${rec.brief}`;
   app.id = makeId(app, date);
 
   // If an application with this id already exists, don't duplicate. Promote it

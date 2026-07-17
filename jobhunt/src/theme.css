@@ -246,6 +246,20 @@ table.apps .role { color: var(--fg-muted); font-size: 12.5px; }
 .flag.red .ic { color: var(--bad); }
 .pick .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
 
+/* Expandable deep-dive company brief on a pick card */
+.pick details.brief summary {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--brass-text); cursor: pointer;
+  user-select: none;
+}
+.pick details.brief summary:hover { color: var(--accent-strong); }
+.pick .brief-body {
+  white-space: pre-wrap; font-size: 12.5px; line-height: 1.55; color: var(--fg-muted);
+  margin-top: 8px; padding: 12px; background: var(--surface-sunken);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  max-height: 340px; overflow-y: auto;
+}
+
 /* ---------- Aging / pipeline lists ---------- */
 .list { display: flex; flex-direction: column; }
 .list-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid var(--border); }

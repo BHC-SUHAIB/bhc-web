@@ -50,6 +50,10 @@ router.post('/', (req, res) => {
     rationale: b.rationale || '',
     green_flags: toArray(b.green_flags),
     red_flags: toArray(b.red_flags),
+    // Optional deep-dive company brief (markdown/plain text). Rendered as an
+    // expandable section on the dashboard card and carried into the
+    // application's notes on "Mark applied".
+    brief: b.brief || '',
     status: b.status || 'New',
   };
 

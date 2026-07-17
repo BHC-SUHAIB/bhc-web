@@ -62,6 +62,7 @@ db.exec(`
     resume_pdf      TEXT,
     cover_docx      TEXT,
     cover_pdf       TEXT,
+    brief           TEXT NOT NULL DEFAULT '',
     status          TEXT NOT NULL DEFAULT 'New',
     created_at      TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
@@ -72,6 +73,17 @@ db.exec(`
     value TEXT NOT NULL
   );
 `);
+
+// Lightweight migrations: add columns introduced after first ship, so an
+// existing DB upgrades in place on boot (CREATE TABLE IF NOT EXISTS covers
+// only fresh installs).
+{
+  const recCols = db.prepare('PRAGMA table_info(recommendations)').all().map((c) => c.name);
+  if (!recCols.includes('brief')) {
+    db.exec("ALTER TABLE recommendations ADD COLUMN brief TEXT NOT NULL DEFAULT ''");
+    console.log('[db] migration: added recommendations.brief');
+  }
+}
 
 // ---- JSON (de)serialization helpers for array/object columns ----
 const JSON_COLS_APP = ['status_history'];
@@ -186,7 +198,7 @@ const REC_COLS = [
   'id', 'date_surfaced', 'company', 'role_title', 'source', 'source_url',
   'location_type', 'comp', 'engagement_type', 'chosen_track', 'fit_score',
   'rationale', 'green_flags', 'red_flags', 'resume_docx', 'resume_pdf',
-  'cover_docx', 'cover_pdf', 'status'
+  'cover_docx', 'cover_pdf', 'brief', 'status'
 ];
 
 export function listRecommendations() {

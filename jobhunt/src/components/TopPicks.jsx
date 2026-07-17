@@ -76,6 +76,13 @@ function Pick({ rec, onChanged }) {
         </div>
       ) : null}
 
+      {rec.brief ? (
+        <details className="brief">
+          <summary>Company brief</summary>
+          <div className="brief-body">{rec.brief}</div>
+        </details>
+      ) : null}
+
       <div className="actions">
         {rec.source_url && (
           <a className="btn btn-sm btn-primary" href={rec.source_url} target="_blank" rel="noopener">Open posting ↗</a>

@@ -36,7 +36,8 @@ REC_ID="$(curl -sS -X POST "$BASE/api/ingest/recommendations" \
     "fit_score": 86,
     "rationale": "Ops leadership scope matches your COO track; comp above target.",
     "green_flags": ["Fully remote", "Comp above target", "Reports to CEO"],
-    "red_flags": ["Series B — some runway risk"]
+    "red_flags": ["Series B — some runway risk"],
+    "brief": "Optional deep-dive company brief (markdown or plain text). Shows as an expandable section on the dashboard card and carries into the application notes on Mark applied."
   }' | python3 -c 'import sys,json; print(json.load(sys.stdin)["id"])')"
 
 echo "recommendation id: $REC_ID"

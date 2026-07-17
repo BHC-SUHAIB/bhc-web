@@ -125,8 +125,9 @@ Base: `https://jobhunt.blackhartconsulting.com`
 - `POST /api/ingest/recommendations` — create/upsert a recommendation.
   Idempotent on a **stable id derived from company+role_title**, so a daily
   re-push with a rotating tracking URL updates in place and never orphans
-  attached files. A re-push **never changes status** (only apply/dismiss/
-  restore do). If an **application** already exists for the posting, the push
+  attached files. The ingest path **never writes `Dismissed`** — a new rec is
+  `New` and a re-push (re)surfaces an existing one as `New`; only the human
+  dismiss endpoint sets `Dismissed`. If an **application** already exists for the posting, the push
   returns `{"skipped":"already_application","application_id":...}` and is logged
   (set `INGEST_RESURFACE_APPLIED=true` in `.env` to surface it as a rec anyway).
   Body fields: `date_surfaced, company, role_title, source, source_url,

@@ -9,8 +9,9 @@
 //   POST /:id/files       → attach resume/cover docx+pdf (multipart)
 //
 // Nothing here can submit a job application anywhere. It only stores data.
-// A re-push NEVER changes a recommendation's status: only the human's explicit
-// apply / dismiss / restore actions do that.
+// The ingest path NEVER writes status 'Dismissed'. A newly ingested rec is
+// 'New'; re-ingesting an existing one (re)surfaces it as 'New'. Only the human
+// dismiss endpoint sets 'Dismissed'.
 import express from 'express';
 import multer from 'multer';
 import fs from 'node:fs';
@@ -86,9 +87,12 @@ router.post('/', (req, res) => {
     || (payload.company && payload.role_title && findRecommendationByCompanyRole(payload.company, payload.role_title));
 
   if (existing) {
-    // Update content, but carry the existing status forward untouched — a
-    // re-push must never resurrect a dismissed card or otherwise flip status.
-    const updated = updateRecommendation(existing.id, { ...payload, status: existing.status });
+    // Update content and (re)surface as active. The ingest path NEVER writes
+    // 'Dismissed' — only the human dismiss endpoint does. So re-ingesting a job
+    // brings it back into the active queue. (A job you dismissed will reappear
+    // as New if the agent surfaces it again; dismiss it again, or it stays in
+    // the Dismissed panel to restore.)
+    const updated = updateRecommendation(existing.id, { ...payload, status: 'New' });
     return res.status(200).json({ id: updated.id, updated: true, status: updated.status, recommendation: updated });
   }
 

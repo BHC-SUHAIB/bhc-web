@@ -9,9 +9,9 @@
 //   POST /:id/files       → attach resume/cover docx+pdf (multipart)
 //
 // Nothing here can submit a job application anywhere. It only stores data.
-// The ingest path NEVER writes status 'Dismissed'. A newly ingested rec is
-// 'New'; re-ingesting an existing one (re)surfaces it as 'New'. Only the human
-// dismiss endpoint sets 'Dismissed'.
+// A new rec is created 'New'. A re-ingest PRESERVES the existing status, so a
+// human's Skip is permanent (a dismissed job is not resurrected by re-pushes;
+// recover it from the Dismissed panel). The ingest never sets 'Dismissed'.
 import express from 'express';
 import multer from 'multer';
 import fs from 'node:fs';
@@ -87,12 +87,11 @@ router.post('/', (req, res) => {
     || (payload.company && payload.role_title && findRecommendationByCompanyRole(payload.company, payload.role_title));
 
   if (existing) {
-    // Update content and (re)surface as active. The ingest path NEVER writes
-    // 'Dismissed' — only the human dismiss endpoint does. So re-ingesting a job
-    // brings it back into the active queue. (A job you dismissed will reappear
-    // as New if the agent surfaces it again; dismiss it again, or it stays in
-    // the Dismissed panel to restore.)
-    const updated = updateRecommendation(existing.id, { ...payload, status: 'New' });
+    // Update content but PRESERVE the human's status decision — a skip is
+    // permanent. Re-ingesting a dismissed job leaves it dismissed (recover it
+    // from the Dismissed panel if that was a mistake); a still-active job stays
+    // New. The ingest never sets 'Dismissed' itself.
+    const updated = updateRecommendation(existing.id, { ...payload, status: existing.status });
     return res.status(200).json({ id: updated.id, updated: true, status: updated.status, recommendation: updated });
   }
 

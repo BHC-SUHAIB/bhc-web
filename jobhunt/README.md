@@ -123,8 +123,12 @@ Base: `https://jobhunt.blackhartconsulting.com`
 
 ### Ingest (Bearer token, machine-only)
 - `POST /api/ingest/recommendations` — create/upsert a recommendation.
-  Idempotent on `source_url`, else `company` + `role_title`. If an
-  **application** already exists for the posting, it's not re-queued.
+  Idempotent on a **stable id derived from company+role_title**, so a daily
+  re-push with a rotating tracking URL updates in place and never orphans
+  attached files. A re-push **never changes status** (only apply/dismiss/
+  restore do). If an **application** already exists for the posting, the push
+  returns `{"skipped":"already_application","application_id":...}` and is logged
+  (set `INGEST_RESURFACE_APPLIED=true` in `.env` to surface it as a rec anyway).
   Body fields: `date_surfaced, company, role_title, source, source_url,
   location_type, comp, engagement_type, chosen_track, fit_score (0–100),
   rationale, green_flags[], red_flags[], brief` (optional markdown/plain-text
@@ -139,8 +143,8 @@ See [`sample/ingest-example.sh`](sample/ingest-example.sh) for a working call.
 - `POST /api/login` `{password}` · `POST /api/logout` · `GET /api/me`
 - `GET/POST/PUT/DELETE /api/applications`
 - `GET/PUT /api/settings` (weekly target)
-- `GET /api/recommendations` · `POST /api/recommendations/:id/apply` ·
-  `POST /api/recommendations/:id/dismiss`
+- `GET /api/recommendations` (active queue; `?all=1` includes dismissed) ·
+  `POST /api/recommendations/:id/apply` · `.../dismiss` · `.../restore`
 - `GET /api/export` · `GET /api/files/:recId/:kind` (also accepts the ingest
   token, so the agent can verify its own uploads)
 

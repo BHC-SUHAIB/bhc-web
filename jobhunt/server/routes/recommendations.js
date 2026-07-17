@@ -1,9 +1,11 @@
 // Human-facing recommendations API (requires session).
 //
-//   GET    /                 → list, New first then fit_score desc
+//   GET    /                 → active queue (not dismissed), date_surfaced desc.
+//                              ?all=1 also returns dismissed rows (restore panel).
 //   POST   /:id/apply        → promote a rec into an Applied application, then
 //                              remove it from the queue
-//   POST   /:id/dismiss      → mark the rec Dismissed (kept for history)
+//   POST   /:id/dismiss      → mark the rec Dismissed (leaves the active queue)
+//   POST   /:id/restore      → undo a dismiss (back into the active queue)
 //
 // The token-authenticated ingest routes (create + file upload) live in
 // ingest.js, mounted separately so the human session can never write via them.
@@ -28,8 +30,10 @@ function removeRecFiles(recId) {
   fs.rm(dir, { recursive: true, force: true }, () => {});
 }
 
+// Default: the active queue (not dismissed). ?all=1 also returns dismissed
+// recs so the client can offer a Restore panel for accidental skips.
 router.get('/', (req, res) => {
-  res.json(listRecommendations());
+  res.json(listRecommendations({ includeDismissed: req.query.all === '1' }));
 });
 
 // Promote a recommendation into the applications pipeline as "Applied".
@@ -98,6 +102,16 @@ router.post('/:id/dismiss', (req, res) => {
   const rec = getRecommendation(req.params.id);
   if (!rec) return res.status(404).json({ error: 'Not found' });
   const updated = updateRecommendation(rec.id, { status: 'Dismissed' });
+  res.json(updated);
+});
+
+// Undo a dismiss — bring a card back into the active queue. This is the safety
+// net that makes dismissal reversible, so an accidental (or rapid) Skip is
+// never permanent data loss.
+router.post('/:id/restore', (req, res) => {
+  const rec = getRecommendation(req.params.id);
+  if (!rec) return res.status(404).json({ error: 'Not found' });
+  const updated = updateRecommendation(rec.id, { status: 'New' });
   res.json(updated);
 });
 

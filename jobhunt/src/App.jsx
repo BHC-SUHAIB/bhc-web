@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { api } from './api.js';
 import { computeMetrics } from './metrics.js';
 import Login from './components/Login.jsx';
-import TopPicks from './components/TopPicks.jsx';
+import TopPicks, { DismissedPanel } from './components/TopPicks.jsx';
 import Analytics from './components/Analytics.jsx';
 import ApplicationsTable from './components/ApplicationsTable.jsx';
 import AppEditor from './components/AppEditor.jsx';
@@ -24,7 +24,7 @@ export default function App() {
     setLoading(true);
     try {
       const [a, r, s] = await Promise.all([
-        api.listApplications(), api.listRecommendations(), api.getSettings(),
+        api.listApplications(), api.listRecommendations({ all: true }), api.getSettings(),
       ]);
       setApps(a); setRecs(r); setWeeklyTarget(s.weekly_target);
     } catch (e) {
@@ -56,6 +56,7 @@ export default function App() {
 
   const metrics = computeMetrics(apps, { weeklyTarget });
   const activeRecs = recs.filter((r) => r.status !== 'Dismissed');
+  const dismissedRecs = recs.filter((r) => r.status === 'Dismissed');
 
   return (
     <div className="app-shell">
@@ -81,7 +82,8 @@ export default function App() {
             </div>
             <button className="btn-ghost btn-sm" onClick={loadAll}>↻ Refresh</button>
           </div>
-          <TopPicks recs={recs} onChanged={loadAll} />
+          <TopPicks recs={activeRecs} onChanged={loadAll} />
+          <DismissedPanel recs={dismissedRecs} onChanged={loadAll} />
 
           {/* ---- Analytics ---- */}
           <div className="section-title">

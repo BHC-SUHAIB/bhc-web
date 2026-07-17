@@ -201,10 +201,17 @@ const REC_COLS = [
   'cover_docx', 'cover_pdf', 'brief', 'status'
 ];
 
-export function listRecommendations() {
+// The active queue = everything NOT dismissed (applied recs are deleted, so
+// they're already gone). No date filter of any kind: a pushed recommendation
+// stays here until it's explicitly applied or dismissed. Sorted newest surfaced
+// first, then by fit. Pass includeDismissed to also return dismissed rows (used
+// by the restore panel).
+export function listRecommendations({ includeDismissed = false } = {}) {
+  const where = includeDismissed ? '' : "WHERE status != 'Dismissed'";
   const rows = db.prepare(`
     SELECT * FROM recommendations
-    ORDER BY (status = 'New') DESC, fit_score DESC, date_surfaced DESC
+    ${where}
+    ORDER BY date_surfaced DESC, fit_score DESC
   `).all();
   return rows.map((r) => hydrate(r, JSON_COLS_REC));
 }

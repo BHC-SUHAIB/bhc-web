@@ -260,6 +260,16 @@ table.apps .role { color: var(--fg-muted); font-size: 12.5px; }
   max-height: 340px; overflow-y: auto;
 }
 
+/* ---------- Dismissed (restore) panel ---------- */
+.dismissed-panel { margin-top: 14px; }
+.dismissed-panel > summary {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--fg-faint); cursor: pointer;
+  user-select: none; padding: 8px 0;
+}
+.dismissed-panel > summary:hover { color: var(--fg-muted); }
+.dismissed-panel[open] > summary { color: var(--fg-muted); }
+
 /* ---------- Aging / pipeline lists ---------- */
 .list { display: flex; flex-direction: column; }
 .list-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid var(--border); }

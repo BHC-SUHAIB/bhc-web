@@ -95,3 +95,33 @@ function Pick({ rec, onChanged }) {
     </div>
   );
 }
+
+// Recoverable dismissals. A dismissed card lands here (collapsed by default) and
+// can be restored in one click, so a stray or rapid Skip is never permanent.
+export function DismissedPanel({ recs, onChanged }) {
+  const [busyId, setBusyId] = useState(null);
+  if (!recs.length) return null;
+
+  async function restore(id) {
+    setBusyId(id);
+    try { await api.restoreRecommendation(id); onChanged(); }
+    catch (e) { alert(e.message); setBusyId(null); }
+  }
+
+  return (
+    <details className="dismissed-panel">
+      <summary>Dismissed ({recs.length}) · click to review or restore</summary>
+      <div className="list" style={{ marginTop: 10 }}>
+        {recs.map((r) => (
+          <div className="list-row" key={r.id}>
+            <div className="grow">
+              <div className="co">{r.company} <span className="faint" style={{ fontWeight: 400 }}>· {r.role_title}</span></div>
+              <div className="meta">{[r.chosen_track, r.location_type, r.comp].filter(Boolean).join(' · ')}</div>
+            </div>
+            <button className="btn btn-sm" disabled={busyId === r.id} onClick={() => restore(r.id)}>↩ Restore</button>
+          </div>
+        ))}
+      </div>
+    </details>
+  );
+}

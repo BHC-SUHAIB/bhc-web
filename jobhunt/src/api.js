@@ -37,9 +37,10 @@ export const api = {
   getSettings: () => req('GET', '/api/settings'),
   updateSettings: (patch) => req('PUT', '/api/settings', patch),
 
-  listRecommendations: () => req('GET', '/api/recommendations'),
+  listRecommendations: (opts = {}) => req('GET', '/api/recommendations' + (opts.all ? '?all=1' : '')),
   applyRecommendation: (id) => req('POST', `/api/recommendations/${encodeURIComponent(id)}/apply`),
   dismissRecommendation: (id) => req('POST', `/api/recommendations/${encodeURIComponent(id)}/dismiss`),
+  restoreRecommendation: (id) => req('POST', `/api/recommendations/${encodeURIComponent(id)}/restore`),
 
   exportUrl: '/api/export',
   fileUrl: (recId, kind) => `/api/files/${encodeURIComponent(recId)}/${kind}`,

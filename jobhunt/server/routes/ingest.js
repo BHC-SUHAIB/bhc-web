@@ -2,11 +2,15 @@
 // mounted behind requireIngestToken (see index.js) — the human session does
 // NOT grant access, and this token does NOT grant access to human routes.
 //
-//   POST /                → create OR update a recommendation (idempotent on
-//                           source_url, else company+role_title)
+//   POST /                → create OR update a recommendation. Idempotent on a
+//                           STABLE id derived from company+role_title, so a
+//                           daily re-push (even with a rotating tracking URL)
+//                           updates in place and never orphans attached files.
 //   POST /:id/files       → attach resume/cover docx+pdf (multipart)
 //
 // Nothing here can submit a job application anywhere. It only stores data.
+// A re-push NEVER changes a recommendation's status: only the human's explicit
+// apply / dismiss / restore actions do that.
 import express from 'express';
 import multer from 'multer';
 import fs from 'node:fs';
@@ -20,8 +24,13 @@ import {
 
 const router = express.Router();
 
-function shortId() {
-  return 'rec-' + crypto.randomBytes(6).toString('hex');
+// Deterministic id from the job's natural key (company + role_title). The same
+// posting always maps to the same id, so re-pushes are true upserts regardless
+// of the source_url, which for Indeed/LinkedIn email links is a rotating
+// tracking blob. This is what keeps attached files from being orphaned.
+function stableRecId(company, role) {
+  const key = `${String(company || '').trim().toLowerCase()}|${String(role || '').trim().toLowerCase()}`;
+  return 'rec-' + crypto.createHash('sha1').update(key).digest('hex').slice(0, 12);
 }
 function toArray(v) {
   if (v == null) return [];
@@ -54,26 +63,36 @@ router.post('/', (req, res) => {
     // expandable section on the dashboard card and carried into the
     // application's notes on "Mark applied".
     brief: b.brief || '',
-    status: b.status || 'New',
   };
+  // status is intentionally NOT taken from the request body — it's owned by the
+  // human's apply/dismiss/restore actions and by creation (below).
 
-  // Idempotency: if an APPLICATION already exists for this posting, do not
-  // recreate a recommendation for something already in the pipeline.
+  // If this posting is ALREADY an application in the pipeline, skip by default
+  // rather than re-queueing it. Explicit + logged so a push is never silently
+  // lost. Set INGEST_RESURFACE_APPLIED=true to surface it as a rec anyway.
+  const resurfaceApplied = process.env.INGEST_RESURFACE_APPLIED === 'true';
   const appDupe = findApplicationByUrl(payload.source_url)
     || (payload.company && payload.role_title && findApplicationByCompanyRole(payload.company, payload.role_title));
-  if (appDupe) {
-    return res.status(200).json({ deduped: 'application', application_id: appDupe.id });
+  if (appDupe && !resurfaceApplied) {
+    console.log(`[ingest] skipped (already an application): "${payload.company} — ${payload.role_title}" → ${appDupe.id}`);
+    return res.status(200).json({ skipped: 'already_application', application_id: appDupe.id });
   }
 
-  // Idempotency: update an existing recommendation in place.
-  const existing = findRecommendationByUrl(payload.source_url)
+  // Locate an existing rec by stable id first, then fall back to url / company+role
+  // (covers legacy records created before stable ids, and preserves their id).
+  const stableId = stableRecId(payload.company, payload.role_title);
+  const existing = getRecommendation(stableId)
+    || findRecommendationByUrl(payload.source_url)
     || (payload.company && payload.role_title && findRecommendationByCompanyRole(payload.company, payload.role_title));
+
   if (existing) {
-    const updated = updateRecommendation(existing.id, payload);
-    return res.status(200).json({ id: updated.id, updated: true, recommendation: updated });
+    // Update content, but carry the existing status forward untouched — a
+    // re-push must never resurrect a dismissed card or otherwise flip status.
+    const updated = updateRecommendation(existing.id, { ...payload, status: existing.status });
+    return res.status(200).json({ id: updated.id, updated: true, status: updated.status, recommendation: updated });
   }
 
-  const created = insertRecommendation({ id: shortId(), ...payload });
+  const created = insertRecommendation({ id: stableId, ...payload, status: 'New' });
   res.status(201).json({ id: created.id, created: true, recommendation: created });
 });
 

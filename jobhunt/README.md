@@ -128,6 +128,9 @@ Base: `https://jobhunt.blackhartconsulting.com`
   attached files. A new rec is `New`; a re-push **preserves the existing status**
   (a human Skip is permanent — a dismissed job is not resurrected by re-pushes;
   recover it via the Dismissed panel). The ingest never sets `Dismissed` itself.
+  A new rec scoring below the **fit floor** (`INGEST_MIN_FIT`, default `65`) is
+  auto-skipped straight to the Dismissed panel rather than the active queue
+  (logged, and restorable). The queue is sorted **best fit first**.
   If an **application** already exists for the posting, the push
   returns `{"skipped":"already_application","application_id":...}` and is logged
   (set `INGEST_RESURFACE_APPLIED=true` in `.env` to surface it as a rec anyway).

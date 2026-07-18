@@ -25,6 +25,11 @@ import {
 
 const router = express.Router();
 
+// Fit floor: a newly ingested rec scoring below this is auto-skipped straight
+// into the Dismissed panel instead of cluttering the active queue. Still fully
+// visible + restorable there. Tunable via .env without a code change.
+const MIN_FIT = Number(process.env.INGEST_MIN_FIT ?? 65);
+
 // Deterministic id from the job's natural key (company + role_title). The same
 // posting always maps to the same id, so re-pushes are true upserts regardless
 // of the source_url, which for Indeed/LinkedIn email links is a rotating
@@ -95,8 +100,20 @@ router.post('/', (req, res) => {
     return res.status(200).json({ id: updated.id, updated: true, status: updated.status, recommendation: updated });
   }
 
-  const created = insertRecommendation({ id: stableId, ...payload, status: 'New' });
-  res.status(201).json({ id: created.id, created: true, recommendation: created });
+  // Apply the fit floor at creation only. Once a record exists, the human's
+  // decision governs (a restored low-fit job must not be auto-skipped again by
+  // the next re-push — the update path above preserves status).
+  const fit = Math.max(0, Math.min(100, Math.round(Number(payload.fit_score) || 0)));
+  const autoSkipped = fit < MIN_FIT;
+  if (autoSkipped) {
+    console.log(`[ingest] auto-skipped (fit ${fit} < ${MIN_FIT}): "${payload.company} — ${payload.role_title}"`);
+  }
+
+  const created = insertRecommendation({ id: stableId, ...payload, status: autoSkipped ? 'Dismissed' : 'New' });
+  res.status(201).json({
+    id: created.id, created: true, status: created.status,
+    auto_skipped: autoSkipped, min_fit: MIN_FIT, recommendation: created,
+  });
 });
 
 // ---- POST /:id/files : attach documents ----------------------------------

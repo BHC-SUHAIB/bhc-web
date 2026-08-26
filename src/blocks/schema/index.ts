@@ -57,50 +57,6 @@ export const Hero: Block = {
   ],
 }
 
-export const FoundingClient: Block = {
-  slug: 'foundingClient',
-  labels: { singular: 'Founding Client banner', plural: 'Founding Client banners' },
-  interfaceName: 'FoundingClientBlock',
-  fields: [
-    { name: 'eyebrow', type: 'text', defaultValue: 'Founding Client Pricing', admin: { description: 'Small uppercase label above the headline.' } },
-    { name: 'headline', type: 'text', required: true, defaultValue: 'First 5 clients save up to $1,000.' },
-    { name: 'description', type: 'textarea', defaultValue: 'A temporary discount for our founding cohort. Trades a lower price for a Google review, written testimonial, and case-study permission.' },
-    {
-      name: 'spotsTotal',
-      type: 'number',
-      defaultValue: 5,
-      admin: { description: 'Total founding spots available in this cohort.' },
-    },
-    {
-      name: 'spotsRemaining',
-      type: 'number',
-      defaultValue: 5,
-      admin: { description: 'Remaining spots. Update this manually as clients sign up — drives the visible counter.' },
-    },
-    {
-      name: 'offers',
-      type: 'array',
-      minRows: 1,
-      maxRows: 4,
-      admin: { description: 'Discounted offers available to founding clients.' },
-      fields: [
-        { name: 'name', type: 'text', required: true, admin: { description: 'e.g. "Starter Site"' } },
-        { name: 'priceFounding', type: 'text', required: true, admin: { description: 'e.g. "$1,495"' } },
-        { name: 'priceRetail', type: 'text', admin: { description: 'e.g. "$1,950". Optional — leave blank when the founding price has no meaningful retail anchor (e.g. ongoing Care plan whose value lives in the savings line).' } },
-        { name: 'savings', type: 'text', admin: { description: 'e.g. "Save $455"' } },
-      ],
-    },
-    {
-      name: 'cta',
-      type: 'group',
-      fields: [
-        { name: 'label', type: 'text', defaultValue: 'Claim a founding spot' },
-        { name: 'href', type: 'text', defaultValue: '/contact' },
-      ],
-    },
-  ],
-}
-
 export const BundleOffer: Block = {
   slug: 'bundleOffer',
   labels: { singular: 'Bundle offer', plural: 'Bundle offers' },
@@ -125,7 +81,7 @@ export const BundleOffer: Block = {
         { name: 'tagline', type: 'text', admin: { description: 'One-line description of who this bundle is for.' } },
         { name: 'price', type: 'text', required: true, admin: { description: 'One-time bundle price, e.g. "$999"' } },
         { name: 'monthly', type: 'text', admin: { description: 'Ongoing monthly line rendered next to the price, e.g. "+ $149 a month".' } },
-        { name: 'savings', type: 'text', admin: { description: 'e.g. "Save $50/mo vs buying separately"' } },
+        { name: 'savings', type: 'text', admin: { description: 'Optional line comparing the bundle to buying separately.' } },
         { name: 'note', type: 'text', admin: { description: 'Muted comparison line, e.g. "Sold separately: $1,193 plus $208 a month."' } },
         { name: 'includes', type: 'array', fields: [
           { name: 'label', type: 'text', required: true },
@@ -772,7 +728,6 @@ export const DemoRequestForm: Block = {
 export const allBlocks = [
   Hero,
   HeroPhoto,
-  FoundingClient,
   BundleOffer,
   BundleConfigurator,
   CalendlyBooking,

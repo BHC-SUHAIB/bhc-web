@@ -1,0 +1,16 @@
+ok   / (prices: $249 $399 $295 $299 $149 $799 $79 $2,000 $5,000 $699 $119 $1,795 $999 $1,193 $208 $1,395 $2,441 $287 $59 $129 $395)
+ok   /services (prices: $399 $295 $299 $149 $799 $79 $699 $119 $1,795 $249 $5,000 $59 $129 $395 $449 $0.35 $49 $2,500 $99 $999 $1,193 $208 $1,395 $2,441 $287)
+ok   /fix-it (prices: $249 $195 $395)
+ok   /ai-front-desk (prices: $299 $0.35 $49 $149 $249 $399)
+ok   /automation (prices: $79 $799 $2,500 $99)
+ok   /free-demo-site (prices: $399 $699)
+ok   /thanks (prices: none)
+ok   /about (prices: $20K $699 $2,000)
+ok   /contact (prices: $249 $699 $119 $399 $1,795 $59)
+ok   /contact?tier=starter-site (prices: $249 $699 $119 $399 $1,795 $59)
+ok   /portfolio (prices: none)
+ok   /web-design-houston-heights (prices: $699 $119 $399 $500 $1,000 $2,500 $5,000)
+ok   /local-seo-houston (prices: $449 $295 $500 $1,000 $2,500 $5,000)
+ok   sitemap (new pages present, /thanks excluded)
+
+ALL CHECKS PASSED

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Hero } from './Hero'
-import { FoundingClient } from './FoundingClient'
 import { BundleOffer } from './BundleOffer'
 import { CalendlyBooking } from './CalendlyBooking'
 import { Services } from './Services'
@@ -99,7 +98,6 @@ export async function RenderBlocks({
         }
         return <Hero {...hb} phoneOverride={phoneOverride} />
       }
-      case 'foundingClient': return <FoundingClient {...b} />
       case 'bundleOffer': return <BundleOffer {...b} />
       case 'calendlyBooking': return <CalendlyBooking {...b} />
       case 'services': return <Services {...b} />

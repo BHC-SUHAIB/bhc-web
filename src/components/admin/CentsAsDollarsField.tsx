@@ -99,7 +99,7 @@ function formatFromCents(cents: number | null | undefined): string {
 function parseToCents(raw: string): number | null {
   const trimmed = (raw ?? '').trim()
   if (trimmed === '') return 0
-  // Accept "$1,495.00", "1495", "1495.5", "1,495.50"
+  // Accept "$1,795.00", "1795", "1795.5", "1,795.50"
   const cleaned = trimmed.replace(/[$,\s]/g, '')
   if (!/^-?\d*(\.\d{0,2})?$/.test(cleaned)) return null
   const dollars = parseFloat(cleaned)

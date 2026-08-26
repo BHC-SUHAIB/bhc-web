@@ -26,10 +26,10 @@ export type Opt = {
 }
 
 export const DEFAULT_BUNDLE_OPTIONS: Opt[] = [
-  { id: 'starter', name: 'Starter Site', desc: '5-page site, 14-day delivery. The foundation.', once: 999, cost: '$999', required: true },
-  { id: 'care', name: 'Care plan', desc: 'Hosting, backups, monitoring, 1hr/mo edits. Drops to $99/mo for 12 months.', monthly: 99, save: 600, cost: '$99/mo', defaultOn: true },
-  { id: 'seo', name: 'Local SEO Sprint', desc: 'GBP optimization, 10 citations, schema, 1 cornerstone page.', once: 900, save: 295, cost: '+$900' },
-  { id: 'brand', name: 'Brand mini system', desc: "Logo cleanup, color + type system, if you don't have one yet.", once: 300, cost: '+$300' },
+  { id: 'starter', name: 'Starter Site', desc: '5-page site, 7-day delivery. The foundation.', once: 699, cost: '$699', required: true },
+  { id: 'host', name: 'Host plan', desc: 'Hosting, backups, monitoring, 30 min of edits a month. First month free.', monthly: 59, cost: '$59/mo', defaultOn: true },
+  { id: 'seo', name: 'Local SEO + AI Search Sprint', desc: 'GBP setup, 10 citations, schema, FAQ page, llms.txt.', once: 449, cost: '+$449' },
+  { id: 'front-desk', name: 'AI Front Desk setup', desc: 'Answers every call and books jobs. Plan from $149/mo billed separately.', once: 299, cost: '+$299' },
 ]
 
 const money = (n: number) => '$' + n.toLocaleString('en-US')
@@ -72,7 +72,7 @@ export function BundleConfigurator({
   const monthly = chosen.reduce((s, o) => s + (o.monthly ?? 0), 0)
   const save = chosen.reduce((s, o) => s + (o.save ?? 0), 0)
 
-  const summary = `${chosen.map((o) => o.name).join(' + ')} — ${money(oneTime)}${monthly > 0 ? ` + ${money(monthly)}/mo` : ''}${save > 0 ? ` (save ${money(save)})` : ''}`
+  const summary = `${chosen.map((o) => o.name).join(' + ')} — ${money(oneTime)}${monthly > 0 ? ` + ${money(monthly)}/mo` : ''}`
 
   useEffect(() => {
     onSummaryChange?.(summary)
@@ -145,7 +145,6 @@ export function BundleConfigurator({
                   {monthly > 0 ? <small> + {money(monthly)}/mo</small> : null}
                 </b>
               </div>
-              <div className="sum-save">{save > 0 ? `You save ${money(save)}` : ''}</div>
               <button type="button" className="btn btn-brass btn-md" onClick={scrollToForm}>
                 Continue with this package
                 <span aria-hidden>↓</span>

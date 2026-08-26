@@ -855,6 +855,12 @@ export const FAQ_COLLECTION_REWRITES: Array<{ match: string; question: string; a
     category: 'pricing',
   },
   {
+    match: 'What exactly is in the free site audit?',
+    question: 'What exactly is in the free site audit?',
+    answer: 'Paste your URL and we run the same Lighthouse audit Google uses: performance, accessibility, best practices, and SEO scores, plus Core Web Vitals, in about 30 seconds with no email required. It shows exactly what is costing you calls or bookings. If you want the fixes done, the $249 Site Health Sprint covers three of them in five days.',
+    category: 'process',
+  },
+  {
     match: 'How do I get started?',
     question: 'How do I get started?',
     answer: 'The easiest way is the free demo site: send your business name and Google listing and click through a working mockup within 48 hours. Or use the Buy button on any package, or write to us and you will have a reply within one business day.',

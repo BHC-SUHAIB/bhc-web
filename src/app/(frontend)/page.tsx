@@ -6,8 +6,16 @@ import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 
 // Apex-domain canonical for the home page. Together with the Caddy www->apex
 // 308 redirect, this gives Google exactly one URL to index per Search Console
-// 2026-05-05 audit.
-export const metadata: Metadata = canonical('/')
+// 2026-05-05 audit. Title/description come from the CMS page's seo group so
+// the content script controls home SEO like every other page.
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getCachedPageBySlug('home')
+  return {
+    ...(page?.seo?.metaTitle ? { title: { absolute: page.seo.metaTitle } } : {}),
+    ...(page?.seo?.metaDescription ? { description: page.seo.metaDescription } : {}),
+    ...canonical('/'),
+  }
+}
 
 // Routes stay dynamic so the Docker build doesn't try to prerender
 // Payload-backed pages (PAYLOAD_SECRET / DATABASE_URI are runtime-only).

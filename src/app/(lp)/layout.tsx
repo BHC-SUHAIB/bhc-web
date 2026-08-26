@@ -5,7 +5,7 @@ import { manrope, fraunces, jetbrains } from '@/lib/fonts'
 import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
-import { phoneHref, mailtoHref, LP_PHONE_DISPLAY } from '@/lib/contact'
+import { phoneHref, mailtoHref } from '@/lib/contact'
 import { ScrollFx } from '@/components/ScrollFx'
 import { ExitIntentModal } from '@/components/ExitIntentModal'
 import '../globals.css'
@@ -29,8 +29,7 @@ export default async function LpLayout({ children }: { children: React.ReactNode
   const clarityId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
   const siteSettings = await getCachedSiteSettings()
   const email = siteSettings?.contactEmail ?? 'hello@blackhartconsulting.com'
-  // LP-specific phone override. Main site footer still uses contactPhone.
-  const phone = LP_PHONE_DISPLAY
+  const phone = siteSettings?.contactPhone ?? '(866) 434-9777'
   const emailHref = mailtoHref(email)
   const phoneHrefVal = phoneHref(phone)
   const year = new Date().getFullYear()

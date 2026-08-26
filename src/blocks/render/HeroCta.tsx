@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/Button'
 import { pushEvent, pushEventThenNavigate } from '@/lib/analytics'
-import { toContactAnchor, relabelDiscount } from '@/lib/redesign'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'brass'
 
@@ -28,8 +27,8 @@ export function HeroCta({ href, label, variant, position, onPhoto }: Props) {
       : onPhoto && v === 'secondary'
         ? 'onPhotoSecondary'
         : v
-  const finalHref = toContactAnchor(href)
-  const finalLabel = relabelDiscount(label)
+  const finalHref = href
+  const finalLabel = label
   const isBookingHref = /calendly\.com|cal\.com/i.test(href)
   const isPhoneHref = /^tel:/i.test(href)
 

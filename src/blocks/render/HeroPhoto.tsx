@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { ShieldCheck, Check, Zap } from 'lucide-react'
 import { Container } from '@/components/Container'
-import { relabelDiscount } from '@/lib/redesign'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 
 // Full-bleed photo hero for landing pages (the "Express" mockup hero). Renders
@@ -39,7 +38,7 @@ export function HeroPhoto(b: HeroPhotoProps) {
           </span>
         ) : null}
         {b.headline ? <h1>{b.headline}</h1> : null}
-        {b.subheadline ? <p className="lede">{relabelDiscount(String(b.subheadline))}</p> : null}
+        {b.subheadline ? <p className="lede">{String(b.subheadline)}</p> : null}
         {ctas.length > 0 ? (
           <div className="cta-row">
             {ctas.map((c, i) => {

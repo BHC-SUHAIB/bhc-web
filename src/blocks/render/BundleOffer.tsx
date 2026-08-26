@@ -4,6 +4,7 @@ import { Check } from 'lucide-react'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import { cn } from '@/lib/utils'
 import { PricingCta } from './PricingCta'
+import { BundleBuyButton } from './BundleBuyButton'
 import type { BundleOfferBlock } from '@/payload-types'
 
 // Bundles combine a website build with care or SEO at a discount vs buying the
@@ -81,10 +82,22 @@ export function BundleOffer(b: BundleOfferBlock) {
                   {bundle.tagline ? <div className="sum-line">{bundle.tagline}</div> : null}
                   <div className="sum-total">
                     <span className="lbl">Bundle price</span>
-                    <b>{bundle.price}</b>
+                    <b>
+                      {bundle.price}
+                      {bundle.monthly ? (
+                        <span className="block text-[15px] font-normal opacity-80">{bundle.monthly}</span>
+                      ) : null}
+                    </b>
                   </div>
                   {bundle.savings ? <div className="sum-save">{bundle.savings}</div> : null}
-                  {bundle.cta?.label && bundle.cta?.href ? (
+                  {bundle.note ? (
+                    <div className="mt-2 text-[12.5px] leading-[1.5] opacity-70">{bundle.note}</div>
+                  ) : null}
+                  {bundle.checkoutHref ? (
+                    <div className="mt-5">
+                      <BundleBuyButton href={bundle.checkoutHref} name={bundle.name ?? ''} />
+                    </div>
+                  ) : bundle.cta?.label && bundle.cta?.href ? (
                     <div className="mt-5">
                       <PricingCta
                         href={bundle.cta.href}

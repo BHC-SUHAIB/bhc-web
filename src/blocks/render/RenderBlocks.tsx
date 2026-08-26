@@ -20,6 +20,10 @@ import { GuaranteeStrip, type GuaranteeStripProps } from './GuaranteeStrip'
 import { ProcessSteps, type ProcessStepsProps } from './ProcessSteps'
 import { AnimatedStats, type AnimatedStatsProps } from './AnimatedStats'
 import { BundleConfiguratorBlock, type BundleConfiguratorBlockProps } from './BundleConfiguratorBlock'
+import { OutcomeCards, type OutcomeCardsProps } from './OutcomeCards'
+import { PhoneDemo, type PhoneDemoProps } from './PhoneDemo'
+import { Guarantees, type GuaranteesProps } from './Guarantees'
+import { DemoRequestForm, type DemoRequestFormProps } from './DemoRequestForm'
 import { MobileCta } from '@/components/MobileCta'
 
 // Sentinel eyebrow that flips a contactForm block over to the interactive
@@ -146,6 +150,15 @@ export async function RenderBlocks({
           />
         )
       }
+      // ── Pricing-reset blocks (2026-08) ──────────────────────────────────
+      case 'outcomeCards':
+        return <OutcomeCards {...(b as unknown as OutcomeCardsProps)} />
+      case 'phoneDemo':
+        return <PhoneDemo {...(b as unknown as PhoneDemoProps)} />
+      case 'guarantees':
+        return <Guarantees {...(b as unknown as GuaranteesProps)} />
+      case 'demoRequestForm':
+        return <DemoRequestForm {...(b as unknown as DemoRequestFormProps)} />
       // ── Express landing-page blocks ─────────────────────────────────────
       case 'heroPhoto':
         return <HeroPhoto {...(b as unknown as HeroPhotoProps)} />

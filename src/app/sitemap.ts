@@ -33,9 +33,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getCachedAllArticles(),
     ])
 
-    for (const doc of pageDocs as Array<{ slug?: string | null; updatedAt?: string | null }>) {
+    for (const doc of pageDocs as Array<{ slug?: string | null; updatedAt?: string | null; seo?: { noIndex?: boolean | null } | null }>) {
       const slug = doc.slug ?? ''
       if (!slug) continue
+      // Pages marked noindex (e.g. /thanks) stay out of the sitemap.
+      if (doc.seo?.noIndex) continue
       const path = slug === 'home' ? '' : slug
       entries.push({
         url: `${SITE_URL}/${path}`,

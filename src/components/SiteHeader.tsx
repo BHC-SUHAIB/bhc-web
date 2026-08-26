@@ -9,7 +9,6 @@ import { Button } from './Button'
 import { Menu, X, Phone } from 'lucide-react'
 import { phoneHref } from '@/lib/contact'
 import { pushEvent } from '@/lib/analytics'
-import { toContactAnchor, relabelDiscount } from '@/lib/redesign'
 import type { Header as HeaderGlobal, SiteSetting } from '@/payload-types'
 
 type HeaderProps = { header: HeaderGlobal | null; siteSettings: SiteSetting | null }
@@ -85,8 +84,8 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
               </a>
             ) : null}
             {cta?.show && cta.label && cta.href ? (
-              <Button href={toContactAnchor(cta.href)} variant="brass" size="sm" className="hidden sm:inline-flex">
-                {relabelDiscount(cta.label)}
+              <Button href={cta.href} variant="brass" size="sm" className="hidden sm:inline-flex">
+                {cta.label}
               </Button>
             ) : null}
             <button
@@ -127,8 +126,8 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
             </nav>
             {cta?.show && cta.label && cta.href ? (
               <div className="mt-8">
-                <Button href={toContactAnchor(cta.href)} variant="brass" size="lg" className="w-full justify-center">
-                  {relabelDiscount(cta.label)}
+                <Button href={cta.href} variant="brass" size="lg" className="w-full justify-center">
+                  {cta.label}
                 </Button>
               </div>
             ) : null}

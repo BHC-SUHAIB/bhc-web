@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { pushEvent } from '@/lib/analytics'
-import { toContactAnchor, relabelDiscount } from '@/lib/redesign'
 
 type Props = {
   href: string
@@ -14,11 +13,10 @@ type Props = {
 }
 
 // Drop-in replacement for the Button component on pricing tiers — a client
-// island so it can fire pricing_cta_click. Applies the revision transforms:
-// /contact CTAs route to the contact-form anchor, "Founding" → "Discounted".
+// island so it can fire pricing_cta_click.
 export function PricingCta({ href, label, tierName, blockEyebrow, highlighted, className }: Props) {
-  const finalHref = toContactAnchor(href)
-  const finalLabel = relabelDiscount(label)
+  const finalHref = href
+  const finalLabel = label
   const variantCls = highlighted
     ? 'bg-[var(--color-brass)] text-[var(--color-ink)] hover:bg-[var(--color-brass-dark)] hover:text-[var(--color-ivory)]'
     : 'bg-transparent text-[var(--color-fg)] border border-[var(--color-border-strong)] hover:bg-[var(--color-fg)] hover:text-[var(--color-bg)] hover:border-[var(--color-fg)]'

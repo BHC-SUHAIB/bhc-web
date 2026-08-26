@@ -116,64 +116,80 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info(`[seed] admin user created: ${ADMIN_EMAIL} (password read from SEED_ADMIN_PASSWORD env; change at first login)`)
     }
 
-    await payload.updateGlobal({
-      slug: 'siteSettings',
-      data: {
-        siteName: 'Black Hart Consulting',
-        tagline: 'Websites, SEO, apps, and hosting \u2014 done right.',
-        defaultMetaDescription: 'Custom websites, SEO, and managed hosting from a Houston-based digital studio. Fixed-price builds in days, not months.',
-        defaultTheme: 'dark',
-        contactEmail: 'hello@blackhartconsulting.com',
-        contactPhone: '(866) 434-9777',
-      } as any,
-    })
+    // Globals are seeded only when empty (or with FORCE_GLOBALS_UPSERT=true),
+    // so admin edits and content-script writes survive restarts. A fresh
+    // database still comes up with the correct nav, CTA, and footer.
+    const forceGlobals = process.env.FORCE_GLOBALS_UPSERT === 'true'
 
-    await payload.updateGlobal({
-      slug: 'header',
-      data: {
-        nav: [
-          { label: 'Services', href: '/services' },
-          { label: 'Portfolio', href: '/portfolio' },
-          { label: 'Articles', href: '/articles' },
-          { label: 'About', href: '/about' },
-          { label: 'Contact', href: '/contact' },
-        ],
-        cta: { show: true, label: 'Start a project', href: '/contact' },
-      } as any,
-    })
+    const existingSettings = await payload.findGlobal({ slug: 'siteSettings' })
+    if (forceGlobals || !existingSettings?.siteName) {
+      await payload.updateGlobal({
+        slug: 'siteSettings',
+        data: {
+          siteName: 'Black Hart Consulting',
+          tagline: 'Websites, AI phone answering, and automations for service businesses.',
+          defaultMetaDescription: 'Websites, AI phone answering, and automations for service businesses. Built in days at fixed prices by a Houston studio.',
+          defaultTheme: 'dark',
+          contactEmail: 'hello@blackhartconsulting.com',
+          contactPhone: '(866) 434-9777',
+        } as any,
+      })
+    }
 
-    await payload.updateGlobal({
-      slug: 'footer',
-      data: {
-        tagline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
-        columns: [
-          { heading: 'Services', links: [
-            { label: 'Care plans', href: '/services#care' },
-            { label: 'Website design & build', href: '/services#websites' },
-            { label: 'SEO & search', href: '/services#seo' },
-            { label: 'App design', href: '/services#apps' },
-            { label: 'Hosting & infrastructure', href: '/services#hosting' },
-          ] },
-          { heading: 'Studio', links: [
-            { label: 'Portfolio', href: '/portfolio' },
+    const existingHeader = await payload.findGlobal({ slug: 'header' })
+    if (forceGlobals || !existingHeader?.nav?.length) {
+      await payload.updateGlobal({
+        slug: 'header',
+        data: {
+          nav: [
+            { label: 'Services', href: '/services' },
+            { label: 'AI Front Desk', href: '/ai-front-desk' },
+            { label: 'Work', href: '/portfolio' },
+            { label: 'Articles', href: '/articles' },
             { label: 'About', href: '/about' },
             { label: 'Contact', href: '/contact' },
-          ] },
-          { heading: 'Resources', links: [
-            { label: 'Articles', href: '/articles' },
-            { label: 'Pricing', href: '/services' },
-            { label: 'SMS opt-in', href: '/sms' },
-            { label: 'Privacy Policy', href: '/privacy' },
-          ] },
-        ],
-        social: [
-          { platform: 'linkedin', href: 'https://linkedin.com/company/blackhartconsulting' },
-          { platform: 'github', href: 'https://github.com/blackhartconsulting' },
-          { platform: 'email', href: 'mailto:hello@blackhartconsulting.com' },
-        ],
-        copyright: `\u00a9 ${new Date().getFullYear()} Black Hart Consulting LLC`,
-      } as any,
-    })
+          ],
+          cta: { show: true, label: 'See your site first', href: '/free-demo-site' },
+        } as any,
+      })
+    }
+
+    const existingFooter = await payload.findGlobal({ slug: 'footer' })
+    if (forceGlobals || !existingFooter?.columns?.length) {
+      await payload.updateGlobal({
+        slug: 'footer',
+        data: {
+          tagline: 'Websites, phone answering, and automations for businesses that care how their work shows up.',
+          columns: [
+            { heading: 'Services', links: [
+              { label: 'Websites', href: '/services#websites' },
+              { label: 'AI Front Desk', href: '/ai-front-desk' },
+              { label: 'Automation', href: '/automation' },
+              { label: 'Local SEO + AI Search', href: '/services#seo' },
+              { label: 'Fix-it menu', href: '/fix-it' },
+            ] },
+            { heading: 'Studio', links: [
+              { label: 'Free demo site', href: '/free-demo-site' },
+              { label: 'Work', href: '/portfolio' },
+              { label: 'About', href: '/about' },
+              { label: 'Contact', href: '/contact' },
+            ] },
+            { heading: 'Resources', links: [
+              { label: 'Articles', href: '/articles' },
+              { label: 'Pricing', href: '/services' },
+              { label: 'SMS opt-in', href: '/sms' },
+              { label: 'Privacy Policy', href: '/privacy' },
+            ] },
+          ],
+          social: [
+            { platform: 'linkedin', href: 'https://linkedin.com/company/blackhartconsulting' },
+            { platform: 'github', href: 'https://github.com/blackhartconsulting' },
+            { platform: 'email', href: 'mailto:hello@blackhartconsulting.com' },
+          ],
+          copyright: `\u00a9 ${new Date().getFullYear()} Black Hart Consulting LLC`,
+        } as any,
+      })
+    }
 
     // ensureMedia is used by both page seeds (founder portrait, article hero
     // images) and project seeds (case-study screenshots). Declared once up
@@ -851,7 +867,9 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       year: 2026,
       duration: '5 days (7 commits)',
       teamSize: 1,
-      liveUrl: 'https://waygft.life',
+      // liveUrl intentionally omitted: waygft.life is powered off (client hosting
+      // lapsed), so linking it would send visitors to a dead site. Restore
+      // `liveUrl: 'https://waygft.life'` if the client resumes hosting.
       ...(wgtMediaHome?.id ? { heroImage: wgtMediaHome.id } : {}),
       stack: [
         { name: 'Next.js 16 (App Router)', category: 'framework' },

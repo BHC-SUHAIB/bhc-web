@@ -1,13 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, type FormEvent } from 'react'
+import { Suspense, useState, type FormEvent } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Mail, Phone, MapPin, Clock, Check, Calendar } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { phoneHref, mailtoHref, BOOKING_URL } from '@/lib/contact'
 import { SMS_DISCLAIMER_TEXT, SMS_CHECKBOX_LABEL } from '@/lib/sms-disclaimer'
 import { pushEvent } from '@/lib/analytics'
+import { getTier, type TierInfo } from '@/lib/tiers'
 import type { ContactFormBlockBlock } from '@/payload-types'
 
 type State = 'idle' | 'submitting' | 'success' | 'error'
@@ -32,7 +34,23 @@ function anchorFromEyebrow(eyebrow?: string | null): string | undefined {
   return slug
 }
 
+// useSearchParams needs a Suspense boundary during SSR — wrap the inner form.
 export function ContactForm(b: ContactFormProps) {
+  return (
+    <Suspense fallback={<ContactFormInner {...b} tierOverride={null} />}>
+      <ContactFormWithTier {...b} />
+    </Suspense>
+  )
+}
+
+function ContactFormWithTier(b: ContactFormProps) {
+  const searchParams = useSearchParams()
+  const tier = getTier(searchParams.get('tier'))
+  return <ContactFormInner {...b} tierOverride={tier} />
+}
+
+function ContactFormInner(b: ContactFormProps & { tierOverride: TierInfo | null }) {
+  const tier = b.tierOverride
   const contactEmail = b.contactEmail ?? ''
   const contactPhone = b.contactPhone ?? ''
   const emailHref = mailtoHref(contactEmail)
@@ -60,7 +78,10 @@ export function ContactForm(b: ContactFormProps) {
     // Carry the Express-LP bundle selection into the message so it lands in the
     // submission + Slack alert (no schema change needed).
     if (b.bundleSummary) {
-      payload.message = `${payload.message}\n\n— Selected package: ${b.bundleSummary}`.trim()
+      payload.message = `${payload.message}\n\nSelected package: ${b.bundleSummary}`.trim()
+    }
+    if (tier) {
+      payload.message = `${payload.message}\n\nPicked from pricing: ${tier.label} (${tier.slug})`.trim()
     }
     const company = String(data.get('company') ?? '').trim()
     if (company) payload.company = company
@@ -152,6 +173,16 @@ export function ContactForm(b: ContactFormProps) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="form-fields" noValidate>
+            {tier ? (
+              <div className="rounded-[var(--radius-md)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] px-4 py-3 text-[14px] text-[var(--color-fg)]">
+                You picked {tier.label}. {tier.summary}
+              </div>
+            ) : null}
+            {b.noCallNeeded ? (
+              <p className="text-[14px] leading-[1.55] text-[var(--color-fg-muted)]">
+                No call needed. Write what you need and you will have a reply within one business day, usually within an hour.
+              </p>
+            ) : null}
             {b.bundleSummary ? (
               <div className="rounded-[var(--radius-md)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] px-4 py-3">
                 <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-brass-text)]">Your selected package</span>
@@ -186,15 +217,15 @@ export function ContactForm(b: ContactFormProps) {
                 {b.showProjectTypeField ? (
                   <div>
                     <label htmlFor="cf-type" className="flabel">Project type</label>
-                    <select id="cf-type" name="projectType" defaultValue="" className="field">
+                    <select id="cf-type" name="projectType" key={tier?.projectType ?? 'none'} defaultValue={tier?.projectType ?? ''} className="field">
                       <option value="">Not sure yet</option>
                       <option value="website">Website</option>
-                      <option value="webapp">Web app</option>
-                      <option value="mobile">Mobile app</option>
-                      <option value="seo">SEO engagement</option>
-                      <option value="hosting">Hosting / infrastructure</option>
-                      <option value="brand">Brand / design</option>
-                      <option value="other">Other</option>
+                      <option value="ai-front-desk">AI Front Desk</option>
+                      <option value="automation">Automation</option>
+                      <option value="internal-tool">Internal tool</option>
+                      <option value="seo">Local SEO + AI Search</option>
+                      <option value="fix-it">Fix-it</option>
+                      <option value="other">Something else</option>
                     </select>
                   </div>
                 ) : null}
@@ -207,12 +238,11 @@ export function ContactForm(b: ContactFormProps) {
                   <label htmlFor="cf-budget" className="flabel">Budget range</label>
                   <select id="cf-budget" name="budgetRange" defaultValue="" className="field">
                     <option value="">Prefer not to say</option>
-                    <option value="under-5k">Under $5k</option>
-                    <option value="5-10k">$5k – $10k</option>
-                    <option value="10-25k">$10k – $25k</option>
-                    <option value="25-50k">$25k – $50k</option>
-                    <option value="50k-plus">$50k+</option>
-                    <option value="unsure">Not sure yet</option>
+                    <option value="under-500">Under $500</option>
+                    <option value="500-1k">$500 to $1,000</option>
+                    <option value="1k-2500">$1,000 to $2,500</option>
+                    <option value="2500-5k">$2,500 to $5,000</option>
+                    <option value="5k-plus">$5,000+</option>
                   </select>
                 </div>
               </div>

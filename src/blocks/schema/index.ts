@@ -121,10 +121,12 @@ export const BundleOffer: Block = {
       maxRows: 3,
       admin: { description: 'Bundles combine a website build with ongoing care or SEO at a discount vs buying separately.' },
       fields: [
-        { name: 'name', type: 'text', required: true, admin: { description: 'e.g. "Site + Care" or "Site + Care + SEO Sprint"' } },
+        { name: 'name', type: 'text', required: true, admin: { description: 'e.g. "Open for Business"' } },
         { name: 'tagline', type: 'text', admin: { description: 'One-line description of who this bundle is for.' } },
-        { name: 'price', type: 'text', required: true, admin: { description: 'Bundled price, e.g. "$1,950 + $99/mo"' } },
+        { name: 'price', type: 'text', required: true, admin: { description: 'One-time bundle price, e.g. "$999"' } },
+        { name: 'monthly', type: 'text', admin: { description: 'Ongoing monthly line rendered next to the price, e.g. "+ $149 a month".' } },
         { name: 'savings', type: 'text', admin: { description: 'e.g. "Save $50/mo vs buying separately"' } },
+        { name: 'note', type: 'text', admin: { description: 'Muted comparison line, e.g. "Sold separately: $1,193 plus $208 a month."' } },
         { name: 'includes', type: 'array', fields: [
           { name: 'label', type: 'text', required: true },
         ] },
@@ -132,6 +134,7 @@ export const BundleOffer: Block = {
           { name: 'label', type: 'text', defaultValue: 'Start this bundle' },
           { name: 'href', type: 'text', defaultValue: '/contact' },
         ] },
+        { name: 'checkoutHref', type: 'text', admin: { description: 'Stripe Payment Link. When set, the button becomes "Buy now" and links here; the CTA above is the fallback.' } },
         { name: 'highlighted', type: 'checkbox', defaultValue: false, admin: { description: 'Visually emphasize this bundle as the recommended option.' } },
       ],
     },
@@ -219,9 +222,13 @@ export const Pricing: Block = {
     },
     { name: 'tiers', type: 'array', minRows: 1, maxRows: 8, fields: [
       { name: 'name', type: 'text', required: true },
-      { name: 'price', type: 'text', required: true, admin: { description: 'Current price. e.g. "$1,495" or "From $1,500/mo"' } },
-      { name: 'originalPrice', type: 'text', admin: { description: 'Optional original price for discount display. Renders strikethrough next to the current price (e.g. set to "$1,950" alongside "$1,495").' } },
+      { name: 'price', type: 'text', required: true, admin: { description: 'Current price. e.g. "$699" or "$149/mo"' } },
+      // Retained for backward compatibility with older content exports. No
+      // longer rendered anywhere; the content script clears every value.
+      { name: 'originalPrice', type: 'text', admin: { hidden: true } },
       { name: 'priceNote', type: 'text', admin: { description: 'Small line under price, e.g. "one-time" or "14-day delivery"' } },
+      { name: 'subscribePrice', type: 'text', admin: { description: 'Optional subscription alternative, e.g. "$119/mo". Renders "or $119/mo" under the price plus a Subscribe button.' } },
+      { name: 'subscribeNote', type: 'text', admin: { description: 'Small line under the subscribe price, e.g. "12 months, then it is yours".' } },
       { name: 'description', type: 'textarea' },
       { name: 'features', type: 'array', fields: [
         { name: 'label', type: 'text', required: true },
@@ -231,6 +238,10 @@ export const Pricing: Block = {
         { name: 'label', type: 'text' },
         { name: 'href', type: 'text' },
       ] },
+      { name: 'checkoutHref', type: 'text', admin: { description: 'Stripe Payment Link for the buy path. When set, the primary button becomes "Buy now" and links here. Leave blank to fall back to the CTA above.' } },
+      { name: 'subscribeHref', type: 'text', admin: { description: 'Stripe Payment Link for the subscribe path. Falls back to the CTA href when blank.' } },
+      { name: 'badge', type: 'text', admin: { description: 'Small pill top-right of the card, e.g. "Most popular", "New".' } },
+      { name: 'footnote', type: 'text', admin: { description: 'Muted line below the feature list, e.g. "Overage $0.35 per minute".' } },
       { name: 'highlighted', type: 'checkbox', defaultValue: false, admin: { description: 'Visually emphasize this tier' } },
       // Tags an "Enterprise"/"Custom" tier so it renders with a brass corner
       // badge and an inset tinted band around the card. Used to make the
@@ -395,6 +406,7 @@ export const ContactFormBlock: Block = {
     { name: 'showCompanyField', type: 'checkbox', defaultValue: true },
     { name: 'showProjectTypeField', type: 'checkbox', defaultValue: true },
     { name: 'showBudgetField', type: 'checkbox', defaultValue: true },
+    { name: 'noCallNeeded', type: 'checkbox', defaultValue: false, admin: { description: 'Show the "No call needed" reassurance line above the form.' } },
     { name: 'submitLabel', type: 'text', defaultValue: 'Send inquiry' },
   ],
 }
@@ -674,6 +686,88 @@ export const BundleConfigurator: Block = {
   ],
 }
 
+// ── Pricing-reset blocks (2026-08) ─────────────────────────────────────────
+// Three-outcome cards, the callable phone demo, the written guarantees, and
+// the free-demo-site request form. `steps` reuses ProcessSteps; `bundles`
+// reuses the extended BundleOffer (see docs/pricing-reset/DECISIONS.md).
+
+export const OutcomeCards: Block = {
+  slug: 'outcomeCards',
+  labels: { singular: 'Outcome cards', plural: 'Outcome cards' },
+  interfaceName: 'OutcomeCardsBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text' },
+    { name: 'headline', type: 'text', required: true },
+    {
+      name: 'cards', type: 'array', minRows: 1, maxRows: 6,
+      admin: { description: 'Three cards in a row (stack on mobile). Each pitches one outcome with a price line and an optional demo link.' },
+      fields: [
+        { name: 'title', type: 'text', required: true },
+        { name: 'blurb', type: 'textarea' },
+        { name: 'priceLine', type: 'text', admin: { description: 'e.g. "Sites from $399. Local SEO + AI Search from $295 a month."' } },
+        { name: 'href', type: 'text', admin: { description: 'Where the card CTA points, e.g. "/services#websites".' } },
+        { name: 'ctaLabel', type: 'text', admin: { description: 'e.g. "See website pricing".' } },
+        { name: 'demoHref', type: 'text', admin: { description: 'Optional proof link, e.g. a live client site or "tel:+18664349777".' } },
+        { name: 'demoLabel', type: 'text', admin: { description: 'e.g. "See a live client site".' } },
+      ],
+    },
+  ],
+}
+
+export const PhoneDemo: Block = {
+  slug: 'phoneDemo',
+  labels: { singular: 'Phone demo', plural: 'Phone demos' },
+  interfaceName: 'PhoneDemoBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text' },
+    { name: 'headline', type: 'text', required: true },
+    { name: 'body', type: 'textarea' },
+    { name: 'phoneNumber', type: 'text', required: true, admin: { description: 'Display format, e.g. "(866) 434-9777". The tel: link is derived.' } },
+    { name: 'phoneLabel', type: 'text', admin: { description: 'Small label above or beside the number, e.g. "Call now".' } },
+    {
+      name: 'bullets', type: 'array', maxRows: 5,
+      admin: { description: 'Short "try asking it" prompts.' },
+      fields: [{ name: 'label', type: 'text', required: true }],
+    },
+    { name: 'cta', type: 'group', fields: [
+      { name: 'label', type: 'text' },
+      { name: 'href', type: 'text' },
+    ] },
+  ],
+}
+
+export const Guarantees: Block = {
+  slug: 'guarantees',
+  labels: { singular: 'Guarantees', plural: 'Guarantees' },
+  interfaceName: 'GuaranteesBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text' },
+    { name: 'headline', type: 'text', required: true },
+    {
+      name: 'items', type: 'array', minRows: 1, maxRows: 6,
+      admin: { description: 'Three columns of title + body. Distinct from GuaranteeStrip (big value + caption).' },
+      fields: [
+        { name: 'title', type: 'text', required: true },
+        { name: 'body', type: 'textarea' },
+      ],
+    },
+  ],
+}
+
+export const DemoRequestForm: Block = {
+  slug: 'demoRequestForm',
+  labels: { singular: 'Demo request form', plural: 'Demo request forms' },
+  interfaceName: 'DemoRequestFormBlock',
+  fields: [
+    { name: 'eyebrow', type: 'text' },
+    { name: 'headline', type: 'text', required: true, defaultValue: 'Get your free demo site.' },
+    { name: 'description', type: 'textarea' },
+    { name: 'submitLabel', type: 'text', defaultValue: 'Send me my demo' },
+    { name: 'fineprint', type: 'text', defaultValue: 'No call. No obligation. Reply within one business day.' },
+    { name: 'successMessage', type: 'textarea', defaultValue: 'Request received. Your demo link lands in your inbox within 48 hours.' },
+  ],
+}
+
 export const allBlocks = [
   Hero,
   HeroPhoto,
@@ -682,7 +776,11 @@ export const allBlocks = [
   BundleConfigurator,
   CalendlyBooking,
   Services,
+  OutcomeCards,
   Pricing,
+  PhoneDemo,
+  Guarantees,
+  DemoRequestForm,
   FeaturedProjects,
   Testimonials,
   Stats,

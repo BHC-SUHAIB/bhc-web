@@ -4,6 +4,7 @@ import { getCachedPageBySlug } from '@/lib/payload-cache'
 import { canonical } from '@/lib/seo'
 import { RenderBlocks } from '@/blocks/render/RenderBlocks'
 import { JsonLd } from '@/components/JsonLd'
+import { ThanksTracker } from '@/components/ThanksTracker'
 import { buildBreadcrumbJsonLd } from '@/lib/schema'
 import type { Page, Media } from '@/payload-types'
 
@@ -43,6 +44,7 @@ export default async function DynamicPage({ params }: Args) {
           { name: page.title, path: `/${slug}` },
         ])}
       />
+      {slug === 'thanks' ? <ThanksTracker /> : null}
       <RenderBlocks blocks={page.layout ?? []} pageSlug={slug} />
     </>
   )

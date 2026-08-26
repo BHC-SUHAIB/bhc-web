@@ -26,6 +26,12 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
       .filter(Boolean) as Project[]
   } else {
     projects = await getCachedFeaturedProjects(b.limit ?? 3)
+    // Client work leads (1c): stable-sort `group: client` entries first so the
+    // home block shows paid client sites before products/concepts.
+    projects = [...projects].sort((a, b2) => {
+      const rank = (p: Project) => (((p.group as string | null) ?? 'product') === 'client' ? 0 : 1)
+      return rank(a) - rank(b2)
+    })
   }
 
   // LP-friendly variant: no link wrappers, no summary text, no client label,

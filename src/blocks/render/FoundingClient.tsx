@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Container } from '@/components/Container'
-import { relabelDiscount, toContactAnchor } from '@/lib/redesign'
 import type { FoundingClientBlock } from '@/payload-types'
 
 // Discounted-client banner: a temporary, time-bound discount that trades price
@@ -27,9 +26,9 @@ export async function FoundingClient(b: FoundingClientBlock) {
         <div className="founding">
           <div className="founding-grid">
             <div>
-              {b.eyebrow ? <span className="eyebrow">{relabelDiscount(b.eyebrow)}</span> : null}
-              <h2>{relabelDiscount(b.headline)}</h2>
-              {b.description ? <p>{relabelDiscount(b.description)}</p> : null}
+              {b.eyebrow ? <span className="eyebrow">{b.eyebrow}</span> : null}
+              <h2>{b.headline}</h2>
+              {b.description ? <p>{b.description}</p> : null}
 
               {offers.length > 0 ? (
                 <div className="offer-list">
@@ -65,10 +64,10 @@ export async function FoundingClient(b: FoundingClientBlock) {
                   {' '}/ {total}
                 </span>
               </div>
-              <div className="spot-k">{relabelDiscount('Founding spots remaining')}</div>
+              <div className="spot-k">{'Spots remaining'}</div>
               {b.cta?.label && b.cta?.href ? (
-                <Link href={toContactAnchor(b.cta.href)} className="btn btn-brass btn-md">
-                  {relabelDiscount(b.cta.label)}
+                <Link href={b.cta.href} className="btn btn-brass btn-md">
+                  {b.cta.label}
                 </Link>
               ) : null}
             </div>

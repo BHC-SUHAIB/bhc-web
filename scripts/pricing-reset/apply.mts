@@ -50,6 +50,29 @@ async function main() {
     }
   }
 
+  // ── 1b. Home featuredProjects: manual order PM, WAYGFT (Phase 2 spec) ────
+  {
+    const bySlug = async (slug: string) => {
+      const r = await payload.find({ collection: 'projects', where: { slug: { equals: slug } }, limit: 1 })
+      return r.docs[0]?.id ?? null
+    }
+    const pm = await bySlug('prometheus-minds')
+    const waygft = await bySlug('waygft')
+    if (pm && waygft) {
+      const res = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1 })
+      const home = res.docs[0]
+      if (home) {
+        const layout: any[] = (home.layout ?? []).map((b: any) =>
+          b.blockType === 'featuredProjects' ? { ...b, mode: 'manual', projects: [pm, waygft] } : b,
+        )
+        await payload.update({ collection: 'pages', id: home.id, data: { layout } as any })
+        log('page home: featuredProjects pinned to Prometheus Minds, WAYGFT')
+      }
+    } else {
+      log('featuredProjects pin skipped (prometheus-minds/waygft not found)')
+    }
+  }
+
   // ── 2. About: insert "How we build" after the three principles ───────────
   {
     const res = await payload.find({ collection: 'pages', where: { slug: { equals: 'about' } }, limit: 1 })

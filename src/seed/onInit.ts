@@ -559,6 +559,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     const prometheusProject: any = {
       title: 'Prometheus Minds',
       slug: 'prometheus-minds',
+      group: 'client',
       summary: 'Squarespace \u2192 custom Vite/React rebuild for an ADHD tutoring practice in the Twin Cities. New brand, block-based CMS with 27 content types, scheduled publishing, and a performance budget \u2014 shipped in 56 commits over 5 days.',
       client: 'Prometheus Minds',
       industry: 'Education / Neurodiverse tutoring',
@@ -687,6 +688,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     const waygftProject: any = {
       title: 'WAYGFT \u2014 What Are You Grateful For Today?',
       slug: 'waygft',
+      group: 'client',
       summary: 'A worldwide wall of anonymous gratitude \u2014 quotes, stories, photos, and videos, moderated by one human, delivered over a global CDN. Scaffolded, branded, and shipped to production in 5 days.',
       client: 'Kaiti (waygft)',
       industry: 'Consumer / Community',

@@ -1,0 +1,1961 @@
+[
+  {
+    "id": 6,
+    "title": "Local SEO in Houston",
+    "slug": "local-seo-houston",
+    "seo": {
+      "metaTitle": "Local SEO in Houston | Black Hart Consulting",
+      "metaDescription": "Local SEO for Houston businesses. Google Business Profile optimization, citations, and LocalBusiness schema that move you into the Houston local 3-pack. Monthly and measurable.",
+      "ogImage": null,
+      "noIndex": false
+    },
+    "layout": [
+      {
+        "id": "6a3da7385790fdf4a549f5e8",
+        "eyebrow": "Houston · Local SEO",
+        "headline": "Local SEO that puts Houston businesses on the map.",
+        "subheadline": "We get you into the Google local pack for the searches that bring real customers: \"near me\", your neighborhood, your service. Built from the Heights, focused on Houston, measured every month.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": null,
+        "overlayStrength": "heavy",
+        "showPhoneCta": false,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a3da7385790fdf4a549f5e6",
+            "label": "Book a 30-min call",
+            "href": "/contact",
+            "variant": "primary"
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5e7",
+            "label": "See SEO pricing",
+            "href": "/services",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5e9",
+        "eyebrow": null,
+        "content": {
+          "root": {
+            "type": "root",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "direction": "ltr",
+            "children": [
+              {
+                "type": "paragraph",
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "direction": "ltr",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "In Houston, the directories and national agencies own the head terms. You win two other places instead: the local 3-pack, where a verified Google Business Profile and proximity decide who shows, and the long-tail neighborhood searches your competitors ignore. That is exactly where we work.",
+                    "format": 0,
+                    "version": 1,
+                    "detail": 0,
+                    "mode": "normal",
+                    "style": ""
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "maxWidth": "medium",
+        "image": null,
+        "imageUrl": null,
+        "imageFocus": "face",
+        "variant": "lede",
+        "blockName": null,
+        "blockType": "richText"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5ed",
+        "eyebrow": "What we optimize",
+        "headline": null,
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a3da7385790fdf4a549f5ea",
+            "value": "GBP",
+            "label": "Profile that ranks",
+            "description": "Categories, services, posts, and review velocity dialed in."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5eb",
+            "value": "Schema",
+            "label": "LocalBusiness markup",
+            "description": "NAP, geo, and areaServed Google can read, on every page."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5ec",
+            "value": "Citations",
+            "label": "Consistent NAP",
+            "description": "Yelp, Apple Maps, Bing, BBB, and the Houston chambers."
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5ee",
+        "eyebrow": null,
+        "content": {
+          "root": {
+            "type": "root",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "direction": "ltr",
+            "children": [
+              {
+                "type": "paragraph",
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "direction": "ltr",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "Local SEO is not one trick. It is a verified, fully-filled Google Business Profile, consistent name-address-phone across every directory, LocalBusiness schema on your site, neighborhood and service pages that match real searches, and a steady habit of recent reviews. We handle the technical work, build the pages, and report rankings and calls every month so you can see it working.",
+                    "format": 0,
+                    "version": 1,
+                    "detail": 0,
+                    "mode": "normal",
+                    "style": ""
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "maxWidth": "medium",
+        "image": null,
+        "imageUrl": null,
+        "imageFocus": "face",
+        "variant": "default",
+        "blockName": null,
+        "blockType": "richText"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5f3",
+        "eyebrow": "Common questions",
+        "headline": "Local SEO in Houston, answered.",
+        "mode": "manual",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a3da7385790fdf4a549f5ef",
+            "question": "How long until I see results from local SEO?",
+            "answer": "Google Business Profile and schema work usually move a Houston business in the local 3-pack within two to four weeks. Broader organic gains follow over months two and three as Google trusts the changes and the reviews build up."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5f0",
+            "question": "What is the local 3-pack and why does it matter?",
+            "answer": "It is the map plus three business listings Google shows above the regular results for local searches. For \"near me\" and neighborhood queries it captures most of the clicks, so getting in is the highest-ROI move for a local business."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5f1",
+            "question": "Do I need a new website for local SEO to work?",
+            "answer": "Not always. We can run local SEO on your existing site if it is technically sound. If it is slow or missing the basics, we will tell you, and a Starter Site rebuild often pays for itself in recovered search traffic."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5f2",
+            "question": "Is local SEO a monthly service?",
+            "answer": "Yes. Rankings, reviews, and citations need consistent work, so local SEO is a monthly engagement with a clear report each month. One-time setup sprints are available if you only need the foundation laid."
+          }
+        ],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5f4",
+        "eyebrow": "Start the conversation",
+        "headline": "Get a local SEO plan for your business.",
+        "description": "Tell us your business and the searches you want to win. We reply within one business day, or book a call to talk it through.",
+        "successMessage": "Thanks. Your note is in. We reply within one business day from hello@blackhartconsulting.com.",
+        "showCompanyField": true,
+        "showProjectTypeField": true,
+        "showBudgetField": true,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      }
+    ],
+    "publishedAt": "2026-06-25T22:10:00.423Z",
+    "updatedAt": "2026-06-25T22:10:00.429Z",
+    "createdAt": "2026-06-25T22:10:00.429Z",
+    "_status": "published"
+  },
+  {
+    "id": 5,
+    "title": "Web Design in Houston Heights",
+    "slug": "web-design-houston-heights",
+    "seo": {
+      "metaTitle": "Web Design in Houston Heights | Black Hart Consulting",
+      "metaDescription": "Custom web design for Houston Heights small businesses. Fast, mobile-first sites that rank in the local pack and turn neighborhood searches into calls. Fixed price, 14-day build.",
+      "ogImage": null,
+      "noIndex": false
+    },
+    "layout": [
+      {
+        "id": "6a3da7385790fdf4a549f5d9",
+        "eyebrow": "Houston Heights · Web design",
+        "headline": "Web design for Houston Heights businesses.",
+        "subheadline": "A custom, fast, mobile-first site built a few blocks from your storefront. We design for how Heights customers actually search: on a phone, near 19th Street or Heights Mercantile, looking for someone local they can trust.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": null,
+        "overlayStrength": "heavy",
+        "showPhoneCta": false,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a3da7385790fdf4a549f5d7",
+            "label": "Book a 30-min call",
+            "href": "/contact",
+            "variant": "primary"
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5d8",
+            "label": "See pricing",
+            "href": "/services",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5da",
+        "eyebrow": null,
+        "content": {
+          "root": {
+            "type": "root",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "direction": "ltr",
+            "children": [
+              {
+                "type": "paragraph",
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "direction": "ltr",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "Most Heights businesses lose customers in the gap between a Google search and a phone call. A slow, dated, hard-to-read-on-mobile site is the leak. We close it with a site that loads in under a second, reads cleanly on the phone people actually search on, and makes the next step obvious.",
+                    "format": 0,
+                    "version": 1,
+                    "detail": 0,
+                    "mode": "normal",
+                    "style": ""
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "maxWidth": "medium",
+        "image": null,
+        "imageUrl": null,
+        "imageFocus": "face",
+        "variant": "lede",
+        "blockName": null,
+        "blockType": "richText"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5de",
+        "eyebrow": "What you get",
+        "headline": null,
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a3da7385790fdf4a549f5db",
+            "value": "14 days",
+            "label": "Kickoff to launch",
+            "description": "Fixed price, fixed timeline, in writing."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5dc",
+            "value": "Local pack",
+            "label": "Built to rank locally",
+            "description": "LocalBusiness schema + Google Business Profile setup included."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5dd",
+            "value": "The Heights",
+            "label": "Where we build",
+            "description": "Houston-based, so feedback happens in your timezone."
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5df",
+        "eyebrow": null,
+        "content": {
+          "root": {
+            "type": "root",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "direction": "ltr",
+            "children": [
+              {
+                "type": "paragraph",
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "direction": "ltr",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "A template site treats a Heights coffee shop, a dental practice, and a law office the same way. Yours should not. We design around your real customer journey: the services they search for, the proof that earns trust, and the one action you want them to take. Then we wire Google Business Profile, LocalBusiness schema, and conversion tracking so the work is measurable, not a leap of faith.",
+                    "format": 0,
+                    "version": 1,
+                    "detail": 0,
+                    "mode": "normal",
+                    "style": ""
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "maxWidth": "medium",
+        "image": null,
+        "imageUrl": null,
+        "imageFocus": "face",
+        "variant": "default",
+        "blockName": null,
+        "blockType": "richText"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5e4",
+        "eyebrow": "Common questions",
+        "headline": "Web design in the Heights, answered.",
+        "mode": "manual",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a3da7385790fdf4a549f5e0",
+            "question": "Do you only work with Houston Heights businesses?",
+            "answer": "The Heights is home base, so a lot of our work is local. But most of our clients are remote across Houston and beyond. Being nearby just makes in-person kickoffs easy when you want one."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5e1",
+            "question": "Will a new site actually help me show up in Google?",
+            "answer": "Yes. Every build ships with Google Business Profile setup and LocalBusiness schema, which is what moves a Heights business into the local 3-pack. We also fix the technical basics (speed, mobile, titles) that Google uses to rank you."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5e2",
+            "question": "How much does a small business website cost?",
+            "answer": "A 5-page Starter Site is a fixed price, quoted before kickoff, with founding-client pricing for our first Heights clients. No hourly billing and no scope-creep surprises. See the Services page for current numbers."
+          },
+          {
+            "id": "6a3da7385790fdf4a549f5e3",
+            "question": "How long does it take?",
+            "answer": "Fourteen days from kickoff to launch for a Starter Site, guaranteed in writing. You approve the design direction before any code is written, so the clock only starts once you are happy with the direction."
+          }
+        ],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a3da7385790fdf4a549f5e5",
+        "eyebrow": "Start the conversation",
+        "headline": "Get a quote for your Heights website.",
+        "description": "A sentence on your business and what you need is enough. We reply within one business day, or grab a time on the call.",
+        "successMessage": "Thanks. Your note is in. We reply within one business day from hello@blackhartconsulting.com.",
+        "showCompanyField": true,
+        "showProjectTypeField": true,
+        "showBudgetField": true,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      }
+    ],
+    "publishedAt": "2026-06-25T22:10:00.380Z",
+    "updatedAt": "2026-06-25T22:10:00.388Z",
+    "createdAt": "2026-06-25T22:10:00.387Z",
+    "_status": "published"
+  },
+  {
+    "id": 4,
+    "title": "Services",
+    "slug": "services",
+    "seo": {
+      "metaTitle": "Services + Pricing, Black Hart Consulting",
+      "metaDescription": "Every service we offer with real prices, real timelines, real deliverables. Website tiers, Care plans, Local SEO Sprints, monthly SEO, and quick-win add-ons.",
+      "ogImage": null,
+      "noIndex": false
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153cf8",
+        "eyebrow": "Services + Pricing",
+        "headline": "Everything we do, with real numbers.",
+        "subheadline": "No “contact us for pricing.” Real prices, real timelines, real deliverables. Founding-client discounts apply through the first 5 clients.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": false,
+        "blockName": null,
+        "ctas": [],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d14",
+        "eyebrow": "Website packages",
+        "headline": "Three packaged tiers.",
+        "description": "Founding-client pricing applies through the first 5 clients on all three.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153cfe",
+            "name": "Site Health Sprint",
+            "price": "$297",
+            "originalPrice": null,
+            "priceNote": "5-day delivery · pick 3 fixes",
+            "description": "Your site has problems. You don't need a rebuild yet. Pick three things, we ship in five days. Free audit included so you know what to fix before paying.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153cf9",
+                "label": "Free 5-minute site audit included",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cfa",
+                "label": "3 specific fixes shipped in 5 days",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cfb",
+                "label": "Tested on mobile and desktop",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cfc",
+                "label": "Before-and-after Lighthouse report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cfd",
+                "label": "30-day fix guarantee",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start the Sprint",
+              "href": "/contact?tier=sprint"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d04",
+            "name": "Single Page",
+            "price": "$749",
+            "originalPrice": null,
+            "priceNote": "fixed · 5-day build",
+            "description": "For solopreneurs, contractors, and event campaigns. One long-form page that makes the case.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153cff",
+                "label": "One conversion-focused page",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d00",
+                "label": "Mobile-first, under 150KB JS",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d01",
+                "label": "Contact form + GA4",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d02",
+                "label": "First month of hosting free",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d03",
+                "label": "1 round of post-launch revisions",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start a single page",
+              "href": "/contact?tier=single"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d0c",
+            "name": "Starter Site",
+            "price": "$999",
+            "originalPrice": "$1,950",
+            "priceNote": "founding · 14-day build",
+            "description": "The most-bought tier. A 5-page site that fits 90% of what businesses need.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d05",
+                "label": "Up to 5 bespoke pages",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d06",
+                "label": "Block-based CMS (Payload)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d07",
+                "label": "Technical SEO + LocalBusiness schema",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d08",
+                "label": "Google Business Profile setup",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d09",
+                "label": "First month of hosting free",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d0a",
+                "label": "1 round of post-launch revisions",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d0b",
+                "label": "14-day delivery, guaranteed",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Claim a founding spot",
+              "href": "/contact?tier=starter"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d13",
+            "name": "Pro Site",
+            "price": "$2,495",
+            "originalPrice": "$4,500",
+            "priceNote": "founding · 21-day build",
+            "description": "For established businesses ready to invest in content + SEO. Multi-location welcome.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d0d",
+                "label": "Up to 12 bespoke pages",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d0e",
+                "label": "Full CMS + blog system",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d0f",
+                "label": "Case study templates",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d10",
+                "label": "Schema, GBP, technical SEO",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d11",
+                "label": "30 days of SEO content writing",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d12",
+                "label": "2 rounds of post-launch revisions",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start a Pro Site",
+              "href": "/contact?tier=pro"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d1c",
+        "eyebrow": null,
+        "headline": "Need something bigger?",
+        "description": "For larger sites, web apps, multi-location enterprise builds, or custom integrations beyond the Pro Site scope.",
+        "layoutVariant": "centered-single",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153d1b",
+            "name": "Custom Build",
+            "price": "From $9,500",
+            "originalPrice": null,
+            "priceNote": "scoped custom · 6+ weeks · quoted to actual scope",
+            "description": "A discovery + scoping engagement first, then a fixed proposal. We say no when it doesn’t fit.",
+            "highlighted": false,
+            "enterpriseBadge": true,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d15",
+                "label": "Discovery + scoping engagement first",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d16",
+                "label": "Unlimited pages, custom integrations",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d17",
+                "label": "Multi-location, multi-language supported",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d18",
+                "label": "Web app or marketing site, both supported",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d19",
+                "label": "Dedicated weekly check-ins",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d1a",
+                "label": "Quoted custom, pricing reflects actual scope",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Scope a custom build",
+              "href": "/contact?tier=custom"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d2e",
+        "eyebrow": "Care plans",
+        "headline": "After launch, keep it running.",
+        "description": "Bundled with every site at a discount, but standalone pricing if you want to skip Care or upgrade later.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153d22",
+            "name": "Care",
+            "price": "$149",
+            "originalPrice": null,
+            "priceNote": "per month",
+            "description": "Hands-off hosting + maintenance. Every client adds this.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d1d",
+                "label": "Managed hosting + monitoring + backups",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d1e",
+                "label": "SSL, CDN, uptime monitoring",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d1f",
+                "label": "1 hr/mo for small edits",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d20",
+                "label": "Monthly performance + uptime report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d21",
+                "label": "Email support",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Add Care to your project",
+              "href": "/contact?addon=care"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d28",
+            "name": "Growth",
+            "price": "$495",
+            "originalPrice": null,
+            "priceNote": "per month",
+            "description": "For sites improving every month with dev + SEO work.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d23",
+                "label": "Everything in Care",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d24",
+                "label": "4 hrs/mo of dev or SEO work",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d25",
+                "label": "Monthly strategy email",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d26",
+                "label": "Same-week turnaround on changes",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d27",
+                "label": "Slack / SMS channel",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Talk about Growth",
+              "href": "/contact?plan=growth"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d2d",
+            "name": "Scale",
+            "price": "$1,295",
+            "originalPrice": null,
+            "priceNote": "per month",
+            "description": "For revenue-critical sites that need a partner on call.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d29",
+                "label": "Everything in Growth",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d2a",
+                "label": "10 hrs/mo of dev or SEO work",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d2b",
+                "label": "Same-day SLA on small changes",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d2c",
+                "label": "Quarterly architecture review",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Talk about Scale",
+              "href": "/contact?plan=scale"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d42",
+        "eyebrow": "Local SEO",
+        "headline": "From a one-time sprint to fully managed.",
+        "description": "Most clients start with the Sprint. Monthly tiers exist for businesses ready to compete harder.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153d35",
+            "name": "Local SEO Sprint",
+            "price": "$499",
+            "originalPrice": "$1,495",
+            "priceNote": "one-time · founding · 2-week delivery",
+            "description": "A full local SEO setup, delivered as a one-time engagement. No monthly contract.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d2f",
+                "label": "Full local SEO audit (PDF)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d30",
+                "label": "Google Business Profile complete setup",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d31",
+                "label": "10 local citation submissions",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d32",
+                "label": "LocalBusiness + Service schema markup",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d33",
+                "label": "1 cornerstone service or location page",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d34",
+                "label": "Delivered in 2 weeks",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start a SEO Sprint",
+              "href": "/contact?seo=sprint"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d3b",
+            "name": "Local SEO Monthly",
+            "price": "$395",
+            "originalPrice": null,
+            "priceNote": "per month",
+            "description": "For single-location service businesses competing locally.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d36",
+                "label": "Weekly Google Business Profile post",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d37",
+                "label": "5 citation submissions per month",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d38",
+                "label": "1 SEO-optimized blog post / month",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d39",
+                "label": "Monthly ranking + traffic report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d3a",
+                "label": "Quarterly strategy review",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start Local SEO",
+              "href": "/contact?seo=local"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d41",
+            "name": "SEO Growth",
+            "price": "$895",
+            "originalPrice": null,
+            "priceNote": "per month",
+            "description": "Full-stack SEO for businesses ready to compete.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d3c",
+                "label": "Everything in Local SEO Monthly",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d3d",
+                "label": "2 long-form articles / month",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d3e",
+                "label": "Internal linking + topic clusters",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d3f",
+                "label": "AI-search optimization",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d40",
+                "label": "Conversion tracking dashboard",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start SEO Growth",
+              "href": "/contact?seo=growth"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d61",
+        "eyebrow": "Quick-win add-ons",
+        "headline": "Fixed-price productized fixes.",
+        "description": "For specific pain points. Sold standalone or as project upsells. All shipped in 3-7 days.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153d47",
+            "name": "Google Business Profile Setup",
+            "price": "$295",
+            "originalPrice": null,
+            "priceNote": "one-time · 3-day delivery",
+            "description": "Complete GBP setup or audit + repair. Photos, services, hours, schema, review-request automation.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d43",
+                "label": "GBP profile audit and complete setup",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d44",
+                "label": "NAP consistency check across 30+ directories",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d45",
+                "label": "Photo upload + categorization",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d46",
+                "label": "Review request email template",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Order GBP Setup",
+              "href": "/contact?addon=gbp"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d4c",
+            "name": "Site Speed Sprint",
+            "price": "$695",
+            "originalPrice": null,
+            "priceNote": "one-time · 5-day delivery",
+            "description": "Make your existing site faster. Often the highest-ROI thing for SEO + conversion.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d48",
+                "label": "Lighthouse + Core Web Vitals audit",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d49",
+                "label": "Image optimization (AVIF / WebP)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d4a",
+                "label": "JS / CSS bundle analysis + cleanup",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d4b",
+                "label": "Before / after performance report",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Order Speed Sprint",
+              "href": "/contact?addon=speed"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d51",
+            "name": "Schema Markup Pack",
+            "price": "$395",
+            "originalPrice": null,
+            "priceNote": "one-time · 3-day delivery",
+            "description": "LocalBusiness, Service, FAQPage, Article, BreadcrumbList. Direct effect on rich results + AI Overview citations.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d4d",
+                "label": "Identify which schema types fit your business",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d4e",
+                "label": "Implement on relevant pages",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d4f",
+                "label": "Validate via schema.org validator",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d50",
+                "label": "Submit re-indexing request to Google",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Order Schema Pack",
+              "href": "/contact?addon=schema"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d56",
+            "name": "GA4 + Conversion Tracking Setup",
+            "price": "$395",
+            "originalPrice": null,
+            "priceNote": "one-time · 3-day delivery",
+            "description": "Wire up GA4, GTM, Google Ads conversions, and dataLayer events so your campaigns can actually optimize.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d52",
+                "label": "GA4 property + measurement ID setup",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d53",
+                "label": "GTM container with key event triggers",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d54",
+                "label": "Google Ads conversion linker + actions",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d55",
+                "label": "End-to-end test with proof of firing",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Order GA4 Setup",
+              "href": "/contact?addon=ga4"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d5b",
+            "name": "5-Page SEO Refresh",
+            "price": "$695",
+            "originalPrice": null,
+            "priceNote": "one-time · 7-day delivery",
+            "description": "Targeted SEO updates to 5 priority pages, titles, meta, schema, internal linking, content tweaks.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d57",
+                "label": "Title tag + meta description rewrite (5 pages)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d58",
+                "label": "Schema markup added to each page",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d59",
+                "label": "Internal linking + content gap fill",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d5a",
+                "label": "Lighthouse SEO score before / after report",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Order 5-Page Refresh",
+              "href": "/contact?addon=seo-refresh"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d60",
+            "name": "Mobile Audit + Fix",
+            "price": "$595",
+            "originalPrice": null,
+            "priceNote": "one-time · 5-day delivery",
+            "description": "Full mobile audit with on-the-spot fixes. Most sites lose 40-60% of mobile traffic to bad mobile UX.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d5c",
+                "label": "Audit on real iOS + Android devices",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d5d",
+                "label": "Touch target, font sizing, viewport fixes",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d5e",
+                "label": "Mobile Core Web Vitals optimization",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d5f",
+                "label": "Before / after mobile-only Lighthouse report",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Order Mobile Fix",
+              "href": "/contact?addon=mobile"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d62",
+        "eyebrow": "Book a 30-min discovery call",
+        "headline": "Want to scope a project?",
+        "description": "Thirty minutes. We talk through what you need, what it costs, and whether we are a fit.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "inline",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": false,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d63",
+        "headline": "Or send us a note instead.",
+        "description": null,
+        "variant": "default",
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&q=80",
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Get in touch",
+          "href": "/contact"
+        },
+        "secondaryCta": {
+          "label": null,
+          "href": null
+        }
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.162Z",
+    "updatedAt": "2026-05-31T08:15:39.182Z",
+    "createdAt": "2026-05-01T22:42:52.990Z",
+    "_status": "published"
+  },
+  {
+    "id": 3,
+    "title": "Contact",
+    "slug": "contact",
+    "seo": {
+      "metaTitle": "Contact, Black Hart Consulting",
+      "metaDescription": "Three ways to reach Suhaib: free site audit, written inquiry, or a 30-minute discovery call. We reply within one business day.",
+      "ogImage": null,
+      "noIndex": false
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153ce7",
+        "eyebrow": "Two ways to start",
+        "headline": "Get in touch the way that's easiest.",
+        "subheadline": "Drop your URL for a free audit, or book a 30-min discovery call. Both reach me directly. No account manager, no junior handoff.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": true,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a1bee2be949f69ccb153ce5",
+            "label": "Get the free audit",
+            "href": "#audit",
+            "variant": "primary"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153ce6",
+            "label": "Book a 30-min call",
+            "href": "#book",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153ce8",
+        "eyebrow": "PageSpeed audit",
+        "headline": "How fast is your site, actually?",
+        "description": "Paste your URL. We run the same Lighthouse audit Google uses, then show you all four scores in about 30 seconds. No email required. If something is broken, the $297 Site Health Sprint covers three specific fixes shipped in five days.",
+        "successMessage": "Thanks — we’ll reply within one business day.",
+        "showCompanyField": false,
+        "showProjectTypeField": false,
+        "showBudgetField": false,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153ce9",
+        "eyebrow": "Book a 30-min discovery call",
+        "headline": "Book a 30-min discovery call.",
+        "description": "Pick any open time. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "inline",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": false,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cea",
+        "eyebrow": "Common questions",
+        "headline": "Before you write:",
+        "mode": "auto",
+        "category": null,
+        "limit": 6,
+        "blockName": null,
+        "items": [],
+        "blockType": "faq"
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.104Z",
+    "updatedAt": "2026-05-31T08:15:39.111Z",
+    "createdAt": "2026-05-01T22:42:52.829Z",
+    "_status": "published"
+  },
+  {
+    "id": 2,
+    "title": "About",
+    "slug": "about",
+    "seo": {
+      "metaTitle": "About, Black Hart Consulting",
+      "metaDescription": "A Houston-based digital studio building custom websites for businesses across the U.S. Modern craft, modern tooling, one line of accountability.",
+      "ogImage": null,
+      "noIndex": false
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153ceb",
+        "eyebrow": "About",
+        "headline": "Modern craft, modern tooling, one line of accountability.",
+        "subheadline": "Black Hart Consulting is a Houston-based digital studio. We build websites, run SEO, and keep them online for businesses that care how their work shows up online.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": false,
+        "blockName": null,
+        "ctas": [],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cec",
+        "eyebrow": "Our mission",
+        "content": {
+          "root": {
+            "type": "root",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "direction": "ltr",
+            "children": [
+              {
+                "type": "paragraph",
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "direction": "ltr",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "We started Black Hart because most businesses are stuck between two bad choices: a generic template site that looks like everyone else’s, or an agency quote that’s three times what it should cost. We close that gap with a senior, accountable owner on every deliverable, a fixed-price model, and a tight delivery window. Agency-quality work, shipped in days instead of months, at a price that makes sense for a business still proving its model.",
+                    "format": 0,
+                    "version": 1,
+                    "detail": 0,
+                    "mode": "normal",
+                    "style": ""
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "maxWidth": "prose",
+        "image": null,
+        "imageUrl": null,
+        "imageFocus": "face",
+        "variant": "lede",
+        "blockName": null,
+        "blockType": "richText"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cf1",
+        "eyebrow": null,
+        "headline": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1554200876-56c2f25224fa?w=1920&q=80",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153ced",
+            "value": "2",
+            "label": "Recent launches in production",
+            "description": null
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cee",
+            "value": "5 days",
+            "label": "Fastest project delivery",
+            "description": null
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cef",
+            "value": "100%",
+            "label": "Projects shipped on quoted price",
+            "description": null
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cf0",
+            "value": "Houston, TX",
+            "label": "Where we’re based",
+            "description": null
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cf2",
+        "eyebrow": "Who you’ll work with",
+        "content": {
+          "root": {
+            "type": "root",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "direction": "ltr",
+            "children": [
+              {
+                "type": "paragraph",
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "direction": "ltr",
+                "children": [
+                  {
+                    "type": "text",
+                    "text": "You’ll work directly with Suhaib Chaudhry, the founder of Black Hart Consulting, and the only person on the build. There’s no account manager layer, no junior handoff, no agency overhead. Every brief, every line of code, and every design decision goes through one accountable owner. That’s the whole point: a senior developer doing the work himself, shipping the kind of deliverables you’d normally pay $20K+ for in days instead of months. Suhaib has been shipping production web software for over a decade across consumer, e-commerce, B2B SaaS, and other platforms. He started Black Hart to bring that craft to small and mid-market businesses at prices that make sense for a company that’s still proving its model.",
+                    "format": 0,
+                    "version": 1,
+                    "detail": 0,
+                    "mode": "normal",
+                    "style": ""
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "maxWidth": "prose",
+        "image": null,
+        "imageUrl": "https://bhc-media.nyc3.cdn.digitaloceanspaces.com/suhaib-headshot.jpg",
+        "imageFocus": "face",
+        "variant": "default",
+        "blockName": null,
+        "blockType": "richText"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cf6",
+        "eyebrow": "How we work",
+        "headline": "Three principles, every project.",
+        "description": null,
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153cf3",
+            "title": "Scope first.",
+            "description": "Every engagement starts with a 30-minute discovery call, then a fixed-price proposal within 48 hours. We never bill hourly for project work, if a brief doesn’t fit a clean scope, we’ll tell you before you sign anything.",
+            "icon": "lightbulb",
+            "downloadHref": null,
+            "downloadLabel": null,
+            "bullets": []
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cf4",
+            "title": "Build in days, not months.",
+            "description": "A senior developer is accountable for every line of code, every word of copy, and every design decision, no junior handoffs, no agency layers between you and the work.",
+            "icon": "zap",
+            "downloadHref": null,
+            "downloadLabel": null,
+            "bullets": []
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cf5",
+            "title": "Stay involved after launch.",
+            "description": "Most agencies hand you a site and walk away. We host, monitor, and improve yours through Care, Growth, or Scale plans that scale up or down with your needs.",
+            "icon": "shield",
+            "downloadHref": null,
+            "downloadLabel": null,
+            "bullets": []
+          }
+        ],
+        "blockType": "services"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cf7",
+        "headline": "Want to work together?",
+        "description": "Book a 30-minute discovery call or send us a note about what you are building.",
+        "variant": "emphasized",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Book a 30-min discovery call",
+          "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call"
+        },
+        "secondaryCta": {
+          "label": "Get in touch",
+          "href": "/contact"
+        }
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.130Z",
+    "updatedAt": "2026-05-31T08:15:39.139Z",
+    "createdAt": "2026-05-01T22:42:52.785Z",
+    "_status": "published"
+  },
+  {
+    "id": 1,
+    "title": "Home",
+    "slug": "home",
+    "seo": {
+      "metaTitle": "Black Hart Consulting: Free site audit · Custom websites in 14 days from $999",
+      "metaDescription": "Houston-based web studio. Free 5-minute site audit with 3 specific fixes in your inbox within one business day. Or, full custom website built in 14 days, from $999.",
+      "ogImage": null,
+      "noIndex": false
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153cac",
+        "eyebrow": "Houston · One-person studio",
+        "headline": "Custom websites that fix the broken funnel.",
+        "subheadline": "Fast, fixed-price websites for U.S. businesses. Start with a free 5-min audit, or jump straight to a $999 rebuild.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": true,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a1bee2be949f69ccb153caa",
+            "label": "Get my free audit",
+            "href": "#audit",
+            "variant": "primary"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cab",
+            "label": "Book a 30-min call",
+            "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cb0",
+        "eyebrow": "How we work",
+        "headline": "Three things we promise.",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153cad",
+            "value": "14 days",
+            "label": "Site live, every time",
+            "description": "Fixed scope, fixed price, fixed launch date."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cae",
+            "value": "<200KB",
+            "label": "First-paint JavaScript",
+            "description": "Loads under a second on the worst phone in your customer base."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153caf",
+            "value": "Same-week",
+            "label": "Edits after launch",
+            "description": "Need a price changed, hours updated, photo swapped? Done within five business days."
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cb1",
+        "eyebrow": "PageSpeed audit",
+        "headline": "How fast is your site, actually?",
+        "description": "Paste your URL. We run the same Lighthouse audit Google uses, then show you all four scores in about 30 seconds. No email required. If something is broken, the $297 Site Health Sprint covers three specific fixes shipped in five days.",
+        "successMessage": "Thanks — we’ll reply within one business day.",
+        "showCompanyField": false,
+        "showProjectTypeField": false,
+        "showBudgetField": false,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cc2",
+        "eyebrow": "What we do",
+        "headline": "Web, SEO, and care, under one roof.",
+        "description": "Four disciplines, one solo developer accountable for every deliverable. Sized for solo operators, mid-market companies, and larger teams that want a partner who ships fast.",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153cb5",
+            "title": "Website design & build",
+            "description": "Marketing sites and web apps, mobile-first, on a CMS your team actually uses.",
+            "icon": "globe",
+            "downloadHref": "/downloads/service-website",
+            "downloadLabel": null,
+            "bullets": [
+              {
+                "id": "6a1bee2be949f69ccb153cb2",
+                "label": "Custom design tuned to your brand"
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cb3",
+                "label": "Block-based CMS, every section editable"
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cb4",
+                "label": "Performance budget enforced"
+              }
+            ]
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cb9",
+            "title": "Local + national SEO",
+            "description": "GBP, schema, citations, content. Local for service businesses, national for SaaS + B2B.",
+            "icon": "search",
+            "downloadHref": "/downloads/service-seo",
+            "downloadLabel": null,
+            "bullets": [
+              {
+                "id": "6a1bee2be949f69ccb153cb6",
+                "label": "Google Business Profile optimization"
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cb7",
+                "label": "LocalBusiness or Organization schema"
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cb8",
+                "label": "Cornerstone service / location pages"
+              }
+            ]
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cbd",
+            "title": "Care plans",
+            "description": "Hosting, monitoring, backups, and ongoing edits, your site stays fast and online without your input.",
+            "icon": "shield",
+            "downloadHref": "/downloads/service-care",
+            "downloadLabel": null,
+            "bullets": [
+              {
+                "id": "6a1bee2be949f69ccb153cba",
+                "label": "Managed hosting + automated daily backups"
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cbb",
+                "label": "Monthly performance + uptime report"
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cbc",
+                "label": "1-10 hours of edits per month"
+              }
+            ]
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cc1",
+            "title": "Quick-win add-ons",
+            "description": "Fixed-price productized fixes for specific pain. From $295. Shipped in 3-7 days.",
+            "icon": "zap",
+            "downloadHref": "/downloads/service-addons",
+            "downloadLabel": null,
+            "bullets": [
+              {
+                "id": "6a1bee2be949f69ccb153cbe",
+                "label": "GBP setup • schema • speed sprint"
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cbf",
+                "label": "GA4 + conversion tracking"
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cc0",
+                "label": "5-page SEO refresh"
+              }
+            ]
+          }
+        ],
+        "blockType": "services"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cc7",
+        "eyebrow": "Founding Client Pricing",
+        "headline": "First 5 clients save up to $2,005.",
+        "description": "A temporary discount for our founding cohort. Trades a lower price for a Google review, a written testimonial, and case-study permission. Founding clients also lock their Care + SEO retainer rate for the first 12 months, even after our public pricing rises. Open to small and mid-market businesses anywhere in the U.S. (and beyond).",
+        "spotsTotal": 5,
+        "spotsRemaining": 5,
+        "blockName": null,
+        "offers": [
+          {
+            "id": "6a1bee2be949f69ccb153cc3",
+            "name": "Starter Site",
+            "priceFounding": "$999",
+            "priceRetail": "$1,950",
+            "savings": "Save $951"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cc4",
+            "name": "Pro Site",
+            "priceFounding": "$2,495",
+            "priceRetail": "$4,500",
+            "savings": "Save $2,005"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cc5",
+            "name": "Local SEO Sprint",
+            "priceFounding": "$499",
+            "priceRetail": "$1,495",
+            "savings": "Save $996"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cc6",
+            "name": "All Care plans",
+            "priceFounding": "$149/mo",
+            "priceRetail": "",
+            "savings": "First month free"
+          }
+        ],
+        "blockType": "foundingClient",
+        "cta": {
+          "label": "Claim a founding spot",
+          "href": "/contact"
+        }
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cdd",
+        "eyebrow": "Pricing",
+        "headline": "Three ways to work together.",
+        "description": "Start with the Sprint if you just need fixes. Jump to Starter if you want a rebuild. Go Pro if you need content + SEO + multi-location depth from day one. Want the full menu? See all pricing →",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153ccd",
+            "name": "Site Health Sprint",
+            "price": "$297",
+            "originalPrice": null,
+            "priceNote": "5-day delivery · pick 3 fixes",
+            "description": "Your site has problems. You don't need a rebuild yet. Pick three things, we ship in five days. Free audit included so you know what to fix before paying.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153cc8",
+                "label": "Free 5-minute site audit included",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cc9",
+                "label": "3 specific fixes shipped in 5 days",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cca",
+                "label": "Tested on mobile and desktop",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153ccb",
+                "label": "Before-and-after Lighthouse report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153ccc",
+                "label": "30-day fix guarantee",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start the Sprint",
+              "href": "/contact?tier=sprint"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cd5",
+            "name": "Starter Site",
+            "price": "$999",
+            "originalPrice": "$1,950",
+            "priceNote": "founding · 14-day build",
+            "description": "The most-bought tier. A 5-page site that fits 90% of what businesses need.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153cce",
+                "label": "Up to 5 bespoke pages",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153ccf",
+                "label": "Block-based CMS (Payload)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cd0",
+                "label": "Technical SEO + LocalBusiness schema",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cd1",
+                "label": "Google Business Profile setup",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cd2",
+                "label": "First month of hosting free",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cd3",
+                "label": "1 round of post-launch revisions",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cd4",
+                "label": "14-day delivery, guaranteed",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Claim a founding spot",
+              "href": "/contact?tier=starter"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153cdc",
+            "name": "Pro Site",
+            "price": "$2,495",
+            "originalPrice": "$4,500",
+            "priceNote": "founding · 21-day build",
+            "description": "For established businesses ready to invest in content + SEO. Multi-location welcome.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153cd6",
+                "label": "Up to 12 bespoke pages",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cd7",
+                "label": "Full CMS + blog system",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cd8",
+                "label": "Case study templates",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cd9",
+                "label": "Schema, GBP, technical SEO",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cda",
+                "label": "30 days of SEO content writing",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153cdb",
+                "label": "2 rounds of post-launch revisions",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start a Pro Site",
+              "href": "/contact?tier=pro"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cde",
+        "headline": "Want the full pricing menu?",
+        "description": "Single Page · Sprint · Starter · Pro · Custom Build · Care plans · Local SEO · quick-win add-ons, every number visible, no quote forms.",
+        "variant": "default",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "See all pricing →",
+          "href": "/services"
+        },
+        "secondaryCta": {
+          "label": null,
+          "href": null
+        }
+      },
+      {
+        "id": "6a1bee2be949f69ccb153cdf",
+        "eyebrow": "Recent work",
+        "headline": "A few projects we're proud of.",
+        "description": "Each case study covers what we shipped, why it works, and what changed for the client.",
+        "mode": "latest",
+        "limit": 3,
+        "viewAllLabel": "View all projects",
+        "viewAllHref": "/portfolio",
+        "linked": true,
+        "compact": false,
+        "blockName": null,
+        "blockType": "featuredProjects",
+        "projects": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153ce0",
+        "eyebrow": "What clients said",
+        "headline": "Real work, real businesses.",
+        "mode": "latest",
+        "limit": 6,
+        "blockName": null,
+        "blockType": "testimonials",
+        "testimonials": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153ce1",
+        "eyebrow": "Book a 30-min discovery call",
+        "headline": "Rather talk it through? Book 30 minutes.",
+        "description": "Pick any open time. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "popup",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": true,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153ce2",
+        "eyebrow": "Free resource",
+        "headline": "Take this checklist into any web-design conversation.",
+        "description": "A 1-pager with the questions to ask, the contract gotchas to avoid, and the performance promises to demand in writing, even if you never hire us.",
+        "downloadHref": "/downloads/website-checklist",
+        "downloadLabel": "Download the free checklist",
+        "fineprint": "PDF · 2 pages · no email required",
+        "blockName": null,
+        "blockType": "leadMagnet"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153ce3",
+        "eyebrow": "Common questions",
+        "headline": "Everything you wanted to ask.",
+        "mode": "auto",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153ce4",
+        "headline": "Still here? Get the free audit.",
+        "description": "Three specific fixes, in your inbox within a business day. No call required. If you would rather talk, book a 30-min discovery call below.",
+        "variant": "emphasized",
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&q=80",
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Get my free audit",
+          "href": "#audit"
+        },
+        "secondaryCta": {
+          "label": "Book a 30-min call",
+          "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call"
+        }
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.025Z",
+    "updatedAt": "2026-05-31T08:15:39.052Z",
+    "createdAt": "2026-05-01T22:42:51.775Z",
+    "_status": "published"
+  }
+]

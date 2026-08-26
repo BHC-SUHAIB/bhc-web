@@ -1,0 +1,1926 @@
+[
+  {
+    "id": 6,
+    "title": "Houston Mid-Market Websites",
+    "slug": "houston-midmarket",
+    "campaign": "Search · Web Design · Houston · Mid-Market",
+    "niche": "professional",
+    "seo": {
+      "metaTitle": "Houston Mid-Market Web Studio: Senior Engineering, No Agency Layers",
+      "metaDescription": "For 5-to-50-person Houston companies. Senior-engineer accountable, fixed-price, 21-day Pro Site builds from $2,495 founding. Free site audit, no call required.",
+      "ogImage": null,
+      "noIndex": true
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153d87",
+        "eyebrow": "Houston · For mid-market companies",
+        "headline": "Senior engineering for mid-market. Without the agency overhead.",
+        "subheadline": "For 5-to-50-person companies. One senior developer, one bill, no junior handoff. Free audit, or a $2,495 Pro Site rebuild.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": true,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a1bee2be949f69ccb153d85",
+            "label": "Get my free audit",
+            "href": "#audit",
+            "variant": "primary"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d86",
+            "label": "Or book a 30-min call",
+            "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d8b",
+        "eyebrow": "What you get",
+        "headline": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1920&q=80",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153d88",
+            "value": "14 days",
+            "label": "From kickoff to launch",
+            "description": "Founding clients delivered first."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d89",
+            "value": "<200KB",
+            "label": "First-paint JavaScript",
+            "description": "Fast on the worst phone in your customer base."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d8a",
+            "value": "$0",
+            "label": "In hidden fees",
+            "description": "Hosting first month free. No scope creep clauses."
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d8c",
+        "eyebrow": "PageSpeed audit",
+        "headline": "How fast is your site, actually?",
+        "description": "Paste your URL. We run the same Lighthouse audit Google uses, then show you all four scores in about 30 seconds. No email required. If something is broken, the $297 Site Health Sprint covers three specific fixes shipped in five days.",
+        "successMessage": "Thanks — we’ll reply within one business day.",
+        "showCompanyField": false,
+        "showProjectTypeField": false,
+        "showBudgetField": false,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d8d",
+        "eyebrow": "What clients said",
+        "headline": "Real work, real businesses.",
+        "mode": "latest",
+        "limit": 3,
+        "blockName": null,
+        "blockType": "testimonials",
+        "testimonials": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d8e",
+        "eyebrow": "Recent work",
+        "headline": "Real projects, real businesses.",
+        "description": "A few sites we have shipped recently.",
+        "mode": "latest",
+        "limit": 3,
+        "viewAllLabel": "",
+        "viewAllHref": "",
+        "linked": false,
+        "compact": true,
+        "blockName": null,
+        "blockType": "featuredProjects",
+        "projects": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153d93",
+        "eyebrow": "Founding Client Pricing",
+        "headline": "First 5 clients save up to $2,005.",
+        "description": "A temporary discount for our founding cohort. Trades a lower price for a Google review, a written testimonial, and case-study permission. Founding clients also lock their Care + SEO retainer rate for the first 12 months, even after our public pricing rises. Open to small and mid-market businesses anywhere in the U.S. (and beyond).",
+        "spotsTotal": 5,
+        "spotsRemaining": 5,
+        "blockName": null,
+        "offers": [
+          {
+            "id": "6a1bee2be949f69ccb153d8f",
+            "name": "Starter Site",
+            "priceFounding": "$999",
+            "priceRetail": "$1,950",
+            "savings": "Save $951"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d90",
+            "name": "Pro Site",
+            "priceFounding": "$2,495",
+            "priceRetail": "$4,500",
+            "savings": "Save $2,005"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d91",
+            "name": "Local SEO Sprint",
+            "priceFounding": "$499",
+            "priceRetail": "$1,495",
+            "savings": "Save $996"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153d92",
+            "name": "All Care plans",
+            "priceFounding": "$149/mo",
+            "priceRetail": "",
+            "savings": "First month free"
+          }
+        ],
+        "blockType": "foundingClient",
+        "cta": {
+          "label": "Claim a founding spot",
+          "href": "#book"
+        }
+      },
+      {
+        "id": "6a1bee2be949f69ccb153da2",
+        "eyebrow": "The offer",
+        "headline": "Two ways to start. Sized for mid-market.",
+        "description": "Audit fix if your existing site needs a tune-up. Pro Site if you need a real rebuild. Both deliver fast with a senior engineer on the work, not a junior handoff.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153d99",
+            "name": "Site Health Sprint",
+            "price": "$297",
+            "originalPrice": null,
+            "priceNote": "5-day delivery · pick 3 fixes",
+            "description": "Your site has problems. You don't need a rebuild yet. Pick three things, we ship in five days. Free audit included so you know what to fix before paying.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d94",
+                "label": "Free 5-minute site audit included",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d95",
+                "label": "3 specific fixes shipped in 5 days",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d96",
+                "label": "Tested on mobile and desktop",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d97",
+                "label": "Before-and-after Lighthouse report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d98",
+                "label": "30-day fix guarantee",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start the Sprint",
+              "href": "#audit"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153da1",
+            "name": "Pro Site",
+            "price": "$2,495",
+            "originalPrice": "$4,500",
+            "priceNote": "founding price · 21-day delivery",
+            "description": "Mid-market build. Up to 12 pages, multi-location welcome, full blog + content workflow.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153d9a",
+                "label": "Up to 12 bespoke pages, multi-location welcome",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d9b",
+                "label": "Full CMS + blog system + case study templates",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d9c",
+                "label": "Technical SEO + schema + GBP setup",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d9d",
+                "label": "30 days of SEO content writing included",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d9e",
+                "label": "Integration with your CRM / marketing stack",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153d9f",
+                "label": "2 rounds of post-launch revisions",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153da0",
+                "label": "21-day delivery, guaranteed in writing",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Claim a founding spot",
+              "href": "#book"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153da3",
+        "eyebrow": "Book a 30-min discovery call",
+        "headline": "Want to talk first? Book a 30-min scoping call.",
+        "description": "Thirty minutes. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "inline",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": false,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153da4",
+        "eyebrow": "Common questions",
+        "headline": "Everything you wanted to ask.",
+        "mode": "auto",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153da5",
+        "headline": "Still here? Get the free audit.",
+        "description": "Three specific fixes, in your inbox within a business day. No call required. If you would rather talk, book a 30-minute discovery call below.",
+        "variant": "emphasized",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Get my free audit",
+          "href": "#audit"
+        },
+        "secondaryCta": {
+          "label": "Book a 30-min call",
+          "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call"
+        }
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.302Z",
+    "updatedAt": "2026-05-31T08:15:39.310Z",
+    "createdAt": "2026-05-31T08:15:39.309Z",
+    "_status": "published"
+  },
+  {
+    "id": 5,
+    "title": "Heights Real Estate Team Websites",
+    "slug": "heights-real-estate",
+    "campaign": "Search · Real Estate · Heights",
+    "niche": "realestate",
+    "seo": {
+      "metaTitle": "Real Estate Team Websites in Houston Heights: IDX, $999",
+      "metaDescription": "Custom websites for Houston Heights real estate teams and agents. IDX listings, neighborhood pages, lead capture.",
+      "ogImage": null,
+      "noIndex": true
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153e0b",
+        "eyebrow": "For Houston Heights Real Estate Teams",
+        "headline": "A real estate site that wins listings + buyers.",
+        "subheadline": "IDX listings integration, deep neighborhood pages for the Heights, and a lead-capture flow that doesn’t feel like a trap.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": true,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a1bee2be949f69ccb153e09",
+            "label": "Book a 30-min discovery call",
+            "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+            "variant": "primary"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153e0a",
+            "label": "See what’s included",
+            "href": "#pricing",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e0f",
+        "eyebrow": "What you get",
+        "headline": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1920&q=80",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153e0c",
+            "value": "14 days",
+            "label": "From kickoff to launch",
+            "description": "Founding clients delivered first."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153e0d",
+            "value": "<200KB",
+            "label": "First-paint JavaScript",
+            "description": "Fast on the worst phone in your customer base."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153e0e",
+            "value": "$0",
+            "label": "In hidden fees",
+            "description": "Hosting first month free. No scope creep clauses."
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e10",
+        "eyebrow": "PageSpeed audit",
+        "headline": "How fast is your site, actually?",
+        "description": "Paste your URL. We run the same Lighthouse audit Google uses, then show you all four scores in about 30 seconds. No email required. If something is broken, the $297 Site Health Sprint covers three specific fixes shipped in five days.",
+        "successMessage": "Thanks — we’ll reply within one business day.",
+        "showCompanyField": false,
+        "showProjectTypeField": false,
+        "showBudgetField": false,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e11",
+        "eyebrow": "What clients said",
+        "headline": "Real work, real businesses.",
+        "mode": "latest",
+        "limit": 3,
+        "blockName": null,
+        "blockType": "testimonials",
+        "testimonials": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e12",
+        "eyebrow": "Recent work",
+        "headline": "Real projects, real businesses.",
+        "description": "A few sites we have shipped recently.",
+        "mode": "latest",
+        "limit": 3,
+        "viewAllLabel": "",
+        "viewAllHref": "",
+        "linked": false,
+        "compact": true,
+        "blockName": null,
+        "blockType": "featuredProjects",
+        "projects": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e17",
+        "eyebrow": "Founding Client Pricing",
+        "headline": "First 5 clients save up to $2,005.",
+        "description": "A temporary discount for our founding cohort. Trades a lower price for a Google review, a written testimonial, and case-study permission. Founding clients also lock their Care + SEO retainer rate for the first 12 months, even after our public pricing rises. Open to small and mid-market businesses anywhere in the U.S. (and beyond).",
+        "spotsTotal": 5,
+        "spotsRemaining": 5,
+        "blockName": null,
+        "offers": [
+          {
+            "id": "6a1bee2be949f69ccb153e13",
+            "name": "Starter Site",
+            "priceFounding": "$999",
+            "priceRetail": "$1,950",
+            "savings": "Save $951"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153e14",
+            "name": "Pro Site",
+            "priceFounding": "$2,495",
+            "priceRetail": "$4,500",
+            "savings": "Save $2,005"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153e15",
+            "name": "Local SEO Sprint",
+            "priceFounding": "$499",
+            "priceRetail": "$1,495",
+            "savings": "Save $996"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153e16",
+            "name": "All Care plans",
+            "priceFounding": "$149/mo",
+            "priceRetail": "",
+            "savings": "First month free"
+          }
+        ],
+        "blockType": "foundingClient",
+        "cta": {
+          "label": "Claim a founding spot",
+          "href": "#book"
+        }
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e26",
+        "eyebrow": "The offer",
+        "headline": "Two ways to start. Pick the one that fits.",
+        "description": "If your site needs a tune-up, start with the 5-day Sprint. If you need a real rebuild, the Starter Site is the founding-client tier most clients pick.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153e1d",
+            "name": "Site Health Sprint",
+            "price": "$297",
+            "originalPrice": null,
+            "priceNote": "5-day delivery · pick 3 fixes",
+            "description": "Your site has problems. You don't need a rebuild yet. Pick three things, we ship in five days. Free audit included so you know what to fix before paying.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153e18",
+                "label": "Free 5-minute site audit included",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e19",
+                "label": "3 specific fixes shipped in 5 days",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e1a",
+                "label": "Tested on mobile and desktop",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e1b",
+                "label": "Before-and-after Lighthouse report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e1c",
+                "label": "30-day fix guarantee",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start the Sprint",
+              "href": "#audit"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153e25",
+            "name": "Starter Site",
+            "price": "$999",
+            "originalPrice": "$1,950",
+            "priceNote": "founding price · 14-day delivery",
+            "description": "5-page website, mobile-first, live in 14 days.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153e1e",
+                "label": "5 pages: Home, Listings, Neighborhoods, About, Contact",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e1f",
+                "label": "IDX integration (Realtyna, IDX Broker, IHF compatible)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e20",
+                "label": "Deep Heights neighborhood pages (sub-area SEO)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e21",
+                "label": "Property valuation lead-capture tool",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e22",
+                "label": "Agent bio pages with contact + booking",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e23",
+                "label": "GBP setup + RealEstateAgent + Place schema",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e24",
+                "label": "Lead-capture form + CRM webhook (Follow Up Boss / kvCORE / Boomtown)",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Claim a founding spot",
+              "href": "#book"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e27",
+        "eyebrow": "Book a 30-min discovery call",
+        "headline": "Book a 30-minute discovery call. We will scope your team site.",
+        "description": "Thirty minutes. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "inline",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": false,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e28",
+        "eyebrow": "Common questions",
+        "headline": "Everything you wanted to ask.",
+        "mode": "auto",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e29",
+        "headline": "Still here? Get the free audit.",
+        "description": "Three specific fixes, in your inbox within a business day. No call required. If you would rather talk, book a 30-minute discovery call below.",
+        "variant": "emphasized",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Get my free audit",
+          "href": "#audit"
+        },
+        "secondaryCta": {
+          "label": "Book a 30-min call",
+          "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call"
+        }
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.487Z",
+    "updatedAt": "2026-05-31T08:15:39.499Z",
+    "createdAt": "2026-05-02T20:39:32.707Z",
+    "_status": "published"
+  },
+  {
+    "id": 4,
+    "title": "Heights Restaurant & Café Websites",
+    "slug": "heights-restaurant",
+    "campaign": "Search · Restaurant · Heights",
+    "niche": "restaurant",
+    "seo": {
+      "metaTitle": "Restaurant Websites in Houston Heights, Reservations + Online Ordering",
+      "metaDescription": "Custom websites for Houston Heights restaurants and cafés. Native menu, online reservations, online ordering.",
+      "ogImage": null,
+      "noIndex": true
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153dea",
+        "eyebrow": "For Houston Heights Restaurants & Cafés",
+        "headline": "A restaurant website hungry diners actually use.",
+        "subheadline": "Native HTML menu (not PDF) so Google can index it, online reservations, and integration with whatever ordering platform you use.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": true,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a1bee2be949f69ccb153de8",
+            "label": "Book a 30-min discovery call",
+            "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+            "variant": "primary"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153de9",
+            "label": "See what’s included",
+            "href": "#pricing",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dee",
+        "eyebrow": "What you get",
+        "headline": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1481833761820-0509d3217039?w=1920&q=80",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153deb",
+            "value": "14 days",
+            "label": "From kickoff to launch",
+            "description": "Founding clients delivered first."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dec",
+            "value": "<200KB",
+            "label": "First-paint JavaScript",
+            "description": "Fast on the worst phone in your customer base."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153ded",
+            "value": "$0",
+            "label": "In hidden fees",
+            "description": "Hosting first month free. No scope creep clauses."
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153def",
+        "eyebrow": "PageSpeed audit",
+        "headline": "How fast is your site, actually?",
+        "description": "Paste your URL. We run the same Lighthouse audit Google uses, then show you all four scores in about 30 seconds. No email required. If something is broken, the $297 Site Health Sprint covers three specific fixes shipped in five days.",
+        "successMessage": "Thanks — we’ll reply within one business day.",
+        "showCompanyField": false,
+        "showProjectTypeField": false,
+        "showBudgetField": false,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153df0",
+        "eyebrow": "What clients said",
+        "headline": "Real work, real businesses.",
+        "mode": "latest",
+        "limit": 3,
+        "blockName": null,
+        "blockType": "testimonials",
+        "testimonials": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153df1",
+        "eyebrow": "Recent work",
+        "headline": "Real projects, real businesses.",
+        "description": "A few sites we have shipped recently.",
+        "mode": "latest",
+        "limit": 3,
+        "viewAllLabel": "",
+        "viewAllHref": "",
+        "linked": false,
+        "compact": true,
+        "blockName": null,
+        "blockType": "featuredProjects",
+        "projects": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153df6",
+        "eyebrow": "Founding Client Pricing",
+        "headline": "First 5 clients save up to $2,005.",
+        "description": "A temporary discount for our founding cohort. Trades a lower price for a Google review, a written testimonial, and case-study permission. Founding clients also lock their Care + SEO retainer rate for the first 12 months, even after our public pricing rises. Open to small and mid-market businesses anywhere in the U.S. (and beyond).",
+        "spotsTotal": 5,
+        "spotsRemaining": 5,
+        "blockName": null,
+        "offers": [
+          {
+            "id": "6a1bee2be949f69ccb153df2",
+            "name": "Starter Site",
+            "priceFounding": "$999",
+            "priceRetail": "$1,950",
+            "savings": "Save $951"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153df3",
+            "name": "Pro Site",
+            "priceFounding": "$2,495",
+            "priceRetail": "$4,500",
+            "savings": "Save $2,005"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153df4",
+            "name": "Local SEO Sprint",
+            "priceFounding": "$499",
+            "priceRetail": "$1,495",
+            "savings": "Save $996"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153df5",
+            "name": "All Care plans",
+            "priceFounding": "$149/mo",
+            "priceRetail": "",
+            "savings": "First month free"
+          }
+        ],
+        "blockType": "foundingClient",
+        "cta": {
+          "label": "Claim a founding spot",
+          "href": "#book"
+        }
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e05",
+        "eyebrow": "The offer",
+        "headline": "Two ways to start. Pick the one that fits.",
+        "description": "If your site needs a tune-up, start with the 5-day Sprint. If you need a real rebuild, the Starter Site is the founding-client tier most clients pick.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153dfc",
+            "name": "Site Health Sprint",
+            "price": "$297",
+            "originalPrice": null,
+            "priceNote": "5-day delivery · pick 3 fixes",
+            "description": "Your site has problems. You don't need a rebuild yet. Pick three things, we ship in five days. Free audit included so you know what to fix before paying.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153df7",
+                "label": "Free 5-minute site audit included",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153df8",
+                "label": "3 specific fixes shipped in 5 days",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153df9",
+                "label": "Tested on mobile and desktop",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dfa",
+                "label": "Before-and-after Lighthouse report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dfb",
+                "label": "30-day fix guarantee",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start the Sprint",
+              "href": "#audit"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153e04",
+            "name": "Starter Site",
+            "price": "$999",
+            "originalPrice": "$1,950",
+            "priceNote": "founding price · 14-day delivery",
+            "description": "5-page website, mobile-first, live in 14 days.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153dfd",
+                "label": "5 pages: Home, Menu, Story, Reservations, Visit",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dfe",
+                "label": "Native HTML menu with Menu schema (not a PDF)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dff",
+                "label": "OpenTable / Resy / Tock reservation integration",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e00",
+                "label": "DoorDash / GrubHub / UberEats deep links",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e01",
+                "label": "Events page for private bookings + bookable form",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e02",
+                "label": "GBP setup + Restaurant + LocalBusiness schema",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153e03",
+                "label": "Email signup for daily specials / new menu drops",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Claim a founding spot",
+              "href": "#book"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e06",
+        "eyebrow": "Book a 30-min discovery call",
+        "headline": "Book a 30-minute discovery call. We will scope your restaurant site.",
+        "description": "Thirty minutes. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "inline",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": false,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e07",
+        "eyebrow": "Common questions",
+        "headline": "Everything you wanted to ask.",
+        "mode": "auto",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153e08",
+        "headline": "Still here? Get the free audit.",
+        "description": "Three specific fixes, in your inbox within a business day. No call required. If you would rather talk, book a 30-minute discovery call below.",
+        "variant": "emphasized",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Get my free audit",
+          "href": "#audit"
+        },
+        "secondaryCta": {
+          "label": "Book a 30-min call",
+          "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call"
+        }
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.442Z",
+    "updatedAt": "2026-05-31T08:15:39.455Z",
+    "createdAt": "2026-05-02T20:39:32.677Z",
+    "_status": "published"
+  },
+  {
+    "id": 3,
+    "title": "Heights Med Spa Websites",
+    "slug": "heights-med-spa",
+    "campaign": "Search · Med Spa · Heights",
+    "niche": "medspa",
+    "seo": {
+      "metaTitle": "Med Spa Websites in Houston Heights: Online Booking, $999",
+      "metaDescription": "Custom med spa websites for Houston Heights aesthetic clinics. Online booking, gift cards, treatment packages.",
+      "ogImage": null,
+      "noIndex": true
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153dc9",
+        "eyebrow": "For Houston Heights Med Spas",
+        "headline": "A med spa website that fills your appointment book.",
+        "subheadline": "Online booking front and center, gift cards that actually convert, treatment packages that don’t require a sales call.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": true,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a1bee2be949f69ccb153dc7",
+            "label": "Book a 30-min discovery call",
+            "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+            "variant": "primary"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dc8",
+            "label": "See what’s included",
+            "href": "#pricing",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dcd",
+        "eyebrow": "What you get",
+        "headline": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1920&q=80",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153dca",
+            "value": "14 days",
+            "label": "From kickoff to launch",
+            "description": "Founding clients delivered first."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dcb",
+            "value": "<200KB",
+            "label": "First-paint JavaScript",
+            "description": "Fast on the worst phone in your customer base."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dcc",
+            "value": "$0",
+            "label": "In hidden fees",
+            "description": "Hosting first month free. No scope creep clauses."
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dce",
+        "eyebrow": "PageSpeed audit",
+        "headline": "How fast is your site, actually?",
+        "description": "Paste your URL. We run the same Lighthouse audit Google uses, then show you all four scores in about 30 seconds. No email required. If something is broken, the $297 Site Health Sprint covers three specific fixes shipped in five days.",
+        "successMessage": "Thanks — we’ll reply within one business day.",
+        "showCompanyField": false,
+        "showProjectTypeField": false,
+        "showBudgetField": false,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dcf",
+        "eyebrow": "What clients said",
+        "headline": "Real work, real businesses.",
+        "mode": "latest",
+        "limit": 3,
+        "blockName": null,
+        "blockType": "testimonials",
+        "testimonials": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dd0",
+        "eyebrow": "Recent work",
+        "headline": "Real projects, real businesses.",
+        "description": "A few sites we have shipped recently.",
+        "mode": "latest",
+        "limit": 3,
+        "viewAllLabel": "",
+        "viewAllHref": "",
+        "linked": false,
+        "compact": true,
+        "blockName": null,
+        "blockType": "featuredProjects",
+        "projects": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dd5",
+        "eyebrow": "Founding Client Pricing",
+        "headline": "First 5 clients save up to $2,005.",
+        "description": "A temporary discount for our founding cohort. Trades a lower price for a Google review, a written testimonial, and case-study permission. Founding clients also lock their Care + SEO retainer rate for the first 12 months, even after our public pricing rises. Open to small and mid-market businesses anywhere in the U.S. (and beyond).",
+        "spotsTotal": 5,
+        "spotsRemaining": 5,
+        "blockName": null,
+        "offers": [
+          {
+            "id": "6a1bee2be949f69ccb153dd1",
+            "name": "Starter Site",
+            "priceFounding": "$999",
+            "priceRetail": "$1,950",
+            "savings": "Save $951"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dd2",
+            "name": "Pro Site",
+            "priceFounding": "$2,495",
+            "priceRetail": "$4,500",
+            "savings": "Save $2,005"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dd3",
+            "name": "Local SEO Sprint",
+            "priceFounding": "$499",
+            "priceRetail": "$1,495",
+            "savings": "Save $996"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dd4",
+            "name": "All Care plans",
+            "priceFounding": "$149/mo",
+            "priceRetail": "",
+            "savings": "First month free"
+          }
+        ],
+        "blockType": "foundingClient",
+        "cta": {
+          "label": "Claim a founding spot",
+          "href": "#book"
+        }
+      },
+      {
+        "id": "6a1bee2be949f69ccb153de4",
+        "eyebrow": "The offer",
+        "headline": "Two ways to start. Pick the one that fits.",
+        "description": "If your site needs a tune-up, start with the 5-day Sprint. If you need a real rebuild, the Starter Site is the founding-client tier most clients pick.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153ddb",
+            "name": "Site Health Sprint",
+            "price": "$297",
+            "originalPrice": null,
+            "priceNote": "5-day delivery · pick 3 fixes",
+            "description": "Your site has problems. You don't need a rebuild yet. Pick three things, we ship in five days. Free audit included so you know what to fix before paying.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153dd6",
+                "label": "Free 5-minute site audit included",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dd7",
+                "label": "3 specific fixes shipped in 5 days",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dd8",
+                "label": "Tested on mobile and desktop",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dd9",
+                "label": "Before-and-after Lighthouse report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dda",
+                "label": "30-day fix guarantee",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start the Sprint",
+              "href": "#audit"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153de3",
+            "name": "Starter Site",
+            "price": "$999",
+            "originalPrice": "$1,950",
+            "priceNote": "founding price · 14-day delivery",
+            "description": "5-page website, mobile-first, live in 14 days.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153ddc",
+                "label": "5 pages: Home, Treatments, Pricing, About, Contact",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153ddd",
+                "label": "Online booking integration (Vagaro, Mindbody, Square)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dde",
+                "label": "Gift card e-commerce (Stripe-powered)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153ddf",
+                "label": "Treatment package builder with transparent pricing",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153de0",
+                "label": "Before / after gallery with consent tracking",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153de1",
+                "label": "GBP setup + MedicalBusiness + Service schema",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153de2",
+                "label": "Mother’s Day / holiday landing page templates",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Claim a founding spot",
+              "href": "#book"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153de5",
+        "eyebrow": "Book a 30-min discovery call",
+        "headline": "Book a 30-minute discovery call. We will scope your med spa site.",
+        "description": "Thirty minutes. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "inline",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": false,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153de6",
+        "eyebrow": "Common questions",
+        "headline": "Everything you wanted to ask.",
+        "mode": "auto",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153de7",
+        "headline": "Still here? Get the free audit.",
+        "description": "Three specific fixes, in your inbox within a business day. No call required. If you would rather talk, book a 30-minute discovery call below.",
+        "variant": "emphasized",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Get my free audit",
+          "href": "#audit"
+        },
+        "secondaryCta": {
+          "label": "Book a 30-min call",
+          "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call"
+        }
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.396Z",
+    "updatedAt": "2026-05-31T08:15:39.408Z",
+    "createdAt": "2026-05-02T20:39:32.646Z",
+    "_status": "published"
+  },
+  {
+    "id": 2,
+    "title": "Heights Dental Practice Websites",
+    "slug": "heights-dental",
+    "campaign": "Search · Dental · Heights",
+    "niche": "dental",
+    "seo": {
+      "metaTitle": "Dental Practice Websites in Houston Heights: $999 Founding",
+      "metaDescription": "Custom websites for Houston Heights dental practices. New-patient lead capture, online booking, insurance verification. 14-day delivery, $999 founding price.",
+      "ogImage": null,
+      "noIndex": true
+    },
+    "layout": [
+      {
+        "id": "6a1bee2be949f69ccb153da8",
+        "eyebrow": "For Houston Heights Dentists",
+        "headline": "A new-patient website for your practice. In 14 days.",
+        "subheadline": "Built around what dental patients actually need: online booking, insurance verification, before/after photos, and a phone number that’s easy to find.",
+        "align": "left",
+        "image": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1920&q=80",
+        "overlayStrength": "heavy",
+        "showPhoneCta": true,
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a1bee2be949f69ccb153da6",
+            "label": "Book a 30-min discovery call",
+            "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+            "variant": "primary"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153da7",
+            "label": "See what’s included",
+            "href": "#pricing",
+            "variant": "ghost"
+          }
+        ],
+        "blockType": "hero"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dac",
+        "eyebrow": "What you get",
+        "headline": null,
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1920&q=80",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a1bee2be949f69ccb153da9",
+            "value": "14 days",
+            "label": "From kickoff to launch",
+            "description": "Founding clients delivered first."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153daa",
+            "value": "<200KB",
+            "label": "First-paint JavaScript",
+            "description": "Fast on the worst phone in your customer base."
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dab",
+            "value": "$0",
+            "label": "In hidden fees",
+            "description": "Hosting first month free. No scope creep clauses."
+          }
+        ],
+        "blockType": "stats"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dad",
+        "eyebrow": "PageSpeed audit",
+        "headline": "How fast is your site, actually?",
+        "description": "Paste your URL. We run the same Lighthouse audit Google uses, then show you all four scores in about 30 seconds. No email required. If something is broken, the $297 Site Health Sprint covers three specific fixes shipped in five days.",
+        "successMessage": "Thanks — we’ll reply within one business day.",
+        "showCompanyField": false,
+        "showProjectTypeField": false,
+        "showBudgetField": false,
+        "submitLabel": "Send inquiry",
+        "blockName": null,
+        "blockType": "contactForm"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dae",
+        "eyebrow": "What clients said",
+        "headline": "Real work, real businesses.",
+        "mode": "latest",
+        "limit": 3,
+        "blockName": null,
+        "blockType": "testimonials",
+        "testimonials": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153daf",
+        "eyebrow": "Recent work",
+        "headline": "Real projects, real businesses.",
+        "description": "A few sites we have shipped recently.",
+        "mode": "latest",
+        "limit": 3,
+        "viewAllLabel": "",
+        "viewAllHref": "",
+        "linked": false,
+        "compact": true,
+        "blockName": null,
+        "blockType": "featuredProjects",
+        "projects": []
+      },
+      {
+        "id": "6a1bee2be949f69ccb153db4",
+        "eyebrow": "Founding Client Pricing",
+        "headline": "First 5 clients save up to $2,005.",
+        "description": "A temporary discount for our founding cohort. Trades a lower price for a Google review, a written testimonial, and case-study permission. Founding clients also lock their Care + SEO retainer rate for the first 12 months, even after our public pricing rises. Open to small and mid-market businesses anywhere in the U.S. (and beyond).",
+        "spotsTotal": 5,
+        "spotsRemaining": 5,
+        "blockName": null,
+        "offers": [
+          {
+            "id": "6a1bee2be949f69ccb153db0",
+            "name": "Starter Site",
+            "priceFounding": "$999",
+            "priceRetail": "$1,950",
+            "savings": "Save $951"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153db1",
+            "name": "Pro Site",
+            "priceFounding": "$2,495",
+            "priceRetail": "$4,500",
+            "savings": "Save $2,005"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153db2",
+            "name": "Local SEO Sprint",
+            "priceFounding": "$499",
+            "priceRetail": "$1,495",
+            "savings": "Save $996"
+          },
+          {
+            "id": "6a1bee2be949f69ccb153db3",
+            "name": "All Care plans",
+            "priceFounding": "$149/mo",
+            "priceRetail": "",
+            "savings": "First month free"
+          }
+        ],
+        "blockType": "foundingClient",
+        "cta": {
+          "label": "Claim a founding spot",
+          "href": "#book"
+        }
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dc3",
+        "eyebrow": "The offer",
+        "headline": "Two ways to start. Pick the one that fits.",
+        "description": "If your site needs a tune-up, start with the 5-day Sprint. If you need a real rebuild, the Starter Site is the founding-client tier most clients pick.",
+        "layoutVariant": "grid",
+        "anchorId": null,
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a1bee2be949f69ccb153dba",
+            "name": "Site Health Sprint",
+            "price": "$297",
+            "originalPrice": null,
+            "priceNote": "5-day delivery · pick 3 fixes",
+            "description": "Your site has problems. You don't need a rebuild yet. Pick three things, we ship in five days. Free audit included so you know what to fix before paying.",
+            "highlighted": false,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153db5",
+                "label": "Free 5-minute site audit included",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153db6",
+                "label": "3 specific fixes shipped in 5 days",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153db7",
+                "label": "Tested on mobile and desktop",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153db8",
+                "label": "Before-and-after Lighthouse report",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153db9",
+                "label": "30-day fix guarantee",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Start the Sprint",
+              "href": "#audit"
+            }
+          },
+          {
+            "id": "6a1bee2be949f69ccb153dc2",
+            "name": "Starter Site",
+            "price": "$999",
+            "originalPrice": "$1,950",
+            "priceNote": "founding price · 14-day delivery",
+            "description": "5-page website, mobile-first, live in 14 days.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a1bee2be949f69ccb153dbb",
+                "label": "5 pages: Home, Services, About, New Patients, Contact",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dbc",
+                "label": "Online booking integration (Dentrix / Open Dental compatible)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dbd",
+                "label": "Insurance accepted list (configurable in CMS)",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dbe",
+                "label": "Before / after photo gallery with HIPAA-safe handling",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dbf",
+                "label": "Patient testimonial section + Google review automation",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dc0",
+                "label": "GBP setup + Dentist + LocalBusiness schema",
+                "included": true
+              },
+              {
+                "id": "6a1bee2be949f69ccb153dc1",
+                "label": "New-patient form with HIPAA-safe submission",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Claim a founding spot",
+              "href": "#book"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dc4",
+        "eyebrow": "Book a 30-min discovery call",
+        "headline": "Book a 30-minute discovery call. We will scope your practice site.",
+        "description": "Thirty minutes. We walk through what you need, ballpark a price, and figure out whether we are a fit. No hard sell.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "inline",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": false,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dc5",
+        "eyebrow": "Common questions",
+        "headline": "Everything you wanted to ask.",
+        "mode": "auto",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a1bee2be949f69ccb153dc6",
+        "headline": "Still here? Get the free audit.",
+        "description": "Three specific fixes, in your inbox within a business day. No call required. If you would rather talk, book a 30-minute discovery call below.",
+        "variant": "emphasized",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Get my free audit",
+          "href": "#audit"
+        },
+        "secondaryCta": {
+          "label": "Book a 30-min call",
+          "href": "https://calendly.com/suhaib-blackhartconsulting/discovery-call"
+        }
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.332Z",
+    "updatedAt": "2026-05-31T08:15:39.350Z",
+    "createdAt": "2026-05-02T20:39:32.613Z",
+    "_status": "published"
+  },
+  {
+    "id": 1,
+    "title": "Express Website",
+    "slug": "express-website",
+    "campaign": "Search · Web Design · US · LP Express",
+    "niche": "generic",
+    "seo": {
+      "metaTitle": "Houston Heights Small Business Websites: Free Audit, $999 Rebuild",
+      "metaDescription": "Heights-local web studio. Free 5-minute site audit with 3 specific fixes in your inbox within a business day. Or, full custom website built in 14 days, from $999 founding price.",
+      "ogImage": null,
+      "noIndex": true
+    },
+    "layout": [
+      {
+        "id": "6a2634a7463ffb60ec1bcf00",
+        "eyebrow": "Houston Heights · 14-Day Delivery",
+        "headline": "A custom small business website. In 14 days. From $999.",
+        "subheadline": "Built by hand, hosted by us, kept fast forever. Discounted pricing for the first 5 Heights small businesses — a lower price in exchange for a review and a case study.",
+        "backgroundImageUrl": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80",
+        "blockName": null,
+        "ctas": [
+          {
+            "id": "6a2634a7463ffb60ec1bcefb",
+            "label": "Run my free site audit",
+            "href": "#audit",
+            "style": "brass"
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcefc",
+            "label": "See the deliverables",
+            "href": "#offer",
+            "style": "onphoto"
+          }
+        ],
+        "trustItems": [
+          {
+            "id": "6a2634a7463ffb60ec1bcefd",
+            "icon": "shield",
+            "label": "Fixed price, in writing"
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcefe",
+            "icon": "check",
+            "label": "You own the code"
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bceff",
+            "icon": "zap",
+            "label": "Under 1-second loads"
+          }
+        ],
+        "blockType": "heroPhoto"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf05",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a2634a7463ffb60ec1bcf01",
+            "value": "14 days",
+            "label": "Kickoff to launch, guaranteed"
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf02",
+            "value": "$999",
+            "label": "Discounted price · was $1,950"
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf03",
+            "value": "<200KB",
+            "label": "First-paint JavaScript"
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf04",
+            "value": "1 dev",
+            "label": "One person, one bill, no agency layers"
+          }
+        ],
+        "blockType": "guaranteeStrip"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf06",
+        "eyebrow": "Free · no email required",
+        "headline": "See exactly what's holding your current site back.",
+        "description": "Paste your URL. We run the same Google Lighthouse audit we use on every project and show you the four scores that matter — in about 30 seconds.",
+        "blockName": null,
+        "blockType": "siteAuditTool"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf08",
+        "eyebrow": "Heights Discounted Pricing",
+        "headline": "First 5 small businesses save up to $1,000.",
+        "description": "A temporary discount for our first cohort of Heights clients, in exchange for a review and a case study.",
+        "spotsTotal": 5,
+        "spotsRemaining": 5,
+        "blockName": null,
+        "offers": [
+          {
+            "id": "6a2634a7463ffb60ec1bcf07",
+            "name": "Starter Site",
+            "priceFounding": "$999",
+            "priceRetail": "$1,950",
+            "savings": "Save $951"
+          }
+        ],
+        "blockType": "foundingClient",
+        "cta": {
+          "label": "Claim your discount",
+          "href": "#lp-start"
+        }
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf11",
+        "eyebrow": "The offer",
+        "headline": "One package, one price, fourteen days.",
+        "description": "No hourly bills, no scope creep. Fixed price, fixed timeline, senior-engineer sign-off on every line of code.",
+        "layoutVariant": "centered-single",
+        "anchorId": "offer",
+        "blockName": null,
+        "tiers": [
+          {
+            "id": "6a2634a7463ffb60ec1bcf10",
+            "name": "Starter Site",
+            "price": "$999",
+            "originalPrice": "$1,950",
+            "priceNote": "discounted · 14-day build",
+            "description": "A 5-page small business website that handles 90% of what a Heights business needs — mobile-first, fast, and fully editable.",
+            "highlighted": true,
+            "enterpriseBadge": false,
+            "features": [
+              {
+                "id": "6a2634a7463ffb60ec1bcf09",
+                "label": "5 bespoke pages designed for your business",
+                "included": true
+              },
+              {
+                "id": "6a2634a7463ffb60ec1bcf0a",
+                "label": "Mobile-first, under 200KB JavaScript",
+                "included": true
+              },
+              {
+                "id": "6a2634a7463ffb60ec1bcf0b",
+                "label": "Block-based CMS — your team edits every section",
+                "included": true
+              },
+              {
+                "id": "6a2634a7463ffb60ec1bcf0c",
+                "label": "Google Business Profile setup + LocalBusiness schema",
+                "included": true
+              },
+              {
+                "id": "6a2634a7463ffb60ec1bcf0d",
+                "label": "Contact form + GA4 + conversion tracking pre-wired",
+                "included": true
+              },
+              {
+                "id": "6a2634a7463ffb60ec1bcf0e",
+                "label": "First month of hosting free",
+                "included": true
+              },
+              {
+                "id": "6a2634a7463ffb60ec1bcf0f",
+                "label": "14-day delivery, guaranteed in writing",
+                "included": true
+              }
+            ],
+            "cta": {
+              "label": "Claim your discount",
+              "href": "#lp-start"
+            }
+          }
+        ],
+        "blockType": "pricing"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf16",
+        "eyebrow": "Build your package",
+        "headline": "Bundle the build with what comes after.",
+        "description": "Most clients add a Care plan and a Local SEO Sprint within their first 90 days anyway. Bundling locks the discount in up front.",
+        "formId": "lp-start",
+        "formHeading": "Tell us what you need.",
+        "formDescription": "Build a package above if you like, then send a note. We reply within one business day with next steps.",
+        "submitLabel": "Send my request",
+        "successMessage": "Thanks — we've got your request. We'll reply within one business day.",
+        "blockName": null,
+        "options": [
+          {
+            "id": "6a2634a7463ffb60ec1bcf12",
+            "name": "Starter Site",
+            "description": "5-page site, 14-day delivery. The foundation.",
+            "cost": "$999",
+            "once": 999,
+            "monthly": null,
+            "save": null,
+            "required": true,
+            "defaultOn": false
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf13",
+            "name": "Care plan",
+            "description": "Hosting, backups, monitoring, 1hr/mo edits. Drops to $99/mo for 12 months.",
+            "cost": "$99/mo",
+            "once": null,
+            "monthly": 99,
+            "save": 600,
+            "required": false,
+            "defaultOn": true
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf14",
+            "name": "Local SEO Sprint",
+            "description": "GBP optimization, 10 citations, schema, 1 cornerstone page.",
+            "cost": "+$900",
+            "once": 900,
+            "monthly": null,
+            "save": 295,
+            "required": false,
+            "defaultOn": false
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf15",
+            "name": "Brand mini system",
+            "description": "Logo cleanup, color + type system, if you don't have one yet.",
+            "cost": "+$300",
+            "once": 300,
+            "monthly": null,
+            "save": null,
+            "required": false,
+            "defaultOn": false
+          }
+        ],
+        "blockType": "bundleConfigurator"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf1c",
+        "eyebrow": "How it works",
+        "headline": "Five steps. Two weeks. No mystery.",
+        "blockName": null,
+        "steps": [
+          {
+            "id": "6a2634a7463ffb60ec1bcf17",
+            "number": "01",
+            "title": "Intro call",
+            "description": "30 minutes. What you need, what it costs, whether we're a fit."
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf18",
+            "number": "02",
+            "title": "Design preview",
+            "description": "You approve a Figma mockup before any code is written."
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf19",
+            "number": "03",
+            "title": "Build",
+            "description": "The 14-day clock starts. One developer, daily progress."
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf1a",
+            "number": "04",
+            "title": "Review",
+            "description": "One round of revisions. We tune copy, photos, and details."
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf1b",
+            "number": "05",
+            "title": "Launch",
+            "description": "Live site, GitHub repo handed over, GBP and schema in place."
+          }
+        ],
+        "blockType": "processSteps"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf21",
+        "eyebrow": "What you get",
+        "headline": "Numbers we hold ourselves to.",
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a2634a7463ffb60ec1bcf1d",
+            "value": 14,
+            "decimals": 0,
+            "prefix": null,
+            "suffix": " days",
+            "label": "From kickoff to launch",
+            "description": "Discounted clients delivered first.",
+            "note": null
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf1e",
+            "value": 0.9,
+            "decimals": 1,
+            "prefix": null,
+            "suffix": "s",
+            "label": "Typical load time",
+            "description": "Down from 8s on the sites we replace.",
+            "note": null
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf1f",
+            "value": 100,
+            "decimals": 0,
+            "prefix": null,
+            "suffix": "%",
+            "label": "You own the code",
+            "description": "GitHub repo handed over at launch. No lock-in, ever.",
+            "note": null
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf20",
+            "value": 0,
+            "decimals": 0,
+            "prefix": "$",
+            "suffix": null,
+            "label": "In hidden fees",
+            "description": "Fixed price. No scope-creep clauses.",
+            "note": null
+          }
+        ],
+        "blockType": "animatedStats"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf22",
+        "eyebrow": "What clients said",
+        "headline": "Real work, real businesses.",
+        "mode": "latest",
+        "limit": 3,
+        "blockName": null,
+        "blockType": "testimonials",
+        "testimonials": []
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf27",
+        "eyebrow": "Common questions",
+        "headline": "Everything you wanted to ask.",
+        "mode": "manual",
+        "category": null,
+        "limit": 12,
+        "blockName": null,
+        "items": [
+          {
+            "id": "6a2634a7463ffb60ec1bcf23",
+            "question": "What if I don't like the design?",
+            "answer": "You see a Figma mockup before any code is written. If the mockup is not right, we iterate until it is. The build clock does not start until you approve the direction."
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf24",
+            "question": "Do I own the code?",
+            "answer": "Yes. The code lives in a GitHub repo we hand over on launch. No lock-in — though most clients keep us as their host because it is already optimized."
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf25",
+            "question": "Can you work with my existing brand?",
+            "answer": "Yes. If you have a logo, colors, and fonts, we use them. If not, we recommend a small design system as a $300 add-on."
+          },
+          {
+            "id": "6a2634a7463ffb60ec1bcf26",
+            "question": "What's the next step?",
+            "answer": "Send a note via the form, or book a call. We reply within one business day and send a written proposal within 48 hours of the intro call."
+          }
+        ],
+        "blockType": "faq"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf28",
+        "eyebrow": "Book a call",
+        "headline": "Pick a time that works for you.",
+        "description": "A 30-minute intro call. We talk about what you need, what it costs, and whether we're a fit. No hard sell.",
+        "calendlyUrl": "https://calendly.com/suhaib-blackhartconsulting/discovery-call",
+        "displayMode": "inline",
+        "popupButtonLabel": "Book a 30-min discovery call",
+        "inlineHeight": 720,
+        "showEmailFallback": true,
+        "emailLabel": "Email us instead",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "calendlyBooking"
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf29",
+        "headline": "Discounted pricing ends at 5 clients.",
+        "description": "Right now, that means a lower price and a faster project. Start your project before the cohort fills.",
+        "variant": "emphasized",
+        "backgroundImageUrl": null,
+        "blockName": null,
+        "blockType": "cta",
+        "primaryCta": {
+          "label": "Claim your discount",
+          "href": "#lp-start"
+        },
+        "secondaryCta": {
+          "label": "See recent work",
+          "href": "/portfolio"
+        }
+      },
+      {
+        "id": "6a2634a7463ffb60ec1bcf2a",
+        "primaryLabel": "Run free audit",
+        "primaryHref": "#audit",
+        "phone": null,
+        "blockName": null,
+        "blockType": "mobileCta"
+      }
+    ],
+    "publishedAt": "2026-05-31T08:15:39.248Z",
+    "updatedAt": "2026-06-08T03:19:03.099Z",
+    "createdAt": "2026-05-02T20:39:32.565Z",
+    "_status": "published"
+  }
+]

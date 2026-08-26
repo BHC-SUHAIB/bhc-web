@@ -18,7 +18,6 @@ type Props = {
 
 // Wraps the shared Button so we can fire hero_cta_click without making the
 // whole Hero block a client component. Applies the revision transforms:
-// /contact CTAs route to the contact-form anchor, "Founding" → "Discounted".
 export function HeroCta({ href, label, variant, position, onPhoto }: Props) {
   const v = variant ?? 'primary'
   const resolved =

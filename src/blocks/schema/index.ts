@@ -380,6 +380,7 @@ export const RichTextBlock: Block = {
       { label: 'Lede (oversized intro statement)', value: 'lede' },
       { label: 'Card (bordered surface card)', value: 'card' },
     ] },
+    { name: 'anchorId', type: 'text', admin: { description: 'Optional HTML id for in-page anchor links (e.g. "demo" so "#demo" scrolls here).' } },
   ],
 }
 

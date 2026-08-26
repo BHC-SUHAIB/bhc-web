@@ -1,8 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Suspense, useState, type FormEvent } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Mail, Phone, MapPin, Clock, Check, Calendar } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
@@ -34,23 +33,14 @@ function anchorFromEyebrow(eyebrow?: string | null): string | undefined {
   return slug
 }
 
-// useSearchParams needs a Suspense boundary during SSR — wrap the inner form.
 export function ContactForm(b: ContactFormProps) {
-  return (
-    <Suspense fallback={<ContactFormInner {...b} tierOverride={null} />}>
-      <ContactFormWithTier {...b} />
-    </Suspense>
-  )
-}
-
-function ContactFormWithTier(b: ContactFormProps) {
-  const searchParams = useSearchParams()
-  const tier = getTier(searchParams.get('tier'))
-  return <ContactFormInner {...b} tierOverride={tier} />
-}
-
-function ContactFormInner(b: ContactFormProps & { tierOverride: TierInfo | null }) {
-  const tier = b.tierOverride
+  // ?tier= is read client-side (no Suspense/useSearchParams: the boundary can
+  // wedge in dev, and the pre-selection is progressive enhancement anyway).
+  const [tier, setTier] = useState<TierInfo | null>(null)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    setTier(getTier(params.get('tier')))
+  }, [])
   const contactEmail = b.contactEmail ?? ''
   const contactPhone = b.contactPhone ?? ''
   const emailHref = mailtoHref(contactEmail)

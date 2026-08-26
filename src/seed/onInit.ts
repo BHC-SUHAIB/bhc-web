@@ -2,6 +2,7 @@
 /* Seed initial content via Payload's onInit hook. Runs once on server boot; idempotent (updates instead of duplicates). */
 import path from 'node:path'
 import type { Payload } from 'payload'
+import * as resetContent from './reset-content'
 import { pushDevSchema } from '@payloadcms/drizzle'
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@blackhartconsulting.com'
@@ -210,189 +211,9 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     // --- Pages ---
-    const servicesBlock = {
-      blockType: 'services',
-      eyebrow: 'What we do',
-      headline: 'Four disciplines, one team.',
-      description: 'Most agencies hand you off to a different vendor for each service. We don\u2019t. You get one engagement manager and one bill.',
-      items: [
-        { title: 'Website design & build', icon: 'globe', description: 'Bespoke marketing sites and web apps built on Next.js, shipped with a CMS your team actually uses.', bullets: [
-          { label: 'Design system from scratch or on top of your brand' },
-          { label: 'CMS-driven content, every section editable' },
-          { label: 'Performance budget \u2014 loads under 1s on 3G' },
-        ] },
-        { title: 'SEO & search', icon: 'search', description: 'Technical SEO audits, content strategy, and month-over-month optimization that actually moves rankings.', bullets: [
-          { label: 'Full technical audit with prioritized action plan' },
-          { label: 'Structured data, Core Web Vitals, crawl budget' },
-          { label: 'Content architecture and internal linking' },
-        ] },
-        { title: 'App design & development', icon: 'smartphone', description: 'Webapps and mobile experiences for teams who need more than a marketing site.', bullets: [
-          { label: 'Product discovery and wireframes' },
-          { label: 'Webapps in Next.js or React' },
-          { label: 'Native iOS / Android available on a project basis' },
-        ] },
-        { title: 'Hosting & infrastructure', icon: 'server', description: 'Managed hosting with actual humans answering when something breaks.', bullets: [
-          { label: 'Deploys to DigitalOcean, AWS, or Vercel' },
-          { label: 'Monitoring, backups, CDN, TLS' },
-          { label: 'One flat monthly fee, no surprise bills' },
-        ] },
-        { title: 'Performance', icon: 'zap', description: 'Make your existing site fast \u2014 often the highest-ROI engagement we run.', bullets: [
-          { label: 'Lighthouse + real-user-monitoring' },
-          { label: 'Image, font, and bundle optimization' },
-          { label: 'Measurable before/after in 2 weeks' },
-        ] },
-        { title: 'Strategy & consulting', icon: 'lightbulb', description: 'Not ready to build? Hire us for a strategic sprint.', bullets: [
-          { label: 'Stack and architecture review' },
-          { label: 'CMS recommendations' },
-          { label: 'Pre-rebuild planning and roadmapping' },
-        ] },
-      ],
-    }
-
-    const websitesPricingBlock = {
-      blockType: 'pricing',
-      eyebrow: 'Websites',
-      headline: 'Fixed-price builds. No surprise invoices.',
-      description: 'Every website project is scoped to a fixed fee before kickoff. Hosting is included on every Care plan, or $79/mo standalone.',
-      tiers: [
-        { name: 'Express Landing Page', price: '$1,495', priceNote: 'one-time', description: 'Template-driven, conversion-focused. Live in 5\u20137 days.', features: [
-          { label: '1 conversion-focused landing page', included: true },
-          { label: 'Custom-styled, on-brand', included: true },
-          { label: 'Analytics & form integration', included: true },
-          { label: 'Deployed on your hosting or ours', included: true },
-          { label: 'Ongoing content updates', included: false },
-        ], cta: { label: 'Start an express page', href: '/contact' } },
-        { name: 'Custom Landing Page', price: '$2,500', priceNote: 'one-time', description: 'A fully custom-designed landing page for a launch, event, or campaign.', features: [
-          { label: '1 fully custom-designed page', included: true },
-          { label: 'CMS-ready \u2014 edit copy & images yourself', included: true },
-          { label: 'Analytics & form integration', included: true },
-          { label: 'Deployed on your hosting or ours', included: true },
-          { label: 'Ongoing content updates', included: false },
-        ], cta: { label: 'Start a landing page', href: '/contact' } },
-        { name: 'Starter Site', price: '$4,500', priceNote: 'one-time', description: 'Up to 5 bespoke pages with a real CMS \u2014 for businesses that need more than a one-pager.', features: [
-          { label: 'Up to 5 bespoke pages', included: true },
-          { label: 'Block-based CMS', included: true },
-          { label: 'Technical SEO foundation', included: true },
-          { label: 'Performance budget guarantee', included: true },
-          { label: '3\u20134 week delivery', included: true },
-        ], cta: { label: 'Start a Starter Site', href: '/contact' } },
-        { name: 'Marketing Site', price: '$8,500', priceNote: 'typical 6-week engagement', description: 'Multi-page marketing site with full CMS, blog, and case studies. Our most common engagement.', highlighted: true, features: [
-          { label: 'Up to 12 bespoke pages', included: true },
-          { label: 'Full block-based CMS', included: true },
-          { label: 'Case study and blog systems', included: true },
-          { label: 'Technical SEO foundation', included: true },
-          { label: 'Performance budget guarantee', included: true },
-          { label: 'First 30 days of SEO work included', included: true },
-        ], cta: { label: 'Start a Marketing Site', href: '/contact' } },
-      ],
-    }
-
-    const carePricingBlock = {
-      blockType: 'pricing',
-      eyebrow: 'Care plans',
-      headline: 'Stay fast, secure, and improving \u2014 month over month.',
-      description: 'Every Care plan includes hosting, monitoring, backups, and SSL. Higher tiers add development hours and SEO work.',
-      tiers: [
-        { name: 'Care', price: '$295', priceNote: 'per month', description: 'Hands-off hosting and maintenance for a site that just needs to stay up.', features: [
-          { label: 'Managed hosting + monitoring + backups', included: true },
-          { label: 'SSL, CDN, uptime monitoring', included: true },
-          { label: '2 hrs/mo for small edits', included: true },
-          { label: 'Monthly performance report', included: true },
-          { label: 'Direct Slack channel', included: false },
-        ], cta: { label: 'Start a Care plan', href: '/contact' } },
-        { name: 'Growth', price: '$895', priceNote: 'per month', description: 'For sites that should be improving every month, not just staying online.', highlighted: true, features: [
-          { label: 'Everything in Care', included: true },
-          { label: '6 hrs/mo of dev or SEO work', included: true },
-          { label: 'Monthly strategy check-in', included: true },
-          { label: 'Same-week turnaround on changes', included: true },
-          { label: 'Direct Slack channel', included: false },
-        ], cta: { label: 'Start a Growth plan', href: '/contact' } },
-        { name: 'Scale', price: '$1,895', priceNote: 'per month', description: 'For revenue-critical sites that need a partner on call, not a vendor.', features: [
-          { label: 'Everything in Growth', included: true },
-          { label: '12 hrs/mo of dev or SEO work', included: true },
-          { label: 'Direct Slack channel', included: true },
-          { label: 'Same-day SLA on small changes', included: true },
-          { label: 'Quarterly architecture review', included: true },
-        ], cta: { label: 'Talk about Scale', href: '/contact' } },
-      ],
-    }
-
-    const seoPricingBlock = {
-      blockType: 'pricing',
-      eyebrow: 'SEO retainers',
-      headline: 'Search and AI-search visibility. Month over month.',
-      description: 'Standalone SEO work \u2014 independent of website design. Sold separately because most businesses need ongoing search work, not another rebuild.',
-      tiers: [
-        { name: 'Local SEO Starter', price: '$750', priceNote: 'per month', description: 'Aimed at single-location service businesses competing locally.', features: [
-          { label: 'Google Business Profile optimization', included: true },
-          { label: 'Local citations + schema markup', included: true },
-          { label: '1 SEO-optimized blog post / month', included: true },
-          { label: 'Monthly ranking + traffic report', included: true },
-          { label: 'Technical fixes (as needed)', included: true },
-        ], cta: { label: 'Start Local SEO', href: '/contact' } },
-        { name: 'SEO Growth', price: '$1,495', priceNote: 'per month', description: 'Full-stack SEO for businesses ready to compete in a real market.', highlighted: true, features: [
-          { label: 'Everything in Local SEO Starter', included: true },
-          { label: '2 content pieces / month', included: true },
-          { label: 'Internal linking + content architecture', included: true },
-          { label: 'GEO / AI-search optimization', included: true },
-          { label: 'Conversion tracking setup', included: true },
-        ], cta: { label: 'Start SEO Growth', href: '/contact' } },
-        { name: 'SEO Scale', price: '$2,495', priceNote: 'per month', description: 'For businesses where organic search is a primary revenue channel.', features: [
-          { label: 'Everything in SEO Growth', included: true },
-          { label: 'Outreach + digital PR', included: true },
-          { label: 'Deep technical SEO work', included: true },
-          { label: 'Custom reporting dashboard', included: true },
-          { label: 'Quarterly strategy review', included: true },
-        ], cta: { label: 'Talk about SEO Scale', href: '/contact' } },
-      ],
-    }
-
-    const foundingBannerBlock = {
-      blockType: 'cta',
-      headline: 'Founding Client pricing \u2014 30% off your first build.',
-      description: 'The first 5 paid clients receive 30% off any Websites tier in exchange for a published case study. 5 spots remaining.',
-      primaryCta: { label: 'Claim a founding spot', href: '/contact' },
-      variant: 'emphasized',
-    }
-
-    const homeData: any = {
-      title: 'Home', slug: 'home', publishedAt: new Date().toISOString(),
-      seo: { metaTitle: 'Black Hart Consulting \u2014 Websites, SEO, apps, hosting', metaDescription: 'Steady craft for businesses that care how their work shows up online.' },
-      layout: [
-        { blockType: 'hero', eyebrow: 'Built by hand', headline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
-          subheadline: 'We design the site. We make it rank. We keep it online. One team, one bill, one line of accountability.', align: 'left',
-          ctas: [
-            { label: 'Start a project', href: '/contact', variant: 'primary' },
-            { label: 'See recent work', href: '/portfolio', variant: 'ghost' },
-          ] },
-        { blockType: 'stats', eyebrow: 'Signal, not noise', items: [
-          { value: '5 days', label: 'Fastest production launch', description: 'Prometheus Minds, kickoff to live, including 56 commits.' },
-          { value: '<200KB', label: 'First-paint JS shipped', description: 'Down from the 1MB+ that most templates ship.' },
-          { value: '$33/mo', label: 'All-in hosting cost', description: 'WAYGFT runs on a $28 droplet + $5 Spaces bucket.' },
-        ] },
-        servicesBlock,
-        { blockType: 'featuredProjects', eyebrow: 'Recent work', headline: 'A few projects we\u2019re proud of.',
-          description: 'The short version is below. Each case study goes into the why behind the framework choices, what we shipped, and what actually changed for the client.',
-          mode: 'latest', limit: 3, viewAllLabel: 'View all projects', viewAllHref: '/portfolio' },
-        foundingBannerBlock,
-        websitesPricingBlock,
-        carePricingBlock,
-        seoPricingBlock,
-        { blockType: 'testimonials', eyebrow: 'Clients', headline: 'What they said after launch.', mode: 'latest', limit: 3 },
-        { blockType: 'faq', eyebrow: 'Questions', headline: 'Common questions we get.', items: [
-          { question: 'Do you work with clients outside your region?', answer: 'Yes. Most of our clients are remote, and time zones are rarely an issue.' },
-          { question: 'How do you price custom work?', answer: 'Scoped fixed-price for anything that fits a clear brief. Hourly retainers for ongoing work. We\u2019ll give you a quote within 48 hours of our initial call.' },
-          { question: 'Do you handle hosting, or just build the site?', answer: 'Both. Every Care plan (Care, Growth, Scale) bundles managed hosting, monitoring, backups, and SSL \u2014 so you never see a separate hosting bill. Prefer to host elsewhere? We\u2019ll deploy to your existing host (DigitalOcean, AWS, Vercel, etc.) and document everything so you\u2019re never stuck. Standalone hosting without a Care plan is $79/mo.' },
-          { question: 'What stack do you build on?', answer: 'Default is Next.js + Payload CMS + Postgres, deployed to DigitalOcean. We\u2019ll use a different stack if your situation calls for it \u2014 for example, Shopify for a commerce-first site. We pick the right tool, not the fashionable one.' },
-          { question: 'Can we edit the site after launch?', answer: 'Yes. Every site ships with a full CMS \u2014 you can add, remove, and reorder sections, change copy, swap images, publish blog posts, and edit pricing without touching code.' },
-        ] },
-        { blockType: 'cta', headline: 'Let\u2019s talk about what you\u2019re building.',
-          description: 'No hard sell. A 30-minute call where we understand what you\u2019re trying to do, and figure out whether we\u2019re a fit.',
-          primaryCta: { label: 'Book a call', href: '/contact' },
-          secondaryCta: { label: 'See the portfolio', href: '/portfolio' },
-          variant: 'emphasized' },
-      ],
-    }
+    // Canonical page layouts live in src/seed/reset-content.ts (2026-08
+    // pricing reset) and are shared with scripts/pricing-reset/apply.mts.
+    const homeData: any = { ...resetContent.homePage(), publishedAt: new Date().toISOString() }
 
     const existingHome = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1 })
     if (existingHome.totalDocs === 0) {
@@ -452,6 +273,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           ['h3', 'Stay involved after launch.'],
           ['p', 'Most agencies hand you a site and walk away. We host, monitor, and improve yours for as long as you\u2019d like \u2014 through Care, Growth, or Scale plans that scale up or down with your needs.'],
         ]) },
+        resetContent.howWeBuildBlock,
         { blockType: 'cta', headline: 'Want to work together?', primaryCta: { label: 'Get in touch', href: '/contact' } },
       ],
     }
@@ -486,10 +308,11 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           showCompanyField: true,
           showProjectTypeField: true,
           showBudgetField: true,
+          noCallNeeded: true,
           submitLabel: 'Send inquiry' },
         { blockType: 'faq', headline: 'Common questions before you write', items: [
           { question: 'What should I include in my first note?', answer: 'A sentence on your company, a sentence on what you\u2019re trying to build or fix, and a rough budget range if you have one. We\u2019ll take it from there.' },
-          { question: 'What\u2019s the engagement process?', answer: '1) 30-min intro call. 2) We send a scoped proposal within 48 hours. 3) You review, we iterate. 4) Signed contract, 50% deposit, kickoff within a week.' },
+          { question: 'What\u2019s the engagement process?', answer: 'Write what you need, or use the Buy button on any package. Payment runs through Stripe: pay in full or subscribe, and a 50 percent deposit by invoice is available on request for Pro Site, Custom Build, and Internal Tool. Kickoff starts the moment your intake form is in.' },
           { question: 'Do you take projects outside North America?', answer: 'Yes. Most of our clients are remote. We\u2019ve shipped work across the US, UK, and Australia. Time zones are rarely an issue.' },
         ] },
       ],
@@ -508,19 +331,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     // Services page
-    const servicesData: any = {
-      title: 'Services', slug: 'services', publishedAt: new Date().toISOString(),
-      layout: [
-        { blockType: 'hero', eyebrow: 'Services', headline: 'Four disciplines. One senior team.',
-          subheadline: 'The short version is on the home page. This is the long version.', align: 'left' },
-        servicesBlock,
-        foundingBannerBlock,
-        websitesPricingBlock,
-        carePricingBlock,
-        seoPricingBlock,
-        { blockType: 'cta', headline: 'Talk to us about your project.', primaryCta: { label: 'Get in touch', href: '/contact' }, variant: 'default' },
-      ],
-    }
+    const servicesData: any = { ...resetContent.servicesPage(), publishedAt: new Date().toISOString() }
+
     const existingServices = await payload.find({ collection: 'pages', where: { slug: { equals: 'services' } }, limit: 1 })
     if (existingServices.totalDocs === 0) {
       await payload.create({ collection: 'pages', data: servicesData })
@@ -532,6 +344,21 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         data: servicesData,
       })
       payload.logger.info('[seed] services page upserted (FORCE_SERVICES_UPSERT)')
+    }
+
+    // New catalog pages (2026-08 pricing reset): fix-it, ai-front-desk,
+    // automation, free-demo-site, thanks. Create-if-missing only; the content
+    // script (apply.mts) owns updates.
+    for (const build of [
+      resetContent.fixItPage, resetContent.aiFrontDeskPage, resetContent.automationPage,
+      resetContent.freeDemoSitePage, resetContent.thanksPage,
+    ]) {
+      const data: any = { ...build(), publishedAt: new Date().toISOString() }
+      const existing = await payload.find({ collection: 'pages', where: { slug: { equals: data.slug } }, limit: 1 })
+      if (existing.totalDocs === 0) {
+        await payload.create({ collection: 'pages', data })
+        payload.logger.info(`[seed] ${data.slug} page created`)
+      }
     }
 
     // --- Legacy sample-project cleanup ---

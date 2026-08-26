@@ -232,7 +232,7 @@ export const Clients: CollectionConfig = {
       type: 'array',
       labels: { singular: 'Tag', plural: 'Tags' },
       fields: [{ name: 'value', type: 'text' }],
-      admin: { description: 'Free-form tags for filtering (e.g. "heights", "founding-client", "referral").' },
+      admin: { description: 'Free-form tags for filtering (e.g. "heights", "referral", "demo-site").' },
     },
     {
       // Attribution: which LP / page produced this client. Auto-fills from

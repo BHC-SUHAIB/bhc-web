@@ -101,7 +101,7 @@ const LOCAL_PAGES: Array<{ title: string; slug: string; seo: Record<string, unkn
         items: [
           { question: 'Do you only work with Houston Heights businesses?', answer: 'The Heights is home base, so a lot of our work is local. But most of our clients are remote across Houston and beyond. Being nearby just makes in-person kickoffs easy when you want one.' },
           { question: 'Will a new site actually help me show up in Google?', answer: 'Yes. Every build ships with Google Business Profile setup and LocalBusiness schema, which is what moves a Heights business into the local 3-pack. We also fix the technical basics (speed, mobile, titles) that Google uses to rank you.' },
-          { question: 'How much does a small business website cost?', answer: 'A 5-page Starter Site is a fixed price, quoted before kickoff, with founding-client pricing for our first Heights clients. No hourly billing and no scope-creep surprises. See the Services page for current numbers.' },
+          { question: 'How much does a small business website cost?', answer: 'A 5-page Starter Site is $699 flat, live in 7 days, or $119 a month on a 12-month subscription that ends with you owning it. A one-page Launch Page is $399. No hourly billing and no scope-creep surprises.' },
           { question: 'How long does it take?', answer: 'Fourteen days from kickoff to launch for a Starter Site, guaranteed in writing. You approve the design direction before any code is written, so the clock only starts once you are happy with the direction.' },
         ],
       },

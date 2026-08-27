@@ -27,6 +27,13 @@ export function TestimonialsCarousel({ items }: Props) {
 
   useEffect(() => {
     if (count <= 1 || paused) return
+    // No auto-advance for reduced-motion visitors or when the CMS motion
+    // level is set to reduced (arrows still work). Motion-polish item 6.
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.body.dataset.motion === 'reduced'
+    )
+      return
     const timer = setInterval(() => {
       setActive((prev) => (prev + 1) % count)
     }, AUTO_ADVANCE_MS)
@@ -60,7 +67,11 @@ export function TestimonialsCarousel({ items }: Props) {
       ) : null}
 
       <figure
+        // Keyed by slide so each swap remounts and plays the drift-in
+        // animation (.quote-swap in components.css). Motion-polish item 6.
+        key={active}
         className={cn(
+          'quote-swap',
           'p-8 sm:p-12 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)]',
           // Fixed height — every slide occupies the same vertical slot so
           // the surrounding page doesn't reflow as the carousel rotates

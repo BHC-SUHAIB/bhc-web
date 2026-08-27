@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { CountUpStat } from '@/components/CountUpStat'
+import { AM_LOOP_CSS, AM_LOOP_HTML } from '@/components/antlerLoopMarkup'
 import { cn } from '@/lib/utils'
 import { pushEvent } from '@/lib/analytics'
 
@@ -334,11 +335,18 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
                 ) : (
                   <div className="rcpt">
                     <p className="r-head">Lighthouse audit · {strategy}</p>
-                    <p className="r-wait">
+                    <div className="r-wait">
+                      {/* The antler mark breathing (Claude Design quiet-loop
+                          variant): the brand's loading state. Static under
+                          reduced motion. */}
+                      <div className="am-wait" aria-hidden>
+                        <style dangerouslySetInnerHTML={{ __html: AM_LOOP_CSS }} />
+                        <div dangerouslySetInnerHTML={{ __html: AM_LOOP_HTML }} />
+                      </div>
                       SCANNING {frameUrl ? frameUrl.toUpperCase() : ''}…
                       <br />
                       <span className="opacity-60">USUALLY 10 TO 30 SECONDS</span>
-                    </p>
+                    </div>
                   </div>
                 )}
               </div>

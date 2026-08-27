@@ -531,6 +531,13 @@ body[data-icon-hover='off'] .group:hover .bic-crown .crownfill { clip-path: inse
   .cd-anim-gate:not(.in) *::after { animation-play-state: paused !important; }
 }
 
+/* Testimonial carousel: each slide drifts in 12px with a fade on swap
+   (Claude Design motion-polish item 6). */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .quote-swap { animation: bh-quote-in 0.42s var(--ease-out); }
+  @keyframes bh-quote-in { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: none; } }
+}
+
 /* Portfolio/work card image reveal: clip up + settle as the card's reveal
    group enters (Claude Design motion-polish item 9). */
 .work .shot img { transition: clip-path 0.82s var(--ease-out), transform 0.82s var(--ease-out); }
@@ -650,6 +657,9 @@ body[data-icon-hover='off'] .group:hover .bic-crown .crownfill { clip-path: inse
 .rcpt .r-total .k { letter-spacing: 0.16em; font-size: 0.62rem; color: color-mix(in srgb, var(--band-fg) 62%, var(--band-bg)); text-transform: uppercase; }
 .rcpt .r-total .v { font-family: var(--font-serif); font-size: 2.1rem; line-height: 1; font-variant-numeric: tabular-nums; }
 .rcpt .r-wait { margin: auto; text-align: center; font-size: 0.68rem; letter-spacing: 0.14em; line-height: 2; color: color-mix(in srgb, var(--band-fg) 62%, var(--band-bg)); padding-block: 2rem; }
+.rcpt .am-wait { width: 58px; margin: 0 auto 14px; color: var(--band-fg); }
+/* The bundle's .am base sets width:180px; pin it to the chip size here. */
+.rcpt .am-wait .am { width: 100%; }
 /* Score colours tuned for the dark receipt (lighter than the .s-* set). */
 .rcpt .rs-good { color: #8FC49A; }
 .rcpt .rs-mid { color: #C9A36B; }

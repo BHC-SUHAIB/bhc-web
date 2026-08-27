@@ -28,11 +28,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
   try {
-    const [pageDocs, projectDocs, articleDocs] = await Promise.all([
-      getCachedAllPages(),
-      getCachedAllProjects(),
-      getCachedAllArticles(),
-    ])
+    // The first request after a deploy can land before Payload is warm, and a
+    // failed fetch here would cache the catch-block stub for a full
+    // revalidate window. Retry briefly so a cold boot yields the real sitemap.
+    const fetchAll = () =>
+      Promise.all([getCachedAllPages(), getCachedAllProjects(), getCachedAllArticles()])
+    let docs: Awaited<ReturnType<typeof fetchAll>> | null = null
+    for (let attempt = 0; attempt < 3 && !docs; attempt++) {
+      try {
+        docs = await fetchAll()
+      } catch (err) {
+        if (attempt === 2) throw err
+        await new Promise((r) => setTimeout(r, 2000 * (attempt + 1)))
+      }
+    }
+    const [pageDocs, projectDocs, articleDocs] = docs!
 
     for (const doc of pageDocs as Array<{ slug?: string | null; updatedAt?: string | null; seo?: { noIndex?: boolean | null } | null }>) {
       const slug = doc.slug ?? ''

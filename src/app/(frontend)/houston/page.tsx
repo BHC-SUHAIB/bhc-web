@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import { ParallaxBackground } from '@/blocks/render/ParallaxBackground'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { JsonLd } from '@/components/JsonLd'
@@ -28,16 +28,12 @@ export default function HoustonHubPage() {
       <section className="py-14 sm:py-20 relative isolate overflow-hidden">
         {/* Faded Buffalo Bayou + skyline backdrop; the next section carries no
             image so backgrounds alternate. */}
-        <div aria-hidden className="absolute inset-0 -z-20">
-          <Image
-            src="https://images.unsplash.com/photo-1625109998123-40f1cc978735?q=80"
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-cover opacity-25"
-            priority
-          />
-        </div>
+        <ParallaxBackground
+          src="https://images.unsplash.com/photo-1625109998123-40f1cc978735?q=80"
+          sizes="100vw"
+          imgClassName="opacity-25"
+          priority
+        />
         <div
           aria-hidden
           className="absolute inset-0 -z-10"

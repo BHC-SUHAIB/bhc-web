@@ -50,26 +50,29 @@ async function main() {
     }
   }
 
-  // ── 1b. Home featuredProjects: manual order PM, WAYGFT (Phase 2 spec) ────
+  // ── 1b. Home featuredProjects: manual order PM, Misbah, Certo ────────────
+  // (WAYGFT dropped from the home pin 2026-08 — the product is paused; it
+  // stays visible on /portfolio.)
   {
     const bySlug = async (slug: string) => {
       const r = await payload.find({ collection: 'projects', where: { slug: { equals: slug } }, limit: 1 })
       return r.docs[0]?.id ?? null
     }
     const pm = await bySlug('prometheus-minds')
-    const waygft = await bySlug('waygft')
-    if (pm && waygft) {
+    const misbah = await bySlug('misbah')
+    const certo = await bySlug('certo')
+    if (pm && misbah && certo) {
       const res = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1 })
       const home = res.docs[0]
       if (home) {
         const layout: any[] = (home.layout ?? []).map((b: any) =>
-          b.blockType === 'featuredProjects' ? { ...b, mode: 'manual', projects: [pm, waygft] } : b,
+          b.blockType === 'featuredProjects' ? { ...b, mode: 'manual', projects: [pm, misbah, certo] } : b,
         )
         await payload.update({ collection: 'pages', id: home.id, data: { layout } as any })
-        log('page home: featuredProjects pinned to Prometheus Minds, WAYGFT')
+        log('page home: featuredProjects pinned to Prometheus Minds, Misbah, Certo')
       }
     } else {
-      log('featuredProjects pin skipped (prometheus-minds/waygft not found)')
+      log('featuredProjects pin skipped (prometheus-minds/misbah/certo not found)')
     }
   }
 

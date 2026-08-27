@@ -36,7 +36,7 @@ export function Pricing(b: PricingBlock & { seeAllHref?: string; seeAllLabel?: s
     <section
       id={anchor}
       className={cn(
-        'py-12 sm:py-16 scroll-mt-24',
+        'py-12 sm:py-16 scroll-mt-[73px]',
         hasEnterprise && 'relative bg-[color-mix(in_srgb,var(--color-brass)_5%,transparent)]',
       )}
     >

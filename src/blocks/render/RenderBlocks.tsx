@@ -54,6 +54,11 @@ export async function RenderBlocks({
 
   const isHome = pageSlug === 'home'
   const isContact = pageSlug === 'contact'
+  // Marketing/sales pages get the homepage's alternating dark/light section
+  // tones. Utility + narrative pages (contact, about, thanks, legal, articles)
+  // stay on the flat cream ground so forms and prose read quietly.
+  const TONED_PAGES = new Set(['home', 'services', 'ai-front-desk', 'automation', 'fix-it', 'free-demo-site'])
+  const isToned = !!pageSlug && (TONED_PAGES.has(pageSlug) || pageSlug.startsWith('houston-'))
 
   const needsSiteSettings = blocks.some(
     (b) => b.blockType === 'contactForm' || b.blockType === 'hero' || b.blockType === 'bundleConfigurator',
@@ -198,8 +203,8 @@ export async function RenderBlocks({
         const key = (b as { id?: string }).id ?? String(i)
         const node = renderOne(b)
         if (node == null) return null
-        if (isHome) {
-          // Alternate section tones down the homepage.
+        if (isToned) {
+          // Alternate section tones down the page.
           return (
             <div key={key} className={i % 2 === 0 ? 'tone-a' : 'tone-b'}>
               {node}

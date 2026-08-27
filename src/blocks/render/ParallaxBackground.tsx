@@ -23,9 +23,11 @@ type Props = {
   alt?: string
   sizes?: string
   priority?: boolean
+  /** Extra classes on the image, e.g. "opacity-30" for faded section washes. */
+  imgClassName?: string
 }
 
-export function ParallaxBackground({ src, alt = '', sizes, priority = true }: Props) {
+export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgClassName }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
 
@@ -34,15 +36,16 @@ export function ParallaxBackground({ src, alt = '', sizes, priority = true }: Pr
     offset: ['start end', 'end start'],
   })
 
-  // ±80px translate range on a 1.25× scaled image. The scale keeps the photo
-  // covering its container even when translated, so the bg doesn't expose
-  // a seam at the top/bottom of the hero section.
-  const yRange = reduce ? ['0px', '0px'] : ['-80px', '80px']
+  // ±110px translate range on a 1.3× scaled image (bumped from ±80/1.25 in
+  // the 2026-08 pass so the motion is clearly felt site-wide). The scale
+  // keeps the photo covering its container even when translated, so the bg
+  // doesn't expose a seam at the top/bottom of the section.
+  const yRange = reduce ? ['0px', '0px'] : ['-110px', '110px']
   const y = useTransform(scrollYProgress, [0, 1], yRange)
-  const scale = reduce ? 1 : 1.25
+  const scale = reduce ? 1 : 1.3
 
   return (
-    <div ref={ref} className="absolute inset-0 -z-20 overflow-hidden">
+    <div ref={ref} aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
       <motion.div
         style={{ y, scale }}
         className="absolute inset-0 will-change-transform"
@@ -52,7 +55,7 @@ export function ParallaxBackground({ src, alt = '', sizes, priority = true }: Pr
           alt={alt}
           fill
           sizes={sizes ?? '(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px'}
-          className="object-cover"
+          className={imgClassName ? `object-cover ${imgClassName}` : 'object-cover'}
           priority={priority}
           fetchPriority={priority ? 'high' : 'auto'}
         />

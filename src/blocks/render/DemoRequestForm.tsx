@@ -88,7 +88,7 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
   }
 
   return (
-    <section id="demo-request" className="py-12 sm:py-16 scroll-mt-24">
+    <section id="demo-request" className="py-12 sm:py-16 scroll-mt-[73px]">
       <Container size="md">
         <div className="section-head mb-8 max-w-2xl">
           {b.eyebrow ? (

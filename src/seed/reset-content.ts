@@ -216,15 +216,15 @@ export const outcomeCardsBlock = {
   ],
 }
 
-// Copy pack B (verbatim)
+// Copy pack B (verbatim, split for the lede treatment)
 export const whyPricesLowBlock = {
   blockType: 'richText',
-  eyebrow: 'Straight answer',
-  maxWidth: 'prose',
-  variant: 'card',
+  eyebrow: 'Why our prices are low',
+  maxWidth: 'medium',
+  variant: 'lede',
   content: rtDoc([
-    ['h2', 'Why our prices are low'],
-    ['p', "Most studios charge $2,000 to $5,000 for a five-page site because a person types every line by hand. We build with AI coding tools and a senior developer reviews every line before it ships. Scope is fixed, so nothing is padded. There is no account manager, no junior handoff, no hourly clock. The result is a site that scores 90 or better on Google's mobile test, delivered in seven days, for $699. The savings are real and they are yours. The review is real too: nothing goes live until a human has clicked every link on a phone."],
+    ['p', 'Most studios charge $2,000 to $5,000 for a five-page site because a person types every line by hand. We build with AI coding tools and a senior developer reviews every line before it ships. Scope is fixed, so nothing is padded.'],
+    ['p', "There is no account manager, no junior handoff, no hourly clock. The result is a site that scores 90 or better on Google's mobile test, delivered in seven days, for $699. The savings are real and they are yours. The review is real too: nothing goes live until a human has clicked every link on a phone."],
   ]),
 }
 
@@ -619,6 +619,21 @@ export const aiFrontDeskPage = () => ({
     },
     phoneDemoBlock,
     {
+      blockType: 'services',
+      eyebrow: 'What it does',
+      headline: 'A full front desk, minus the desk.',
+      description: 'Everything a great receptionist does with the phone, running around the clock and never on a break.',
+      items: [
+        { title: 'Answers and qualifies', icon: 'shield', description: 'Picks up every call, 24 hours a day, and asks the questions you would ask.' },
+        { title: 'Books appointments', icon: 'lightbulb', description: 'Straight into Google Calendar, Cal.com, Jobber, or Housecall Pro.' },
+        { title: 'Takes messages', icon: 'code', description: 'Captures the details and texts you the ones that matter, as they happen.' },
+        { title: 'Transfers emergencies', icon: 'zap', description: 'Anything urgent rings through to you immediately, day or night.' },
+        { title: 'Texts back missed calls', icon: 'smartphone', description: 'Every missed call gets a text within 60 seconds, before they dial a competitor.' },
+        { title: 'Runs your web chat', icon: 'globe', description: 'The same trained brain answers questions in a chat widget on your site.' },
+        { title: 'Asks for reviews', icon: 'sparkles', description: 'After the job closes, it requests the Google review for you, when you want it to.' },
+      ],
+    },
+    {
       blockType: 'processSteps',
       eyebrow: 'How it works',
       headline: 'Forward your number. That is the hard part.',
@@ -628,23 +643,6 @@ export const aiFrontDeskPage = () => ({
         { title: 'Forward your number', description: 'Always, after hours, or on no-answer. Nothing to port, nothing to install.' },
         { title: 'It answers, books, and reports', description: 'Bookings land in your calendar, callers get a text, you get a summary of every call.' },
       ],
-    },
-    {
-      blockType: 'richText',
-      eyebrow: 'What it does',
-      maxWidth: 'prose',
-      content: rtDoc([
-        ['h2', 'What it does'],
-        ['ul', [
-          'Answers and qualifies every call, 24 hours a day',
-          'Books appointments straight into your calendar',
-          'Takes messages and texts you the ones that matter',
-          'Transfers emergencies to you immediately',
-          'Texts back missed calls within 60 seconds',
-          'Runs the same brain as a chat widget on your site',
-          'Asks for a review after the job, when you want it to',
-        ]],
-      ]),
     },
     {
       blockType: 'pricing',
@@ -658,7 +656,6 @@ export const aiFrontDeskPage = () => ({
         TIER_BLOCKS.frontDeskBasic, TIER_BLOCKS.frontDeskPlus, TIER_BLOCKS.frontDeskPro,
       ],
     },
-    manualFaq(FAQ_FRONT_DESK, 'The front desk, answered.'),
     guaranteesBlock,
     {
       blockType: 'cta',
@@ -669,6 +666,7 @@ export const aiFrontDeskPage = () => ({
       primaryCta: { label: 'Start setup, $299', href: '/contact?tier=front-desk-setup' },
       secondaryCta: { label: `Call the demo ${PHONE_DISPLAY}`, href: PHONE_TEL },
     },
+    manualFaq(FAQ_FRONT_DESK, 'The front desk, answered.'),
   ],
 })
 

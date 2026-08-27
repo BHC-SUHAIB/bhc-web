@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { ParallaxBackground } from './ParallaxBackground'
 import { ShieldCheck, Check, Zap } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
@@ -28,7 +28,7 @@ export function HeroPhoto(b: HeroPhotoProps) {
   return (
     <section className="hero-photo" aria-label="Offer">
       <div className="hp-bg">
-        <Image src={heroBg} alt="" fill sizes="100vw" className="object-cover" priority fetchPriority="high" />
+        <ParallaxBackground src={heroBg} sizes="100vw" priority />
       </div>
       <Container size="xl" className="hp-inner">
         {b.eyebrow ? (

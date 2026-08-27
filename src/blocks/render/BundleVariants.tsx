@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { Container } from '@/components/Container'
+import { ParallaxBackground } from './ParallaxBackground'
 import { Check, Phone, Globe, MapPin, Zap } from 'lucide-react'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import { cn } from '@/lib/utils'
@@ -35,18 +35,14 @@ function BundleCtaSlot({ bundle, eyebrow, full }: { bundle: Bundle; eyebrow: str
 function SectionShell({ b, children }: { b: BundleOfferBlock; children: React.ReactNode }) {
   const hasBg = !!b.backgroundImageUrl
   return (
-    <section className="section relative isolate overflow-hidden scroll-mt-24" id="bundles">
+    <section className="section relative isolate overflow-hidden scroll-mt-[73px]" id="bundles">
       {hasBg ? (
         <>
-          <div aria-hidden className="absolute inset-0 -z-20">
-            <Image
-              src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
-              className="object-cover opacity-30"
-            />
-          </div>
+          <ParallaxBackground
+            src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
+            imgClassName="opacity-30"
+            priority={false}
+          />
           <div
             aria-hidden
             className="absolute inset-0 -z-10"

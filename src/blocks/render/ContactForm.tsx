@@ -136,7 +136,7 @@ export function ContactForm(b: ContactFormProps) {
   const anchor = b.anchorId ?? anchorFromEyebrow(b.eyebrow)
 
   return (
-    <section id={anchor} className="py-12 sm:py-16 scroll-mt-24">
+    <section id={anchor} className="py-12 sm:py-16 scroll-mt-[73px]">
       <Container size="md">
         <div className="section-head mb-8 max-w-2xl">
           {b.eyebrow ? (

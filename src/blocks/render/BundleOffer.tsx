@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { Container } from '@/components/Container'
+import { ParallaxBackground } from './ParallaxBackground'
 import { Check } from 'lucide-react'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import { cn } from '@/lib/utils'
@@ -27,20 +27,16 @@ export function BundleOffer(b: BundleOfferBlock) {
   if (variant === 'banners') return <BundleBanners {...b} />
 
   return (
-    <section className="section relative isolate overflow-hidden scroll-mt-24" id="bundles">
+    <section className="section relative isolate overflow-hidden scroll-mt-[73px]" id="bundles">
       {hasBg ? (
         <>
           {/* CSS background-image → next/image so the editor-pasted Unsplash
               source gets responsive sizing. Lighthouse audit 2026-05-05. */}
-          <div aria-hidden className="absolute inset-0 -z-20">
-            <Image
-              src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
-              className="object-cover opacity-30"
-            />
-          </div>
+          <ParallaxBackground
+            src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
+            imgClassName="opacity-30"
+            priority={false}
+          />
           <div
             aria-hidden
             className="absolute inset-0 -z-10"

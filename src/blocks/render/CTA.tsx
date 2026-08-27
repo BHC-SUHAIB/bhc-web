@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { Container } from '@/components/Container'
+import { ParallaxBackground } from './ParallaxBackground'
 import { Button } from '@/components/Button'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import { cn } from '@/lib/utils'
@@ -16,15 +16,11 @@ export function CTA(b: CTABlock) {
               1920px Unsplash source on every viewport (~984KB on /home).
               Routed through next/image so mobile gets a 750w variant.
               Lighthouse audit 2026-05-05. */}
-          <div aria-hidden className="absolute inset-0 -z-20">
-            <Image
-              src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
-              className="object-cover opacity-30"
-            />
-          </div>
+          <ParallaxBackground
+            src={stripUnsplashFixedWidth(b.backgroundImageUrl as string)}
+            imgClassName="opacity-30"
+            priority={false}
+          />
           <div
             aria-hidden
             className="absolute inset-0 -z-10"

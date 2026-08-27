@@ -27,7 +27,7 @@ export function CalendlyBooking(b: CalendlyBookingBlock) {
   }
 
   return (
-    <section className="section-tight scroll-mt-24" id="book">
+    <section className="section-tight scroll-mt-[73px]" id="book">
       <Container size="lg">
         <div className="relative overflow-hidden rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-7 sm:px-9 sm:py-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-4">

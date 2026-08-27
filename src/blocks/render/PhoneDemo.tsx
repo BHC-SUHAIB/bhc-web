@@ -22,7 +22,7 @@ export function PhoneDemo(b: PhoneDemoProps) {
   const bullets = (b.bullets ?? []).filter((x) => x?.label)
 
   return (
-    <section className="section surface scroll-mt-24" id="phone-demo">
+    <section className="section surface scroll-mt-[73px]" id="phone-demo">
       <Container size="xl">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <div>

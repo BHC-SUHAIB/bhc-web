@@ -38,7 +38,7 @@ export function RichText(b: RichTextBlock) {
   const containerSize = isBio || isMission ? 'lg' : size === 'wide' ? 'xl' : size === 'medium' ? 'md' : 'sm'
 
   return (
-    <section id={(b as { anchorId?: string | null }).anchorId || undefined} className="py-10 sm:py-14 scroll-mt-24">
+    <section id={(b as { anchorId?: string | null }).anchorId || undefined} className="py-10 sm:py-14 scroll-mt-[73px]">
       <Container size={containerSize}>
         <style>{`
           .prose-content p { margin: 0 0 1.1em; }

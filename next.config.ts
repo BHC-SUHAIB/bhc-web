@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
     // ParallaxBackground washes/heroes (photographic bgs behind gradient
     // overlays; the drop from 75 is invisible there and saves ~40% bytes on
     // the mobile LCP image).
-    qualities: [60, 75],
+    qualities: [45, 60, 75],
     remotePatterns: [
       { protocol: 'http', hostname: 'localhost' },
       { protocol: 'http', hostname: '127.0.0.1' },

@@ -31,4 +31,8 @@ export const jetbrains = JetBrains_Mono({
   style: ['normal'],
   variable: '--font-mono',
   display: 'swap',
+  // Mono only paints eyebrows/labels/prices — small, below-the-headline text.
+  // Skipping the preload keeps ~25KB out of the critical path so the hero LCP
+  // image wins that bandwidth on mobile; swap paints fallback mono meanwhile.
+  preload: false,
 })

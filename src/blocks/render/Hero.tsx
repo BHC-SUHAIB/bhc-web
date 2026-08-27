@@ -61,6 +61,10 @@ export async function Hero(b: HeroBlock & { phoneOverride?: string }) {
         <ParallaxBackground
           src={bgUrl}
           sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
+          // This is the mobile LCP image and it always sits under a dark
+          // overlay: q45 is visually identical there and ~40% lighter than
+          // the q60 default, which is worth ~0.2s of simulated mobile LCP.
+          quality={45}
         />
         <div className={cn('absolute inset-0 -z-10', overlayClass)} aria-hidden />
         <Container size="xl">

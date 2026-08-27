@@ -22,34 +22,23 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { execFileSync } from 'node:child_process'
-import Stripe from 'stripe'
 
 const LIVE = process.argv.includes('--live')
 const MODE = LIVE ? 'live' : 'test'
 const SITE = 'https://blackhartconsulting.com'
 
-// ── Key from the Stripe CLI (never asked for, never printed) ────────────────
-// The CLI config can hold several profiles; use the [default] section, which
-// `stripe login` writes (Black Hart Consulting LLC).
-function cliKey(): string {
-  const out = execFileSync('stripe', ['config', '--list'], { encoding: 'utf8' })
-  const section = out.split(/^\[/m).find((s) => s.startsWith('default]'))
-  if (!section) {
-    console.error('No [default] profile in `stripe config --list`. Run `stripe login` first.')
-    process.exit(1)
-  }
-  const re = LIVE ? /live_mode_api_key\s*=\s*'?([^'\n]+?)'?\s*$/m : /test_mode_api_key\s*=\s*'?([^'\n]+?)'?\s*$/m
-  const m = section.match(re)
-  if (!m) {
-    console.error(`No ${MODE}-mode key in the default profile. Run \`stripe login\` first.`)
-    process.exit(1)
-  }
-  const acct = section.match(/account_id\s*=\s*'?(acct_\w+)/)?.[1]
-  console.log(`Using CLI default profile (account ${acct ?? 'unknown'})`)
-  return m[1].trim()
+// ── Stripe access via the CLI's own auth (`stripe get/post` passthrough).
+// The CLI manages and refreshes its keys itself; we never extract or print
+// one. Values are passed as argv entries, so no shell quoting issues.
+function api(method: 'get' | 'post', path: string, params: Record<string, string | number | boolean> = {}): any {
+  const args = [method, path]
+  for (const [k, v] of Object.entries(params)) args.push('-d', `${k}=${v}`)
+  if (LIVE) args.push('--live')
+  const out = execFileSync('stripe', args, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
+  const parsed = JSON.parse(out)
+  if (parsed?.error) throw new Error(`${path}: ${parsed.error.message}`)
+  return parsed
 }
-
-const stripe = new Stripe(cliKey(), { apiVersion: '2024-12-18.acacia' as any })
 
 // ── Catalog definition (facts table, amounts in cents) ─────────────────────
 
@@ -118,19 +107,25 @@ const outDir = path.join(process.cwd(), 'docs', 'pricing-reset')
 const write = (name: string, data: unknown) =>
   fs.writeFileSync(path.join(outDir, name), JSON.stringify(data, null, 2))
 
-async function listAll<T>(fn: (params: any) => Stripe.ApiListPromise<T>): Promise<T[]> {
-  const items: T[] = []
-  for await (const item of fn({ limit: 100 })) items.push(item as T)
+function listAll(path: string, extra: Record<string, string> = {}): any[] {
+  const items: any[] = []
+  let startingAfter: string | undefined
+  for (;;) {
+    const params: Record<string, string> = { limit: '100', ...extra }
+    if (startingAfter) params.starting_after = startingAfter
+    const page = api('get', path, params)
+    items.push(...(page.data ?? []))
+    if (!page.has_more || page.data.length === 0) break
+    startingAfter = page.data[page.data.length - 1].id
+  }
   return items
 }
 
 async function snapshot() {
-  const [customers, subscriptions, products, prices] = await Promise.all([
-    listAll<Stripe.Customer>((p) => stripe.customers.list(p)),
-    listAll<Stripe.Subscription>((p) => stripe.subscriptions.list({ ...p, status: 'all' })),
-    listAll<Stripe.Product>((p) => stripe.products.list(p)),
-    listAll<Stripe.Price>((p) => stripe.prices.list(p)),
-  ])
+  const customers = listAll('/v1/customers')
+  const subscriptions = listAll('/v1/subscriptions', { status: 'all' })
+  const products = listAll('/v1/products')
+  const prices = listAll('/v1/prices')
   return { customers, subscriptions, products, prices }
 }
 
@@ -158,24 +153,26 @@ async function main() {
   const before = await snapshot()
   write(`stripe-before.${MODE}.json`, before)
   console.log(`before: ${before.customers.length} customers, ${before.subscriptions.length} subscriptions, ${before.products.length} products, ${before.prices.length} prices`)
-  const pm = before.subscriptions.find((s: any) => JSON.stringify(s).toLowerCase().includes('prometheus'))
+  const pmCustomer = before.customers.find((c: any) => (c.name ?? '').toLowerCase().includes('prometheus'))
+  const pm = before.subscriptions.find((s: any) => s.customer === pmCustomer?.id && s.status === 'active')
+    ?? before.subscriptions.find((s: any) => JSON.stringify(s).toLowerCase().includes('prometheus'))
   console.log(pm ? `Prometheus Minds subscription present: ${pm.id} (${pm.status})` : 'note: no subscription matching "prometheus" found in this mode')
 
   // Terms-of-service consent only if a terms URL is set in public details.
   let requireTos = false
   try {
-    const acct = await stripe.accounts.retrieve()
-    requireTos = !!(acct.settings?.card_payments || true) && !!(acct as any).business_profile?.url && !!(acct.settings as any)?.terms_of_service?.url
-  } catch { /* restricted key may not read the account; skip */ }
+    const acct = api('get', '/v1/account')
+    requireTos = !!acct?.settings?.terms_of_service?.url
+  } catch { /* account read may be restricted; skip */ }
   if (!requireTos) console.log('consent_collection.terms_of_service skipped (no terms URL confirmed); see CHECKLIST')
 
   // Existing lookups
-  const productsBySku = new Map<string, Stripe.Product>()
+  const productsBySku = new Map<string, any>()
   for (const p of before.products) if ((p as any).metadata?.sku) productsBySku.set((p as any).metadata.sku, p as any)
-  const pricesByLookup = new Map<string, Stripe.Price>()
+  const pricesByLookup = new Map<string, any>()
   for (const pr of before.prices) if (pr.lookup_key) pricesByLookup.set(pr.lookup_key, pr)
-  const links = await listAll<Stripe.PaymentLink>((p) => stripe.paymentLinks.list(p))
-  const linksBySku = new Map<string, Stripe.PaymentLink>()
+  const links = listAll('/v1/payment_links')
+  const linksBySku = new Map<string, any>()
   for (const l of links) if ((l as any).metadata?.sku) linksBySku.set((l as any).metadata.sku, l)
 
   const catalog: Record<string, { productId: string; priceId: string; paymentLinkId?: string; url?: string; lookupKey: string }> = {}
@@ -184,11 +181,12 @@ async function main() {
     // Product (shared across buy/subscribe paths)
     let product = productsBySku.get(def.productSku)
     if (!product) {
-      product = await stripe.products.create({
+      product = api('post', '/v1/products', {
         name: def.productName,
         description: def.description,
         statement_descriptor: 'BLACK HART',
-        metadata: { sku: def.productSku, line: def.line },
+        'metadata[sku]': def.productSku,
+        'metadata[line]': def.line,
       })
       productsBySku.set(def.productSku, product)
       console.log(`product created: ${def.productSku} (${product.id})`)
@@ -197,13 +195,13 @@ async function main() {
     // Price
     let price = pricesByLookup.get(def.lookupKey)
     if (!price) {
-      price = await stripe.prices.create({
+      price = api('post', '/v1/prices', {
         product: product.id,
         currency: 'usd',
         unit_amount: def.amount,
         lookup_key: def.lookupKey,
-        ...(def.interval ? { recurring: { interval: def.interval } } : {}),
-        metadata: { sku: def.sku },
+        ...(def.interval ? { 'recurring[interval]': def.interval } : {}),
+        'metadata[sku]': def.sku,
       })
       pricesByLookup.set(def.lookupKey, price)
       console.log(`price created: ${def.lookupKey} (${price.id})`)
@@ -212,16 +210,18 @@ async function main() {
     // Payment link (one per price)
     let link = linksBySku.get(def.sku)
     if (!link) {
-      link = await stripe.paymentLinks.create({
-        line_items: [{ price: price.id, quantity: 1 }],
-        after_completion: { type: 'redirect', redirect: { url: `${SITE}/thanks?sku=${def.sku}` } },
-        phone_number_collection: { enabled: true },
+      link = api('post', '/v1/payment_links', {
+        'line_items[0][price]': price.id,
+        'line_items[0][quantity]': 1,
+        'after_completion[type]': 'redirect',
+        'after_completion[redirect][url]': `${SITE}/thanks?sku=${def.sku}`,
+        'phone_number_collection[enabled]': true,
         billing_address_collection: 'auto',
         allow_promotion_codes: false,
-        metadata: { sku: def.sku },
-        ...(def.interval && def.subDescription ? { subscription_data: { description: def.subDescription } } : {}),
-        ...(requireTos ? { consent_collection: { terms_of_service: 'required' } } : {}),
-        custom_text: { submit: { message: 'You will get the intake form by email within one business day.' } },
+        'metadata[sku]': def.sku,
+        ...(def.interval && def.subDescription ? { 'subscription_data[description]': def.subDescription } : {}),
+        ...(requireTos ? { 'consent_collection[terms_of_service]': 'required' } : {}),
+        'custom_text[submit][message]': 'You will get the intake form by email within one business day.',
       })
       linksBySku.set(def.sku, link)
       console.log(`payment link created: ${def.sku}`)

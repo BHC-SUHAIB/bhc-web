@@ -366,11 +366,6 @@ select.field { appearance: none; background-image: url("data:image/svg+xml,%3Csv
   [data-reveal-stagger]:not(.in) > * { opacity: 0; transform: translateY(22px); }
 }
 
-/* Below-the-fold sections skip render work until scrolled near (mobile FCP
-   was paying ~2s of style/layout for a 12000px page before first paint).
-   contain-intrinsic-size keeps scrollbar/anchor math stable pre-render. */
-.cv-auto { content-visibility: auto; contain-intrinsic-size: auto 720px; }
-
 /* ---------- small utilities ---------- */
 .placeholder-note { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; }
 .lp-pad-bottom { padding-bottom: 5rem; }

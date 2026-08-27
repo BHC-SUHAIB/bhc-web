@@ -56,6 +56,8 @@ export function RichText(b: RichTextBlock) {
           .lede-content em { font-style: italic; color: var(--color-brass-dark); }
           .card-content p { margin: 0 0 1em; }
           .card-content p:last-child { margin-bottom: 0; }
+          .card-content h2 { font-family: var(--font-serif); font-weight: 600; font-size: 1.65em; letter-spacing: -0.02em; line-height: 1.15; margin: 0 0 0.6em; }
+          .card-content h2:not(:first-child) { margin-top: 1.4em; }
         `}</style>
 
         {isBio ? (
@@ -108,13 +110,14 @@ export function RichText(b: RichTextBlock) {
               </figcaption>
             </figure>
             <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-7 sm:p-10 shadow-[0_18px_40px_-24px_color-mix(in_srgb,var(--color-ink)_40%,transparent)] reveal-up">
-              {/* 2026-08 punch list: the eyebrow doubles as the section title
-                  at the same scale as every other section heading, and the
-                  body reads as a normal paragraph, not bold serif. */}
-              <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em]">
+              {/* 2026-08 punch list round 2: heading styled as the standard
+                  section eyebrow (brass rule + mono caps), matching "What we
+                  do" / "How we work"; body stays a regular paragraph. */}
+              <span className="eyebrow eyebrow-row mb-4">
+                <span className="rule" />
                 {b.eyebrow}
-              </h2>
-              <div className="card-content text-[17px] leading-[1.65] text-[var(--color-fg)] mt-5">
+              </span>
+              <div className="card-content text-[17px] leading-[1.65] text-[var(--color-fg)] mt-4">
                 <RichTextRenderer content={b.content} />
               </div>
             </figure>
@@ -122,10 +125,11 @@ export function RichText(b: RichTextBlock) {
         ) : variant === 'lede' ? (
           <div className={inner}>
             <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-7 sm:p-10 shadow-[0_18px_40px_-24px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]">
-              <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em]">
+              <span className="eyebrow eyebrow-row mb-4">
+                <span className="rule" />
                 {b.eyebrow ?? 'Our mission'}
-              </h2>
-              <div className="card-content text-[17px] leading-[1.65] text-[var(--color-fg)] mt-5">
+              </span>
+              <div className="card-content text-[17px] leading-[1.65] text-[var(--color-fg)] mt-4">
                 <RichTextRenderer content={b.content} />
               </div>
             </figure>
@@ -134,7 +138,12 @@ export function RichText(b: RichTextBlock) {
           <div className={inner}>
             <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 sm:p-9 card-content text-[16px] leading-[1.6]">
               {b.eyebrow ? (
-                <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-fg-muted)] mb-4">{b.eyebrow}</p>
+                /* Standard section-eyebrow treatment (rule + mono caps),
+                   matching "Who you'll work with" etc. (2026-08 round 2). */
+                <span className="eyebrow eyebrow-row mb-4">
+                  <span className="rule" />
+                  {b.eyebrow}
+                </span>
               ) : null}
               <RichTextRenderer content={b.content} />
             </div>

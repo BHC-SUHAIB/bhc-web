@@ -147,8 +147,9 @@ export function BundleReceipt(b: BundleOfferBlock) {
               className={cn(
                 'rounded-[var(--radius-md)] border bg-[var(--color-surface)] px-7 py-8 flex flex-col h-full',
                 'shadow-[0_18px_40px_-28px_color-mix(in_srgb,var(--color-ink)_45%,transparent)]',
-                // Same hover grammar as the tier/outcome/work cards sitewide.
-                'transition-[transform,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)]',
+                // Inverts to the dark band with gold accents on hover
+                // (see .bundle-invert in components.css).
+                'bundle-invert',
                 bundle.highlighted ? 'border-[var(--color-brass)]' : 'border-[var(--color-border-strong)]',
               )}
             >

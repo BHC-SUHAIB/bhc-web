@@ -53,18 +53,24 @@ export async function Hero(b: HeroBlock & { phoneOverride?: string }) {
     // Strip Unsplash's hardcoded `w=1920` so next/image can pick a size for
     // the viewport. See src/lib/unsplash.ts for the full reasoning.
     const bgUrl = stripUnsplashFixedWidth(b.backgroundImageUrl as string)
+    // Mobile hides the photo (see mobileHidden below), so the section itself
+    // carries the warm charcoal (tone-b's #14120E) under the gradient
+    // overlay; from sm up the photo shows and the bg is moot.
     return (
-      <section className="relative isolate overflow-hidden">
+      <section className="relative isolate overflow-hidden bg-[#14120E]">
         {/* ParallaxBackground is a client leaf that translates the hero photo
             on scroll. Mobile + reduced-motion fall back to a static image so
             the perf budget (sub-200KB JS, sub-1s LCP) is preserved. */}
         <ParallaxBackground
           src={bgUrl}
           sizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px"
-          // This is the mobile LCP image and it always sits under a dark
-          // overlay: q45 is visually identical there and ~40% lighter than
-          // the q60 default, which is worth ~0.2s of simulated mobile LCP.
+          // Under the dark overlay q45 is visually identical to q60 and
+          // ~40% lighter. mobileHidden keeps the photo off phones entirely:
+          // a full-viewport photo can never beat the headline to largest
+          // paint on throttled mobile, so phones get the gradient hero and
+          // the text becomes the LCP (~2s instead of 4s+).
           quality={45}
+          mobileHidden
         />
         <div className={cn('absolute inset-0 -z-10', overlayClass)} aria-hidden />
         <Container size="xl">

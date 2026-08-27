@@ -26,9 +26,14 @@ type Props = {
   /** Extra classes on the image, e.g. "opacity-30" for faded section washes. */
   imgClassName?: string
   quality?: number
+  /** Hide the photo below the sm breakpoint (mobile LCP art direction):
+   * the wrapper gets hidden sm:block and the image loses its preload so a
+   * phone's largest paint is the headline text, not a full-bleed photo.
+   * The section's gradient overlay carries the visual on mobile. */
+  mobileHidden?: boolean
 }
 
-export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgClassName, quality = 60 }: Props) {
+export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgClassName, quality = 60, mobileHidden = false }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
 
@@ -46,7 +51,15 @@ export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgC
   const scale = reduce ? 1 : 1.3
 
   return (
-    <div ref={ref} aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
+    <div
+      ref={ref}
+      aria-hidden
+      className={
+        mobileHidden
+          ? 'hidden sm:block absolute inset-0 -z-20 overflow-hidden'
+          : 'absolute inset-0 -z-20 overflow-hidden'
+      }
+    >
       <motion.div
         style={{ y, scale }}
         className="absolute inset-0 will-change-transform"
@@ -57,7 +70,12 @@ export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgC
           fill
           sizes={sizes ?? '(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1920px'}
           className={imgClassName ? `object-cover ${imgClassName}` : 'object-cover'}
-          priority={priority}
+          // mobileHidden drops the <link rel=preload> (priority) so phones
+          // don't spend critical bandwidth on a hidden image; the SSR'd img
+          // tag with loading=eager still lets desktop's preload scanner
+          // fetch it immediately.
+          priority={priority && !mobileHidden}
+          loading="eager"
           fetchPriority={priority ? 'high' : 'auto'}
           quality={quality}
         />

@@ -53,7 +53,10 @@ export function PhoneDemo(b: PhoneDemoProps) {
 
           <div className="rounded-[var(--radius-xl)] border border-[var(--color-border-strong)] bg-[var(--color-surface)] p-8 sm:p-10 text-center">
             {b.phoneLabel ? (
-              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-brass-text)] mb-4">
+              <p className="inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-brass-text)] mb-4">
+                {/* Live-line pulse: this number is genuinely answered around
+                    the clock, so the dot conveys real state, not decoration. */}
+                <span className="pulse-dot" aria-hidden />
                 {b.phoneLabel}
               </p>
             ) : null}

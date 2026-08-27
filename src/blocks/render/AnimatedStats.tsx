@@ -1,5 +1,6 @@
 import { Container } from '@/components/Container'
 import { CountUpStat } from '@/components/CountUpStat'
+import { IconClock, IconGauge, IconWrench } from '@/components/BrandIcons'
 
 // Stats grid whose numbers count up when scrolled into view. Renders the exact
 // .stats-grid markup from app/components.css, now CMS-driven. Each item carries
@@ -39,8 +40,12 @@ export function AnimatedStats(b: AnimatedStatsProps) {
           </div>
         ) : null}
         <div className="stats-grid reveal-up reveal-d1">
-          {items.map((s, i) => (
+          {items.map((s, i) => {
+            // Same sentinel as Stats.tsx: the promises band gets custom icons.
+            const Icon = /promise/i.test(b.headline ?? '') ? [IconClock, IconGauge, IconWrench][i] : undefined
+            return (
             <div key={i} className="stat">
+              {Icon ? <Icon className="mb-4" /> : null}
               <div className="s-val">
                 <CountUpStat
                   value={s.value ?? 0}
@@ -62,7 +67,8 @@ export function AnimatedStats(b: AnimatedStatsProps) {
                 </div>
               ) : null}
             </div>
-          ))}
+            )
+          })}
         </div>
       </Container>
     </section>

@@ -7,7 +7,18 @@ import { cn } from '@/lib/utils'
 import { PricingCta } from './PricingCta'
 import { pushEvent } from '@/lib/analytics'
 import { tierSlugFromName } from '@/lib/tiers'
+import { IconPage, IconStack, IconPen, IconCompass } from '@/components/BrandIcons'
 import type { PricingBlock } from '@/payload-types'
+
+// Custom brass icons for the four website tiers (theme enrichment 2026-08).
+// Name-keyed so the many other Pricing instances (care plans, sprints,
+// retainers) render unchanged until given art of their own.
+const TIER_ICONS: Array<{ match: RegExp; Icon: typeof IconPage }> = [
+  { match: /launch page/i, Icon: IconPage },
+  { match: /starter site/i, Icon: IconStack },
+  { match: /pro site/i, Icon: IconPen },
+  { match: /custom build/i, Icon: IconCompass },
+]
 
 function anchorFromEyebrow(eyebrow?: string | null): string | undefined {
   if (!eyebrow) return undefined
@@ -103,6 +114,10 @@ export function Pricing(b: PricingBlock & { seeAllHref?: string; seeAllLabel?: s
                   Custom scope
                 </span>
               ) : null}
+              {(() => {
+                const Icon = TIER_ICONS.find((x) => x.match.test(t.name ?? ''))?.Icon
+                return Icon ? <Icon className="mb-3 size-6" /> : null
+              })()}
               <h3 className="font-serif font-semibold text-[22px] mb-2">{t.name}</h3>
               <div className="mb-4">
                 <span

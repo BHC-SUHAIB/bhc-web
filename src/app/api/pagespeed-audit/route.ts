@@ -126,12 +126,19 @@ export async function POST(req: Request) {
       lighthouseResult?: {
         finalUrl?: string
         categories?: Record<string, { score?: number }>
-        audits?: Record<string, { displayValue?: string }>
+        audits?: Record<string, { displayValue?: string; details?: { data?: string } }>
       }
     }
     const data = (await res.json()) as PsiResp
     const cats = data?.lighthouseResult?.categories ?? {}
     const audits = data?.lighthouseResult?.audits ?? {}
+    // Lighthouse renders the audited page and returns the final frame as a
+    // base64 data URI. Passing it through lets the audit tool show the
+    // visitor a screenshot of THEIR OWN site alongside the scores (the
+    // receipt UI). Typically 50-200KB of JPEG; only ever data: scheme.
+    const screenshotRaw = audits['final-screenshot']?.details?.data
+    const screenshot =
+      typeof screenshotRaw === 'string' && screenshotRaw.startsWith('data:image/') ? screenshotRaw : null
     const scores = {
       performance: Math.round((cats.performance?.score ?? 0) * 100),
       accessibility: Math.round((cats.accessibility?.score ?? 0) * 100),
@@ -149,6 +156,7 @@ export async function POST(req: Request) {
       url: data?.lighthouseResult?.finalUrl ?? parsed.toString(),
       scores,
       vitals,
+      screenshot,
     })
   } catch (err) {
     clearTimeout(timeout)

@@ -86,6 +86,39 @@ export function RichText(b: RichTextBlock) {
               </div>
             </div>
           </div>
+        ) : variant === 'lede' && eyebrowLower.includes('why our prices') ? (
+          /* Theme enrichment (2026-08): the "Why our prices are low" figure
+             gets the founder portrait beside it. The section's central claim
+             is "a senior developer reviews every line", so we show the
+             developer. Same in-repo headshot as the About bio (sync-proof,
+             ~75KB). The right column keeps the block's live lede styling. */
+          <div className="why-grid max-w-5xl mx-auto">
+            <figure className="why-portrait reveal-up">
+              <Image
+                src={ABOUT_BIO_PORTRAIT}
+                alt="Suhaib Chaudhry, founder of Black Hart Consulting"
+                fill
+                className="object-cover"
+                sizes="(min-width:860px) 340px, 100vw"
+                unoptimized
+              />
+              <figcaption>
+                <strong>Suhaib Chaudhry</strong>
+                The senior developer who reviews every line.
+              </figcaption>
+            </figure>
+            <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-7 sm:p-10 shadow-[0_18px_40px_-24px_color-mix(in_srgb,var(--color-ink)_40%,transparent)] reveal-up">
+              <div className="flex items-center gap-3 mb-5">
+                <span className="h-[2px] w-8 bg-[var(--color-brass)] rounded-full" aria-hidden />
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-brass-text)]">
+                  {b.eyebrow}
+                </span>
+              </div>
+              <div className="lede-content">
+                <RichTextRenderer content={b.content} />
+              </div>
+            </figure>
+          </div>
         ) : variant === 'lede' ? (
           <div className={inner}>
             <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-7 sm:p-10 shadow-[0_18px_40px_-24px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]">

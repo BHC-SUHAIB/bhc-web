@@ -1,7 +1,13 @@
 import { Container } from '@/components/Container'
 import { ParallaxBackground } from './ParallaxBackground'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
+import { IconClock, IconGauge, IconWrench } from '@/components/BrandIcons'
 import type { StatsBlock } from '@/payload-types'
+
+// Custom brass icons for the homepage promises band ("Three things we
+// promise": launch date / Lighthouse score / edit turnaround). Sentinel on
+// the headline so other Stats instances render unchanged.
+const PROMISE_ICONS = [IconClock, IconGauge, IconWrench]
 
 export function Stats(b: StatsBlock) {
   // Faint background — image at 30% opacity over a translucent bg-color tint
@@ -46,14 +52,18 @@ export function Stats(b: StatsBlock) {
           </div>
         ) : null}
 
-        <div className="stats-grid">
-          {b.items?.map((s, i) => (
-            <div key={i} className="stat">
-              <div className="s-val">{s.value}</div>
-              <div className="s-label">{s.label}</div>
-              {s.description ? <div className="s-desc">{s.description}</div> : null}
-            </div>
-          ))}
+        <div className="stats-grid" data-reveal-stagger>
+          {b.items?.map((s, i) => {
+            const Icon = /promise/i.test(b.headline ?? '') ? PROMISE_ICONS[i] : undefined
+            return (
+              <div key={i} className="stat">
+                {Icon ? <Icon className="mb-4" /> : null}
+                <div className="s-val">{s.value}</div>
+                <div className="s-label">{s.label}</div>
+                {s.description ? <div className="s-desc">{s.description}</div> : null}
+              </div>
+            )
+          })}
         </div>
       </Container>
     </section>

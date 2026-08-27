@@ -441,3 +441,130 @@ select.field { appearance: none; background-image: url("data:image/svg+xml,%3Csv
 .guarantee-strip .g { background: var(--color-bg); padding: 1.4rem clamp(1.1rem, 3vw, 2rem); display: flex; flex-direction: column; gap: 0.3rem; }
 .guarantee-strip .g b { font-family: var(--font-serif); font-size: 1.4rem; }
 .guarantee-strip .g span { font-size: 0.78rem; color: var(--color-fg-muted); }
+
+/* ── Revision 3: theme enrichment (2026-08) ─────────────────────────────────
+   Custom brass line icons with a draw-in on reveal, photo headers on outcome
+   cards, eyebrow rules that draw across, a pulse dot on the live demo line,
+   and the audit tool's expand → scan → receipt flow. All motion is gated
+   behind `scripting: enabled` + `prefers-reduced-motion: no-preference` so
+   no-JS and reduced-motion visitors get the fully-drawn static state. */
+
+/* Brand icons (see src/components/BrandIcons.tsx). Drawn by default; the
+   hidden (undrawn) state only exists pre-reveal with JS + motion allowed. */
+.bic { width: 28px; height: 28px; color: var(--color-brass-text); flex: none; }
+.bic :is(path, circle) { transition: stroke-dashoffset 1.2s var(--ease-out) 0.15s; }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  :is(.reveal-up, [data-reveal-stagger]):not(.in) .bic :is(path, circle) { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  :is(.reveal-up, [data-reveal-stagger]).in .bic :is(path, circle) { stroke-dasharray: 1; stroke-dashoffset: 0; }
+}
+
+/* Eyebrow hairline draws across when its reveal group enters. */
+.eyebrow-row .rule { transition: width 0.7s var(--ease-out) 0.1s; }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  :is(.reveal-up, [data-reveal-stagger]):not(.in) .eyebrow-row .rule { width: 0; }
+}
+
+/* Outcome-card photo header: image on top of the existing outlined card,
+   gentle zoom on hover, brass-ringed icon chip anchored to the photo. */
+.oc-thumb { position: relative; margin: -1.75rem -1.75rem 1.4rem; border-radius: var(--radius-lg) var(--radius-lg) 0 0; overflow: hidden; aspect-ratio: 16 / 9; background: var(--color-surface-raised); }
+.oc-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-out); }
+.group:hover .oc-thumb img { transform: scale(1.045); }
+@media (prefers-reduced-motion: reduce) { .group:hover .oc-thumb img { transform: none; } }
+.oc-chip { position: absolute; left: 12px; bottom: 12px; width: 42px; height: 42px; border-radius: var(--radius-md); display: grid; place-items: center; background: rgba(16, 13, 10, 0.72); border: 1px solid color-mix(in srgb, var(--color-brass) 45%, transparent); backdrop-filter: blur(4px); }
+.oc-chip .bic { width: 22px; height: 22px; color: var(--color-brass); }
+
+/* Live-line pulse dot (phone demo). Semantic: the demo number is answered
+   around the clock. One per page. */
+.pulse-dot { position: relative; width: 10px; height: 10px; border-radius: 50%; background: var(--color-brass); flex: none; }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .pulse-dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--color-brass); animation: bh-pulse 2.4s var(--ease-out) infinite; }
+  @keyframes bh-pulse { 0% { transform: scale(0.65); opacity: 0.9; } 100% { transform: scale(2.1); opacity: 0; } }
+}
+
+/* Founder portrait beside the "Why our prices are low" card. */
+.why-grid { display: grid; grid-template-columns: 1fr; gap: 1.2rem; align-items: stretch; }
+@media (min-width: 860px) { .why-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); } }
+.why-portrait { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--color-border); min-height: 300px; }
+@media (min-width: 860px) { .why-portrait { min-height: 0; } }
+.why-portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.why-portrait figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2.4rem 1.2rem 0.9rem; background: linear-gradient(to top, rgba(20, 18, 14, 0.85), transparent); color: #F3EEE1; font-size: 0.82rem; line-height: 1.4; }
+.why-portrait figcaption strong { display: block; font-family: var(--font-serif); font-weight: 500; font-size: 1rem; }
+
+/* ── Audit tool: expand → scan → receipt ── */
+/* Collapsed result area that unfolds when the audit starts. */
+.audit-reveal { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.7s var(--ease-out); }
+.audit-reveal.open { grid-template-rows: 1fr; }
+.audit-reveal-clip { overflow: hidden; min-height: 0; }
+.audit-result-grid { display: grid; grid-template-columns: 1fr; gap: 1.4rem; align-items: stretch; border-top: 1px dashed var(--color-border-strong); margin-top: 1.4rem; padding-top: 1.4rem; }
+@media (min-width: 760px) { .audit-result-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); } }
+@media (prefers-reduced-motion: reduce) { .audit-reveal { transition: none; } }
+
+/* Browser frame that holds the skeleton (running) then the PSI screenshot. */
+.audit-frame { border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); overflow: hidden; background: var(--color-bg); display: flex; flex-direction: column; }
+.audit-frame .af-bar { display: flex; align-items: center; gap: 0.7rem; padding: 0.5rem 0.9rem; border-bottom: 1px solid var(--color-border); background: var(--color-cream); }
+.audit-frame .af-dots { display: flex; gap: 0.3rem; }
+.audit-frame .af-dots span { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--color-border-strong); }
+.audit-frame .af-url { flex: 1; font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-fg-muted); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-pill); padding: 0.25rem 0.85rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.audit-frame .af-view { position: relative; flex: 1; min-height: 240px; aspect-ratio: 16 / 10; }
+.audit-frame .af-view > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity 0.6s var(--ease-out); }
+.audit-frame .af-view > img.show { opacity: 1; }
+
+/* Skeleton page shape while Google runs the audit. */
+.af-skel { position: absolute; inset: 0; padding: 8%; display: flex; flex-direction: column; gap: 6%; background: var(--color-cream); }
+.af-skel span { display: block; border-radius: 6px; background: linear-gradient(100deg, var(--color-border) 40%, var(--color-border-strong) 50%, var(--color-border) 60%); background-size: 220% 100%; }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .af-skel span { animation: bh-shimmer 1.6s linear infinite; }
+  @keyframes bh-shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+}
+.af-skel .s1 { height: 9%; width: 36%; }
+.af-skel .s2 { height: 16%; width: 78%; }
+.af-skel .s3 { height: 7%; width: 60%; }
+.af-skel .s4 { height: 11%; width: 26%; border-radius: var(--radius-pill); }
+.af-skel .s5 { flex: 1; width: 100%; }
+
+/* The brass scanline. Loops while running; one closing sweep on success. */
+.af-beam { position: absolute; left: 0; right: 0; top: -4px; height: 3px; z-index: 3; opacity: 0; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--color-brass) 30%, #E8CFA4 50%, var(--color-brass) 70%, transparent);
+  box-shadow: 0 0 18px 2px color-mix(in srgb, var(--color-brass) 55%, transparent); }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .audit-frame.scanning .af-beam { opacity: 1; animation: bh-sweep-loop 1.5s var(--ease-out) infinite; }
+  .audit-frame.landed .af-beam { opacity: 1; animation: bh-sweep-once 0.9s var(--ease-out) forwards; }
+  @keyframes bh-sweep-loop { 0% { top: -4px; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { top: calc(100% + 1px); opacity: 0; } }
+  @keyframes bh-sweep-once { from { top: -4px; } to { top: calc(100% + 1px); opacity: 0; } }
+}
+.af-status { position: absolute; left: 10px; bottom: 10px; z-index: 3; background: var(--color-ink); color: var(--color-ivory); font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; border-radius: var(--radius-pill); padding: 0.3rem 0.8rem; }
+.af-status .t { color: var(--color-brass); }
+
+/* The audit receipt (dark mono card, dotted leaders, serif total). */
+.rcpt { background: var(--band-bg); color: var(--band-fg); border-radius: var(--radius-md); padding: 1.5rem; font-family: var(--font-mono); font-size: 0.8rem; display: flex; flex-direction: column; }
+.rcpt .r-head { letter-spacing: 0.2em; font-size: 0.62rem; color: color-mix(in srgb, var(--band-fg) 62%, var(--band-bg)); text-transform: uppercase; }
+.rcpt .r-site { font-size: 0.85rem; margin-top: 0.3rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rcpt .r-line { display: flex; align-items: baseline; gap: 0.6rem; margin-top: 0.85rem; }
+.rcpt .r-line .k { color: color-mix(in srgb, var(--band-fg) 62%, var(--band-bg)); }
+.rcpt .r-line .leader { flex: 1; border-bottom: 1px dotted color-mix(in srgb, var(--band-fg) 26%, transparent); transform: translateY(-4px); }
+.rcpt .r-line .v { font-size: 0.98rem; font-variant-numeric: tabular-nums; }
+.rcpt .r-total { margin-top: auto; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, var(--band-fg) 16%, transparent); display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.rcpt .r-total .k { letter-spacing: 0.16em; font-size: 0.62rem; color: color-mix(in srgb, var(--band-fg) 62%, var(--band-bg)); text-transform: uppercase; }
+.rcpt .r-total .v { font-family: var(--font-serif); font-size: 2.1rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.rcpt .r-wait { margin: auto; text-align: center; font-size: 0.68rem; letter-spacing: 0.14em; line-height: 2; color: color-mix(in srgb, var(--band-fg) 62%, var(--band-bg)); padding-block: 2rem; }
+/* Score colours tuned for the dark receipt (lighter than the .s-* set). */
+.rcpt .rs-good { color: #8FC49A; }
+.rcpt .rs-mid { color: #C9A36B; }
+.rcpt .rs-bad { color: #E08A70; }
+/* Variation-1 print: rows rise in sequence, leaders draw across, total last. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .rcpt.print .r-site { animation: bh-rise 0.45s var(--ease-out) both; }
+  .rcpt.print .r-line { animation: bh-rise 0.45s var(--ease-out) both; }
+  .rcpt.print .r-line .leader { transform-origin: left; animation: bh-growx 0.5s var(--ease-out) both; }
+  .rcpt.print .r-line:nth-of-type(1) { animation-delay: 0.15s; }
+  .rcpt.print .r-line:nth-of-type(1) .leader { animation-delay: 0.25s; }
+  .rcpt.print .r-line:nth-of-type(2) { animation-delay: 0.3s; }
+  .rcpt.print .r-line:nth-of-type(2) .leader { animation-delay: 0.4s; }
+  .rcpt.print .r-line:nth-of-type(3) { animation-delay: 0.45s; }
+  .rcpt.print .r-line:nth-of-type(3) .leader { animation-delay: 0.55s; }
+  .rcpt.print .r-line:nth-of-type(4) { animation-delay: 0.6s; }
+  .rcpt.print .r-line:nth-of-type(4) .leader { animation-delay: 0.7s; }
+  .rcpt.print .r-total { animation: bh-rise 0.5s var(--ease-out) 0.85s both; }
+  @keyframes bh-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes bh-growx { from { transform: translateY(-4px) scaleX(0); } to { transform: translateY(-4px) scaleX(1); } }
+}

@@ -14,7 +14,13 @@ export const manrope = Manrope({
   weight: ['400', '500', '600', '700'],
   style: ['normal'],
   variable: '--font-sans',
-  display: 'swap',
+  // 'optional' instead of 'swap': a late font swap repaints the headline and
+  // re-fires LCP at the swap moment, which is what pinned simulated mobile
+  // LCP at ~4.5s (the text painted at FCP, then Fraunces arrived and reset
+  // the clock). With 'optional', fonts that miss the ~100ms block window sit
+  // out that pageview (cached for the next one) and LCP = first text paint.
+  // Fast connections and repeat visits still get the brand fonts.
+  display: 'optional',
 })
 
 export const fraunces = Fraunces({
@@ -22,7 +28,7 @@ export const fraunces = Fraunces({
   weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
   variable: '--font-serif',
-  display: 'swap',
+  display: 'optional',
 })
 
 export const jetbrains = JetBrains_Mono({

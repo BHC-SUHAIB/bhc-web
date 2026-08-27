@@ -5,6 +5,7 @@ import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import { cn } from '@/lib/utils'
 import { PricingCta } from './PricingCta'
 import { BundleBuyButton } from './BundleBuyButton'
+import { BundleCards, BundleReceipt, BundleBanners } from './BundleVariants'
 import type { BundleOfferBlock } from '@/payload-types'
 
 // Bundles combine a website build with care or SEO at a discount vs buying the
@@ -17,6 +18,14 @@ import type { BundleOfferBlock } from '@/payload-types'
 export function BundleOffer(b: BundleOfferBlock) {
   const bundles = b.bundles ?? []
   const hasBg = !!b.backgroundImageUrl
+
+  // Layout variants (CMS-selectable). "receipt" is the site default; the
+  // configurator markup below remains as the legacy option.
+  const variant = (b as { layoutVariant?: string | null }).layoutVariant ?? 'receipt'
+  if (variant === 'receipt') return <BundleReceipt {...b} />
+  if (variant === 'cards') return <BundleCards {...b} />
+  if (variant === 'banners') return <BundleBanners {...b} />
+
   return (
     <section className="section relative isolate overflow-hidden scroll-mt-24" id="bundles">
       {hasBg ? (

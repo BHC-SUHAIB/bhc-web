@@ -249,6 +249,7 @@ export const bundlesBlock = {
   blockType: 'bundleOffer',
   eyebrow: 'Bundles',
   headline: 'Everything a new location needs.',
+  layoutVariant: 'receipt',
   backgroundImageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80',
   bundles: [
     {

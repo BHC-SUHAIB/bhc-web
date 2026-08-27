@@ -66,6 +66,18 @@ export const BundleOffer: Block = {
     { name: 'headline', type: 'text', required: true, defaultValue: 'Save by bundling.' },
     { name: 'description', type: 'textarea' },
     {
+      name: 'layoutVariant',
+      type: 'select',
+      defaultValue: 'receipt',
+      admin: { description: 'How the bundles render: itemized receipt (default), the legacy configurator rows, pricing-style tier cards, or wide stacked banners.' },
+      options: [
+        { label: 'Itemized receipt', value: 'receipt' },
+        { label: 'Configurator rows + summary band', value: 'configurator' },
+        { label: 'Tier cards', value: 'cards' },
+        { label: 'Stacked feature banners', value: 'banners' },
+      ],
+    },
+    {
       name: 'backgroundImageUrl',
       type: 'text',
       admin: { description: 'Optional faint background image URL. Renders behind the bundle cards at low opacity.' },

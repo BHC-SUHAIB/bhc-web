@@ -98,12 +98,15 @@ export const ContactSubmissions: CollectionConfig = {
             // Reply-To points at the submitter so hitting "Reply" in your
             // inbox opens a draft to them, not to the no-reply sender.
             replyTo: doc.email,
-            subject: `New inquiry from ${doc.name}`,
+            subject: doc.formType === 'demo-request'
+              ? `Demo site request from ${doc.name}`
+              : `New inquiry from ${doc.name}`,
             html: [
               `<h2 style="font-family:Georgia,serif;">New contact inquiry</h2>`,
               `<p><strong>Name:</strong> ${escapeHtml(doc.name)}</p>`,
               `<p><strong>Email:</strong> <a href="mailto:${encodeURIComponent(doc.email)}">${escapeHtml(doc.email)}</a></p>`,
               doc.company ? `<p><strong>Company:</strong> ${escapeHtml(doc.company)}</p>` : '',
+              doc.listingUrl ? `<p><strong>Listing / site:</strong> ${escapeHtml(doc.listingUrl)}</p>` : '',
               doc.projectType ? `<p><strong>Project type:</strong> ${escapeHtml(doc.projectType)}</p>` : '',
               doc.budgetRange ? `<p><strong>Budget:</strong> ${escapeHtml(doc.budgetRange)}</p>` : '',
               `<hr style="border:none;border-top:1px solid #ccc;margin:16px 0;">`,
@@ -123,6 +126,18 @@ export const ContactSubmissions: CollectionConfig = {
   fields: [
     { name: 'name', type: 'text', required: true },
     { name: 'email', type: 'email', required: true },
+    {
+      name: 'formType', type: 'select', defaultValue: 'contact',
+      admin: { description: 'Which form produced this lead.' },
+      options: [
+        { label: 'Contact form', value: 'contact' },
+        { label: 'Demo site request', value: 'demo-request' },
+      ],
+    },
+    {
+      name: 'listingUrl', type: 'text',
+      admin: { description: 'Demo requests: the Google Business Profile link or current website.' },
+    },
     { name: 'phone', type: 'text', admin: { description: 'Optional. Only present if the submitter wanted SMS follow-up.' } },
     {
       name: 'smsConsent', type: 'checkbox', defaultValue: false,
@@ -142,14 +157,20 @@ export const ContactSubmissions: CollectionConfig = {
         {
           name: 'projectType', type: 'select', admin: { width: '50%' },
           options: [
+            // Current catalog
             { label: 'Website', value: 'website' },
-            { label: 'Web app', value: 'webapp' },
-            { label: 'Mobile app', value: 'mobile' },
-            { label: 'SEO engagement', value: 'seo' },
-            { label: 'Hosting / infrastructure', value: 'hosting' },
-            { label: 'Brand / design', value: 'brand' },
-            { label: 'Not sure yet', value: 'unsure' },
-            { label: 'Other', value: 'other' },
+            { label: 'AI Front Desk', value: 'ai-front-desk' },
+            { label: 'Automation', value: 'automation' },
+            { label: 'Internal tool', value: 'internal-tool' },
+            { label: 'Local SEO + AI Search', value: 'seo' },
+            { label: 'Fix-it', value: 'fix-it' },
+            { label: 'Something else', value: 'other' },
+            // Legacy values kept so older submissions still display
+            { label: 'Web app (legacy)', value: 'webapp' },
+            { label: 'Mobile app (legacy)', value: 'mobile' },
+            { label: 'Hosting (legacy)', value: 'hosting' },
+            { label: 'Brand (legacy)', value: 'brand' },
+            { label: 'Not sure yet (legacy)', value: 'unsure' },
           ],
         },
       ],
@@ -157,12 +178,19 @@ export const ContactSubmissions: CollectionConfig = {
     {
       name: 'budgetRange', type: 'select',
       options: [
-        { label: 'Under $5k', value: 'under-5k' },
-        { label: '$5k \u2013 $10k', value: '5-10k' },
-        { label: '$10k \u2013 $25k', value: '10-25k' },
-        { label: '$25k \u2013 $50k', value: '25-50k' },
-        { label: '$50k+', value: '50k-plus' },
-        { label: 'Not sure yet', value: 'unsure' },
+        // Current ranges
+        { label: 'Under $500', value: 'under-500' },
+        { label: '$500 to $1,000', value: '500-1k' },
+        { label: '$1,000 to $2,500', value: '1k-2500' },
+        { label: '$2,500 to $5,000', value: '2500-5k' },
+        { label: '$5,000+', value: '5k-plus' },
+        // Legacy values kept so older submissions still display
+        { label: 'Under $5k (legacy)', value: 'under-5k' },
+        { label: '$5k to $10k (legacy)', value: '5-10k' },
+        { label: '$10k to $25k (legacy)', value: '10-25k' },
+        { label: '$25k to $50k (legacy)', value: '25-50k' },
+        { label: '$50k+ (legacy)', value: '50k-plus' },
+        { label: 'Not sure yet (legacy)', value: 'unsure' },
       ],
     },
     { name: 'message', type: 'textarea', required: true, minLength: 10, maxLength: 5000 },

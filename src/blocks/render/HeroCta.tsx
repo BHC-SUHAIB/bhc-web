@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/Button'
 import { pushEvent, pushEventThenNavigate } from '@/lib/analytics'
-import { toContactAnchor, relabelDiscount } from '@/lib/redesign'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'brass'
 
@@ -19,7 +18,6 @@ type Props = {
 
 // Wraps the shared Button so we can fire hero_cta_click without making the
 // whole Hero block a client component. Applies the revision transforms:
-// /contact CTAs route to the contact-form anchor, "Founding" → "Discounted".
 export function HeroCta({ href, label, variant, position, onPhoto }: Props) {
   const v = variant ?? 'primary'
   const resolved =
@@ -28,8 +26,8 @@ export function HeroCta({ href, label, variant, position, onPhoto }: Props) {
       : onPhoto && v === 'secondary'
         ? 'onPhotoSecondary'
         : v
-  const finalHref = toContactAnchor(href)
-  const finalLabel = relabelDiscount(label)
+  const finalHref = href
+  const finalLabel = label
   const isBookingHref = /calendly\.com|cal\.com/i.test(href)
   const isPhoneHref = /^tel:/i.test(href)
 

@@ -68,68 +68,91 @@ export default async function PortfolioPage() {
             built, the stack we chose, and what actually changed for them.
           </p>
           <div className="cta-row">
-            <Button href="/express-website" variant="brass" size="lg">
-              Run my free audit
+            <Button href="/free-demo-site" variant="brass" size="lg">
+              See your site first
             </Button>
-            <Button href="/services#website-packages" variant="onPhotoGhost" size="lg">
-              Get discounted pricing
+            <Button href="/services" variant="onPhotoGhost" size="lg">
+              See services and pricing
             </Button>
           </div>
         </Container>
       </section>
 
-      <section className="section-tight">
-        <Container size="xl">
-          {projects.length === 0 ? (
+      {projects.length === 0 ? (
+        <section className="section-tight">
+          <Container size="xl">
             <p className="text-[var(--color-fg-muted)]">No projects published yet.</p>
-          ) : (
-            <div className="work-grid">
-              {projects.map((p, idx) => {
-                const hero = typeof p.heroImage === 'object' ? (p.heroImage as Media | null) : null
-                // Surface the first metric (if any) as the card's result line.
-                const result = p.metrics && p.metrics.length > 0 ? p.metrics[0] : null
-                return (
-                  <Link key={p.id} href={`/portfolio/${p.slug}`} className="work">
-                    <div className="shot relative">
-                      {hero?.url ? (
-                        <Image
-                          src={hero.url as string}
-                          alt={(hero.alt as string) ?? p.title}
-                          fill
-                          sizes="(min-width:768px) 50vw, 100vw"
-                          // First card is the mobile LCP candidate — without
-                          // priority it loaded after JS, pushing LCP to 9.5s.
-                          // Lighthouse audit 2026-05-05.
-                          priority={idx === 0}
-                          fetchPriority={idx === 0 ? 'high' : 'auto'}
-                        />
-                      ) : (
-                        <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="wide" />
-                      )}
-                    </div>
-                    <div className="meta">
-                      {p.projectType || p.industry ? (
-                        <div className="tags">
-                          {p.projectType ? <span className="chip">{p.projectType}</span> : null}
-                          {p.industry ? <span className="chip">{p.industry}</span> : null}
+          </Container>
+        </section>
+      ) : (
+        // Three grouped sections in fixed order; empty groups are hidden.
+        (
+          [
+            { key: 'client', heading: 'Client sites' },
+            { key: 'concept', heading: 'Concepts' },
+            { key: 'product', heading: 'Products we built' },
+          ] as const
+        ).map(({ key, heading }) => {
+          // Older entries predate the `group` field; treat missing as product.
+          const groupProjects = projects.filter((p) => ((p.group as string | null) ?? 'product') === key)
+          if (groupProjects.length === 0) return null
+          return (
+            <section key={key} className="section-tight">
+              <Container size="xl">
+                <div className="section-head">
+                  <h2 className="font-serif font-semibold text-[clamp(1.4rem,2.4vw,2rem)] leading-[1.15] tracking-[-0.02em]">
+                    {heading}
+                  </h2>
+                </div>
+                <div className="work-grid">
+                  {groupProjects.map((p, idx) => {
+                    const hero = typeof p.heroImage === 'object' ? (p.heroImage as Media | null) : null
+                    // Surface the first metric (if any) as the card's result line.
+                    const result = p.metrics && p.metrics.length > 0 ? p.metrics[0] : null
+                    return (
+                      <Link key={p.id} href={`/portfolio/${p.slug}`} className="work">
+                        <div className="shot relative">
+                          {hero?.url ? (
+                            <Image
+                              src={hero.url as string}
+                              alt={(hero.alt as string) ?? p.title}
+                              fill
+                              sizes="(min-width:768px) 50vw, 100vw"
+                              // First card is the mobile LCP candidate — without
+                              // priority it loaded after JS, pushing LCP to 9.5s.
+                              // Lighthouse audit 2026-05-05.
+                              priority={key === 'client' && idx === 0}
+                              fetchPriority={key === 'client' && idx === 0 ? 'high' : 'auto'}
+                            />
+                          ) : (
+                            <Placeholder seed={p.slug ?? p.title} label={p.client ?? p.title} sublabel={p.projectType ?? undefined} aspect="wide" />
+                          )}
                         </div>
-                      ) : null}
-                      <h3>{p.title}</h3>
-                      {p.summary ? <p>{p.summary}</p> : null}
-                      {result ? (
-                        <span className="result">
-                          <ResultArrow />
-                          {result.label ? `${result.value} ${result.label}` : result.value}
-                        </span>
-                      ) : null}
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          )}
-        </Container>
-      </section>
+                        <div className="meta">
+                          {p.projectType || p.industry ? (
+                            <div className="tags">
+                              {p.projectType ? <span className="chip">{p.projectType}</span> : null}
+                              {p.industry ? <span className="chip">{p.industry}</span> : null}
+                            </div>
+                          ) : null}
+                          <h3>{p.title}</h3>
+                          {p.summary ? <p>{p.summary}</p> : null}
+                          {result ? (
+                            <span className="result">
+                              <ResultArrow />
+                              {result.label ? `${result.value} ${result.label}` : result.value}
+                            </span>
+                          ) : null}
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </Container>
+            </section>
+          )
+        })
+      )}
 
       {/* End-of-index CTA band — drives the same conversion as the rest of the
           redesign. `.cta-band.emph` is the ink-on-band variant. */}
@@ -143,7 +166,7 @@ export default async function PortfolioPage() {
               whenever you&apos;re ready.
             </p>
             <div className="cta-row">
-              <Button href="/express-website" variant="brass" size="lg">Run my free audit</Button>
+              <Button href="/free-demo-site" variant="brass" size="lg">See your site first</Button>
               <Button href="/contact#contact-form" variant="onPhotoGhost" size="lg">Start your project</Button>
             </div>
           </div>

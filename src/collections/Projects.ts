@@ -39,6 +39,16 @@ export const Projects: CollectionConfig = {
     { name: 'summary', type: 'textarea', required: true, admin: { description: 'Short 1-2 line teaser shown on cards and the portfolio listing' } },
     { name: 'heroImage', type: 'upload', relationTo: 'media' as const, admin: { description: 'Upload from Media library. Recommended 2400\u00d71350 (16:9).' } },
 
+    {
+      name: 'group', type: 'select', defaultValue: 'product', required: true,
+      admin: { description: 'Which /portfolio section this belongs to: paid client work, demo/concept sites, or our own products.' },
+      options: [
+        { label: 'Client site', value: 'client' },
+        { label: 'Concept / demo', value: 'concept' },
+        { label: 'Product we built', value: 'product' },
+      ],
+    },
+
     { type: 'row', fields: [
       { name: 'client', type: 'text', admin: { width: '33%' } },
       { name: 'industry', type: 'text', admin: { width: '33%' } },

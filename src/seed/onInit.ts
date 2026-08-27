@@ -2,6 +2,7 @@
 /* Seed initial content via Payload's onInit hook. Runs once on server boot; idempotent (updates instead of duplicates). */
 import path from 'node:path'
 import type { Payload } from 'payload'
+import * as resetContent from './reset-content'
 import { pushDevSchema } from '@payloadcms/drizzle'
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@blackhartconsulting.com'
@@ -116,64 +117,80 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info(`[seed] admin user created: ${ADMIN_EMAIL} (password read from SEED_ADMIN_PASSWORD env; change at first login)`)
     }
 
-    await payload.updateGlobal({
-      slug: 'siteSettings',
-      data: {
-        siteName: 'Black Hart Consulting',
-        tagline: 'Websites, SEO, apps, and hosting \u2014 done right.',
-        defaultMetaDescription: 'Custom websites, SEO, and managed hosting from a Houston-based digital studio. Fixed-price builds in days, not months.',
-        defaultTheme: 'dark',
-        contactEmail: 'hello@blackhartconsulting.com',
-        contactPhone: '(866) 434-9777',
-      } as any,
-    })
+    // Globals are seeded only when empty (or with FORCE_GLOBALS_UPSERT=true),
+    // so admin edits and content-script writes survive restarts. A fresh
+    // database still comes up with the correct nav, CTA, and footer.
+    const forceGlobals = process.env.FORCE_GLOBALS_UPSERT === 'true'
 
-    await payload.updateGlobal({
-      slug: 'header',
-      data: {
-        nav: [
-          { label: 'Services', href: '/services' },
-          { label: 'Portfolio', href: '/portfolio' },
-          { label: 'Articles', href: '/articles' },
-          { label: 'About', href: '/about' },
-          { label: 'Contact', href: '/contact' },
-        ],
-        cta: { show: true, label: 'Start a project', href: '/contact' },
-      } as any,
-    })
+    const existingSettings = await payload.findGlobal({ slug: 'siteSettings' })
+    if (forceGlobals || !existingSettings?.siteName) {
+      await payload.updateGlobal({
+        slug: 'siteSettings',
+        data: {
+          siteName: 'Black Hart Consulting',
+          tagline: 'Websites, AI phone answering, and automations for service businesses.',
+          defaultMetaDescription: 'Websites, AI phone answering, and automations for service businesses. Built in days at fixed prices by a Houston studio.',
+          defaultTheme: 'dark',
+          contactEmail: 'hello@blackhartconsulting.com',
+          contactPhone: '(866) 434-9777',
+        } as any,
+      })
+    }
 
-    await payload.updateGlobal({
-      slug: 'footer',
-      data: {
-        tagline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
-        columns: [
-          { heading: 'Services', links: [
-            { label: 'Care plans', href: '/services#care' },
-            { label: 'Website design & build', href: '/services#websites' },
-            { label: 'SEO & search', href: '/services#seo' },
-            { label: 'App design', href: '/services#apps' },
-            { label: 'Hosting & infrastructure', href: '/services#hosting' },
-          ] },
-          { heading: 'Studio', links: [
-            { label: 'Portfolio', href: '/portfolio' },
+    const existingHeader = await payload.findGlobal({ slug: 'header' })
+    if (forceGlobals || !existingHeader?.nav?.length) {
+      await payload.updateGlobal({
+        slug: 'header',
+        data: {
+          nav: [
+            { label: 'Services', href: '/services' },
+            { label: 'AI Front Desk', href: '/ai-front-desk' },
+            { label: 'Work', href: '/portfolio' },
+            { label: 'Articles', href: '/articles' },
             { label: 'About', href: '/about' },
             { label: 'Contact', href: '/contact' },
-          ] },
-          { heading: 'Resources', links: [
-            { label: 'Articles', href: '/articles' },
-            { label: 'Pricing', href: '/services' },
-            { label: 'SMS opt-in', href: '/sms' },
-            { label: 'Privacy Policy', href: '/privacy' },
-          ] },
-        ],
-        social: [
-          { platform: 'linkedin', href: 'https://linkedin.com/company/blackhartconsulting' },
-          { platform: 'github', href: 'https://github.com/blackhartconsulting' },
-          { platform: 'email', href: 'mailto:hello@blackhartconsulting.com' },
-        ],
-        copyright: `\u00a9 ${new Date().getFullYear()} Black Hart Consulting LLC`,
-      } as any,
-    })
+          ],
+          cta: { show: true, label: 'See your site first', href: '/free-demo-site' },
+        } as any,
+      })
+    }
+
+    const existingFooter = await payload.findGlobal({ slug: 'footer' })
+    if (forceGlobals || !existingFooter?.columns?.length) {
+      await payload.updateGlobal({
+        slug: 'footer',
+        data: {
+          tagline: 'Websites, phone answering, and automations for businesses that care how their work shows up.',
+          columns: [
+            { heading: 'Services', links: [
+              { label: 'Websites', href: '/services#websites' },
+              { label: 'AI Front Desk', href: '/ai-front-desk' },
+              { label: 'Automation', href: '/automation' },
+              { label: 'Local SEO + AI Search', href: '/services#seo' },
+              { label: 'Fix-it menu', href: '/fix-it' },
+            ] },
+            { heading: 'Studio', links: [
+              { label: 'Free demo site', href: '/free-demo-site' },
+              { label: 'Work', href: '/portfolio' },
+              { label: 'About', href: '/about' },
+              { label: 'Contact', href: '/contact' },
+            ] },
+            { heading: 'Resources', links: [
+              { label: 'Articles', href: '/articles' },
+              { label: 'Pricing', href: '/services' },
+              { label: 'SMS opt-in', href: '/sms' },
+              { label: 'Privacy Policy', href: '/privacy' },
+            ] },
+          ],
+          social: [
+            { platform: 'linkedin', href: 'https://linkedin.com/company/blackhartconsulting' },
+            { platform: 'github', href: 'https://github.com/blackhartconsulting' },
+            { platform: 'email', href: 'mailto:hello@blackhartconsulting.com' },
+          ],
+          copyright: `\u00a9 ${new Date().getFullYear()} Black Hart Consulting LLC`,
+        } as any,
+      })
+    }
 
     // ensureMedia is used by both page seeds (founder portrait, article hero
     // images) and project seeds (case-study screenshots). Declared once up
@@ -194,189 +211,9 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     // --- Pages ---
-    const servicesBlock = {
-      blockType: 'services',
-      eyebrow: 'What we do',
-      headline: 'Four disciplines, one team.',
-      description: 'Most agencies hand you off to a different vendor for each service. We don\u2019t. You get one engagement manager and one bill.',
-      items: [
-        { title: 'Website design & build', icon: 'globe', description: 'Bespoke marketing sites and web apps built on Next.js, shipped with a CMS your team actually uses.', bullets: [
-          { label: 'Design system from scratch or on top of your brand' },
-          { label: 'CMS-driven content, every section editable' },
-          { label: 'Performance budget \u2014 loads under 1s on 3G' },
-        ] },
-        { title: 'SEO & search', icon: 'search', description: 'Technical SEO audits, content strategy, and month-over-month optimization that actually moves rankings.', bullets: [
-          { label: 'Full technical audit with prioritized action plan' },
-          { label: 'Structured data, Core Web Vitals, crawl budget' },
-          { label: 'Content architecture and internal linking' },
-        ] },
-        { title: 'App design & development', icon: 'smartphone', description: 'Webapps and mobile experiences for teams who need more than a marketing site.', bullets: [
-          { label: 'Product discovery and wireframes' },
-          { label: 'Webapps in Next.js or React' },
-          { label: 'Native iOS / Android available on a project basis' },
-        ] },
-        { title: 'Hosting & infrastructure', icon: 'server', description: 'Managed hosting with actual humans answering when something breaks.', bullets: [
-          { label: 'Deploys to DigitalOcean, AWS, or Vercel' },
-          { label: 'Monitoring, backups, CDN, TLS' },
-          { label: 'One flat monthly fee, no surprise bills' },
-        ] },
-        { title: 'Performance', icon: 'zap', description: 'Make your existing site fast \u2014 often the highest-ROI engagement we run.', bullets: [
-          { label: 'Lighthouse + real-user-monitoring' },
-          { label: 'Image, font, and bundle optimization' },
-          { label: 'Measurable before/after in 2 weeks' },
-        ] },
-        { title: 'Strategy & consulting', icon: 'lightbulb', description: 'Not ready to build? Hire us for a strategic sprint.', bullets: [
-          { label: 'Stack and architecture review' },
-          { label: 'CMS recommendations' },
-          { label: 'Pre-rebuild planning and roadmapping' },
-        ] },
-      ],
-    }
-
-    const websitesPricingBlock = {
-      blockType: 'pricing',
-      eyebrow: 'Websites',
-      headline: 'Fixed-price builds. No surprise invoices.',
-      description: 'Every website project is scoped to a fixed fee before kickoff. Hosting is included on every Care plan, or $79/mo standalone.',
-      tiers: [
-        { name: 'Express Landing Page', price: '$1,495', priceNote: 'one-time', description: 'Template-driven, conversion-focused. Live in 5\u20137 days.', features: [
-          { label: '1 conversion-focused landing page', included: true },
-          { label: 'Custom-styled, on-brand', included: true },
-          { label: 'Analytics & form integration', included: true },
-          { label: 'Deployed on your hosting or ours', included: true },
-          { label: 'Ongoing content updates', included: false },
-        ], cta: { label: 'Start an express page', href: '/contact' } },
-        { name: 'Custom Landing Page', price: '$2,500', priceNote: 'one-time', description: 'A fully custom-designed landing page for a launch, event, or campaign.', features: [
-          { label: '1 fully custom-designed page', included: true },
-          { label: 'CMS-ready \u2014 edit copy & images yourself', included: true },
-          { label: 'Analytics & form integration', included: true },
-          { label: 'Deployed on your hosting or ours', included: true },
-          { label: 'Ongoing content updates', included: false },
-        ], cta: { label: 'Start a landing page', href: '/contact' } },
-        { name: 'Starter Site', price: '$4,500', priceNote: 'one-time', description: 'Up to 5 bespoke pages with a real CMS \u2014 for businesses that need more than a one-pager.', features: [
-          { label: 'Up to 5 bespoke pages', included: true },
-          { label: 'Block-based CMS', included: true },
-          { label: 'Technical SEO foundation', included: true },
-          { label: 'Performance budget guarantee', included: true },
-          { label: '3\u20134 week delivery', included: true },
-        ], cta: { label: 'Start a Starter Site', href: '/contact' } },
-        { name: 'Marketing Site', price: '$8,500', priceNote: 'typical 6-week engagement', description: 'Multi-page marketing site with full CMS, blog, and case studies. Our most common engagement.', highlighted: true, features: [
-          { label: 'Up to 12 bespoke pages', included: true },
-          { label: 'Full block-based CMS', included: true },
-          { label: 'Case study and blog systems', included: true },
-          { label: 'Technical SEO foundation', included: true },
-          { label: 'Performance budget guarantee', included: true },
-          { label: 'First 30 days of SEO work included', included: true },
-        ], cta: { label: 'Start a Marketing Site', href: '/contact' } },
-      ],
-    }
-
-    const carePricingBlock = {
-      blockType: 'pricing',
-      eyebrow: 'Care plans',
-      headline: 'Stay fast, secure, and improving \u2014 month over month.',
-      description: 'Every Care plan includes hosting, monitoring, backups, and SSL. Higher tiers add development hours and SEO work.',
-      tiers: [
-        { name: 'Care', price: '$295', priceNote: 'per month', description: 'Hands-off hosting and maintenance for a site that just needs to stay up.', features: [
-          { label: 'Managed hosting + monitoring + backups', included: true },
-          { label: 'SSL, CDN, uptime monitoring', included: true },
-          { label: '2 hrs/mo for small edits', included: true },
-          { label: 'Monthly performance report', included: true },
-          { label: 'Direct Slack channel', included: false },
-        ], cta: { label: 'Start a Care plan', href: '/contact' } },
-        { name: 'Growth', price: '$895', priceNote: 'per month', description: 'For sites that should be improving every month, not just staying online.', highlighted: true, features: [
-          { label: 'Everything in Care', included: true },
-          { label: '6 hrs/mo of dev or SEO work', included: true },
-          { label: 'Monthly strategy check-in', included: true },
-          { label: 'Same-week turnaround on changes', included: true },
-          { label: 'Direct Slack channel', included: false },
-        ], cta: { label: 'Start a Growth plan', href: '/contact' } },
-        { name: 'Scale', price: '$1,895', priceNote: 'per month', description: 'For revenue-critical sites that need a partner on call, not a vendor.', features: [
-          { label: 'Everything in Growth', included: true },
-          { label: '12 hrs/mo of dev or SEO work', included: true },
-          { label: 'Direct Slack channel', included: true },
-          { label: 'Same-day SLA on small changes', included: true },
-          { label: 'Quarterly architecture review', included: true },
-        ], cta: { label: 'Talk about Scale', href: '/contact' } },
-      ],
-    }
-
-    const seoPricingBlock = {
-      blockType: 'pricing',
-      eyebrow: 'SEO retainers',
-      headline: 'Search and AI-search visibility. Month over month.',
-      description: 'Standalone SEO work \u2014 independent of website design. Sold separately because most businesses need ongoing search work, not another rebuild.',
-      tiers: [
-        { name: 'Local SEO Starter', price: '$750', priceNote: 'per month', description: 'Aimed at single-location service businesses competing locally.', features: [
-          { label: 'Google Business Profile optimization', included: true },
-          { label: 'Local citations + schema markup', included: true },
-          { label: '1 SEO-optimized blog post / month', included: true },
-          { label: 'Monthly ranking + traffic report', included: true },
-          { label: 'Technical fixes (as needed)', included: true },
-        ], cta: { label: 'Start Local SEO', href: '/contact' } },
-        { name: 'SEO Growth', price: '$1,495', priceNote: 'per month', description: 'Full-stack SEO for businesses ready to compete in a real market.', highlighted: true, features: [
-          { label: 'Everything in Local SEO Starter', included: true },
-          { label: '2 content pieces / month', included: true },
-          { label: 'Internal linking + content architecture', included: true },
-          { label: 'GEO / AI-search optimization', included: true },
-          { label: 'Conversion tracking setup', included: true },
-        ], cta: { label: 'Start SEO Growth', href: '/contact' } },
-        { name: 'SEO Scale', price: '$2,495', priceNote: 'per month', description: 'For businesses where organic search is a primary revenue channel.', features: [
-          { label: 'Everything in SEO Growth', included: true },
-          { label: 'Outreach + digital PR', included: true },
-          { label: 'Deep technical SEO work', included: true },
-          { label: 'Custom reporting dashboard', included: true },
-          { label: 'Quarterly strategy review', included: true },
-        ], cta: { label: 'Talk about SEO Scale', href: '/contact' } },
-      ],
-    }
-
-    const foundingBannerBlock = {
-      blockType: 'cta',
-      headline: 'Founding Client pricing \u2014 30% off your first build.',
-      description: 'The first 5 paid clients receive 30% off any Websites tier in exchange for a published case study. 5 spots remaining.',
-      primaryCta: { label: 'Claim a founding spot', href: '/contact' },
-      variant: 'emphasized',
-    }
-
-    const homeData: any = {
-      title: 'Home', slug: 'home', publishedAt: new Date().toISOString(),
-      seo: { metaTitle: 'Black Hart Consulting \u2014 Websites, SEO, apps, hosting', metaDescription: 'Steady craft for businesses that care how their work shows up online.' },
-      layout: [
-        { blockType: 'hero', eyebrow: 'Built by hand', headline: 'Websites, SEO, and hosting for businesses that care how their work shows up online.',
-          subheadline: 'We design the site. We make it rank. We keep it online. One team, one bill, one line of accountability.', align: 'left',
-          ctas: [
-            { label: 'Start a project', href: '/contact', variant: 'primary' },
-            { label: 'See recent work', href: '/portfolio', variant: 'ghost' },
-          ] },
-        { blockType: 'stats', eyebrow: 'Signal, not noise', items: [
-          { value: '5 days', label: 'Fastest production launch', description: 'Prometheus Minds, kickoff to live, including 56 commits.' },
-          { value: '<200KB', label: 'First-paint JS shipped', description: 'Down from the 1MB+ that most templates ship.' },
-          { value: '$33/mo', label: 'All-in hosting cost', description: 'WAYGFT runs on a $28 droplet + $5 Spaces bucket.' },
-        ] },
-        servicesBlock,
-        { blockType: 'featuredProjects', eyebrow: 'Recent work', headline: 'A few projects we\u2019re proud of.',
-          description: 'The short version is below. Each case study goes into the why behind the framework choices, what we shipped, and what actually changed for the client.',
-          mode: 'latest', limit: 3, viewAllLabel: 'View all projects', viewAllHref: '/portfolio' },
-        foundingBannerBlock,
-        websitesPricingBlock,
-        carePricingBlock,
-        seoPricingBlock,
-        { blockType: 'testimonials', eyebrow: 'Clients', headline: 'What they said after launch.', mode: 'latest', limit: 3 },
-        { blockType: 'faq', eyebrow: 'Questions', headline: 'Common questions we get.', items: [
-          { question: 'Do you work with clients outside your region?', answer: 'Yes. Most of our clients are remote, and time zones are rarely an issue.' },
-          { question: 'How do you price custom work?', answer: 'Scoped fixed-price for anything that fits a clear brief. Hourly retainers for ongoing work. We\u2019ll give you a quote within 48 hours of our initial call.' },
-          { question: 'Do you handle hosting, or just build the site?', answer: 'Both. Every Care plan (Care, Growth, Scale) bundles managed hosting, monitoring, backups, and SSL \u2014 so you never see a separate hosting bill. Prefer to host elsewhere? We\u2019ll deploy to your existing host (DigitalOcean, AWS, Vercel, etc.) and document everything so you\u2019re never stuck. Standalone hosting without a Care plan is $79/mo.' },
-          { question: 'What stack do you build on?', answer: 'Default is Next.js + Payload CMS + Postgres, deployed to DigitalOcean. We\u2019ll use a different stack if your situation calls for it \u2014 for example, Shopify for a commerce-first site. We pick the right tool, not the fashionable one.' },
-          { question: 'Can we edit the site after launch?', answer: 'Yes. Every site ships with a full CMS \u2014 you can add, remove, and reorder sections, change copy, swap images, publish blog posts, and edit pricing without touching code.' },
-        ] },
-        { blockType: 'cta', headline: 'Let\u2019s talk about what you\u2019re building.',
-          description: 'No hard sell. A 30-minute call where we understand what you\u2019re trying to do, and figure out whether we\u2019re a fit.',
-          primaryCta: { label: 'Book a call', href: '/contact' },
-          secondaryCta: { label: 'See the portfolio', href: '/portfolio' },
-          variant: 'emphasized' },
-      ],
-    }
+    // Canonical page layouts live in src/seed/reset-content.ts (2026-08
+    // pricing reset) and are shared with scripts/pricing-reset/apply.mts.
+    const homeData: any = { ...resetContent.homePage(), publishedAt: new Date().toISOString() }
 
     const existingHome = await payload.find({ collection: 'pages', where: { slug: { equals: 'home' } }, limit: 1 })
     if (existingHome.totalDocs === 0) {
@@ -436,6 +273,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           ['h3', 'Stay involved after launch.'],
           ['p', 'Most agencies hand you a site and walk away. We host, monitor, and improve yours for as long as you\u2019d like \u2014 through Care, Growth, or Scale plans that scale up or down with your needs.'],
         ]) },
+        resetContent.howWeBuildBlock,
         { blockType: 'cta', headline: 'Want to work together?', primaryCta: { label: 'Get in touch', href: '/contact' } },
       ],
     }
@@ -470,10 +308,11 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           showCompanyField: true,
           showProjectTypeField: true,
           showBudgetField: true,
+          noCallNeeded: true,
           submitLabel: 'Send inquiry' },
         { blockType: 'faq', headline: 'Common questions before you write', items: [
           { question: 'What should I include in my first note?', answer: 'A sentence on your company, a sentence on what you\u2019re trying to build or fix, and a rough budget range if you have one. We\u2019ll take it from there.' },
-          { question: 'What\u2019s the engagement process?', answer: '1) 30-min intro call. 2) We send a scoped proposal within 48 hours. 3) You review, we iterate. 4) Signed contract, 50% deposit, kickoff within a week.' },
+          { question: 'What\u2019s the engagement process?', answer: 'Write what you need, or use the Buy button on any package. Payment runs through Stripe: pay in full or subscribe, and a 50 percent deposit by invoice is available on request for Pro Site, Custom Build, and Internal Tool. Kickoff starts the moment your intake form is in.' },
           { question: 'Do you take projects outside North America?', answer: 'Yes. Most of our clients are remote. We\u2019ve shipped work across the US, UK, and Australia. Time zones are rarely an issue.' },
         ] },
       ],
@@ -492,19 +331,8 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     }
 
     // Services page
-    const servicesData: any = {
-      title: 'Services', slug: 'services', publishedAt: new Date().toISOString(),
-      layout: [
-        { blockType: 'hero', eyebrow: 'Services', headline: 'Four disciplines. One senior team.',
-          subheadline: 'The short version is on the home page. This is the long version.', align: 'left' },
-        servicesBlock,
-        foundingBannerBlock,
-        websitesPricingBlock,
-        carePricingBlock,
-        seoPricingBlock,
-        { blockType: 'cta', headline: 'Talk to us about your project.', primaryCta: { label: 'Get in touch', href: '/contact' }, variant: 'default' },
-      ],
-    }
+    const servicesData: any = { ...resetContent.servicesPage(), publishedAt: new Date().toISOString() }
+
     const existingServices = await payload.find({ collection: 'pages', where: { slug: { equals: 'services' } }, limit: 1 })
     if (existingServices.totalDocs === 0) {
       await payload.create({ collection: 'pages', data: servicesData })
@@ -516,6 +344,21 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         data: servicesData,
       })
       payload.logger.info('[seed] services page upserted (FORCE_SERVICES_UPSERT)')
+    }
+
+    // New catalog pages (2026-08 pricing reset): fix-it, ai-front-desk,
+    // automation, free-demo-site, thanks. Create-if-missing only; the content
+    // script (apply.mts) owns updates.
+    for (const build of [
+      resetContent.fixItPage, resetContent.aiFrontDeskPage, resetContent.automationPage,
+      resetContent.freeDemoSitePage, resetContent.thanksPage,
+    ]) {
+      const data: any = { ...build(), publishedAt: new Date().toISOString() }
+      const existing = await payload.find({ collection: 'pages', where: { slug: { equals: data.slug } }, limit: 1 })
+      if (existing.totalDocs === 0) {
+        await payload.create({ collection: 'pages', data })
+        payload.logger.info(`[seed] ${data.slug} page created`)
+      }
     }
 
     // --- Legacy sample-project cleanup ---
@@ -716,6 +559,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     const prometheusProject: any = {
       title: 'Prometheus Minds',
       slug: 'prometheus-minds',
+      group: 'client',
       summary: 'Squarespace \u2192 custom Vite/React rebuild for an ADHD tutoring practice in the Twin Cities. New brand, block-based CMS with 27 content types, scheduled publishing, and a performance budget \u2014 shipped in 56 commits over 5 days.',
       client: 'Prometheus Minds',
       industry: 'Education / Neurodiverse tutoring',
@@ -844,6 +688,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     const waygftProject: any = {
       title: 'WAYGFT \u2014 What Are You Grateful For Today?',
       slug: 'waygft',
+      group: 'client',
       summary: 'A worldwide wall of anonymous gratitude \u2014 quotes, stories, photos, and videos, moderated by one human, delivered over a global CDN. Scaffolded, branded, and shipped to production in 5 days.',
       client: 'Kaiti (waygft)',
       industry: 'Consumer / Community',
@@ -851,7 +696,9 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       year: 2026,
       duration: '5 days (7 commits)',
       teamSize: 1,
-      liveUrl: 'https://waygft.life',
+      // liveUrl intentionally omitted: waygft.life is powered off (client hosting
+      // lapsed), so linking it would send visitors to a dead site. Restore
+      // `liveUrl: 'https://waygft.life'` if the client resumes hosting.
       ...(wgtMediaHome?.id ? { heroImage: wgtMediaHome.id } : {}),
       stack: [
         { name: 'Next.js 16 (App Router)', category: 'framework' },
@@ -1836,6 +1683,87 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           ['h2', 'Step 5: Ship and re-measure'],
           ['p', 'CrUX updates on a 28-day rolling window. You won\u2019t see the green bar until a full month after your deploy. Don\u2019t panic, don\u2019t re-optimize prematurely. Ship, wait 28 days, re-measure.'],
           ['quote', 'A fast site isn\u2019t a lucky site. It\u2019s a site where someone with authority said "we\u2019re going to take a week and fix this" and then actually took the week.'],
+        ]),
+      },
+      {
+        title: 'What an AI receptionist actually costs a Houston contractor',
+        slug: 'ai-receptionist-cost-houston-contractor',
+        excerpt: 'Missed calls are the most expensive line item most contractors never see. Here is what human answering services cost, what AI answering costs, where the money goes, and when to skip it.',
+        author: 'Suhaib Chaudhry',
+        readTime: 7,
+        category: 'strategy',
+        tags: [{ label: 'AI Front Desk' }, { label: 'Phone answering' }, { label: 'Contractors' }],
+        featured: true,
+        publishedAt: '2026-08-26T09:00:00.000Z',
+        content: rtDoc([
+          ['p', 'Ask a Houston contractor what a missed call costs and most will shrug. Ask what their average job is worth and they answer instantly. Put the two numbers together and the shrug goes away: if your average job is $400 and you miss five calls a week, the phone is quietly costing you more than your truck payment.'],
+          ['h2', 'The missed-call problem, with numbers'],
+          ['p', 'Industry studies of home-service businesses consistently find that somewhere between a quarter and half of inbound calls go unanswered, depending on season and crew size. That is not laziness. You are under a sink, on a roof, or driving I-45. The caller does not know that, and the data on caller behavior is brutal: most people who reach voicemail for a service business do not leave a message. They call the next company Google shows them.'],
+          ['p', 'The math compounds during exactly the weeks you can least afford it. A summer AC failure or a hard freeze multiplies call volume right when every tech is booked, so the calls you miss are the highest-intent calls of the year.'],
+          ['h2', 'What a human answering service costs'],
+          ['p', 'The traditional fix is a human answering service. They typically bill per minute or per call, and for a service business doing real volume the invoice lands between a few hundred and a couple thousand dollars a month. The per-minute rates look small until you multiply them out; a hundred five-minute calls at typical rates is real money.'],
+          ['ul', [
+            'Per-minute plans commonly run one to two dollars per minute at small-business volumes.',
+            'Flat plans with a few hundred minutes included tend to start in the low hundreds per month.',
+            'After-hours and bilingual coverage usually cost extra.',
+          ]],
+          ['p', 'The bigger issue is not price. A generalist operator reading a script cannot quote your services, does not know your service area, and usually ends the call with "someone will call you back." That is a message-taking service, not a front desk.'],
+          ['h2', 'What AI answering costs, and where the money goes'],
+          ['p', 'AI phone answering has crossed the line from novelty to boring utility. The recurring cost has three parts: the platform fee for the software, the per-minute cost of the calls themselves (telephony plus the AI models doing speech and reasoning), and the one-time setup work of teaching it your business.'],
+          ['p', 'Market pricing today puts a configured small-business AI receptionist in the one-to-four-hundred-dollars-a-month range for typical call volumes, with per-minute overages measured in cents rather than dollars. Setup, done properly, is where the real value hides. The software is a commodity; the script, the knowledge base, and the guardrails are not.'],
+          ['h2', 'What to require before you sign anything'],
+          ['ul', [
+            'It answers from your existing number via forwarding. No porting, no new number on your truck wraps.',
+            'It quotes only prices you approved in writing, and says "I will have Suhaib confirm that" for everything else.',
+            'It books directly into your calendar or field-service software, not into a spreadsheet someone checks later.',
+            'Missed calls get a text back within a minute, because half your callers would rather text anyway.',
+            'You get a transcript and summary of every call, and you can read them whenever you want.',
+            'You can turn it off with a phone setting, not a support ticket.',
+          ]],
+          ['h2', 'When not to use one'],
+          ['p', 'Skip AI answering if your volume is a handful of calls a week and you genuinely answer them. Skip it if your jobs are won on long consultative calls where the first conversation is the sale. And skip any vendor who cannot let you call a live demo line before you pay; if they will not let you hear it, they know something you should.'],
+          ['h2', 'What we run'],
+          ['p', 'Our AI Front Desk is the same system that answers our own line at (866) 434-9777, around the clock. Setup is $299: we write the script and knowledge base for your business, you approve the voice and greeting, we connect your calendar and test five real scenarios with you. Plans are $149 a month for 300 minutes, $249 for 750, and $399 for 1,500, month to month after the first 30 days, with overage at $0.35 a minute. Call our line first and try to stump it; that is the whole pitch.'],
+          ['quote', 'The phone is the cheapest employee you will ever hire or the most expensive one you never noticed you fired.'],
+        ]),
+      },
+      {
+        title: 'How to show up when someone asks ChatGPT or Google for a plumber',
+        slug: 'show-up-in-chatgpt-google-local-search',
+        excerpt: 'AI assistants now answer "who should I call" questions directly. Here is how they pick local businesses, and the 30-day checklist that gets yours mentioned.',
+        author: 'Suhaib Chaudhry',
+        readTime: 7,
+        category: 'seo',
+        tags: [{ label: 'Local SEO' }, { label: 'AI search' }, { label: 'Google Business Profile' }],
+        featured: true,
+        publishedAt: '2026-08-26T10:00:00.000Z',
+        content: rtDoc([
+          ['p', 'A growing share of "who should I call" questions never touch a search results page. Someone asks ChatGPT for a plumber in the Heights, or asks Google and gets an AI-written answer with three business names in it. If your business is one of the three, you get the call. If not, you do not even know the question was asked.'],
+          ['h2', 'How AI answers pick local businesses'],
+          ['p', 'AI assistants do not crawl your homepage and admire the design. They lean on structured, corroborated data: your Google Business Profile, the consistency of your name and address across directories, review volume and recency, and machine-readable markup on your site. When several independent sources agree about what you do and where you do it, you become a safe answer. Ambiguity, staleness, and contradictions make you an unsafe answer, and unsafe answers get skipped.'],
+          ['h2', 'Google Business Profile is still the spine'],
+          ['p', 'Both Google\u2019s AI results and third-party assistants weight the Business Profile heavily because it is verified and structured. Complete every field: services with descriptions, hours, service area, photos, and the exact categories that match what you sell. A profile updated weekly signals a business that exists; one untouched since 2023 signals a coin flip.'],
+          ['h2', 'Schema is how your site talks to machines'],
+          ['p', 'LocalBusiness, Service, and FAQPage schema are small blocks of code that state, unambiguously, who you are, what you offer, and where you serve. Humans never see them. Every machine that decides whether to recommend you reads them first. Most small-business sites in Houston have none, which is the whole opportunity.'],
+          ['h2', 'FAQ pages answer the questions assistants get asked'],
+          ['p', 'People ask assistants questions, so pages that answer questions in plain language get quoted. A real FAQ page, with the questions your customers actually ask and specific answers with numbers in them, gives an assistant something safe to lift. Marketing prose does not.'],
+          ['h2', 'Reviews and citations are the corroboration'],
+          ['p', 'Reviews prove you are real and recently active; assistants favor volume plus recency over a perfect score. Citations, meaning your name, address, and phone listed identically on Yelp, Bing Places, Apple Business Connect, and the industry directories, are the cross-checking layer. One old phone number on a forgotten directory is exactly the contradiction that gets you skipped.'],
+          ['h2', 'llms.txt, the new robots.txt'],
+          ['p', 'llms.txt is an emerging convention: a plain-text file on your site that tells AI crawlers what your business is and which pages matter. It costs ten minutes and puts you ahead of nearly every competitor, because almost nobody has one yet.'],
+          ['h2', 'The 30-day checklist'],
+          ['ul', [
+            'Week 1: complete every Google Business Profile field, add 10 photos, fix your categories.',
+            'Week 1: put your exact name, address, and phone in the site footer and match it everywhere.',
+            'Week 2: add LocalBusiness and Service schema to the site, validate it, request re-indexing.',
+            'Week 2: submit or correct listings on Yelp, Bing Places, Apple Business Connect, and Facebook.',
+            'Week 3: publish an FAQ page answering your ten most common customer questions with real numbers.',
+            'Week 3: add llms.txt and make sure your services pages say the neighborhoods you serve, by name.',
+            'Week 4: start automated review requests after every job and reply to every review, good or bad.',
+          ]],
+          ['h2', 'If you want it done for you'],
+          ['p', 'This checklist is exactly what our Local SEO + AI Search Sprint delivers: the audit, the full Business Profile setup, ten citations, the schema, the FAQ page, and llms.txt, done in ten days for $449. It also comes inside the Booked Solid bundle. Do it yourself with the list above, or hand it to us; either way, stop being the business the assistants cannot safely recommend.'],
+          ['quote', 'You cannot win the answers you never knew were being asked. Structure is how you get invited.'],
         ]),
       },
     ]

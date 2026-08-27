@@ -81,11 +81,6 @@ const ALTER_STATEMENTS: string[] = [
   `ALTER TABLE _landing_pages_v_blocks_services_items ADD COLUMN download_href TEXT`,
   `ALTER TABLE _landing_pages_v_blocks_services_items ADD COLUMN download_label TEXT`,
 
-  // SiteSettings — founding spots counters (admin-editable, live on the
-  // global so all FoundingClient banners stay in sync without a re-seed).
-  `ALTER TABLE site_settings ADD COLUMN founding_spots_total INTEGER DEFAULT 5`,
-  `ALTER TABLE site_settings ADD COLUMN founding_spots_remaining INTEGER DEFAULT 5`,
-
   // FeaturedProjects — linked + compact flags for the LP screenshots-only variant.
   `ALTER TABLE pages_blocks_featured_projects ADD COLUMN linked INTEGER DEFAULT 1`,
   `ALTER TABLE landing_pages_blocks_featured_projects ADD COLUMN linked INTEGER DEFAULT 1`,

@@ -5,7 +5,6 @@ import { Logo } from '@/components/Logo'
 import { Container } from '@/components/Container'
 import { TrackedLink } from '@/components/TrackedLink'
 import { BookedTracker } from './BookedTracker'
-import { LP_PHONE_DISPLAY, LP_PHONE_HREF } from '@/lib/contact'
 
 export const metadata: Metadata = {
   title: "You're booked — see you on the call | Black Hart Consulting",
@@ -21,8 +20,8 @@ export const metadata: Metadata = {
 // available during the Docker build phase.
 export const dynamic = 'force-dynamic'
 
-const PHONE_DISPLAY = LP_PHONE_DISPLAY
-const PHONE_HREF = LP_PHONE_HREF
+const PHONE_DISPLAY = '(866) 434-9777'
+const PHONE_HREF = 'tel:+18664349777'
 const EMAIL_DISPLAY = 'hello@blackhartconsulting.com'
 const EMAIL_HREF = 'mailto:hello@blackhartconsulting.com'
 

@@ -1,0 +1,162 @@
+[
+  {
+    "id": 18,
+    "question": "Where are you based, and do you take remote clients?",
+    "answer": "Houston, Texas. Most of our clients are remote, across the U.S. and a few international. Time zones are rarely an issue.",
+    "category": "process",
+    "featured": true,
+    "sortOrder": 90,
+    "updatedAt": "2026-05-31T08:15:39.237Z",
+    "createdAt": "2026-05-31T08:15:39.237Z"
+  },
+  {
+    "id": 17,
+    "question": "What's included in the Starter Site at $999?",
+    "answer": "Up to 5 bespoke pages, Payload CMS so your team can edit every section, Google Business Profile setup, LocalBusiness schema markup, contact form pre-wired with GA4 conversion tracking, mobile-first responsive design, and 14-day delivery, guaranteed in writing.",
+    "category": "pricing",
+    "featured": true,
+    "sortOrder": 10,
+    "updatedAt": "2026-05-31T08:15:39.221Z",
+    "createdAt": "2026-05-31T08:15:39.221Z"
+  },
+  {
+    "id": 16,
+    "question": "What does the $297 Site Health Sprint cover?",
+    "answer": "You pick three fixes from a menu: mobile responsiveness, page speed (Lighthouse target 85+), Google Business Profile + LocalBusiness schema, contact form with GA4 conversion tracking, hero rewrite, SEO basics (title/meta/OG tags), missing-section add (testimonials block, services block, FAQ, etc.), or broken images/links cleanup. Delivered in 5 days with a before-and-after Lighthouse report. 30-day fix guarantee. Free audit included so you know what to fix before paying.",
+    "category": "pricing",
+    "featured": true,
+    "sortOrder": 5,
+    "updatedAt": "2026-05-31T08:15:39.219Z",
+    "createdAt": "2026-05-31T08:15:39.219Z"
+  },
+  {
+    "id": 15,
+    "question": "What exactly is in the free site audit?",
+    "answer": "Paste your URL and a sentence on what feels broken. Within one business day, I send an email back with three specific things to fix on your site, what they are, why they matter, and what each is roughly costing you in lost calls or bookings. No call required. No pitch. If you want me to do the fixes, the Site Health Sprint at $297 covers it.",
+    "category": "process",
+    "featured": true,
+    "sortOrder": 1,
+    "updatedAt": "2026-05-31T08:15:39.218Z",
+    "createdAt": "2026-05-31T08:15:39.218Z"
+  },
+  {
+    "id": 14,
+    "question": "How do I get started?",
+    "answer": "Book a 30-minute discovery call at blackhartconsulting.com, send a note to hello@blackhartconsulting.com, or call (866) 434-9777. We’ll scope your project, ballpark a price, and tell you whether we’re a fit, no hard sell.",
+    "category": "care",
+    "featured": true,
+    "sortOrder": 140,
+    "updatedAt": "2026-05-31T08:15:39.247Z",
+    "createdAt": "2026-05-03T03:02:23.629Z"
+  },
+  {
+    "id": 13,
+    "question": "What does ongoing care cost?",
+    "answer": "Care plan starts at $149/mo (managed hosting, automated daily backups, monitoring, 1 hour of edits per month). Growth at $495/mo bumps it to 5 hours of dev or SEO work. Scale at $1,295/mo bumps to 10 hours plus a monthly strategy call. All month-to-month, cancel any time.",
+    "category": "care",
+    "featured": true,
+    "sortOrder": 130,
+    "updatedAt": "2026-05-31T08:15:39.245Z",
+    "createdAt": "2026-05-03T03:02:23.628Z"
+  },
+  {
+    "id": 12,
+    "question": "Can you work with my existing brand?",
+    "answer": "Yes. If you have a logo, color palette, and fonts, we use them. If you don’t, we can scope a brand kit as part of the build.",
+    "category": "ownership",
+    "featured": true,
+    "sortOrder": 120,
+    "updatedAt": "2026-05-31T08:15:39.243Z",
+    "createdAt": "2026-05-03T03:02:23.627Z"
+  },
+  {
+    "id": 11,
+    "question": "What CMS do you use, and can my team edit it?",
+    "answer": "Payload CMS. Every section of the site is a “block” your team can edit, reorder, or remove from a clean admin dashboard, no developer required for copy, image, or pricing changes.",
+    "category": "ownership",
+    "featured": true,
+    "sortOrder": 110,
+    "updatedAt": "2026-05-31T08:15:39.241Z",
+    "createdAt": "2026-05-03T03:02:23.626Z"
+  },
+  {
+    "id": 10,
+    "question": "Do I own the code?",
+    "answer": "Yes. The code lives in a GitHub repo we hand over to you on launch. No proprietary lock-in, no hosting hostage situations, you can take it anywhere.",
+    "category": "ownership",
+    "featured": true,
+    "sortOrder": 100,
+    "updatedAt": "2026-05-31T08:15:39.239Z",
+    "createdAt": "2026-05-03T03:02:23.625Z"
+  },
+  {
+    "id": 8,
+    "question": "What if I don’t like the design?",
+    "answer": "You see a mockup before any code is written. If the mockup isn’t right, we iterate until it is. The 14-day clock doesn’t start until you approve the design direction.",
+    "category": "process",
+    "featured": true,
+    "sortOrder": 80,
+    "updatedAt": "2026-05-31T08:15:39.235Z",
+    "createdAt": "2026-05-03T03:02:23.623Z"
+  },
+  {
+    "id": 7,
+    "question": "How does the engagement actually work?",
+    "answer": "1) 30-minute discovery call. 2) Fixed-price proposal within 48 hours. 3) Signed contract, 50% deposit (or first monthly), kickoff within a week. 4) Mockups for every page, you approve before any code is written. 5) Site live in 14 days (Starter) or 21 days (Pro).",
+    "category": "process",
+    "featured": true,
+    "sortOrder": 70,
+    "updatedAt": "2026-05-31T08:15:39.233Z",
+    "createdAt": "2026-05-03T03:02:23.622Z"
+  },
+  {
+    "id": 6,
+    "question": "Do you work with enterprise / mid-market clients?",
+    "answer": "Yes, we’re open to engagements of every size. The packaged tiers cover most small-business needs; for larger or more complex builds, send a note and we’ll scope it custom.",
+    "category": "pricing",
+    "featured": true,
+    "sortOrder": 60,
+    "updatedAt": "2026-05-31T08:15:39.231Z",
+    "createdAt": "2026-05-03T03:02:23.620Z"
+  },
+  {
+    "id": 5,
+    "question": "What if I need more than 12 pages or something custom?",
+    "answer": "The Custom Build tier starts at $9,500 and is for web apps, multi-location enterprise builds, multi-language sites, or custom integrations beyond the Pro Site scope. We start with a discovery + scoping engagement, then send a fixed-price proposal, and we say no when it doesn’t fit.",
+    "category": "pricing",
+    "featured": true,
+    "sortOrder": 50,
+    "updatedAt": "2026-05-31T08:15:39.229Z",
+    "createdAt": "2026-05-03T03:02:23.619Z"
+  },
+  {
+    "id": 4,
+    "question": "Do you take payment plans?",
+    "answer": "Yes. Starter Site splits as 50%/50% or 3 monthly payments of $333. Pro Site splits 50%/50% or 4 monthly payments of $625. SEO Sprints split 50%/50%. No interest, no fees.",
+    "category": "pricing",
+    "featured": true,
+    "sortOrder": 40,
+    "updatedAt": "2026-05-31T08:15:39.227Z",
+    "createdAt": "2026-05-03T03:02:23.617Z"
+  },
+  {
+    "id": 3,
+    "question": "What’s the difference between Starter and Pro?",
+    "answer": "Starter = 5 pages, 14-day delivery, $999 founding. Pro = up to 12 pages, 21-day delivery, full blog/CMS system, case study templates, plus 30 days of SEO content writing, $2,495 founding. Pro is for businesses that already invest in content or have multiple locations.",
+    "category": "pricing",
+    "featured": true,
+    "sortOrder": 30,
+    "updatedAt": "2026-05-31T08:15:39.226Z",
+    "createdAt": "2026-05-03T03:02:23.616Z"
+  },
+  {
+    "id": 2,
+    "question": "What does “founding-client pricing” mean?",
+    "answer": "For our first 5 clients, every package is discounted ($999 instead of $1,950 for Starter, $2,495 instead of $4,500 for Pro). In exchange, you provide a Google review at launch, a written testimonial, and case-study permission. Founding clients also lock their Care + SEO retainer rate for 12 months.",
+    "category": "pricing",
+    "featured": true,
+    "sortOrder": 20,
+    "updatedAt": "2026-05-31T08:15:39.224Z",
+    "createdAt": "2026-05-03T03:02:23.615Z"
+  }
+]

@@ -45,7 +45,7 @@ const FIXTURE_INVOICE: Stripe.Invoice = {
   lines: {
     data: [
       { description: 'Starter Site (5-page custom build, 14-day delivery)', amount: 149_500 },
-      { description: 'Founding-client discount applied', amount: 0 },
+      { description: 'Launch discount applied', amount: 0 },
     ],
   },
 } as unknown as Stripe.Invoice

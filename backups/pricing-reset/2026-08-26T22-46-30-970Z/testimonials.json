@@ -1,0 +1,38 @@
+[
+  {
+    "id": 3,
+    "rating": "5",
+    "quote": "Black Hart Consulting completely rebuilt our web presence in two weeks. The new site loads in under a second on mobile, our Google Business Profile is finally set up correctly, and the contact form fires conversion events straight into our analytics dashboard. Revenue from organic search has tripled since launch. Worth every dollar for any small business burned by an agency in the past.",
+    "author": "Quote Length Test",
+    "role": "QA Tester",
+    "company": "Filler Co.",
+    "featured": true,
+    "sortOrder": 99,
+    "updatedAt": "2026-05-03T02:11:10.574Z",
+    "createdAt": "2026-05-03T02:11:10.574Z"
+  },
+  {
+    "id": 2,
+    "rating": null,
+    "quote": "Black Hart Consulting completely transformed my website from the ground up. They rebuilt everything from scratch, adding the pages and features I needed to actually present my business well. Since launch, parents engage with a much better understanding of what we offer -- which has directly helped with conversions. They build platforms that grow your business, not just sites that look good.",
+    "author": "Philip Parmar",
+    "role": "Founder",
+    "company": "Prometheus Minds",
+    "featured": true,
+    "sortOrder": 20,
+    "updatedAt": "2026-05-03T02:12:17.993Z",
+    "createdAt": "2026-05-01T22:42:53.086Z"
+  },
+  {
+    "id": 1,
+    "rating": null,
+    "quote": "We’ve seen solid progress, especially with confidence. I’d definitely recommend them to other parents looking for something that’s both professional and personal.",
+    "author": "Grace R.",
+    "role": "Parent",
+    "company": "Prometheus Minds (Google review)",
+    "featured": true,
+    "sortOrder": 10,
+    "updatedAt": "2026-05-01T22:42:53.079Z",
+    "createdAt": "2026-05-01T22:42:53.079Z"
+  }
+]

@@ -28,8 +28,8 @@ export const Header: GlobalConfig = {
     ] },
     { name: 'cta', type: 'group', admin: { description: 'Optional button on the right side of the header' }, fields: [
       { name: 'show', type: 'checkbox', defaultValue: true },
-      { name: 'label', type: 'text', defaultValue: 'Start a project' },
-      { name: 'href', type: 'text', defaultValue: '/contact' },
+      { name: 'label', type: 'text', defaultValue: 'See your site first' },
+      { name: 'href', type: 'text', defaultValue: '/free-demo-site' },
     ] },
   ],
 }

@@ -3,7 +3,7 @@
 import { pushEventThenNavigate } from '@/lib/analytics'
 
 type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  trackEvent: 'phone_click' | 'email_click' | 'booking_click'
+  trackEvent: 'phone_click' | 'email_click' | 'booking_click' | 'cta_click'
   trackLocation: string
 }
 

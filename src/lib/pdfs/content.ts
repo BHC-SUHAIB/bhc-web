@@ -115,10 +115,10 @@ export const SERVICE_WEBSITE: PdfDoc = {
     {
       type: 'bullets',
       items: [
-        'Single Page — $749. One long-form page, 5-day delivery.',
-        'Starter Site — $999 founding (was $1,950). 5 pages, 14-day delivery.',
-        'Pro Site — $2,495 founding (was $4,500). 12 pages, 21-day delivery, +30 days SEO content.',
-        'Custom Build — from $9,500. Web apps, multi-language, custom integrations.',
+        'Launch Page — $399. One conversion-focused page, 3-day delivery.',
+        'Starter Site — $699, or $119/mo for 12 months and it is yours. 5 pages, 7-day delivery.',
+        'Pro Site — $1,795, or $249/mo for 12 months. 12 pages, 14-day delivery, +30 days SEO content.',
+        'Custom Build — from $5,000. Web apps, multi-language, custom integrations.',
       ],
     },
 
@@ -167,9 +167,9 @@ export const SERVICE_SEO: PdfDoc = {
     {
       type: 'bullets',
       items: [
-        'Local SEO Sprint — $499 founding (was $1,495). One-time, 2-week delivery.',
-        'Local SEO Monthly — $395/mo. Single-location service businesses.',
-        'SEO Growth — $895/mo. Multi-location or content-heavy businesses.',
+        'Local SEO + AI Search Sprint — $449. One-time, 10-day delivery.',
+        'Local SEO + AI Search Monthly — $295/mo. Weekly GBP posts, citations, an article, a ranking report.',
+        'Growth plan — $395/mo. Hosting plus 6 hours of development or SEO a month.',
       ],
     },
 

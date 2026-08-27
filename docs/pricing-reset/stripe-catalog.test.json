@@ -1,0 +1,247 @@
+{
+  "launch-page": {
+    "productId": "prod_V99KUgCMomN1wl",
+    "priceId": "price_1U8r1bRTwwgtrqUJRuBOnIgK",
+    "paymentLinkId": "plink_1U8r1bRTwwgtrqUJX8fruD4D",
+    "url": "https://buy.stripe.com/test_3cIeVfapC8upelK9Lv1VK00",
+    "lookupKey": "launch_page_399"
+  },
+  "starter-site": {
+    "productId": "prod_V99KUsq2v8q9sj",
+    "priceId": "price_1U8r1cRTwwgtrqUJyU1okcak",
+    "paymentLinkId": "plink_1U8r1cRTwwgtrqUJGvMAPGsc",
+    "url": "https://buy.stripe.com/test_eVq6oJ7dq11X4LaaPz1VK01",
+    "lookupKey": "starter_site_699"
+  },
+  "pro-site": {
+    "productId": "prod_V99Kz8AtsQ9qBF",
+    "priceId": "price_1U8r1dRTwwgtrqUJZKWKjJWw",
+    "paymentLinkId": "plink_1U8r1dRTwwgtrqUJ4UbAnKnx",
+    "url": "https://buy.stripe.com/test_bJe3cx8hu11X7Xm8Hr1VK02",
+    "lookupKey": "pro_site_1795"
+  },
+  "seo-sprint": {
+    "productId": "prod_V99KOX3aGtIQz7",
+    "priceId": "price_1U8r1eRTwwgtrqUJ0TMxjkg0",
+    "paymentLinkId": "plink_1U8r1eRTwwgtrqUJ77ormd5k",
+    "url": "https://buy.stripe.com/test_28EfZj1T611X4La4rb1VK03",
+    "lookupKey": "seo_sprint_449"
+  },
+  "front-desk-setup": {
+    "productId": "prod_V99KIm6ROuwLzJ",
+    "priceId": "price_1U8r1fRTwwgtrqUJqu2ZbB2E",
+    "paymentLinkId": "plink_1U8r1fRTwwgtrqUJpmbDy1ya",
+    "url": "https://buy.stripe.com/test_dRm4gBeFS4e93H67Dn1VK04",
+    "lookupKey": "front_desk_setup_299"
+  },
+  "automation-sprint": {
+    "productId": "prod_V99KVuKfHSHvz6",
+    "priceId": "price_1U8r1fRTwwgtrqUJCjoCU4tk",
+    "paymentLinkId": "plink_1U8r1gRTwwgtrqUJnyXiJvpV",
+    "url": "https://buy.stripe.com/test_5kQ00leFS8up0uU6zj1VK05",
+    "lookupKey": "automation_sprint_799"
+  },
+  "site-health-sprint": {
+    "productId": "prod_V99KAMQGt1BHtu",
+    "priceId": "price_1U8r1hRTwwgtrqUJWdNnA8fq",
+    "paymentLinkId": "plink_1U8r1hRTwwgtrqUJ7sECKyfd",
+    "url": "https://buy.stripe.com/test_eVqcN71T69yt6Ti7Dn1VK06",
+    "lookupKey": "site_health_sprint_249"
+  },
+  "gbp-setup": {
+    "productId": "prod_V99KfLKS02LnYT",
+    "priceId": "price_1U8r1hRTwwgtrqUJsbDCWk47",
+    "paymentLinkId": "plink_1U8r1iRTwwgtrqUJa1sJQGXP",
+    "url": "https://buy.stripe.com/test_00wbJ3dBO3a5gtS9Lv1VK07",
+    "lookupKey": "gbp_setup_195"
+  },
+  "schema-pack": {
+    "productId": "prod_V99KMAl31WxXUF",
+    "priceId": "price_1U8r1iRTwwgtrqUJy1hPT29c",
+    "paymentLinkId": "plink_1U8r1jRTwwgtrqUJO0CLVaFB",
+    "url": "https://buy.stripe.com/test_cNidRb69mh0VfpO4rb1VK08",
+    "lookupKey": "schema_pack_195"
+  },
+  "ga4-setup": {
+    "productId": "prod_V99KLG61AFheOL",
+    "priceId": "price_1U8r1jRTwwgtrqUJiUvROEK8",
+    "paymentLinkId": "plink_1U8r1kRTwwgtrqUJZEVoDMrB",
+    "url": "https://buy.stripe.com/test_00waEZ55ibGB7Xmg9T1VK09",
+    "lookupKey": "ga4_setup_195"
+  },
+  "speed-sprint": {
+    "productId": "prod_V99K3Gb7CVh1YD",
+    "priceId": "price_1U8r1kRTwwgtrqUJ0jPkSbAG",
+    "paymentLinkId": "plink_1U8r1kRTwwgtrqUJae7hcXw9",
+    "url": "https://buy.stripe.com/test_bJebJ32Xa7ql2D2bTD1VK0a",
+    "lookupKey": "speed_sprint_395"
+  },
+  "mobile-fix": {
+    "productId": "prod_V99K6JqFwndh8j",
+    "priceId": "price_1U8r1lRTwwgtrqUJMRNhQxjr",
+    "paymentLinkId": "plink_1U8r1lRTwwgtrqUJpS5D9xks",
+    "url": "https://buy.stripe.com/test_14AeVf69mbGB91qg9T1VK0b",
+    "lookupKey": "mobile_fix_395"
+  },
+  "seo-refresh": {
+    "productId": "prod_V99KNQvALu6Ysr",
+    "priceId": "price_1U8r1mRTwwgtrqUJzoIXqtKw",
+    "paymentLinkId": "plink_1U8r1mRTwwgtrqUJJBlawwaD",
+    "url": "https://buy.stripe.com/test_cNidRbgO02611yYbTD1VK0c",
+    "lookupKey": "seo_refresh_395"
+  },
+  "bundle-open-for-business": {
+    "productId": "prod_V99KQyerooCRZw",
+    "priceId": "price_1U8r1nRTwwgtrqUJ0B2KMyUE",
+    "paymentLinkId": "plink_1U8r1nRTwwgtrqUJIObVeRWl",
+    "url": "https://buy.stripe.com/test_6oUcN7dBO8up2D25vf1VK0d",
+    "lookupKey": "bundle_open_for_business_999"
+  },
+  "bundle-booked-solid": {
+    "productId": "prod_V99Kbnh8L7IrIO",
+    "priceId": "price_1U8r1nRTwwgtrqUJhIx6bHAu",
+    "paymentLinkId": "plink_1U8r1oRTwwgtrqUJbPWJRKZc",
+    "url": "https://buy.stripe.com/test_aFadRb2Xa5idb9yg9T1VK0e",
+    "lookupKey": "bundle_booked_solid_1395"
+  },
+  "starter-site-subscribe": {
+    "productId": "prod_V99KUsq2v8q9sj",
+    "priceId": "price_1U8r1oRTwwgtrqUJwSKx4VYN",
+    "paymentLinkId": "plink_1U8r1pRTwwgtrqUJ3VtGoFYN",
+    "url": "https://buy.stripe.com/test_aFafZjcxK3a5cdCf5P1VK0f",
+    "lookupKey": "starter_site_sub_119m"
+  },
+  "pro-site-subscribe": {
+    "productId": "prod_V99Kz8AtsQ9qBF",
+    "priceId": "price_1U8r1pRTwwgtrqUJTjGdhUzW",
+    "paymentLinkId": "plink_1U8r1pRTwwgtrqUJepan8mRR",
+    "url": "https://buy.stripe.com/test_00w9AV0P2eSN3H6aPz1VK0g",
+    "lookupKey": "pro_site_sub_249m"
+  },
+  "host": {
+    "productId": "prod_V99K5FEXSMEbrv",
+    "priceId": "price_1U8r1qRTwwgtrqUJNDaT7P7v",
+    "paymentLinkId": "plink_1U8r1qRTwwgtrqUJ4uS5657I",
+    "url": "https://buy.stripe.com/test_eVq6oJ2Xa9ytcdCbTD1VK0h",
+    "lookupKey": "host_59m"
+  },
+  "care": {
+    "productId": "prod_V99KZcAZkDzhaA",
+    "priceId": "price_1U8r1rRTwwgtrqUJGSlm5yH0",
+    "paymentLinkId": "plink_1U8r1rRTwwgtrqUJ8xrtj4wZ",
+    "url": "https://buy.stripe.com/test_cNi5kF8hu7ql7Xme1L1VK0i",
+    "lookupKey": "care_129m"
+  },
+  "growth": {
+    "productId": "prod_V99KhJQgePwUfs",
+    "priceId": "price_1U8r1sRTwwgtrqUJz2yK1nL1",
+    "paymentLinkId": "plink_1U8r1sRTwwgtrqUJnjSTsy0m",
+    "url": "https://buy.stripe.com/test_00wdRb8huaCxelK7Dn1VK0j",
+    "lookupKey": "growth_395m"
+  },
+  "seo-monthly": {
+    "productId": "prod_V99K0ZPi5WRJD6",
+    "priceId": "price_1U8r1tRTwwgtrqUJEM0d53rJ",
+    "paymentLinkId": "plink_1U8r1tRTwwgtrqUJfcC7AW8O",
+    "url": "https://buy.stripe.com/test_4gMaEZbtGfWRcdC9Lv1VK0k",
+    "lookupKey": "seo_monthly_295m"
+  },
+  "front-desk-basic": {
+    "productId": "prod_V99KcgbbhFCfln",
+    "priceId": "price_1U8r1uRTwwgtrqUJv4AnSJqJ",
+    "paymentLinkId": "plink_1U8r1uRTwwgtrqUJvAfjxEA6",
+    "url": "https://buy.stripe.com/test_eVq14p2Xa4e90uU0aV1VK0l",
+    "lookupKey": "front_desk_basic_149m"
+  },
+  "front-desk-plus": {
+    "productId": "prod_V99K2HYdaOolwa",
+    "priceId": "price_1U8r1vRTwwgtrqUJ6qPf3aZM",
+    "paymentLinkId": "plink_1U8r1vRTwwgtrqUJuW4nBH4j",
+    "url": "https://buy.stripe.com/test_8x28wRdBO6mh4La7Dn1VK0m",
+    "lookupKey": "front_desk_plus_249m"
+  },
+  "front-desk-pro": {
+    "productId": "prod_V99KV2gh4vSibo",
+    "priceId": "price_1U8r1vRTwwgtrqUJkHfxiPsV",
+    "paymentLinkId": "plink_1U8r1wRTwwgtrqUJqsvTZbuv",
+    "url": "https://buy.stripe.com/test_dRm6oJeFSdOJgtS8Hr1VK0n",
+    "lookupKey": "front_desk_pro_399m"
+  },
+  "front-desk-premium-voice": {
+    "productId": "prod_V99KNYCFnnFDdW",
+    "priceId": "price_1U8r1wRTwwgtrqUJXGHQk0dj",
+    "paymentLinkId": "plink_1U8r1xRTwwgtrqUJK7kFjs8Y",
+    "url": "https://buy.stripe.com/test_dRm3cx41e9ytgtS9Lv1VK0o",
+    "lookupKey": "front_desk_premium_voice_49m"
+  },
+  "automation-run": {
+    "productId": "prod_V99KCMctKWfFXy",
+    "priceId": "price_1U8r1xRTwwgtrqUJUMfMgrRr",
+    "paymentLinkId": "plink_1U8r1yRTwwgtrqUJF2vYvcHq",
+    "url": "https://buy.stripe.com/test_7sYfZj7dq9yt7Xm2j31VK0p",
+    "lookupKey": "automation_run_79m"
+  },
+  "internal-tool-hosting": {
+    "productId": "prod_V99KBjQ3p3AFuL",
+    "priceId": "price_1U8r1yRTwwgtrqUJOOuMpvvx",
+    "paymentLinkId": "plink_1U8r1zRTwwgtrqUJa1GbeHZR",
+    "url": "https://buy.stripe.com/test_5kQ8wR1T6h0VelK8Hr1VK0q",
+    "lookupKey": "internal_tool_hosting_99m"
+  },
+  "bundle-open-for-business-monthly": {
+    "productId": "prod_V99KQyerooCRZw",
+    "priceId": "price_1U8r1zRTwwgtrqUJM93Rpeey",
+    "paymentLinkId": "plink_1U8r1zRTwwgtrqUJ8dkherWy",
+    "url": "https://buy.stripe.com/test_00w7sNdBOaCx5PeaPz1VK0r",
+    "lookupKey": "bundle_open_for_business_149m"
+  },
+  "bundle-booked-solid-monthly": {
+    "productId": "prod_V99Kbnh8L7IrIO",
+    "priceId": "price_1U8r1zRTwwgtrqUJjcGPfM1W",
+    "paymentLinkId": "plink_1U8r20RTwwgtrqUJYbGjA6F9",
+    "url": "https://buy.stripe.com/test_00w4gB0P22615Pe3n71VK0s",
+    "lookupKey": "bundle_booked_solid_149m"
+  },
+  "host-annual": {
+    "productId": "prod_V99K5FEXSMEbrv",
+    "priceId": "price_1U8r20RTwwgtrqUJtpe4mq5k",
+    "paymentLinkId": "plink_1U8r20RTwwgtrqUJTwfaPOlL",
+    "url": "https://buy.stripe.com/test_bJe00l7dq6mhb9y2j31VK0t",
+    "lookupKey": "host_590y"
+  },
+  "care-annual": {
+    "productId": "prod_V99KZcAZkDzhaA",
+    "priceId": "price_1U8r21RTwwgtrqUJQ1G47T6S",
+    "paymentLinkId": "plink_1U8r21RTwwgtrqUJVlsTt7tV",
+    "url": "https://buy.stripe.com/test_cNidRbdBO4e9fpOg9T1VK0u",
+    "lookupKey": "care_1290y"
+  },
+  "seo-monthly-annual": {
+    "productId": "prod_V99K0ZPi5WRJD6",
+    "priceId": "price_1U8r21RTwwgtrqUJbe3lgqEV",
+    "paymentLinkId": "plink_1U8r22RTwwgtrqUJybZjr67g",
+    "url": "https://buy.stripe.com/test_4gM8wRdBOdOJ91q4rb1VK0v",
+    "lookupKey": "seo_monthly_2950y"
+  },
+  "front-desk-basic-annual": {
+    "productId": "prod_V99KcgbbhFCfln",
+    "priceId": "price_1U8r22RTwwgtrqUJ2CdxW2Uj",
+    "paymentLinkId": "plink_1U8r22RTwwgtrqUJ0T68hHJT",
+    "url": "https://buy.stripe.com/test_9B6aEZapCh0Vb9y5vf1VK0w",
+    "lookupKey": "front_desk_basic_1490y"
+  },
+  "front-desk-plus-annual": {
+    "productId": "prod_V99K2HYdaOolwa",
+    "priceId": "price_1U8r23RTwwgtrqUJQXiLeWIO",
+    "paymentLinkId": "plink_1U8r23RTwwgtrqUJfetj41wH",
+    "url": "https://buy.stripe.com/test_aFa5kFgO08upelK7Dn1VK0x",
+    "lookupKey": "front_desk_plus_2490y"
+  },
+  "front-desk-pro-annual": {
+    "productId": "prod_V99KV2gh4vSibo",
+    "priceId": "price_1U8r23RTwwgtrqUJ8tZtgpp9",
+    "paymentLinkId": "plink_1U8r24RTwwgtrqUJGAryhqZj",
+    "url": "https://buy.stripe.com/test_6oUbJ3eFS2615Pe1eZ1VK0y",
+    "lookupKey": "front_desk_pro_3990y"
+  }
+}

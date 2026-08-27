@@ -23,6 +23,8 @@ type EventName =
   | 'pagespeed_audit_completed'  // PSI returned scores; engagement signal
   | 'cta_click'                  // Generic CTA click (e.g. sticky mobile bar primary action)
   | 'exit_intent_shown'          // Exit-intent / deep-scroll lead modal was displayed
+  | 'checkout_click'             // Buy now / Subscribe button on a pricing tier or bundle
+  | 'purchase'                   // /thanks?sku= landed after a Stripe Payment Link checkout
 
 type EventParams = {
   /** Page or section the event fired from. */

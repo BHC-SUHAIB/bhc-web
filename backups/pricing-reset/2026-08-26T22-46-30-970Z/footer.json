@@ -1,0 +1,105 @@
+{
+  "id": 1,
+  "tagline": "Websites, SEO, and hosting for businesses that care how their work shows up online.",
+  "columns": [
+    {
+      "id": "6a8f6cc6530a742441fa1974",
+      "heading": "Services",
+      "links": [
+        {
+          "id": "6a8f6cc6530a742441fa196f",
+          "label": "Care plans",
+          "href": "/services#care"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa1970",
+          "label": "Website design & build",
+          "href": "/services#websites"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa1971",
+          "label": "SEO & search",
+          "href": "/services#seo"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa1972",
+          "label": "App design",
+          "href": "/services#apps"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa1973",
+          "label": "Hosting & infrastructure",
+          "href": "/services#hosting"
+        }
+      ]
+    },
+    {
+      "id": "6a8f6cc6530a742441fa1978",
+      "heading": "Studio",
+      "links": [
+        {
+          "id": "6a8f6cc6530a742441fa1975",
+          "label": "Portfolio",
+          "href": "/portfolio"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa1976",
+          "label": "About",
+          "href": "/about"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa1977",
+          "label": "Contact",
+          "href": "/contact"
+        }
+      ]
+    },
+    {
+      "id": "6a8f6cc6530a742441fa197d",
+      "heading": "Resources",
+      "links": [
+        {
+          "id": "6a8f6cc6530a742441fa1979",
+          "label": "Articles",
+          "href": "/articles"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa197a",
+          "label": "Pricing",
+          "href": "/services"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa197b",
+          "label": "SMS opt-in",
+          "href": "/sms"
+        },
+        {
+          "id": "6a8f6cc6530a742441fa197c",
+          "label": "Privacy Policy",
+          "href": "/privacy"
+        }
+      ]
+    }
+  ],
+  "social": [
+    {
+      "id": "6a8f6cc6530a742441fa197e",
+      "platform": "linkedin",
+      "href": "https://linkedin.com/company/blackhartconsulting"
+    },
+    {
+      "id": "6a8f6cc6530a742441fa197f",
+      "platform": "github",
+      "href": "https://github.com/blackhartconsulting"
+    },
+    {
+      "id": "6a8f6cc6530a742441fa1980",
+      "platform": "email",
+      "href": "mailto:hello@blackhartconsulting.com"
+    }
+  ],
+  "copyright": "© 2026 Black Hart Consulting LLC",
+  "updatedAt": "2026-08-26T22:46:30.793Z",
+  "createdAt": "2026-05-01T22:42:51.580Z",
+  "globalType": "footer"
+}

@@ -267,13 +267,16 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
 
             <div className="audit-upsell">
               <p>
-                Prefer we just fix it? The $297 Site Health Sprint covers three specific fixes shipped in five days, with a before-and-after report.
+                Want to see what a better site looks like? Send your business name and Google listing, and within 48 hours you get a working mockup built from your real services and reviews. Free, no obligation. Or pick three fixes from the menu: the $249 Site Health Sprint ships them in five days with a before-and-after report.
               </p>
               <div className="cta-row mt-0">
-                <Button href="#book" variant="brass" size="md">
-                  Start a $297 Sprint
+                <Button href="/free-demo-site" variant="brass" size="md">
+                  See your site first
                 </Button>
-                <Button type="button" variant="secondary" size="md" onClick={reset}>
+                <Button href="/contact?tier=site-health-sprint" variant="secondary" size="md">
+                  Start a $249 Sprint
+                </Button>
+                <Button type="button" variant="ghost" size="md" onClick={reset}>
                   Run another audit
                 </Button>
               </div>

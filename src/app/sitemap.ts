@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getCachedAllPages, getCachedAllProjects, getCachedAllArticles } from '@/lib/payload-cache'
+import { ALL_LOCAL_PAGES } from '@/lib/local-pages'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://blackhartconsulting.com').replace(/\/$/, '')
 
@@ -33,9 +34,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getCachedAllArticles(),
     ])
 
-    for (const doc of pageDocs as Array<{ slug?: string | null; updatedAt?: string | null }>) {
+    for (const doc of pageDocs as Array<{ slug?: string | null; updatedAt?: string | null; seo?: { noIndex?: boolean | null } | null }>) {
       const slug = doc.slug ?? ''
       if (!slug) continue
+      // Pages marked noindex (e.g. /thanks) stay out of the sitemap.
+      if (doc.seo?.noIndex) continue
       const path = slug === 'home' ? '' : slug
       entries.push({
         url: `${SITE_URL}/${path}`,
@@ -78,6 +81,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.7,
     })
+
+    // Local vertical pages (Phase 6): /houston hub + 42 vertical x neighborhood pages.
+    entries.push({
+      url: `${SITE_URL}/houston`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    })
+    for (const p of ALL_LOCAL_PAGES) {
+      entries.push({
+        url: `${SITE_URL}/houston/${p.slug}`,
+        lastModified: now,
+        changeFrequency: 'monthly',
+        priority: 0.6,
+      })
+    }
 
     // Hard-coded legal / compliance routes (not Payload-backed).
     entries.push({

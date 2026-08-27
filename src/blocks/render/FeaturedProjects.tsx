@@ -25,7 +25,15 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
       .map((p) => (typeof p === 'object' ? (p as Project) : null))
       .filter(Boolean) as Project[]
   } else {
-    projects = await getCachedFeaturedProjects(b.limit ?? 3)
+    // Client work leads (1c): overfetch, stable-sort `group: client` first
+    // (then concept, then product), and cut to the block's limit.
+    const limit = b.limit ?? 3
+    const pool = await getCachedFeaturedProjects(Math.max(limit, 12))
+    const rank = (p: Project) => {
+      const g = (p.group as string | null) ?? 'product'
+      return g === 'client' ? 0 : g === 'concept' ? 1 : 2
+    }
+    projects = [...pool].sort((a, b2) => rank(a) - rank(b2)).slice(0, limit)
   }
 
   // LP-friendly variant: no link wrappers, no summary text, no client label,

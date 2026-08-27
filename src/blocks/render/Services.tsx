@@ -1,10 +1,27 @@
 import { Container } from '@/components/Container'
-import { Globe, Search, Smartphone, Server, Sparkles, Zap, Shield, Code, Lightbulb, Check } from 'lucide-react'
+import { Check } from 'lucide-react'
+import {
+  IconCompass, IconSearch, IconPhoneRing, IconStack, IconCrown,
+  IconGauge, IconShield, IconPen, IconEye,
+} from '@/components/BrandIcons'
 import { PdfDownloadLink } from './PdfDownloadLink'
 import { cn } from '@/lib/utils'
 import type { ServicesBlock } from '@/payload-types'
 
-const icons = { globe: Globe, search: Search, smartphone: Smartphone, server: Server, sparkles: Sparkles, zap: Zap, shield: Shield, code: Code, lightbulb: Lightbulb } as const
+// CMS icon keys mapped onto the animated brand icon set (2026-08) so these
+// cards draw in and play their hover gestures like every other icon on the
+// site. Closest semantic match per legacy lucide key.
+const icons = {
+  globe: IconCompass,
+  search: IconSearch,
+  smartphone: IconPhoneRing,
+  server: IconStack,
+  sparkles: IconCrown,
+  zap: IconGauge,
+  shield: IconShield,
+  code: IconPen,
+  lightbulb: IconEye,
+} as const
 
 export function Services(b: ServicesBlock) {
   return (
@@ -25,7 +42,7 @@ export function Services(b: ServicesBlock) {
           {b.items?.map((item, i) => {
             const Icon = item.icon ? icons[item.icon as keyof typeof icons] : null
             return (
-              <div key={i} className="svc">
+              <div key={i} className="svc group">
                 {Icon ? (
                   <div className="ic">
                     <Icon />

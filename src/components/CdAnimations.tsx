@@ -10,10 +10,17 @@ import { WA_CSS, WA_HTML } from './websiteAssemblyMarkup'
 import { PL_CSS, PL_HTML } from './processLoopMarkup'
 import { AM_CSS, AM_DRAWIN_HTML } from './antlerDrawInMarkup'
 
-/** 7-day website build timeline (services page, under the website tiers). */
+/** 7-day website build timeline (services page, under the website tiers).
+    cd-anim-gate + reveal-up: every animation inside holds at frame zero
+    (paused) until ScrollFx marks the section `.in`, so the day-1-to-day-7
+    story plays from the start when the visitor reaches it. */
 export function BuildTimeline() {
   return (
-    <section aria-label="The 7-day website build, step by step" style={{ background: '#14120E' }}>
+    <section
+      aria-label="The 7-day website build, step by step"
+      className="reveal-up cd-anim-gate"
+      style={{ background: '#14120E' }}
+    >
       <style dangerouslySetInnerHTML={{ __html: BT_CSS }} />
       <div dangerouslySetInnerHTML={{ __html: BT_HTML }} />
     </section>

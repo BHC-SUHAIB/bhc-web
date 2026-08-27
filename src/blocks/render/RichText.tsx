@@ -58,6 +58,10 @@ export function RichText(b: RichTextBlock) {
           .card-content p:last-child { margin-bottom: 0; }
           .card-content h2 { font-family: var(--font-serif); font-weight: 600; font-size: 1.65em; letter-spacing: -0.02em; line-height: 1.15; margin: 0 0 0.6em; }
           .card-content h2:not(:first-child) { margin-top: 1.4em; }
+          /* When the card has an eyebrow, the content's leading h2 duplicates
+             it (e.g. About's "How we build") - keep only the styled eyebrow.
+             first-of-type, not first-child: the eyebrow renders before it. */
+          .card-has-eyebrow .card-content > h2:first-of-type { display: none; }
         `}</style>
 
         {isBio ? (
@@ -135,7 +139,7 @@ export function RichText(b: RichTextBlock) {
             </figure>
           </div>
         ) : variant === 'card' ? (
-          <div className={inner}>
+          <div className={cn(inner, b.eyebrow && 'card-has-eyebrow')}>
             <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 sm:p-9 card-content text-[16px] leading-[1.6]">
               {b.eyebrow ? (
                 /* Standard section-eyebrow treatment (rule + mono caps),

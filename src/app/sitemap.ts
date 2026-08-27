@@ -4,12 +4,11 @@ import { ALL_LOCAL_PAGES } from '@/lib/local-pages'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://blackhartconsulting.com').replace(/\/$/, '')
 
-// Re-render at most every 10 min. Without this Next caches the route
-// indefinitely — if the Payload fetch in the try block fails once during a
-// deploy and the catch fallback emits a stub sitemap, Google would keep
-// seeing the broken version until the next deploy. With revalidate=600 the
-// next request after 10 min retries the real fetch.
-export const revalidate = 600
+// Rendered per request, never at build time: the Docker build has no
+// PAYLOAD_SECRET (runtime-only), so prerendering this route fails the build.
+// Per-request cost is tiny because the collection reads underneath go through
+// unstable_cache (1h tags). Matches every other Payload-backed route here.
+export const dynamic = 'force-dynamic'
 
 const pageChangeFreq = (slug: string): 'daily' | 'weekly' | 'monthly' | 'yearly' => {
   if (slug === 'home') return 'weekly'

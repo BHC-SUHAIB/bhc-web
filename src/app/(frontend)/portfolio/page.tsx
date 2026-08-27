@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { ParallaxBackground } from '@/blocks/render/ParallaxBackground'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
@@ -45,14 +46,10 @@ export default async function PortfolioPage() {
           (`.hero-photo .hp-bg::after`), so no inline overlay is needed. */}
       <section className="hero-photo" aria-label="Portfolio intro">
         <div className="hp-bg">
-          <Image
+          <ParallaxBackground
             src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80"
-            alt=""
-            fill
             sizes="100vw"
-            className="object-cover"
             priority
-            fetchPriority="high"
           />
         </div>
         <Container size="xl" className="hp-inner">

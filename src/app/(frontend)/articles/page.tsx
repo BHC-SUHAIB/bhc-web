@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { ParallaxBackground } from '@/blocks/render/ParallaxBackground'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
@@ -37,14 +38,10 @@ export default async function ArticlesPage() {
           baked into the CSS, so legibility is handled without inline styles. */}
       <section className="hero-photo" aria-label="Articles intro">
         <div className="hp-bg">
-          <Image
+          <ParallaxBackground
             src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80"
-            alt=""
-            fill
             sizes="100vw"
-            className="object-cover"
             priority
-            fetchPriority="high"
           />
         </div>
         <Container size="xl" className="hp-inner">

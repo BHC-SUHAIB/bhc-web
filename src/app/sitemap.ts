@@ -27,19 +27,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = []
   const now = new Date()
 
-  try {
-    // The first request after a deploy can land before Payload is warm, and a
-    // failed fetch here would cache the catch-block stub for a full
-    // revalidate window. Retry briefly so a cold boot yields the real sitemap.
+  // The first request after a deploy can land before Payload is warm. Retry
+  // for ~12s so a cold boot still yields the real sitemap; if it ultimately
+  // fails, the thrown error is NOT cached (unlike a returned stub), so the
+  // next request serves the real thing immediately.
+  {
     const fetchAll = () =>
       Promise.all([getCachedAllPages(), getCachedAllProjects(), getCachedAllArticles()])
     let docs: Awaited<ReturnType<typeof fetchAll>> | null = null
-    for (let attempt = 0; attempt < 3 && !docs; attempt++) {
+    for (let attempt = 0; attempt < 5 && !docs; attempt++) {
       try {
         docs = await fetchAll()
       } catch (err) {
-        if (attempt === 2) throw err
-        await new Promise((r) => setTimeout(r, 2000 * (attempt + 1)))
+        if (attempt === 4) throw err
+        await new Promise((r) => setTimeout(r, 3000))
       }
     }
     const [pageDocs, projectDocs, articleDocs] = docs!
@@ -132,13 +133,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: 'yearly',
       priority: 0.3,
-    })
-  } catch {
-    entries.push({
-      url: SITE_URL,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 1,
     })
   }
 

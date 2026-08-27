@@ -1,0 +1,38 @@
+[
+  {
+    "id": 7,
+    "rating": null,
+    "quote": "We’ve seen solid progress, especially with confidence. I’d definitely recommend them to other parents looking for something that’s both professional and personal.",
+    "author": "Grace R.",
+    "role": "Parent",
+    "company": "Prometheus Minds (Google review)",
+    "featured": false,
+    "sortOrder": 10,
+    "updatedAt": "2026-05-07T00:36:06.965Z",
+    "createdAt": "2026-05-06T09:17:47.311Z"
+  },
+  {
+    "id": 6,
+    "rating": "5",
+    "quote": "Black Hart Consulting did an outstanding job on WAYGFT. The site is clean, intuitive, and engaging — and captures the heart behind our message. The team was professional, responsive, and followed through on every commitment. If you want strong design with a strategic approach, highly recommend.",
+    "author": "Kaiti Wachter",
+    "role": "Founder",
+    "company": "WAYGFT",
+    "featured": true,
+    "sortOrder": 2,
+    "updatedAt": "2026-05-06T07:49:09.587Z",
+    "createdAt": "2026-05-06T07:49:09.587Z"
+  },
+  {
+    "id": 2,
+    "rating": "5",
+    "quote": "Black Hart Consulting rebuilt my site from the ground up, adding professional features that perfectly align with my service level. Since launching, clients have a clearer understanding of our value, making sales easier and boosting conversions. More than just design, they delivered a strategic, functional tool. The team was responsive and easy to work with. Highly recommended for driving growth!",
+    "author": "Philip Parmar",
+    "role": "Founder",
+    "company": "Prometheus Minds",
+    "featured": true,
+    "sortOrder": 1,
+    "updatedAt": "2026-05-03T05:39:18.934Z",
+    "createdAt": "2026-05-01T21:24:44.830Z"
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "id": 1,
+  "nav": [
+    {
+      "id": "6a63e6c29b37c80001752f91",
+      "label": "Services",
+      "href": "/services",
+      "openInNewTab": false
+    },
+    {
+      "id": "6a63e6c29b37c80001752f92",
+      "label": "Portfolio",
+      "href": "/portfolio",
+      "openInNewTab": false
+    },
+    {
+      "id": "6a63e6c29b37c80001752f93",
+      "label": "Articles",
+      "href": "/articles",
+      "openInNewTab": false
+    },
+    {
+      "id": "6a63e6c29b37c80001752f94",
+      "label": "About",
+      "href": "/about",
+      "openInNewTab": false
+    },
+    {
+      "id": "6a63e6c29b37c80001752f95",
+      "label": "Contact",
+      "href": "/contact",
+      "openInNewTab": false
+    }
+  ],
+  "cta": {
+    "show": true,
+    "label": "Start a project",
+    "href": "/contact"
+  },
+  "updatedAt": "2026-07-24T22:27:14.028Z",
+  "createdAt": "2026-04-17T05:00:32.218Z",
+  "globalType": "header"
+}

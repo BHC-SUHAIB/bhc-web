@@ -1,0 +1,26 @@
+{
+  "id": 1,
+  "siteName": "Black Hart Consulting",
+  "tagline": "Websites, SEO, apps, and hosting — done right.",
+  "defaultMetaDescription": "Custom websites, SEO, and managed hosting from a Houston-based digital studio. Fixed-price builds in days, not months.",
+  "defaultOgImage": null,
+  "defaultTheme": "dark",
+  "contactEmail": "hello@blackhartconsulting.com",
+  "contactPhone": "(866) 434-9777",
+  "displayTimezone": "America/Chicago",
+  "localSeo": {
+    "streetAddress": null,
+    "addressLocality": "Houston",
+    "addressRegion": "TX",
+    "postalCode": null,
+    "addressCountry": "US",
+    "latitude": 29.7989,
+    "longitude": -95.3989,
+    "serviceRadiusMiles": 25,
+    "openingHours": "Mo-Fr 09:00-18:00",
+    "sameAs": []
+  },
+  "updatedAt": "2026-07-24T22:27:13.988Z",
+  "createdAt": "2026-04-17T05:00:32.162Z",
+  "globalType": "siteSettings"
+}

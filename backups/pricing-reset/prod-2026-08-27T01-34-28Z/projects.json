@@ -1,0 +1,4766 @@
+[
+  {
+    "id": 19,
+    "title": "Certo — Exam Prep & Practice",
+    "slug": "certo",
+    "summary": "A native iOS exam-prep app spanning 26 professional certifications across five industries — technology, business & project management, finance, legal, and healthcare — with 3,281 original scenario questions, a scaled-score mock-exam simulation, spaced-repetition review, and deep per-option explanations. 100% original content, written to the public exam blueprints: no leaked or brain-dump questions, no ban risk. Built in SwiftUI with over-the-air content updates and a full StoreKit 2 catalog.",
+    "heroImage": 78,
+    "group": "product",
+    "client": "Black Hart Consulting (first-party app)",
+    "industry": "EdTech / Professional certification",
+    "projectType": "mobile",
+    "year": 2026,
+    "duration": "Submitted — in App Store review",
+    "teamSize": 1,
+    "liveUrl": null,
+    "stack": [
+      {
+        "id": "6a569260ad3546000190615a",
+        "name": "SwiftUI",
+        "category": "framework"
+      },
+      {
+        "id": "6a569260ad3546000190615b",
+        "name": "Swift",
+        "category": "language"
+      },
+      {
+        "id": "6a569260ad3546000190615c",
+        "name": "SwiftData",
+        "category": "db"
+      },
+      {
+        "id": "6a569260ad3546000190615d",
+        "name": "StoreKit 2",
+        "category": "tool"
+      },
+      {
+        "id": "6a569260ad3546000190615e",
+        "name": "Swift Charts",
+        "category": "framework"
+      },
+      {
+        "id": "6a569260ad3546000190615f",
+        "name": "Xcode Cloud (CI/CD)",
+        "category": "hosting"
+      },
+      {
+        "id": "6a569260ad35460001906160",
+        "name": "App Store Connect API",
+        "category": "tool"
+      },
+      {
+        "id": "6a569260ad35460001906161",
+        "name": "Python (content pipeline)",
+        "category": "tool"
+      },
+      {
+        "id": "6a569260ad35460001906162",
+        "name": "Next.js (remote content host)",
+        "category": "framework"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Certification prep is dominated by “brain-dump” sites that traffic in leaked, real exam questions. Using them violates the certification bodies’ NDAs, can get a candidate’s result revoked or their account banned, and is legally infringing — yet they persist, because learners genuinely want realistic, exam-shaped practice and the honest alternatives are thin and scattered.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The brief was to build the credible, native alternative: one iOS app covering 26 certifications across five very different professional worlds — cloud and security, project management, finance and accounting, legal, and healthcare — with practice good enough to actually predict exam readiness, under a hard rule that every question is original. No leaked content, no ban risk.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "That rule is also the hardest constraint. Originality has to hold at the scale of thousands of questions; a single wrong answer key erodes trust instantly across a paid catalog; and one monetization model has to work for audiences as different as a DevOps engineer and a paralegal.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Original content, written to the public blueprints",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Every question is authored from scratch against each exam’s publicly published skills outline — never copied or paraphrased from real items. The content lives in a versioned JSON pipeline with Python validators that enforce structure and a consistent explanation template, so all 26 banks stay uniform. We then ran a citation-grounded answer-key audit across every question, verifying keys against authoritative public sources — Microsoft Learn, AWS and Google Cloud docs, the IRS, FDA/CMS, PMI, the Scrum Guide, ASQ — with brain-dump sites explicitly excluded.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A real scaled-score simulation, not a quiz",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The signature feature is a timed, blueprint-weighted mock exam that reports a scaled score against a true pass line, with a per-domain breakdown — so readiness is something you measure, not something you guess at. Practice, spaced-repetition review, and the full simulation all draw from the same bank but score and pace differently.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Learning that actually sticks",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Every question carries a worked explanation of why the right answer is right and why each distractor is wrong. A real SM-2 spaced-repetition scheduler resurfaces missed items just as you’re about to forget them, and built-in plus user-authored flashcards cover the rote layer.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Ship content without shipping an app update",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Question banks are versioned and served from a remote content host, so a corrected or expanded exam reaches users over the air — no App Store release required. The app downloads a bank only when its version is strictly higher, then swaps it in place.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Monetization across five industries",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A full StoreKit 2 catalog: per-exam one-time unlocks, five industry bundles, a lifetime all-access, and an auto-renewing yearly subscription with a free trial. Free “funnel” exams drive installs, and a readiness-gated pass guarantee — study, clear a full mock, and if the real exam doesn’t go your way your next exam is on us — doubles as a conversion lever.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Shipped from a beta-OS machine via Xcode Cloud",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The development Mac runs a macOS beta that can’t archive for the App Store locally, so the entire release path — archive, upload, and submit — is driven through Xcode Cloud and the App Store Connect API from the command line, including the full in-app-purchase catalog and every store asset.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A complete, polished v1 — submitted to the App Store with its full in-app-purchase catalog — built around a study loop (practice → simulate → review) that measures real readiness instead of just tallying a score.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "26 certification banks across technology, business & PM, finance, legal, and healthcare — 3,281 original scenario questions.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Timed, blueprint-weighted exam simulations with a scaled score, a true pass line, and a per-domain breakdown.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "SM-2 spaced-repetition review, a worked “why each option” explanation on every question, and built-in plus custom flashcards.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A citation-grounded answer-key audit across all 26 banks — zero wrong keys, and zero leaked or brain-dump content.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Over-the-air content updates through a versioned remote host, so fixes ship without an App Store release.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A complete StoreKit 2 catalog — per-exam unlocks, five industry bundles, lifetime all-access, and a yearly subscription with a free trial.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The whole product rests on one promise the category’s biggest names can’t make: every question is original, written to the public outlines — no leaked content, no ban risk.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "6a569260ad35460001906163",
+        "value": "26",
+        "label": "certifications, one app"
+      },
+      {
+        "id": "6a569260ad35460001906164",
+        "value": "3,281",
+        "label": "original practice questions"
+      },
+      {
+        "id": "6a569260ad35460001906165",
+        "value": "5",
+        "label": "industries covered"
+      },
+      {
+        "id": "6a569260ad35460001906166",
+        "value": "0",
+        "label": "leaked or brain-dump items"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "6a569260ad35460001906167",
+        "image": 79,
+        "caption": "The signature feature — a timed, scaled-score mock exam with a true pass line, a per-domain breakdown, and elapsed time. Readiness you can measure."
+      },
+      {
+        "id": "6a569260ad35460001906168",
+        "image": 80,
+        "caption": "Every question is an original scenario written to the public exam blueprint, graded in place with a worked explanation of why each option is right or wrong."
+      },
+      {
+        "id": "6a569260ad35460001906169",
+        "image": 81,
+        "caption": "A calibrated readiness score, mastery by topic, and an accuracy trend over time — so you know when you’re actually ready to sit the exam."
+      },
+      {
+        "id": "6a569260ad3546000190616a",
+        "image": 82,
+        "caption": "26 certifications across five industries — technology, business & PM, finance, legal, and healthcare — each tracked separately, in one app."
+      },
+      {
+        "id": "6a569260ad3546000190616b",
+        "image": 83,
+        "caption": "A readiness-gated pass guarantee: study, clear a full in-app mock, and if the real exam doesn’t go your way, your next exam is on us."
+      }
+    ],
+    "testimonial": {
+      "quote": null,
+      "author": null,
+      "role": null
+    },
+    "appInstall": {
+      "status": "live",
+      "appName": "Certo",
+      "testFlightUrl": null,
+      "appStoreUrl": "https://apps.apple.com/app/id6776512986",
+      "platformNote": "iPhone & iPad — iOS 17+"
+    },
+    "featured": true,
+    "publishedAt": "2026-07-14T19:47:44.726Z",
+    "updatedAt": "2026-07-14T19:47:44.799Z",
+    "createdAt": "2026-07-10T06:13:24.338Z",
+    "_status": "draft"
+  },
+  {
+    "id": 18,
+    "title": "Sidecar — One-Click Student Export for Teachable",
+    "slug": "sidecar-teachable",
+    "summary": "The second extension in the Sidecar line: a Manifest V3 browser extension that adds one-click CSV, Excel, PDF and JSON export to the Teachable admin — plus a Pro “Full export” that taps Teachable’s own API to pull every student, across every page, with every field. Built in a day on the shared @sidecar/core engine, dependency-free, entirely on-device, and now live on the Chrome Web Store.",
+    "heroImage": 73,
+    "group": "product",
+    "client": "Black Hart Consulting (first-party product)",
+    "industry": "Online Course Platforms / Creator Tools",
+    "projectType": "webapp",
+    "year": 2026,
+    "duration": "1 day on the shared engine",
+    "teamSize": 1,
+    "liveUrl": "https://blackhartconsulting.com/sidecar/teachable",
+    "stack": [
+      {
+        "id": "6a3b4060775b88000156b8f4",
+        "name": "TypeScript",
+        "category": "language"
+      },
+      {
+        "id": "6a3b4060775b88000156b8f5",
+        "name": "Manifest V3 (Chrome Extension)",
+        "category": "framework"
+      },
+      {
+        "id": "6a3b4060775b88000156b8f6",
+        "name": "Vite 8 + @crxjs/vite-plugin",
+        "category": "tool"
+      },
+      {
+        "id": "6a3b4060775b88000156b8f7",
+        "name": "Shadow DOM (isolated UI)",
+        "category": "framework"
+      },
+      {
+        "id": "6a3b4060775b88000156b8f8",
+        "name": "Hand-rolled OOXML + PDF writers",
+        "category": "tool"
+      },
+      {
+        "id": "6a3b4060775b88000156b8f9",
+        "name": "ExtensionPay + Stripe",
+        "category": "tool"
+      },
+      {
+        "id": "6a3b4060775b88000156b8fa",
+        "name": "Chrome Web Store",
+        "category": "hosting"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Teachable runs the course businesses of hundreds of thousands of creators, but getting your own student list out is a chore. The built-in export emails you a CSV that expires in about 24 minutes; the admin paginates 25 students at a time; and the richer fields — phone, tags, sign-up source, sign-in history, address — never appear in the list at all. Even the bulk tools sit behind a paywall.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The deeper goal was to prove a thesis. Sidecar for Kajabi had shipped on a reusable engine we claimed could deliver the same fix across platform after platform. Teachable was the test: build a second, more capable extension in a fraction of the time, on the same core, without starting over.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A second platform on the same engine",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The whole extension is a thin layer over @sidecar/core — config, selectors, a manifest and entry points. We validated the live admin rather than guessing: Teachable’s students list is a real table.tch-table.student-table that paginates 25 rows at a time, and the shared scraper handled its header-in-the-body markup with no core change.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Reverse-engineering Teachable’s own API",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Unlike Kajabi’s server-rendered profiles, Teachable’s admin is a client-rendered single-page app — fetching a page just returns an empty shell. So we traced the dashboard’s own network calls to /api/v1/users?page=N, a JSON endpoint that returns every field for every user with clean pagination metadata. Full export pages through it in the user’s own logged-in session, filters to enrolled students, and assembles all fifteen fields across every page — collapsing “all pages” and “all fields” into one feature.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Dependency-free Excel and PDF, written by hand",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Rather than inject hundreds of kilobytes of SheetJS and jsPDF into a content script, we hand-rolled the writers: a minimal ZIP plus an OOXML worksheet for real .xlsx, and a from-scratch PDF generator (Helvetica, WinAnsi encoding, true pagination) for the branded report. The whole extension is about 11 KB gzipped — and there is no remote code for Chrome’s reviewers to question.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A richer Pro tier, validated live",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Free one-click CSV is the hook; Pro adds JSON and Excel export, a branded PDF report, an on-page Insights panel (revenue, roles, top students), and the Full export. Every feature was validated on a live Teachable account — the exported workbook checked field-by-field against the dashboard before submitting. Privacy stays absolute: nothing leaves the browser except the call to Teachable’s own API, on the user’s click.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Shipped Sidecar’s second extension — built in a day on the shared engine, validated live, and now published on the Chrome Web Store.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A Manifest V3 extension that adds a one-click export bar above the Teachable students table — CSV free; JSON, Excel, a PDF report and an Insights panel on Pro.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Full export — pages through Teachable’s /api/v1/users API to pull every student across every page with all 15 fields, far beyond the 10 columns the dashboard shows.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Dependency-free .xlsx and PDF writers added to @sidecar/core, so the whole bundle stays ~11 KB gzipped with zero remote code.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A Black Hart–themed marketing, support and privacy site at blackhartconsulting.com/sidecar/teachable, plus a complete Chrome Web Store listing, now live.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Proof of the thesis: a second platform shipped on the same core, validating the engine that makes each new target cheap.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Two extensions are now live in the Chrome Web Store from a single engine. Next on the same rails: Thinkific.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "6a3b4060775b88000156b8fb",
+        "value": "15",
+        "label": "student fields, across every page"
+      },
+      {
+        "id": "6a3b4060775b88000156b8fc",
+        "value": "~11 KB",
+        "label": "bundle gzipped — xlsx & PDF hand-rolled"
+      },
+      {
+        "id": "6a3b4060775b88000156b8fd",
+        "value": "1 day",
+        "label": "to ship on the shared engine"
+      },
+      {
+        "id": "6a3b4060775b88000156b8fe",
+        "value": "100%",
+        "label": "on-device — no servers, no tracking"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "6a3b4060775b88000156b8ff",
+        "image": 74,
+        "caption": "The dashboard shows ten columns on one page; the Pro Full export gathers all fifteen fields — phone, tags, sign-up source, sign-in stats, address — for every student across every page, by paging through Teachable’s own API."
+      },
+      {
+        "id": "6a3b4060775b88000156b900",
+        "image": 75,
+        "caption": "Teachable’s built-in export emails a CSV that expires in about 24 minutes. Sidecar writes the file to your downloads instantly, on your device, with no email round-trip."
+      },
+      {
+        "id": "6a3b4060775b88000156b901",
+        "image": 76,
+        "caption": "Free one-click CSV is the hook; Pro ($5/mo or $39 lifetime) unlocks JSON and Excel export, a PDF report, Insights, and the Full export — billed through ExtensionPay on the existing Stripe account."
+      }
+    ],
+    "testimonial": {
+      "quote": null,
+      "author": null,
+      "role": null
+    },
+    "appInstall": {
+      "status": "none",
+      "appName": null,
+      "testFlightUrl": null,
+      "appStoreUrl": null,
+      "platformNote": null
+    },
+    "featured": false,
+    "publishedAt": "2026-06-24T02:26:40.100Z",
+    "updatedAt": "2026-06-24T02:26:40.148Z",
+    "createdAt": "2026-06-23T04:41:23.837Z",
+    "_status": "draft"
+  },
+  {
+    "id": 17,
+    "title": "Scrubbr — In-Browser Metadata Scrubber & True Redactor",
+    "slug": "scrubbr",
+    "summary": "A 100%-in-browser tool that strips hidden metadata from PDFs and images and performs true redaction — destroying the text and pixels under your boxes, not just covering them — then re-parses the output to prove removal. No upload endpoint exists; files never leave the device. Built and launched in a single session: live, taking real payments, and scoring a perfect 100 across Lighthouse.",
+    "heroImage": 68,
+    "group": "product",
+    "client": "Black Hart Consulting (first-party product)",
+    "industry": "Privacy / Security Tools",
+    "projectType": "webapp",
+    "year": 2026,
+    "duration": "one session (10 commits, build to launch)",
+    "teamSize": 1,
+    "liveUrl": "https://scrubbr.pro",
+    "stack": [
+      {
+        "id": "6a3a0a436ae32600018716dd",
+        "name": "React 19 + Vite 8",
+        "category": "framework"
+      },
+      {
+        "id": "6a3a0a436ae32600018716de",
+        "name": "TypeScript",
+        "category": "language"
+      },
+      {
+        "id": "6a3a0a436ae32600018716df",
+        "name": "pdf-lib + pdf.js",
+        "category": "tool"
+      },
+      {
+        "id": "6a3a0a436ae32600018716e0",
+        "name": "exifr + piexifjs (EXIF)",
+        "category": "tool"
+      },
+      {
+        "id": "6a3a0a436ae32600018716e1",
+        "name": "Stripe Checkout + serverless",
+        "category": "tool"
+      },
+      {
+        "id": "6a3a0a436ae32600018716e2",
+        "name": "Resend (license email)",
+        "category": "tool"
+      },
+      {
+        "id": "6a3a0a436ae32600018716e3",
+        "name": "Vercel",
+        "category": "hosting"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The “private PDF tool” space is crowded, but the two operations people actually need to do safely — strip a file’s hidden metadata, and redact it so the underlying text is truly gone — were missing client-side. Every online option uploads your file to a server, asking you to trust a deletion policy you can’t verify.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "And most “redaction” is a black rectangle drawn on top: the original text sits underneath, fully selectable and extractable — a well-documented way sensitive documents leak. We wanted a tool that removes the data for real, never uploads the file, and can prove both.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Everything in the browser — no upload endpoint exists",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Metadata reading, scrubbing, redaction and verification all run locally in JavaScript and WebAssembly. There is no server that receives files. Even pdf.js’s worker, fonts and CMaps are bundled as local assets, so the heavy PDF path makes no third-party request either — the only network calls the app can make are licensing, which carry a key and never a file. You can confirm it in the network tab.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "True redaction by flattening, not covering",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "For each marked PDF page we render it to a high-resolution raster, paint the redaction boxes onto the image, and rebuild the page from that flattened raster — so the underlying text and vector objects no longer exist in the file. Images are burned in at the pixel level. Pages you don’t mark are copied through untouched, so their text stays selectable.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Verification that re-parses the real bytes",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The differentiator is the verify step. After scrubbing, we re-open the output and confirm each removed field is gone; after redaction, we re-extract the text that sat under the boxes and prove none of it survived, and that flattened pages yield zero extractable text. It checks the output, not the intention.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Lossless image stripping",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "For JPEG and PNG we rewrite the container — dropping the EXIF, GPS, IPTC and XMP segments and chunks — without recompressing, so the image is byte-for-byte preserved and GPS can be removed on its own while keeping the rest of EXIF.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Built to be found, and to pay for itself",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Eight high-intent routes are prerendered to static HTML — with SoftwareApplication, HowTo and FAQ JSON-LD — via a custom prerender step, no SSG framework, so the tool ranks and AI assistants can cite it. A $5 one-time Pro tier (batch + PDF/A) runs on Stripe Checkout through three small Vercel serverless functions with a stateless HMAC license, and Resend emails the key on purchase.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Built and launched in a single working session: live at scrubbr.pro, taking real payments, and scoring a perfect 100/100/100/100 on Lighthouse.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Metadata scrub for PDFs (info dictionary, XMP, thumbnails) and images (EXIF, GPS, IPTC, XMP) — lossless for JPEG/PNG — with every field shown before removal.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "True redaction for PDFs and images that destroys the content under each box, verified by re-extracting text from the output.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A verification step that re-parses the real output bytes to prove metadata is gone and redacted text is unrecoverable.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Eight prerendered SEO routes with JSON-LD, a 0.3s desktop load, and zero file-bearing network requests — confirmed in the network tab.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A $5 Pro tier (batch + PDF/A) on Stripe Checkout with serverless licensing and emailed keys via Resend.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The whole premise is verifiable, not asserted: open your network tab and watch nothing leave your device.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "6a3a0a436ae32600018716e4",
+        "value": "0",
+        "label": "files uploaded — 100% in your browser"
+      },
+      {
+        "id": "6a3a0a436ae32600018716e5",
+        "value": "4×100",
+        "label": "Lighthouse: perf, a11y, SEO, best-practices"
+      },
+      {
+        "id": "6a3a0a436ae32600018716e6",
+        "value": "8",
+        "label": "prerendered SEO routes"
+      },
+      {
+        "id": "6a3a0a436ae32600018716e7",
+        "value": "0.3s",
+        "label": "desktop load (LCP)"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "6a3a0a436ae32600018716e8",
+        "image": 69,
+        "caption": "Drop in a file and every hidden field surfaces — author, software, GPS, timestamps — flagged and individually removable. Here, a confidential PDF’s eight metadata blocks, ready to strip."
+      },
+      {
+        "id": "6a3a0a436ae32600018716e9",
+        "image": 70,
+        "caption": "True redaction: drag a box over anything sensitive and the page is flattened so the text underneath is destroyed, not covered. No selectable text survives."
+      },
+      {
+        "id": "6a3a0a436ae32600018716ea",
+        "image": 71,
+        "caption": "The trust differentiator — Scrubbr re-parses the output bytes and confirms each field is actually gone. It verifies the result, not the intent."
+      },
+      {
+        "id": "6a3a0a436ae32600018716eb",
+        "image": 72,
+        "caption": "Free for single-file scrub, redact and verify; a $5 one-time Pro unlock adds batch processing and PDF/A export, billed through Stripe."
+      }
+    ],
+    "testimonial": {
+      "quote": null,
+      "author": null,
+      "role": null
+    },
+    "appInstall": {
+      "status": "none",
+      "appName": null,
+      "testFlightUrl": null,
+      "appStoreUrl": null,
+      "platformNote": null
+    },
+    "featured": true,
+    "publishedAt": "2026-06-23T04:23:31.803Z",
+    "updatedAt": "2026-06-23T04:23:31.832Z",
+    "createdAt": "2026-06-23T04:23:31.831Z",
+    "_status": "draft"
+  },
+  {
+    "id": 16,
+    "title": "Sidecar — One-Click Data Export for Kajabi",
+    "slug": "sidecar",
+    "summary": "A Manifest V3 browser extension that overlays Kajabi and adds the one-click export its dashboard refuses to give you — CSV, Excel, JSON, a branded PDF report, on-page insights, and a Full export that walks every page to pull every field — built on a reusable engine designed to ship the same fix across a whole portfolio of locked-in platforms. Every export runs in the browser; nothing leaves the device. Built, validated on a live account, and now live on the Chrome Web Store.",
+    "heroImage": 64,
+    "group": "product",
+    "client": "Black Hart Consulting (first-party product)",
+    "industry": "Creator Economy / SaaS Tools",
+    "projectType": "webapp",
+    "year": 2026,
+    "duration": "days, not weeks",
+    "teamSize": 1,
+    "liveUrl": "https://blackhartconsulting.com/sidecar/kajabi",
+    "stack": [
+      {
+        "id": "6a3c690ca5a83e00012a43ad",
+        "name": "TypeScript",
+        "category": "language"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43ae",
+        "name": "Manifest V3 (Chrome Extension)",
+        "category": "framework"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43af",
+        "name": "Vite 8 + @crxjs/vite-plugin",
+        "category": "tool"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43b0",
+        "name": "Shadow DOM (isolated UI)",
+        "category": "framework"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43b1",
+        "name": "ExtensionPay + Stripe",
+        "category": "tool"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43b2",
+        "name": "npm workspaces (monorepo)",
+        "category": "tool"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43b3",
+        "name": "Chrome Web Store",
+        "category": "hosting"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Kajabi runs the businesses of hundreds of thousands of creators on $200–400/month plans, but it will not let them take their own data with them. There is no public API, the contact list shows only a fraction of the fields it actually stores, and the one built-in export is a slow CSV that gets emailed to you and expires in three days. Plenty of people end up copy-pasting rows by hand.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The brief had two layers. Build the export Kajabi withholds — cleanly and safely, inside a dashboard we do not control and must not break. And build it so the same fix can ship for the next locked-in platform, and the one after that, without starting from scratch each time.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "An overlay, not an integration",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Kajabi has no API to connect to, so Sidecar does not try. A Manifest V3 content script injects a small export bar directly above Kajabi’s own tables — People, Sales, Analytics — inside the dashboard the user is already logged into. The whole UI lives in a Shadow DOM, so the host’s styles can’t break it and it can’t break Kajabi.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The real product is a reusable engine",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The valuable part isn’t the Kajabi extension — it’s @sidecar/core: a shared engine for mounting, Shadow-DOM widgets, settings, a centralized selector registry with a self-check, scraping, export, and ExtensionPay licensing. A whole new target is roughly six thin files — config, selectors, manifest and entry points — layered over that core. Kajabi is the flagship; Teachable, Thinkific and an email-billing cluster ride the same rails.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Resilient to a host you don’t control",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Every selector for a platform lives in one registry behind a self-check and a kill-switch, so when Kajabi ships a DOM change the extension degrades safely instead of silently exporting garbage. The targets are validated on a live account, never guessed — Kajabi’s contact table is a table.sage-table that sits outside the page’s main element, exactly the kind of detail you only learn by checking.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Full export — the Pro feature that earns its price",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Kajabi’s list shows six columns; the other nine — phone, mobile, address, city, state, country, zip, tags and custom fields — live on each contact’s profile page. Kajabi is a client-rendered app with no bulk API, so Full export drives the list’s own pagination to walk every page, then opens each contact’s profile in the user’s logged-in session and assembles all fifteen fields — every contact, every page — with bounded concurrency. Instant and on-device, versus Kajabi’s slow, emailed, three-day-expiry file. Change-tracking goes a step further: each Full export is diffed against a hashed, on-device fingerprint of the previous one, stamping every row new or changed since last time — recurring value with no new permissions and nothing kept on disk but one-way hashes.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A Pro toolkit that compounds across the line",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Pro is more than a raw dump. JSON, a formatted Excel workbook, a branded PDF report, and an on-page Insights panel — totals, revenue and your top contacts — all computed on the device. Each is a dependency-free module in @sidecar/core, hand-rolled (a from-scratch .xlsx and PDF writer) to keep the bundle tiny and “no remote code” trivially true for Chrome’s reviewers. Built once for the second extension, the whole suite dropped straight into the flagship — the reusable-engine bet paying off.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Privacy as a hard constraint — and a real business model",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Everything runs in the browser: no servers, no analytics, no data off the device — the only network calls are to the user’s own Kajabi pages. Free one-click CSV is the hook; Pro ($5/mo or $39 lifetime) unlocks JSON, Excel, a PDF report, Insights and the all-pages Full export, gated by ExtensionPay on top of Black Hart’s existing Stripe. Each platform ships as its own Chrome Web Store listing, with scoped permissions and isolated payouts.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Shipped the flagship — Sidecar for Kajabi — built, validated on a live Kajabi account, and now published on the Chrome Web Store, with the reusable engine behind it ready for the next platform.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A Manifest V3 extension that injects a one-click export bar over every Kajabi table — People, Sales and Analytics.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Free CSV; a Pro tier adding JSON, Excel, a branded PDF report, on-page Insights, and a Full export that walks every page to recover all 15 contact fields from the 6 the list shows. It also flags what’s new or changed since your last export.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "@sidecar/core — a shared, dependency-free engine (selectors + self-check, kill-switch, scraping, hand-rolled Excel and PDF writers, insights, licensing) that turns a new target into roughly six files.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "ExtensionPay + Stripe billing at $5/mo or $39 lifetime, with per-extension store listings and isolated payouts.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A Black Hart–themed marketing, support and privacy site, plus a full set of Chrome Web Store assets; the listing is now live.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Six platforms mapped on the roadmap: Kajabi → Teachable → Thinkific, then an email-billing cluster.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The flagship is live on the Chrome Web Store, installable today. The bet isn’t a single extension — it’s the engine that turns each approval into a repeatable, privacy-first product line.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "6a3c690ca5a83e00012a43b4",
+        "value": "15",
+        "label": "contact fields recovered, vs Kajabi’s 6"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43b5",
+        "value": "~6",
+        "label": "files to ship the next platform"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43b6",
+        "value": "6",
+        "label": "platforms on the roadmap"
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43b7",
+        "value": "100%",
+        "label": "on-device — no servers, no tracking"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "6a3c690ca5a83e00012a43b8",
+        "image": 65,
+        "caption": "The injected export bar sits directly above Kajabi’s own contacts table — one click writes a clean CSV to your downloads, with no copy-paste and no waiting on an emailed file."
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43b9",
+        "image": 66,
+        "caption": "Kajabi’s list shows six columns; the Pro Full export gathers all fifteen — phone, address, tags and custom fields — by walking every page and reading each contact’s profile in the user’s own session."
+      },
+      {
+        "id": "6a3c690ca5a83e00012a43ba",
+        "image": 67,
+        "caption": "Free one-click CSV is the hook; Pro ($5/mo or $39 lifetime) unlocks JSON, Excel, a PDF report, Insights and the all-pages Full export, billed through ExtensionPay on the existing Stripe account."
+      }
+    ],
+    "testimonial": {
+      "quote": null,
+      "author": null,
+      "role": null
+    },
+    "appInstall": {
+      "status": "none",
+      "appName": null,
+      "testFlightUrl": null,
+      "appStoreUrl": null,
+      "platformNote": null
+    },
+    "featured": true,
+    "publishedAt": "2026-06-24T23:32:28.827Z",
+    "updatedAt": "2026-06-24T23:32:28.902Z",
+    "createdAt": "2026-06-23T00:43:59.057Z",
+    "_status": "draft"
+  },
+  {
+    "id": 15,
+    "title": "MergeBird — Mail Merge for Outlook",
+    "slug": "mergebird",
+    "summary": "A privacy-first mail-merge add-in for new Outlook, designed and built end-to-end — Office.js task pane, Microsoft Graph delivery, per-recipient attachments, Stripe billing, and a one-command deploy.",
+    "heroImage": 59,
+    "group": "product",
+    "client": "Black Hart Consulting (in-house product)",
+    "industry": "SaaS · Productivity",
+    "projectType": "webapp",
+    "year": 2026,
+    "duration": "3 weeks",
+    "teamSize": 1,
+    "liveUrl": "https://mergebird.app",
+    "stack": [
+      {
+        "id": "6a39063ef4aab7002ea2f41d",
+        "name": "Office.js Add-in",
+        "category": "framework"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f41e",
+        "name": "React",
+        "category": "framework"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f41f",
+        "name": "TypeScript",
+        "category": "language"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f420",
+        "name": "Fluent UI v9",
+        "category": "design"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f421",
+        "name": "Microsoft Graph",
+        "category": "tool"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f422",
+        "name": "MSAL · Nested App Auth",
+        "category": "tool"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f423",
+        "name": "Hono",
+        "category": "framework"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f424",
+        "name": "Node.js",
+        "category": "language"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f425",
+        "name": "Stripe",
+        "category": "tool"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f426",
+        "name": "DigitalOcean",
+        "category": "hosting"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f427",
+        "name": "nginx · Let’s Encrypt",
+        "category": "hosting"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "text": "Mail merge inside Outlook is stuck in the past. The built-in feature can’t attach a different file to each recipient, and the third-party tools that can will route your contacts and message content through their own servers to do it. On top of that, “new Outlook” — Microsoft’s rebuilt Windows, Mac, and web client — broke most of the legacy COM add-ins people relied on.",
+                "type": "text",
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "text": "So anyone who needed to send two hundred personalized invoices, each with its own PDF, straight from their own mailbox was left without a good option that also respected their data. That gap was the brief: a genuinely cross-platform mail-merge tool where privacy is the architecture, not a marketing line.",
+                "type": "text",
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "text": "We designed and built MergeBird end-to-end as a single cross-platform Office.js add-in. The task pane is a React + TypeScript + Fluent UI wizard — write the template, import recipients from CSV or Excel, attach per-recipient files, preview every merge, then send. Because Office.js itself can’t send a batch of fresh emails, delivery runs through Microsoft Graph’s /me/sendMail, authenticated with Nested App Authentication so the user signs in once inside Outlook with no redirect dance.",
+                "type": "text",
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "text": "The hero feature — a different attachment for every recipient — matches uploaded files to a spreadsheet column by file name, entirely in the browser. That’s also what makes the privacy promise real: recipients, message bodies, and attachments never touch our infrastructure. A deliberately small Hono backend handles only what it must — anonymous license/quota counts and Stripe billing — and is the only server in the picture.",
+                "type": "text",
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "text": "Around the core we built the rest of a real product: a Trust Cobalt brand and logo, a marketing site, honest opt-in analytics (aggregate-only open and click tracking, no per-recipient data), live Stripe subscriptions and credit packs, and a one-command deploy to DigitalOcean behind HTTPS with auto-renewing certificates — plus a validated AppSource submission package.",
+                "type": "text",
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "text": "MergeBird shipped as a complete, monetized product. One codebase runs across new Outlook on Windows, Mac, and the web; real campaigns send from the user’s own Microsoft 365 mailbox; and Stripe billing is live in production. Because the merge happens client-side, the backend only ever sees an opaque key and a send count — never a recipient, a subject line, or an attachment.",
+                "type": "text",
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "text": "The result is a small, fast, fixed-scope SaaS that demonstrates the full path Black Hart Consulting can take a product down: discovery, design and branding, full-stack engineering against a hard third-party platform, billing, infrastructure, and marketplace submission — all the way to a live, paid product.",
+                "type": "text",
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "6a39063ef4aab7002ea2f428",
+        "value": "0",
+        "label": "recipient records stored server-side"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f429",
+        "value": "3",
+        "label": "Outlook platforms, one codebase"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f42a",
+        "value": "100%",
+        "label": "of email sent from the user’s own mailbox"
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f42b",
+        "value": "Live",
+        "label": "Stripe billing, in production"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "6a39063ef4aab7002ea2f42c",
+        "image": 60,
+        "caption": "The marketing site — privacy-first positioning at mergebird.app."
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f42d",
+        "image": 61,
+        "caption": "The hero feature: a unique attachment for every recipient, matched by file name."
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f42e",
+        "image": 62,
+        "caption": "Every merged message — body and attachment — is previewable before a single email sends."
+      },
+      {
+        "id": "6a39063ef4aab7002ea2f42f",
+        "image": 63,
+        "caption": "Throttled Microsoft Graph delivery with opt-in, aggregate-only open & click tracking."
+      }
+    ],
+    "testimonial": {
+      "quote": null,
+      "author": null,
+      "role": null
+    },
+    "appInstall": {
+      "status": "none",
+      "appName": null,
+      "testFlightUrl": null,
+      "appStoreUrl": null,
+      "platformNote": null
+    },
+    "featured": true,
+    "publishedAt": "2026-06-22T09:54:06.225Z",
+    "updatedAt": "2026-06-22T09:54:06.275Z",
+    "createdAt": "2026-06-22T09:54:06.273Z",
+    "_status": "published"
+  },
+  {
+    "id": 14,
+    "title": "EstimatedTax — 2026 Self-Employment Tax Estimator",
+    "slug": "estimatedtax",
+    "summary": "A free, SEO-first 2026 tax estimator for freelancers and the self-employed — federal + self-employment tax, all 50 states and D.C., an S-Corp break-even, and a real paid email-reminder service. 84 statically-generated pages, every tax calculation client-side, shipped to estimatedtax.io.",
+    "heroImage": 53,
+    "group": "product",
+    "client": "Black Hart Consulting (first-party product)",
+    "industry": "FinTech / Tax",
+    "projectType": "webapp",
+    "year": 2026,
+    "duration": "days, not weeks",
+    "teamSize": 1,
+    "liveUrl": "https://estimatedtax.io",
+    "stack": [
+      {
+        "id": "6a38f2add3b667000125a930",
+        "name": "Next.js 15 (App Router)",
+        "category": "framework"
+      },
+      {
+        "id": "6a38f2add3b667000125a931",
+        "name": "React 19",
+        "category": "framework"
+      },
+      {
+        "id": "6a38f2add3b667000125a932",
+        "name": "TypeScript",
+        "category": "language"
+      },
+      {
+        "id": "6a38f2add3b667000125a933",
+        "name": "Tailwind CSS v3",
+        "category": "design"
+      },
+      {
+        "id": "6a38f2add3b667000125a934",
+        "name": "Vitest",
+        "category": "tool"
+      },
+      {
+        "id": "6a38f2add3b667000125a935",
+        "name": "Stripe (subscriptions)",
+        "category": "tool"
+      },
+      {
+        "id": "6a38f2add3b667000125a936",
+        "name": "Resend",
+        "category": "tool"
+      },
+      {
+        "id": "6a38f2add3b667000125a937",
+        "name": "Vercel (hosting + Cron)",
+        "category": "hosting"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Freelancers and the self-employed have to estimate and pre-pay their own taxes four times a year — and the existing tools are either ad-choked, inaccurate, or quietly harvesting the income figures people type in. The goal was a free 2026 estimator that is fast, genuinely accurate, completely private, and built to rank in search so it compounds on its own.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Three constraints shaped everything. The tax math had to be exactly right for 2026 — real IRS figures, self-employment tax, the QBI deduction, all fifty states. Nothing a user typed could ever leave the browser. And it had to monetize without the sleaze the category is known for: no ad walls, no fake “free” that paywalls the actual answer.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Static-first Next.js, with the tax engine 100% in the browser",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The whole site is statically generated — 84 pages — and the tax engine is a pure, dependency-free TypeScript module that runs entirely client-side. Nothing the user types is ever sent anywhere, the result is instant, and hosting is effectively free. The calculator itself is a guided three-step wizard whose numbers update live as you type.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "One locked tax config, pinned by regression tests",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Every 2026 figure — brackets, the standard deduction, the Social Security wage base, the QBI thresholds — lives in a single locked config file that is the only source of truth; no number is hardcoded anywhere else. 67 Vitest tests pin the math against hand-derived anchors (a $120k sole proprietor owes exactly $28,462), so a refactor can never silently change someone’s tax.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Programmatic SEO at real scale",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "All 50 states plus D.C. ship with verified 2026 brackets, alongside 15 plain-language guides and 12 profession-specific calculator pages (rideshare driver, real estate agent, consultant, and more). Every page is generated from data with tailored metadata, JSON-LD, an explainer, and an FAQ — the prose surface that earns search rankings and AI citations.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The hard tax details, done properly",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Beyond the basics: the §199A QBI deduction with its high-income phase-out and specified-service-business rules, an S-Corp vs sole-proprietor comparison with a real break-even verdict, the safe-harbor rule, a W-2 withholding offset for people with a day job, and a one-tap .ics export of the four due dates.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Monetization that is actually a product",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Three honest revenue streams: CPA and payroll (Gusto) affiliate placements that adapt to the user’s situation, and a real Pro tier. Pro is not a paywall on free features — it is a backend-gated email reminder service (a Stripe subscription feeds a daily Vercel Cron job that emails only active subscribers, via Resend, before each due date), something free users genuinely cannot replicate.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A calm “financial instrument” design",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A custom Sage design system with full light/dark support, three layered typefaces, and a results ledger that reads like a statement rather than a form. No ads, no sign-up, no clutter — the kind of tool people actually trust with a money question.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Shipped to estimatedtax.io: a free, fast, private 2026 tax estimator that already monetizes.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "84 statically-generated pages — the calculator, all 50 states + D.C., 15 guides, and 12 profession pages.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A guided calculator: federal income tax, self-employment tax, the QBI deduction with its high-earner phase-out, and the four quarterly payments with safe-harbor sizing.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A built-in S-Corp vs sole-proprietor break-even, a W-2 withholding offset, .ics calendar export, and shareable result links.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A real Pro subscription — backend-gated email reminders via Stripe → Vercel Cron → Resend.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "CPA + payroll affiliate placements that adapt to the user’s numbers.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Verified in Google Search Console with an 84-URL sitemap; light/dark, fully responsive, zero ads.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Every calculation runs in the browser — not a single byte of anyone’s financial data is collected — and the SEO surface is built to compound over time. A free tool that respects its users and still pays for itself.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "6a38f2add3b667000125a938",
+        "value": "84",
+        "label": "statically-generated pages"
+      },
+      {
+        "id": "6a38f2add3b667000125a939",
+        "value": "51",
+        "label": "states + D.C. covered"
+      },
+      {
+        "id": "6a38f2add3b667000125a93a",
+        "value": "67",
+        "label": "tests pinning the tax math"
+      },
+      {
+        "id": "6a38f2add3b667000125a93b",
+        "value": "0",
+        "label": "bytes of user data collected"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "6a38f2add3b667000125a93c",
+        "image": 54,
+        "caption": "The guided calculator — federal + self-employment tax, your effective rate, and the four quarterly payments, all computed live in the browser."
+      },
+      {
+        "id": "6a38f2add3b667000125a93d",
+        "image": 55,
+        "caption": "Every state has its own page: choose California and the estimate folds in state income tax for a combined federal + state total ($34,757 here)."
+      },
+      {
+        "id": "6a38f2add3b667000125a93e",
+        "image": 56,
+        "caption": "A built-in S-Corp vs sole-proprietor comparison nets the self-employment-tax saving against payroll costs and returns a plain break-even verdict."
+      },
+      {
+        "id": "6a38f2add3b667000125a93f",
+        "image": 57,
+        "caption": "Programmatic SEO: twelve profession-specific calculator pages, each with the deductions and S-Corp math that actually apply to that line of work."
+      },
+      {
+        "id": "6a38f2add3b667000125a940",
+        "image": 58,
+        "caption": "Fifteen plain-language guides — set-aside math, the safe harbor, QBI, the S-Corp break-even — each backed by the same free calculator."
+      }
+    ],
+    "testimonial": {
+      "quote": null,
+      "author": null,
+      "role": null
+    },
+    "appInstall": {
+      "status": "none",
+      "appName": null,
+      "testFlightUrl": null,
+      "appStoreUrl": null,
+      "platformNote": null
+    },
+    "featured": true,
+    "publishedAt": "2026-06-22T08:30:37.053Z",
+    "updatedAt": "2026-06-22T08:30:37.090Z",
+    "createdAt": "2026-06-22T08:30:37.089Z",
+    "_status": "draft"
+  },
+  {
+    "id": 13,
+    "title": "Misbah — Prayer, Qibla & Quran",
+    "slug": "misbah",
+    "summary": "A warm, privacy-first iOS companion for daily Muslim worship — accurate prayer times with a no-server Live Activity countdown, a Qibla compass, the full offline Quran, and the complete Hisn al-Muslim dua collection. Built in SwiftUI with a framework-light core for a future Android port. Collects nothing; works on-device.",
+    "heroImage": 77,
+    "group": "product",
+    "client": "Black Hart Consulting (first-party app)",
+    "industry": "Muslim lifestyle / Consumer iOS",
+    "projectType": "mobile",
+    "year": 2026,
+    "duration": "Launched July 2026",
+    "teamSize": 1,
+    "liveUrl": null,
+    "stack": [
+      {
+        "id": "6a56a258e3221800016183f5",
+        "name": "SwiftUI",
+        "category": "framework"
+      },
+      {
+        "id": "6a56a258e3221800016183f6",
+        "name": "Swift 6 (strict concurrency)",
+        "category": "language"
+      },
+      {
+        "id": "6a56a258e3221800016183f7",
+        "name": "MisbahCore (Swift Package)",
+        "category": "framework"
+      },
+      {
+        "id": "6a56a258e3221800016183f8",
+        "name": "WidgetKit",
+        "category": "framework"
+      },
+      {
+        "id": "6a56a258e3221800016183f9",
+        "name": "ActivityKit / Live Activities",
+        "category": "framework"
+      },
+      {
+        "id": "6a56a258e3221800016183fa",
+        "name": "SwiftData",
+        "category": "db"
+      },
+      {
+        "id": "6a56a258e3221800016183fb",
+        "name": "StoreKit 2",
+        "category": "tool"
+      },
+      {
+        "id": "6a56a258e3221800016183fc",
+        "name": "Core Location",
+        "category": "tool"
+      },
+      {
+        "id": "6a56a258e3221800016183fd",
+        "name": "Adhan (prayer-time engine)",
+        "category": "tool"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The Muslim prayer-app category is crowded, ad-heavy, and — as a string of well-documented investigations between 2020 and 2025 showed — a place where some of the most popular apps quietly sold users’ precise location to data brokers, with the data ending up in the hands of military and immigration agencies. For an app opened during worship, that is a profound breach of trust.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The brief was to build the opposite: a warm, beautiful daily companion for the five prayers, the Qibla, the Quran, and the everyday duas — with an architecture that is privacy-first by construction. No account, no ads, no analytics, no tracking, and nothing about the user collected or sold. And it had to feel calm and premium, not utilitarian.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The hardest constraint followed straight from that stance: the signature feature — a live countdown to the next prayer on the Lock Screen — had to work with no push server (which would mean running a backend that sees every user’s location and schedule). Apple’s Live Activities are designed to be driven by push. Doing it server-free is swimming upstream.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Privacy-first, by construction",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Prayer times and the Qibla are computed entirely on-device from Core Location and an open-source astronomical engine. There is no backend, no analytics SDK, and no advertising SDK anywhere in the app. The only network call is optional Quran-recitation audio, streamed from a public host and cached locally. The App Store privacy label is, truthfully, “Data Not Collected.”",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A no-server Live Activity that survives the night",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The next-prayer countdown runs on the Lock Screen, Dynamic Island, CarPlay, and Apple Watch — with no push server. The trick: the Live Activity bakes the whole upcoming prayer schedule into its state, and the widget recomputes the current prayer at render time, counting down from the device clock. So when iOS re-renders the activity at its stale-date boundary, it advances to the next prayer on its own — even while the phone is asleep. A WidgetKit timeline and a best-effort background refresh layer on top for reliability.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A framework-light core for a future Android port",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "All of the logic, content, and design tokens live in MisbahCore — a SwiftUI-free Swift package — with every platform capability (location, notifications, purchases) behind a protocol. That keeps the door open to a native Jetpack Compose rebuild against the same core, without re-deriving prayer math or re-authoring content.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The full Quran and an authentic dua library, offline",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The complete Quran ships offline — Uthmani Arabic plus a public-domain translation, all 114 surahs — with stream-and-cache recitation, so each verse is available offline after its first play. The full Hisn al-Muslim collection (267 duas across eight everyday categories, 233 with bundled audio) is searchable down to the individual supplication.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Calm, premium design",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A warm palette, a serif display face for the countdown, hand-tuned Arabic typography, and four sky-phase gradients that shift with the time of day. Monetization is a one-time “Misbah Plus” unlock plus an optional tip jar — no ads, no subscription traps.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Version 1.0 shipped to the App Store in July 2026 and is live in 174 countries — roughly 85 Swift files behind a calm five-tab interface, with a reusable Swift-package core ready for Android.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Five daily prayers with adhan audio, per-prayer reminders, and a full-month timetable (region-aware calculation methods).",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A no-server next-prayer Live Activity engineered to roll over overnight — on Lock Screen, Dynamic Island, CarPlay, and Apple Watch.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A magnetometer Qibla compass with live bearing and distance to Makkah, plus an AR Qibla mode.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "The full offline Quran with translation, bookmarks, translation search, and stream-and-cache recitation.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "267 Hisn al-Muslim duas in eight categories, 233 with audio, searchable to the individual dua.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "A first-run feature tour, a daily prayer log with qada (missed-prayer) make-up, a Ramadan suite, a tasbih counter, and Home / Lock-Screen widgets.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Every one of those features runs without collecting a single byte of user data — the very thing the category’s biggest names gave up.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "6a56a258e3221800016183fe",
+        "value": "0",
+        "label": "trackers, ads, or data sold"
+      },
+      {
+        "id": "6a56a258e3221800016183ff",
+        "value": "100%",
+        "label": "on-device — works offline"
+      },
+      {
+        "id": "6a56a258e322180001618400",
+        "value": "114",
+        "label": "surahs, full Quran offline"
+      },
+      {
+        "id": "6a56a258e322180001618401",
+        "value": "267",
+        "label": "Hisn al-Muslim duas"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "6a56a258e322180001618402",
+        "image": 49,
+        "caption": "The Qibla compass — live bearing and distance to the Kaaba, computed on-device from the magnetometer."
+      },
+      {
+        "id": "6a56a258e322180001618403",
+        "image": 50,
+        "caption": "The full Quran ships offline — a searchable surah list with per-surah recitation downloads for offline listening."
+      },
+      {
+        "id": "6a56a258e322180001618404",
+        "image": 51,
+        "caption": "The complete Hisn al-Muslim collection, grouped into eight everyday categories and searchable to the individual dua."
+      },
+      {
+        "id": "6a56a258e322180001618405",
+        "image": 52,
+        "caption": "A full-month prayer timetable with region-aware calculation methods (ISNA shown)."
+      }
+    ],
+    "testimonial": {
+      "quote": null,
+      "author": null,
+      "role": null
+    },
+    "appInstall": {
+      "status": "live",
+      "appName": "Misbah",
+      "testFlightUrl": "https://testflight.apple.com/join/jsSRjzV4",
+      "appStoreUrl": "https://apps.apple.com/app/id6776505999",
+      "platformNote": "iPhone & iPad — iOS 17+"
+    },
+    "featured": true,
+    "publishedAt": "2026-07-14T20:55:51.995Z",
+    "updatedAt": "2026-07-14T20:55:52.090Z",
+    "createdAt": "2026-06-08T03:30:57.287Z",
+    "_status": "draft"
+  },
+  {
+    "id": 12,
+    "title": "WAYGFT — What Are You Grateful For Today?",
+    "slug": "waygft",
+    "summary": "A worldwide wall of anonymous gratitude — quotes, stories, photos, and videos, moderated by one human, delivered over a global CDN. Scaffolded, branded, and shipped to production in 5 days.",
+    "heroImage": 38,
+    "group": "product",
+    "client": "Kaiti (waygft)",
+    "industry": "Consumer / Community",
+    "projectType": "webapp",
+    "year": 2026,
+    "duration": "5 days (7 commits)",
+    "teamSize": 1,
+    "liveUrl": null,
+    "stack": [
+      {
+        "id": "69ea675c26847000014b179a",
+        "name": "Next.js 16 (App Router)",
+        "category": "framework"
+      },
+      {
+        "id": "69ea675c26847000014b179b",
+        "name": "React 19",
+        "category": "framework"
+      },
+      {
+        "id": "69ea675c26847000014b179c",
+        "name": "TypeScript",
+        "category": "language"
+      },
+      {
+        "id": "69ea675c26847000014b179d",
+        "name": "Tailwind CSS v4",
+        "category": "design"
+      },
+      {
+        "id": "69ea675c26847000014b179e",
+        "name": "Framer Motion",
+        "category": "design"
+      },
+      {
+        "id": "69ea675c26847000014b179f",
+        "name": "Prisma",
+        "category": "tool"
+      },
+      {
+        "id": "69ea675c26847000014b17a0",
+        "name": "PostgreSQL",
+        "category": "db"
+      },
+      {
+        "id": "69ea675c26847000014b17a1",
+        "name": "DigitalOcean Spaces + CDN",
+        "category": "hosting"
+      },
+      {
+        "id": "69ea675c26847000014b17a2",
+        "name": "jose (JWT) + bcrypt",
+        "category": "tool"
+      },
+      {
+        "id": "69ea675c26847000014b17a3",
+        "name": "Zod",
+        "category": "tool"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Kaiti wanted to launch a worldwide wall of gratitude: anyone could anonymously share a quote, a story, a photo, or a video of something that made them smile. One human — her — would moderate every post with love before it appeared on the wall. The brand had to feel soft and personal, not like a SaaS product.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The constraints were real: every submission had to stay anonymous, but submitters needed rate-limiting so bad actors couldn’t flood the queue. Photos and videos had to load fast globally without bloating the server. The admin side had to be simple enough that one person could run the whole moderation queue on a phone. And it had to go from idea to production in a weekend.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Next.js 16 App Router with the new “proxy.ts”",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Built on the App Router to get streaming, ISR, and server-side rendering for the wall. Used Next 16’s new `proxy.ts` (the successor to `middleware.ts`) to guard every /admin/* route with a JWT cookie check. The gratitude wall home page is statically rendered with ISR (60s revalidation); approving a post calls `revalidatePath('/')` for instant publish.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A schema that’s smaller than it sounds",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Prisma + Postgres. Two tables: `Post` (with enum fields for `PostType` → QUOTE/STORY/PHOTO/VIDEO and `PostStatus` → PENDING/APPROVED/REJECTED), and `Admin` (email + bcrypt hash + last-login timestamp). Two compound indexes on `(status, createdAt)` and `(status, approvedAt)` keep the moderation queue and the public wall snappy as the table grows.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Privacy-first rate limiting",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Six submissions per hour per IP — but the raw IP is never stored. Every submission hashes the IP with a salted SHA-256 before it touches the database. The rate limiter itself is an in-memory keyed store, so it resets on redeploy and never persists PII. Zod schemas validate every submission at the edge.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Spaces + CDN for zero-drama media",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Photos and videos upload directly to DigitalOcean Spaces via a signed S3 client (`@aws-sdk/client-s3`). Every object is served from the Spaces CDN edge, not the droplet — a 4 GB droplet can run this at scale without ever touching the media path. When an admin deletes a photo post, the object is deleted from Spaces too.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A soft-landing brand",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Three custom Google fonts layered together: Plus Jakarta Sans for body, Fraunces for serif headlines, Caveat for the script flourish. Pink/parchment palette with floating hearts animated by Framer Motion. A three-column autoscrolling wall that slows on hover. Duck emoji accents. A rotating-prompt hero that cycles through “music / pretty / that thing” before the user finishes reading.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "An admin panel a non-engineer can actually run",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Three tabs: Pending, Approved, Rejected. Each post renders inline (text, photo, or video), with approve/reject buttons and a delete confirmation. Settings page with a change-password flow. No build step, no CMS to learn — just a login and three tabs.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Shipped in 5 days. Seven commits from `create-next-app` to a moderated, multimedia, CDN-backed, mobile-ready production site live at waygft.life.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Public gratitude wall with 3-column autoscroll and opacity mask.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Four submission types: quote, story, photo, video — all moderated.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "/latest paginated archive and per-post permalinks (/p/[id]) with social share.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Admin portal with pending/approved/rejected queues + change-password flow.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Rate limit: 6 submissions per hour per IP, stored as salted SHA-256 hashes.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Mobile-first nav and wall; reduced-motion respected.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Deployed to a $28/mo DO droplet + $5/mo Spaces bucket — ~$33/mo all-in.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The brand landed in a way that matters: warm, soft, unmistakably not a product demo. The kind of site people actually want to submit to.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "69ea675c26847000014b17a4",
+        "value": "5 days",
+        "label": "scaffold → production"
+      },
+      {
+        "id": "69ea675c26847000014b17a5",
+        "value": "4",
+        "label": "submission types supported"
+      },
+      {
+        "id": "69ea675c26847000014b17a6",
+        "value": "100%",
+        "label": "human-moderated posts"
+      },
+      {
+        "id": "69ea675c26847000014b17a7",
+        "value": "~$33/mo",
+        "label": "all-in hosting cost"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "69ea675c26847000014b17a8",
+        "image": 39,
+        "caption": "The About page — a one-paragraph mission statement, framed to feel like a handwritten letter rather than a product page."
+      },
+      {
+        "id": "69ea675c26847000014b17a9",
+        "image": 40,
+        "caption": "Four submission types behind a single form: quote, story, photo, video. Optional signature, zero required PII."
+      },
+      {
+        "id": "69ea675c26847000014b17aa",
+        "image": 42,
+        "caption": "The /latest archive — a masonry wall with quotes, stories, and media posts interleaved, each one linkable and shareable."
+      }
+    ],
+    "testimonial": {
+      "quote": null,
+      "author": null,
+      "role": null
+    },
+    "appInstall": {
+      "status": "none",
+      "appName": null,
+      "testFlightUrl": null,
+      "appStoreUrl": null,
+      "platformNote": null
+    },
+    "featured": true,
+    "publishedAt": "2026-04-23T18:39:24.882Z",
+    "updatedAt": "2026-05-22T08:12:40.416Z",
+    "createdAt": "2026-04-23T18:39:24.904Z",
+    "_status": "draft"
+  },
+  {
+    "id": 10,
+    "title": "Prometheus Minds",
+    "slug": "prometheus-minds",
+    "summary": "Squarespace → custom Vite/React rebuild for an ADHD tutoring practice in the Twin Cities. New brand, block-based CMS with 27 content types, scheduled publishing, and a performance budget — shipped in 56 commits over 5 days.",
+    "heroImage": 33,
+    "group": "product",
+    "client": "Prometheus Minds",
+    "industry": "Education / Neurodiverse tutoring",
+    "projectType": "website",
+    "year": 2026,
+    "duration": "5 days (56 commits)",
+    "teamSize": 1,
+    "liveUrl": "https://www.prometheusminds.com",
+    "stack": [
+      {
+        "id": "69e9be659fd4e20001cc54de",
+        "name": "React 19",
+        "category": "framework"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54df",
+        "name": "Vite 8",
+        "category": "tool"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e0",
+        "name": "React Router 7",
+        "category": "framework"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e1",
+        "name": "Tailwind CSS",
+        "category": "design"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e2",
+        "name": "Express 4",
+        "category": "framework"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e3",
+        "name": "SQLite",
+        "category": "db"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e4",
+        "name": "JWT + bcrypt",
+        "category": "tool"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e5",
+        "name": "Resend (transactional email)",
+        "category": "tool"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e6",
+        "name": "DigitalOcean",
+        "category": "hosting"
+      }
+    ],
+    "challenge": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Prometheus Minds had outgrown its Squarespace template. The existing site ran Squarespace 7.1 — all-caps headlines locked in by the theme, generic stock-photo layouts, and a content editor that couldn’t keep pace with the practice: scheduled posts, structured service pages with per-tier pricing, a real blog, a newsletter.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The performance ceiling was the platform itself. Squarespace shipped 20+ vendor scripts on every page load — reCAPTCHA, CSS runtime, component definitions, universal performance bundle — with no way to trim the bundle or preload the LCP hero. Each paid monthly dollar bought less and less control.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The ask: a fully custom site the practice could actually run. Their own brand, their own CMS, their own hosting, and a publishing cadence that didn’t require a Squarespace editor.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "approach": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A mid-build pivot: tutor portal → CMS-only",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The original scope included a tutor portal for post-session notes and a parent login. A week in, we pivoted: Prometheus Minds already uses TutorBird for scheduling, billing, and parent communication. A second portal would have duplicated work and confused parents. We dropped ~1,200 lines of portal code and rerouted \"Portal Login\" to TutorBird. That time went into a services CMS and newsletter backend instead.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Block-based CMS with 27 content types",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Every public page is composed from blocks — Hero, FeatureGrid, PricingCards, Testimonials, ImageText, NumberedSteps, InlineContact, ServiceAreaBanner, and more. Philip can drag blocks into any order on any page, autosaving as he works. Each block has its own schema and its own React renderer, so the design and the CMS can never drift.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Three tiers of polish",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Tier 1 — fundamentals: dynamic sitemap, robots.txt, alt-text validation, WCAG AA contrast, silent admin fetches, dark-background auth pages.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Tier 2 — UX: drag-and-drop block reorder with auto-save, duplicate block/page, required-image warning, per-post SEO meta, error boundaries per route.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Tier 3 — advanced: RSS feed, scheduled publishing for pages and blog posts, live preview, page versioning, image focal-point editor.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "A real performance budget",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "WebP logo, preload LCP hero image with matching fetchpriority, inline critical CSS, lazy-loaded admin portals and auth routes, responsive srcSets with Squarespace-CDN resize params for blog covers, and preconnect to image hosts. First paint ships <200KB of JS — down from the 1MB+ Squarespace sent on every page.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "h3",
+            "type": "heading",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Auth with Resend-based password reset",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "HMAC-signed reset tokens with a one-hour expiry, delivered through Resend for transactional email. JWT plus bcrypt for the admin session. No plaintext passwords, no reset links that live forever, and no third-party auth platform to depend on.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "outcome": {
+      "root": {
+        "type": "root",
+        "format": "",
+        "indent": 0,
+        "version": 1,
+        "children": [
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "Shipped in five working days — 56 commits from initial scaffold to production-ready, spanning Apr 17–22, 2026. Full design refresh, verbatim content restoration from the old site for SEO parity, and a CMS the owner actually runs.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          },
+          {
+            "tag": "ul",
+            "type": "list",
+            "start": 1,
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Typography rebuilt around Plus Jakarta Sans + a custom gold/parchment/ink design system (old site: Squarespace template, all-caps headlines).",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Home page rebuilt with 12 sections, strict image/solid section rhythm, photo backgrounds chosen by the owner.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Four dedicated service pages (Neurodiverse Tutoring, 6-Week ADHD Reset, Online Tutoring, About) — each fully block-composed.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Blog system with per-post SEO, responsive cover images via CDN params, and a dynamic RSS feed.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Contact form with three placements site-wide, an admin inbox, and rate-limiting. Three-field inquiry routing: service, budget, notes.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Newsletter signup with admin-side subscriber list export.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "listitem",
+                "value": 1,
+                "format": "",
+                "indent": 0,
+                "version": 1,
+                "children": [
+                  {
+                    "mode": "normal",
+                    "text": "Mobile sticky CTA, custom-eased smooth scroll, respect for prefers-reduced-motion.",
+                    "type": "text",
+                    "style": "",
+                    "detail": 0,
+                    "format": 0,
+                    "version": 1
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ],
+            "listType": "bullet",
+            "direction": "ltr"
+          },
+          {
+            "type": "paragraph",
+            "format": "",
+            "indent": 0,
+            "version": 1,
+            "children": [
+              {
+                "mode": "normal",
+                "text": "The site now runs on a $12/month DigitalOcean droplet instead of Squarespace’s $36/month Business plan — and the practice owns the stack, the content, and the roadmap.",
+                "type": "text",
+                "style": "",
+                "detail": 0,
+                "format": 0,
+                "version": 1
+              }
+            ],
+            "direction": "ltr"
+          }
+        ],
+        "direction": "ltr"
+      }
+    },
+    "metrics": [
+      {
+        "id": "69e9be659fd4e20001cc54e7",
+        "value": "56",
+        "label": "commits shipped in 5 days"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e8",
+        "value": "27",
+        "label": "block types in the CMS"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54e9",
+        "value": "<200KB",
+        "label": "first-paint JS (was ~1MB)"
+      },
+      {
+        "id": "69e9be659fd4e20001cc54ea",
+        "value": "$24/mo",
+        "label": "saved vs. Squarespace"
+      }
+    ],
+    "gallery": [
+      {
+        "id": "69e9be659fd4e20001cc54eb",
+        "image": 34,
+        "caption": "Before — the original Squarespace homepage: all-caps headline, generic template hero, 1MB+ JS on every page."
+      },
+      {
+        "id": "69e9be659fd4e20001cc54ec",
+        "image": 36,
+        "caption": "After — Neurodiverse Tutoring service page, one of four block-composed service pages with tier-specific pricing."
+      },
+      {
+        "id": "69e9be659fd4e20001cc54ed",
+        "image": 35,
+        "caption": "The new About page introduces Philip Parmar as founder, leaning into the brand story rather than stock photography."
+      },
+      {
+        "id": "69e9be659fd4e20001cc54ee",
+        "image": 37,
+        "caption": "Before — the old Services page: wall of all-caps copy, no visual hierarchy, no per-service imagery."
+      }
+    ],
+    "testimonial": {
+      "quote": "We’ve seen solid progress, especially with confidence. I’d definitely recommend them to other parents looking for something that’s both professional and personal.",
+      "author": "Grace R.",
+      "role": "Parent, Prometheus Minds (Google review)"
+    },
+    "appInstall": {
+      "status": "none",
+      "appName": null,
+      "testFlightUrl": null,
+      "appStoreUrl": null,
+      "platformNote": null
+    },
+    "featured": true,
+    "publishedAt": "2026-04-23T06:38:29.004Z",
+    "updatedAt": "2026-04-23T06:38:29.025Z",
+    "createdAt": "2026-04-23T06:38:29.025Z",
+    "_status": "draft"
+  }
+]

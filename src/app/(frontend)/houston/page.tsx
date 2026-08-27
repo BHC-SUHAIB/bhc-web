@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { JsonLd } from '@/components/JsonLd'
@@ -24,7 +25,27 @@ export default function HoustonHubPage() {
           { name: 'Houston', path: '/houston' },
         ])}
       />
-      <section className="py-14 sm:py-20">
+      <section className="py-14 sm:py-20 relative isolate overflow-hidden">
+        {/* Faded Buffalo Bayou + skyline backdrop; the next section carries no
+            image so backgrounds alternate. */}
+        <div aria-hidden className="absolute inset-0 -z-20">
+          <Image
+            src="https://images.unsplash.com/photo-1625109998123-40f1cc978735?q=80"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-25"
+            priority
+          />
+        </div>
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              'linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 55%, transparent) 0%, color-mix(in srgb, var(--color-bg) 92%, transparent) 100%)',
+          }}
+        />
         <Container size="xl">
           <span className="eyebrow eyebrow-row mb-4"><span className="rule" />Houston, by neighborhood</span>
           <h1 className="font-serif font-semibold text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] tracking-[-0.025em] max-w-3xl">

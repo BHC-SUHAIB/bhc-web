@@ -249,6 +249,7 @@ export const bundlesBlock = {
   blockType: 'bundleOffer',
   eyebrow: 'Bundles',
   headline: 'Everything a new location needs.',
+  backgroundImageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80',
   bundles: [
     {
       name: 'Open for Business', price: '$999', monthly: '+ $149 a month',
@@ -335,6 +336,7 @@ export const demoCtaBlock = {
   headline: 'Still here? Get a free demo site.',
   description: 'Send your business name and Google listing. A mockup of your new site is in your inbox within 48 hours. No call, no obligation.',
   variant: 'emphasized',
+  backgroundImageUrl: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1920&q=80',
   primaryCta: { label: 'See your site first', href: '/free-demo-site' },
   secondaryCta: { label: 'Book a 30-min call', href: 'https://calendly.com/suhaib-blackhartconsulting/discovery-call' },
 }
@@ -417,6 +419,8 @@ export const homePage = () => ({
       headline: 'Websites, AI phone answering, and automations for service businesses.',
       subheadline: 'Built in days at fixed prices. See your new site before you pay a dollar, or call our front desk right now and hear it book an appointment.',
       align: 'left',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1609445333560-e03ba271b2ce?w=1920&q=80',
+      overlayStrength: 'heavy',
       ctas: [
         { label: 'See your site first', href: '/free-demo-site', variant: 'primary' },
         { label: `Call the front desk ${PHONE_DISPLAY}`, href: PHONE_TEL, variant: 'secondary' },
@@ -473,6 +477,8 @@ export const servicesPage = () => ({
       headline: 'Everything we do, with real numbers.',
       subheadline: 'No "contact us for pricing." Real prices, real timelines, real deliverables. Buy outright or subscribe and own it in a year.',
       align: 'left',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&q=80',
+      overlayStrength: 'heavy',
       ctas: [
         { label: 'See your site first', href: '/free-demo-site', variant: 'primary' },
         { label: 'Ask a question', href: '/contact', variant: 'ghost' },
@@ -526,6 +532,7 @@ export const servicesPage = () => ({
       headline: 'Need one specific fix?',
       description: 'Speed, mobile, schema, tracking, a Google Business Profile. Fixed prices, three to seven days.',
       variant: 'default',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1605152276897-4f618f831968?w=1920&q=80',
       primaryCta: { label: 'See the fix-it menu', href: '/fix-it' },
     },
     calendlyBlock('Want to scope a project?', 'Book a 30-min discovery call'),
@@ -555,6 +562,8 @@ export const fixItPage = () => ({
       headline: 'One problem, one price, done this week.',
       subheadline: 'For sites we can get into (your repo, your host, or WordPress). If we cannot get access, we will tell you in the first reply and suggest a Launch Page instead.',
       align: 'left',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1920&q=80',
+      overlayStrength: 'heavy',
       ctas: [
         { label: 'Get my free audit first', href: '/#audit', variant: 'primary' },
         { label: 'Ask which fix I need', href: '/contact?tier=fix-it', variant: 'ghost' },
@@ -600,6 +609,8 @@ export const aiFrontDeskPage = () => ({
       headline: 'Every call answered. Every job booked.',
       subheadline: 'A receptionist that picks up on the first ring, 24 hours a day, quotes only what you told it to quote, books into your calendar, texts the caller a confirmation, and sends you the summary. Forward your number and it is live in five days.',
       align: 'left',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1520923642038-b4259acecbd7?w=1920&q=80',
+      overlayStrength: 'heavy',
       ctas: [
         { label: `Call the demo ${PHONE_DISPLAY}`, href: PHONE_TEL, variant: 'primary' },
         { label: 'Start setup, $299', href: '/contact?tier=front-desk-setup', variant: 'secondary' },
@@ -653,6 +664,7 @@ export const aiFrontDeskPage = () => ({
       headline: 'Stop losing the calls you paid to get.',
       description: 'Setup is $299 and it is live in five days. Call the demo first if you want proof.',
       variant: 'emphasized',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1523966211575-eb4a01e7dd51?w=1920&q=80',
       primaryCta: { label: 'Start setup, $299', href: '/contact?tier=front-desk-setup' },
       secondaryCta: { label: `Call the demo ${PHONE_DISPLAY}`, href: PHONE_TEL },
     },
@@ -675,6 +687,8 @@ export const automationPage = () => ({
       headline: 'One process, fixed price, seven days.',
       subheadline: 'Pick the thing you do by hand every week. We wire it so it happens on its own, show you it working, and keep it running for $79 a month.',
       align: 'left',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1560264280-88b68371db39?w=1920&q=80',
+      overlayStrength: 'heavy',
       ctas: [
         { label: 'Start a Sprint, $799', href: '/contact?tier=automation-sprint', variant: 'primary' },
         { label: 'See the workflows', href: '#workflows', variant: 'ghost' },
@@ -739,6 +753,8 @@ export const freeDemoSitePage = () => ({
       headline: 'See your new site before you pay a dollar.',
       subheadline: 'Send your business name and your Google listing. Within 48 hours you get a link to a working mockup built from your real services, hours, and reviews. If you like it, $399 to $699 puts it live this week. If you do not, you owe nothing and it disappears.',
       align: 'left',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1920&q=80',
+      overlayStrength: 'heavy',
       ctas: [
         { label: 'Request my demo', href: '#demo-request', variant: 'primary' },
       ],
@@ -782,6 +798,8 @@ export const thanksPage = () => ({
       blockType: 'hero',
       eyebrow: 'Order received',
       headline: 'Thank you. Here is what happens next.',
+      backgroundImageUrl: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1920&q=80',
+      overlayStrength: 'heavy',
       subheadline: `You will get an email within one business day with the intake form for your project. Fill it in whenever you are ready and the clock starts the moment we have it. Questions in the meantime: reply to that email or text ${PHONE_DISPLAY}.`,
       align: 'center',
       ctas: [

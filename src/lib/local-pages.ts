@@ -59,6 +59,8 @@ export function localPageLayout(p: LocalPage): any[] {
         `Built in 7 days at a fixed price, with the search structure that puts a ${v.label.toLowerCase()} business in front of {n} customers, and a front desk that answers when you cannot.`,
       ),
       align: 'left',
+      backgroundImageUrl: (v as { heroImage?: string }).heroImage,
+      overlayStrength: 'heavy',
       ctas: [
         { label: 'See your site first', href: '/free-demo-site', variant: 'primary' },
         { label: `Call the front desk ${PHONE_DISPLAY}`, href: 'tel:+18664349777', variant: 'ghost' },

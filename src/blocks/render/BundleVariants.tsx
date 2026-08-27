@@ -144,12 +144,12 @@ export function BundleReceipt(b: BundleOfferBlock) {
     <SectionShell b={b}>
       <Container size="xl">
         <Head {...b} />
-        <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-start">
+        <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
           {bundles.map((bundle, i) => (
             <div
               key={i}
               className={cn(
-                'rounded-[var(--radius-md)] border bg-[var(--color-surface)] px-7 py-8',
+                'rounded-[var(--radius-md)] border bg-[var(--color-surface)] px-7 py-8 flex flex-col h-full',
                 'shadow-[0_18px_40px_-28px_color-mix(in_srgb,var(--color-ink)_45%,transparent)]',
                 bundle.highlighted ? 'border-[var(--color-brass)]' : 'border-[var(--color-border-strong)]',
               )}
@@ -162,7 +162,7 @@ export function BundleReceipt(b: BundleOfferBlock) {
                 <p className="text-[13.5px] text-[var(--color-fg-muted)] text-center mt-1">{bundle.tagline}</p>
               ) : null}
               <div className="border-t border-dashed border-[var(--color-border-strong)] my-5" />
-              <ul className="space-y-2.5">
+              <ul className="space-y-2.5 flex-1">
                 {bundle.includes?.map((f, j) => (
                   <li key={j} className="flex items-baseline justify-between gap-4 text-[14px]">
                     <span>{f.label}</span>

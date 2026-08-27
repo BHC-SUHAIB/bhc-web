@@ -203,15 +203,25 @@ export async function RenderBlocks({
         const key = (b as { id?: string }).id ?? String(i)
         const node = renderOne(b)
         if (node == null) return null
+        // Blocks past the first two are below the fold on every viewport:
+        // content-visibility lets the renderer skip their layout/paint until
+        // scroll approaches, which is most of what first paint was waiting on.
+        const cv = i >= 2 ? ' cv-auto' : ''
         if (isToned) {
           // Alternate section tones down the page.
           return (
-            <div key={key} className={i % 2 === 0 ? 'tone-a' : 'tone-b'}>
+            <div key={key} className={(i % 2 === 0 ? 'tone-a' : 'tone-b') + cv}>
               {node}
             </div>
           )
         }
-        return <React.Fragment key={key}>{node}</React.Fragment>
+        return cv ? (
+          <div key={key} className="cv-auto">
+            {node}
+          </div>
+        ) : (
+          <React.Fragment key={key}>{node}</React.Fragment>
+        )
       })}
     </>
   )

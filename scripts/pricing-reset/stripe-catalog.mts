@@ -29,14 +29,23 @@ const MODE = LIVE ? 'live' : 'test'
 const SITE = 'https://blackhartconsulting.com'
 
 // ── Key from the Stripe CLI (never asked for, never printed) ────────────────
+// The CLI config can hold several profiles; use the [default] section, which
+// `stripe login` writes (Black Hart Consulting LLC).
 function cliKey(): string {
   const out = execFileSync('stripe', ['config', '--list'], { encoding: 'utf8' })
-  const re = LIVE ? /live_mode_api_key\s*=\s*'?([^'\n]+)'?/ : /test_mode_api_key\s*=\s*'?([^'\n]+)'?/
-  const m = out.match(re)
-  if (!m) {
-    console.error(`No ${MODE}-mode key in \`stripe config --list\`. Run \`stripe login\` first.`)
+  const section = out.split(/^\[/m).find((s) => s.startsWith('default]'))
+  if (!section) {
+    console.error('No [default] profile in `stripe config --list`. Run `stripe login` first.')
     process.exit(1)
   }
+  const re = LIVE ? /live_mode_api_key\s*=\s*'?([^'\n]+?)'?\s*$/m : /test_mode_api_key\s*=\s*'?([^'\n]+?)'?\s*$/m
+  const m = section.match(re)
+  if (!m) {
+    console.error(`No ${MODE}-mode key in the default profile. Run \`stripe login\` first.`)
+    process.exit(1)
+  }
+  const acct = section.match(/account_id\s*=\s*'?(acct_\w+)/)?.[1]
+  console.log(`Using CLI default profile (account ${acct ?? 'unknown'})`)
   return m[1].trim()
 }
 

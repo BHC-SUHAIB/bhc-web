@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react'
+import { useParallaxScale } from '@/components/useParallaxScale'
 
 // Parallax hero background. Isolated client leaf so motion/react's hooks
 // don't bleed into Server Components. Uses useScroll + useTransform (NOT a
@@ -46,9 +47,15 @@ export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgC
   // the 2026-08 pass so the motion is clearly felt site-wide). The scale
   // keeps the photo covering its container even when translated, so the bg
   // doesn't expose a seam at the top/bottom of the section.
-  const yRange = reduce ? ['0px', '0px'] : ['-110px', '110px']
+  // pScale is the CMS multiplier (SiteSettings → Motion & animation →
+  // parallax strength): 0 off, 0.5 subtle, 1 standard, 1.5 strong. The
+  // cover-scale grows with the range so stronger drift never exposes seams.
+  const pScale = useParallaxScale(ref)
+  const range = 110 * pScale
+  const still = reduce || range === 0
+  const yRange = still ? ['0px', '0px'] : [`-${range}px`, `${range}px`]
   const y = useTransform(scrollYProgress, [0, 1], yRange)
-  const scale = reduce ? 1 : 1.3
+  const scale = still ? 1 : 1 + 0.3 * Math.max(pScale, 0.5)
 
   return (
     <div

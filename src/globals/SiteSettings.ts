@@ -48,6 +48,45 @@ export const SiteSettings: GlobalConfig = {
       admin: { description: 'Timezone used for displaying dates in the admin dashboard + branded emails.' },
     },
 
+    // Motion & animation tuning (2026-08 theme enrichment). Consumed by the
+    // frontend layout, which stamps data-motion attributes + a --motion-parallax
+    // CSS variable on the page wrapper; components.css and the parallax
+    // components read those. Everything still honors a visitor's own
+    // reduced-motion preference regardless of these settings.
+    {
+      type: 'group',
+      name: 'motion',
+      label: 'Motion & animation',
+      admin: { description: 'Site-wide motion tuning. Saving applies everywhere within about a minute. Visitor reduced-motion preferences always win.' },
+      fields: [
+        {
+          name: 'level',
+          type: 'select',
+          defaultValue: 'full',
+          options: [
+            { label: 'Full (recommended): reveals, animations, gestures', value: 'full' },
+            { label: 'Reduced: treat every visitor as reduced-motion; nothing moves', value: 'reduced' },
+          ],
+          admin: { description: 'The master switch. "Reduced" freezes every animation site-wide to its finished frame.' },
+        },
+        {
+          name: 'parallaxStrength',
+          type: 'select',
+          defaultValue: 'standard',
+          options: [
+            { label: 'Off: background photos hold still', value: 'off' },
+            { label: 'Subtle: about half the standard drift', value: 'subtle' },
+            { label: 'Standard (recommended)', value: 'standard' },
+            { label: 'Strong: about 1.5x the standard drift', value: 'strong' },
+          ],
+          admin: { description: 'How far background photos (hero, stats, bundles) drift as the page scrolls.' },
+        },
+        { name: 'iconDrawIn', type: 'checkbox', defaultValue: true, label: 'Icons draw themselves in on scroll', admin: { description: 'The brass line icons sketch themselves stroke-by-stroke as their section appears.' } },
+        { name: 'iconHoverGestures', type: 'checkbox', defaultValue: true, label: 'Icon hover gestures', admin: { description: 'Hovering a card makes its icon perform (the clock ticks, the phone wiggles, the eye blinks).' } },
+        { name: 'countUps', type: 'checkbox', defaultValue: true, label: 'Numbers count up', admin: { description: 'Stats and audit scores count up from zero when they enter the viewport.' } },
+      ],
+    },
+
     // Local SEO / NAP. Drives the sitewide LocalBusiness (ProfessionalService)
     // JSON-LD built in src/lib/schema.ts. Keep these identical to the Google
     // Business Profile so Google reads one consistent NAP everywhere.

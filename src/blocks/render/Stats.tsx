@@ -1,7 +1,15 @@
 import { Container } from '@/components/Container'
 import { ParallaxBackground } from './ParallaxBackground'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
-import { IconClock, IconGauge, IconWrench } from '@/components/BrandIcons'
+import {
+  IconClock, IconGauge, IconWrench, IconShield, IconEye, IconTrend, IconSearch, IconPhoneRing,
+} from '@/components/BrandIcons'
+
+// CMS-selectable icons (Stats item → icon field).
+const STAT_ICONS = {
+  clock: IconClock, gauge: IconGauge, wrench: IconWrench, shield: IconShield,
+  eye: IconEye, trend: IconTrend, search: IconSearch, phone: IconPhoneRing,
+} as const
 import { CountUpStat } from '@/components/CountUpStat'
 import type { StatsBlock } from '@/payload-types'
 
@@ -66,7 +74,16 @@ export function Stats(b: StatsBlock) {
 
         <div className="stats-grid" data-reveal-stagger>
           {b.items?.map((s, i) => {
-            const Icon = /promise/i.test(b.headline ?? '') ? PROMISE_ICONS[i] : undefined
+            // CMS icon choice wins; 'auto' keeps the promises-band sentinel.
+            const key = ((s as { icon?: string | null }).icon ?? 'auto') as string
+            const Icon =
+              key === 'none'
+                ? undefined
+                : key !== 'auto'
+                  ? STAT_ICONS[key as keyof typeof STAT_ICONS]
+                  : /promise/i.test(b.headline ?? '')
+                    ? PROMISE_ICONS[i]
+                    : undefined
             return (
               <div key={i} className="stat">
                 {Icon ? <Icon className="mb-4" /> : null}

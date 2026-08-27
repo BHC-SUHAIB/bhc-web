@@ -3,7 +3,13 @@ import Image from 'next/image'
 import { Container } from '@/components/Container'
 import { ArrowRight } from 'lucide-react'
 import { TrackedLink } from '@/components/TrackedLink'
-import { IconSearch, IconPhoneRing, IconLoop } from '@/components/BrandIcons'
+import { IconSearch, IconPhoneRing, IconLoop, IconGauge, IconShield, IconTrend } from '@/components/BrandIcons'
+
+// CMS-selectable icons (card → icon field).
+const CARD_ICONS = {
+  search: IconSearch, phone: IconPhoneRing, loop: IconLoop,
+  gauge: IconGauge, shield: IconShield, trend: IconTrend,
+} as const
 import { phoneHref } from '@/lib/contact'
 
 // Three outcome cards ("Get found" / "Never miss a call" / "Stop doing it by
@@ -47,6 +53,8 @@ export type OutcomeCardsProps = {
   cards?: Array<{
     title?: string | null
     blurb?: string | null
+    imageUrl?: string | null
+    icon?: string | null
     priceLine?: string | null
     href?: string | null
     ctaLabel?: string | null
@@ -76,7 +84,21 @@ export function OutcomeCards(b: OutcomeCardsProps) {
           {cards.map((c, i) => {
             const isTelDemo = /^tel:/i.test(c.demoHref ?? '')
             const demoHref = isTelDemo ? (phoneHref(c.demoHref!.replace(/^tel:/i, '')) ?? c.demoHref) : c.demoHref
-            const art = CARD_ART.find((a) => a.match.test(c.title ?? ''))
+            // CMS overrides win; blank/auto falls back to the title-keyed art.
+            const auto = CARD_ART.find((a) => a.match.test(c.title ?? ''))
+            const iconKey = c.icon ?? 'auto'
+            const art = (c.imageUrl || auto)
+              ? {
+                  src: c.imageUrl || auto!.src,
+                  alt: c.imageUrl ? (c.title ?? 'Outcome illustration') : auto!.alt,
+                  Icon:
+                    iconKey === 'none'
+                      ? undefined
+                      : iconKey !== 'auto'
+                        ? CARD_ICONS[iconKey as keyof typeof CARD_ICONS]
+                        : auto?.Icon,
+                }
+              : undefined
             return (
               <div
                 key={i}
@@ -91,10 +113,16 @@ export function OutcomeCards(b: OutcomeCardsProps) {
                       height={360}
                       sizes="(min-width:768px) 33vw, 100vw"
                       quality={60}
+                      // Editor-pasted URLs can come from any host, which the
+                      // image optimizer's allow-list would reject; serve them
+                      // raw (same pattern as Hero backgroundImageUrl).
+                      unoptimized={!!c.imageUrl}
                     />
-                    <span className="oc-chip" aria-hidden>
-                      <art.Icon />
-                    </span>
+                    {art.Icon ? (
+                      <span className="oc-chip" aria-hidden>
+                        <art.Icon />
+                      </span>
+                    ) : null}
                   </div>
                 ) : null}
                 <h3 className="font-serif font-semibold text-[22px] mb-2.5">{c.title}</h3>

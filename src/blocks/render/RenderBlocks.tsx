@@ -87,14 +87,20 @@ export async function RenderBlocks({
     arr.splice(idx + 1, 0, { blockType } as unknown as RenderBlock)
     return arr
   }
-  if (pageSlug === 'ai-front-desk') {
-    list = injectAfter([...list], (b) => b.blockType === 'hero', 'fdHeroAnim')
-  } else if (pageSlug === 'services') {
-    list = injectAfter([...list], (b) => b.blockType === 'pricing', 'buildTimelineAnim')
-  } else if (pageSlug === 'free-demo-site') {
-    list = injectAfter([...list], (b) => b.blockType === 'hero', 'websiteAssemblyAnim')
-  } else if (pageSlug === 'automation') {
-    list = injectAfter([...list], (b) => b.blockType === 'hero', 'processLoopAnim')
+  // A CMS-placed "Brand animation" block anywhere on the page takes over:
+  // the code-side default placement then steps aside entirely, so the editor
+  // controls position, variant, and play-on-arrival from the admin.
+  const hasCmsAnimation = list.some((b) => (b.blockType as string) === 'brandAnimation')
+  if (!hasCmsAnimation) {
+    if (pageSlug === 'ai-front-desk') {
+      list = injectAfter([...list], (b) => b.blockType === 'hero', 'fdHeroAnim')
+    } else if (pageSlug === 'services') {
+      list = injectAfter([...list], (b) => b.blockType === 'pricing', 'buildTimelineAnim')
+    } else if (pageSlug === 'free-demo-site') {
+      list = injectAfter([...list], (b) => b.blockType === 'hero', 'websiteAssemblyAnim')
+    } else if (pageSlug === 'automation') {
+      list = injectAfter([...list], (b) => b.blockType === 'hero', 'processLoopAnim')
+    }
   }
 
   if (isHome) {
@@ -235,6 +241,16 @@ export async function RenderBlocks({
         return <WebsiteAssembly />
       case 'processLoopAnim' as never:
         return <ProcessLoop />
+      case 'brandAnimation' as never: {
+        const a = b as unknown as { variant?: string; playOnArrival?: boolean | null }
+        const gate = a.playOnArrival !== false
+        switch (a.variant) {
+          case 'buildTimeline': return <BuildTimeline gate={gate} />
+          case 'websiteAssembly': return <WebsiteAssembly gate={gate} />
+          case 'processLoop': return <ProcessLoop gate={gate} />
+          default: return <FrontDeskHero gate={gate} />
+        }
+      }
       default: return null
     }
   }

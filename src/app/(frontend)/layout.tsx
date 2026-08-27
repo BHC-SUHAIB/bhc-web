@@ -62,6 +62,17 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   // interactive so it doesn't block the initial paint.
   const clarityId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
 
+  // Motion & animation tuning from SiteSettings \u2192 data attributes + a CSS
+  // variable on <body>. components.css keys the icon draw-in / hover gestures
+  // / master freeze off the attributes; ParallaxBackground/Layer and
+  // CountUpStat read the variable + attributes at runtime. Defaults (attrs
+  // absent/on, scale 1) preserve today's behavior when the group is unset.
+  const motion = (siteSettings as {
+    motion?: { level?: string | null; parallaxStrength?: string | null; iconDrawIn?: boolean | null; iconHoverGestures?: boolean | null; countUps?: boolean | null }
+  } | null)?.motion
+  const parallaxScale =
+    { off: 0, subtle: 0.5, standard: 1, strong: 1.5 }[motion?.parallaxStrength ?? 'standard'] ?? 1
+
   // No data-theme attribute \u2014 theme follows OS preference via the
   // `@media (prefers-color-scheme: dark)` block in globals.css.
   return (
@@ -126,7 +137,14 @@ export default async function FrontendLayout({ children }: { children: React.Rea
           </Script>
         ) : null}
       </head>
-      <body className="min-h-dvh flex flex-col">
+      <body
+        className="min-h-dvh flex flex-col"
+        data-motion={motion?.level === 'reduced' ? 'reduced' : 'full'}
+        data-icon-drawin={motion?.iconDrawIn === false ? 'off' : 'on'}
+        data-icon-hover={motion?.iconHoverGestures === false ? 'off' : 'on'}
+        data-countups={motion?.countUps === false ? 'off' : 'on'}
+        style={{ ['--motion-parallax' as string]: String(parallaxScale) }}
+      >
         {gtmId ? (
           <noscript>
             <iframe

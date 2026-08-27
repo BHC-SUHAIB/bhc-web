@@ -14,9 +14,13 @@ import { FD_HERO_CSS, FD_HERO_HTML } from './frontDeskHeroMarkup'
 // target the #14120E dark band, so the section pins that band color rather
 // than inheriting a tone that might rotate light.
 
-export function FrontDeskHero() {
+export function FrontDeskHero({ gate = false }: { gate?: boolean } = {}) {
   return (
-    <section aria-label="How the AI Front Desk routes calls" style={{ background: '#14120E' }}>
+    <section
+      aria-label="How the AI Front Desk routes calls"
+      className={gate ? 'reveal-up cd-anim-gate' : undefined}
+      style={{ background: '#14120E' }}
+    >
       <style dangerouslySetInnerHTML={{ __html: FD_HERO_CSS }} />
       <div dangerouslySetInnerHTML={{ __html: FD_HERO_HTML }} />
     </section>

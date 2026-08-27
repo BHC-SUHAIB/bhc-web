@@ -22,7 +22,10 @@ export function CountUpStat({ value, decimals = 0, prefix = '', suffix = '', dur
     const el = ref.current
     if (!el) return
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduce || !('IntersectionObserver' in window)) {
+    // CMS switches (SiteSettings → Motion & animation), stamped on <body>.
+    const cmsOff =
+      document.body.dataset.motion === 'reduced' || document.body.dataset.countups === 'off'
+    if (reduce || cmsOff || !('IntersectionObserver' in window)) {
       setDisplay(value)
       return
     }

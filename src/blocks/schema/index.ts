@@ -287,9 +287,21 @@ export const Stats: Block = {
       admin: { description: 'Optional very-faint background image URL (e.g. an Unsplash photo). Renders behind the stats at low opacity for visual texture without hurting readability.' },
     },
     { name: 'items', type: 'array', minRows: 1, maxRows: 6, fields: [
-      { name: 'value', type: 'text', required: true, admin: { description: 'e.g. "140%" or "0.9s" or "12M+"' } },
+      { name: 'value', type: 'text', required: true, admin: { description: 'e.g. "140%" or "0.9s" or "12M+". A leading number counts up when scrolled into view.' } },
       { name: 'label', type: 'text', required: true },
       { name: 'description', type: 'text' },
+      { name: 'icon', type: 'select', defaultValue: 'auto', options: [
+        { label: 'Automatic (homepage promises get clock / gauge / wrench)', value: 'auto' },
+        { label: 'None', value: 'none' },
+        { label: 'Clock', value: 'clock' },
+        { label: 'Gauge', value: 'gauge' },
+        { label: 'Wrench', value: 'wrench' },
+        { label: 'Shield', value: 'shield' },
+        { label: 'Eye', value: 'eye' },
+        { label: 'Trend line', value: 'trend' },
+        { label: 'Search', value: 'search' },
+        { label: 'Phone', value: 'phone' },
+      ], admin: { description: 'Brass line icon above the value. It draws itself in on scroll.' } },
     ] },
   ],
 }
@@ -673,6 +685,17 @@ export const OutcomeCards: Block = {
       fields: [
         { name: 'title', type: 'text', required: true },
         { name: 'blurb', type: 'textarea' },
+        { name: 'imageUrl', type: 'text', admin: { description: 'Photo header for the card (full https URL, e.g. an Unsplash link). Leave blank to keep the built-in art for the standard three cards (open sign / brass phone / paperwork).' } },
+        { name: 'icon', type: 'select', defaultValue: 'auto', options: [
+          { label: 'Automatic (matched to the card title)', value: 'auto' },
+          { label: 'None', value: 'none' },
+          { label: 'Search', value: 'search' },
+          { label: 'Phone', value: 'phone' },
+          { label: 'Loop arrows', value: 'loop' },
+          { label: 'Gauge', value: 'gauge' },
+          { label: 'Shield', value: 'shield' },
+          { label: 'Trend line', value: 'trend' },
+        ], admin: { description: 'Brass icon chip on the photo. Animates on hover.' } },
         { name: 'priceLine', type: 'text', admin: { description: 'e.g. "Sites from $399. Local SEO + AI Search from $295 a month."' } },
         { name: 'href', type: 'text', admin: { description: 'Where the card CTA points, e.g. "/services#websites".' } },
         { name: 'ctaLabel', type: 'text', admin: { description: 'e.g. "See website pricing".' } },
@@ -737,8 +760,29 @@ export const DemoRequestForm: Block = {
   ],
 }
 
+// The Claude Design brand animations (2026-08) as a placeable block: add one
+// anywhere in a page layout, pick the variant, done. Pages that have none get
+// the code-side default placement (RenderBlocks injects on ai-front-desk,
+// services, free-demo-site, automation), so adding a block here OVERRIDES the
+// default position for that page.
+export const BrandAnimation: Block = {
+  slug: 'brandAnimation',
+  labels: { singular: 'Brand animation', plural: 'Brand animations' },
+  interfaceName: 'BrandAnimationBlock',
+  fields: [
+    { name: 'variant', type: 'select', required: true, defaultValue: 'callFlow', options: [
+      { label: 'AI Front Desk call flow (switchboard + live transcript)', value: 'callFlow' },
+      { label: '7-day build timeline', value: 'buildTimeline' },
+      { label: 'Website assembles itself', value: 'websiteAssembly' },
+      { label: 'Process loop (runs while you work)', value: 'processLoop' },
+    ], admin: { description: 'All variants sit on the dark ink band, ship zero JavaScript, and honor reduced-motion automatically.' } },
+    { name: 'playOnArrival', type: 'checkbox', defaultValue: true, admin: { description: 'Hold the animation at its first frame until the visitor scrolls to it, so the story plays from the beginning. Turn off for ambient variants with no beginning (the process loop).' } },
+  ],
+}
+
 export const allBlocks = [
   Hero,
+  BrandAnimation,
   HeroPhoto,
   BundleOffer,
   BundleConfigurator,

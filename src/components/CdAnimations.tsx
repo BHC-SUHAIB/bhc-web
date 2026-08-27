@@ -10,15 +10,20 @@ import { WA_CSS, WA_HTML } from './websiteAssemblyMarkup'
 import { PL_CSS, PL_HTML } from './processLoopMarkup'
 import { AM_CSS, AM_DRAWIN_HTML } from './antlerDrawInMarkup'
 
-/** 7-day website build timeline (services page, under the website tiers).
-    cd-anim-gate + reveal-up: every animation inside holds at frame zero
-    (paused) until ScrollFx marks the section `.in`, so the day-1-to-day-7
-    story plays from the start when the visitor reaches it. */
-export function BuildTimeline() {
+// `gate` = hold every animation paused at frame zero until ScrollFx marks
+// the section `.in` (cd-anim-gate + reveal-up), so the story plays from its
+// beginning when the visitor reaches it. CMS-exposed as "play on arrival"
+// on the Brand animation block.
+const gateCls = (gate: boolean) => (gate ? 'reveal-up cd-anim-gate' : undefined)
+
+type AnimProps = { gate?: boolean }
+
+/** 7-day website build timeline (services page, under the website tiers). */
+export function BuildTimeline({ gate = true }: AnimProps = {}) {
   return (
     <section
       aria-label="The 7-day website build, step by step"
-      className="reveal-up cd-anim-gate"
+      className={gateCls(gate)}
       style={{ background: '#14120E' }}
     >
       <style dangerouslySetInnerHTML={{ __html: BT_CSS }} />
@@ -28,9 +33,9 @@ export function BuildTimeline() {
 }
 
 /** A website assembling itself in a browser frame (/free-demo-site hero). */
-export function WebsiteAssembly() {
+export function WebsiteAssembly({ gate = false }: AnimProps = {}) {
   return (
-    <section aria-label="A demo website assembling itself" style={{ background: '#14120E' }}>
+    <section aria-label="A demo website assembling itself" className={gateCls(gate)} style={{ background: '#14120E' }}>
       <style dangerouslySetInnerHTML={{ __html: WA_CSS }} />
       <div dangerouslySetInnerHTML={{ __html: WA_HTML }} />
     </section>
@@ -38,9 +43,9 @@ export function WebsiteAssembly() {
 }
 
 /** "Runs while you work" ambient process loop (automation page). */
-export function ProcessLoop() {
+export function ProcessLoop({ gate = false }: AnimProps = {}) {
   return (
-    <section aria-label="An automated process running on its own" style={{ background: '#14120E' }}>
+    <section aria-label="An automated process running on its own" className={gateCls(gate)} style={{ background: '#14120E' }}>
       <style dangerouslySetInnerHTML={{ __html: PL_CSS }} />
       <div dangerouslySetInnerHTML={{ __html: PL_HTML }} />
     </section>

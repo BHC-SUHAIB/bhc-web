@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import { delayedAnalyticsSnippet } from '@/lib/analytics-loader'
 import Link from 'next/link'
 import { manrope, fraunces, jetbrains } from '@/lib/fonts'
 import { Container } from '@/components/Container'
@@ -64,23 +65,15 @@ export default async function LpLayout({ children }: { children: React.ReactNode
             <Script id="gtm-page-type" strategy="beforeInteractive">
               {`(function(){try{if(window.localStorage&&localStorage.getItem('bhc_skip_analytics')==='true')return;}catch(e){}window.dataLayer=window.dataLayer||[];window.dataLayer.push({page_type:'landing_page'});})();`}
             </Script>
-            <Script id="gtm-init" strategy="afterInteractive">
-              {`(function(w,d,s,l,i){try{if(w.localStorage&&w.localStorage.getItem('bhc_skip_analytics')==='true')return;}catch(e){}w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${gtmId}');`}
-            </Script>
           </>
         ) : null}
-        {clarityId ? (
-          // Clarity is non-essential for conversion attribution; lazy-load it
-          // after window.load so it doesn't block initial paint on mobile LP
-          // visits where Lighthouse currently measures 4.6s Speed Index.
-          //
-          // Same bhc_skip_analytics short-circuit as the GTM scripts above.
-          <Script id="clarity-init" strategy="lazyOnload">
-            {`(function(c,l,a,r,i,t,y){try{if(c.localStorage&&c.localStorage.getItem('bhc_skip_analytics')==='true')return;}catch(e){}c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
+        {gtmId || clarityId ? (
+          // GTM (GA4 + Ads pixel) and Clarity load on first interaction or
+          // after 4s, whichever comes first — see src/lib/analytics-loader.ts.
+          // Ads Quality Score cares about mobile LP speed, so the LPs get the
+          // same deferred bootstrap as the main site.
+          <Script id="analytics-delayed" strategy="beforeInteractive">
+            {delayedAnalyticsSnippet(gtmId, clarityId)}
           </Script>
         ) : null}
         {/* Same Unsplash preconnect as the (frontend) layout — every LP hero

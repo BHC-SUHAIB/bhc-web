@@ -1,0 +1,225 @@
+{
+  "comment": "Phase 6 local vertical pages. {n} interpolates the neighborhood name so composed sentences stay specific and unique per page. Numbers are phrased as industry ranges on purpose; do not present them as measurements. Style rule: every sentence of six words or more in vertical copy carries {n}, so no two pages read alike.",
+  "verticals": [
+    {
+      "slug": "plumbers",
+      "label": "Plumber",
+      "plural": "Plumbers",
+      "servicesWord": "plumbing",
+      "intro": "A plumbing company in {n} lives and dies by the phone. When a water heater fails or a line backs up somewhere in {n}, the customer calls the first two or three companies Google shows and the one that answers wins the job. Your website's whole purpose is putting your company in that {n} shortlist and making the call happen.",
+      "painPoints": [
+        { "title": "The missed-call leak", "body": "Service businesses routinely miss a quarter to a third of inbound calls, and a homeowner in {n} with water on the floor does not leave a voicemail; they dial the next plumber on the list. Answering that picks up around the clock is worth more to a {n} plumbing company than any ad campaign." },
+        { "title": "Quotes that go quiet", "body": "Industry surveys put typical quote follow-up at a single attempt, so {n} jobs go to whoever follows up second and third. A site wired for lead follow-up texts and emails every {n} lead within a minute, then nudges twice more on its own." },
+        { "title": "Thin review pages", "body": "The plumbers winning the {n} map pack tend to hold several hundred Google reviews while most independents sit under fifty. Automated review requests after every {n} job close that gap in months instead of years." }
+      ],
+      "siteNeeds": [
+        { "label": "Emergency line up top", "why": "Burst-pipe searches in {n} happen on phones at night, so the number must be tappable in the first screen." },
+        { "label": "Service pages per job", "why": "Water heaters, drains, repipes, and gas lines each get a page, because that is how {n} homeowners actually search." },
+        { "label": "License in the footer", "why": "A Texas RMP number is the trust signal your unlicensed {n} competitors cannot copy." },
+        { "label": "Reviews on the site", "why": "Third-party proof from {n} customers beats any sentence you write about yourself." },
+        { "label": "LocalBusiness schema", "why": "Schema naming {n} in your service area is how Google and AI assistants confirm you belong in the answer." }
+      ],
+      "faqs": [
+        { "q": "Do you build websites for plumbing companies in {n}?", "a": "Yes: a five-page Starter Site with service pages, emergency call buttons, and Google Business Profile setup tuned to {n} is $699, live in 7 days. Before paying anything you can click through a free demo built from your {n} listing." },
+        { "q": "What should a plumber's website in {n} have that a template does not?", "a": "A tappable emergency number in the first screen, pages for each service {n} residents search for, your RMP license number, and schema that names {n} as service area. Template sites carry none of those, which is why they lose the map pack in {n}." },
+        { "q": "Can the site help with after-hours calls from {n}?", "a": "The AI Front Desk answers {n} callers around the clock, quotes only what you approve, books the job, and texts you the summary. It is $299 to set up and runs on the number you already use in {n}." },
+        { "q": "How fast can a {n} plumbing site go live?", "a": "Seven days for the Starter Site, in writing, and a three-day $399 Launch Page if you need a {n} presence this week." },
+        { "q": "Do I own the website?", "a": "Buy outright and you own it at launch; subscribe at $119 a month and your {n} site is fully yours at month 12." }
+      ]
+    },
+    {
+      "slug": "hvac",
+      "label": "HVAC",
+      "plural": "HVAC companies",
+      "servicesWord": "HVAC",
+      "intro": "Houston cooling season runs longer than almost anywhere in the country, and an HVAC company in {n} feels demand swing hard with the first 95-degree week. The {n} companies that grow are the ones whose website converts the panic search into a booked appointment before the caller tries a competitor.",
+      "painPoints": [
+        { "title": "Seasonal whiplash", "body": "Summer AC failures can multiply call volume several times over in a single week, and every unanswered ring in {n} is a job handed to a bigger dispatch board. Answering that scales with the spike keeps July in {n} from overwhelming a small crew." },
+        { "title": "Financing questions kill deals", "body": "A replacement system is a four-to-five-figure decision, and industry data consistently shows a large share of homeowners finance it. If financing is invisible on your site, the {n} homeowner assumes you do not offer it and keeps scrolling." },
+        { "title": "One-and-done customers", "body": "Maintenance agreements are where HVAC margins live, yet most small-shop websites never mention a plan. A tune-up page with a simple monthly price turns a one-time {n} repair into recurring revenue every season." }
+      ],
+      "siteNeeds": [
+        { "label": "A financing page", "why": "Replacement decisions in {n} stall the moment payment options are not visible." },
+        { "label": "Emergency line up top", "why": "AC-out searches in {n} happen on phones during the hottest week of the year." },
+        { "label": "A maintenance plan page", "why": "Recurring tune-up revenue smooths the {n} seasonal swings that whipsaw cash flow." },
+        { "label": "Split service pages", "why": "Repair, replacement, and air quality each carry their own {n} search and ticket size." },
+        { "label": "TACL license displayed", "why": "Texas requires the license on advertising, and it separates you from {n} handymen." }
+      ],
+      "faqs": [
+        { "q": "Do you build websites for HVAC companies in {n}?", "a": "Yes: a five-page Starter Site with repair, replacement, maintenance, and financing pages for your {n} service area is $699, live in 7 days. A free demo built from your {n} listing comes first, before any payment." },
+        { "q": "Can the site handle the {n} summer call spike?", "a": "Paired with the AI Front Desk it can: every {n} call answered around the clock, booked into your calendar, confirmed by text to the caller. That runs from $149 a month after a $299 setup on your existing number." },
+        { "q": "How should financing show up for {n} customers?", "a": "As its own page, worded around your actual offering, because a {n} homeowner who cannot see payment options assumes you have none. We build it into the site rather than burying a line in the footer." },
+        { "q": "How do maintenance plans fit a {n} HVAC site?", "a": "A dedicated plan page with clear monthly pricing, plus an automation that requests the seasonal tune-up booking from your {n} customer list. That automation is a $799 Sprint working alongside the site." },
+        { "q": "How fast can it be live for {n}?", "a": "Seven days for the Starter Site, and if the season already hit {n}, a three-day $399 Launch Page gets a booking page up first." }
+      ]
+    },
+    {
+      "slug": "electricians",
+      "label": "Electrician",
+      "plural": "Electricians",
+      "servicesWord": "electrical",
+      "intro": "Electrical work is a trust purchase, and a homeowner in {n} hiring someone to open their panel checks licensing, insurance, and reviews before calling. The {n} website that shows all three in the first scroll wins the call, and the panel upgrade behind it.",
+      "painPoints": [
+        { "title": "Trust decides the call", "body": "Home-services hiring surveys consistently rank licensing and reviews above price for electrical work. A {n} site that buries the master license and shows no reviews loses to the {n} competitor that leads with both." },
+        { "title": "The new demand is specific", "body": "EV charger installs, panel upgrades, and generator hookups are the fastest-growing electrical searches, and {n} homes generate exactly these queries. A generic services list never ranks for what {n} homeowners are actually typing." },
+        { "title": "Small tickets need volume", "body": "An electrician's average ticket sits well below a roofer's, so the business runs on call volume. Missing even a few {n} calls a week is a meaningful share of the month, which is what around-the-clock answering fixes." }
+      ],
+      "siteNeeds": [
+        { "label": "License and insurance up top", "why": "It is the first thing a {n} homeowner verifies before letting anyone near a panel." },
+        { "label": "EV and panel pages", "why": "The growth searches coming out of {n} deserve their own pages, not a bullet." },
+        { "label": "Clean-work photos", "why": "A tidy panel photo sells competence to {n} homeowners better than adjectives." },
+        { "label": "Reviews naming the area", "why": "A review that mentions {n} does double duty as proof and local relevance." },
+        { "label": "Service schema", "why": "LocalBusiness and Service schema decide whether Google shows you for {n} at all." }
+      ],
+      "faqs": [
+        { "q": "Do you build websites for electricians in {n}?", "a": "Yes: five pages including EV charger and panel upgrade pages aimed at {n} searches, $699, live in 7 days. You click through a free demo built from your {n} listing before paying a dollar." },
+        { "q": "Why do EV charger pages matter in {n}?", "a": "Charger installs are among the fastest-growing electrical searches and {n} driveways are adding them steadily. A dedicated page ranks for those {n} queries where a services bullet list cannot." },
+        { "q": "How do you present my license to {n} customers?", "a": "Master license number, insurance, and TDLR details rendered in the header and footer of every page, plus schema so the machines answering {n} queries read them too." },
+        { "q": "What happens when I miss calls on {n} jobs?", "a": "The AI Front Desk answers while your hands are in a panel, books the {n} visit, and texts you the summary. It is $299 to set up and from $149 a month on your existing number." },
+        { "q": "What does it cost to start in {n}?", "a": "$399 for a one-page Launch Page in 3 days or $699 for the five-page Starter Site in 7 days, hosting free the first month either way." }
+      ]
+    },
+    {
+      "slug": "roofers",
+      "label": "Roofer",
+      "plural": "Roofers",
+      "servicesWord": "roofing",
+      "intro": "Roofing in Houston is storm-driven, and when hail or a named storm moves through {n}, weeks of demand compress into days. Homeowners then choose between your company and the out-of-town door-knockers working the same {n} streets, and a local website with real proof is the antidote to that distrust.",
+      "painPoints": [
+        { "title": "Demand arrives all at once", "body": "A single hail event can generate months of work in a week, and the {n} roofer whose phone and website are ready captures it while competitors let calls ring out. Storm pages and around-the-clock answering exist for exactly that {n} week." },
+        { "title": "Insurance confusion stalls jobs", "body": "Most storm-damage roofs run through an insurance claim, and homeowners consistently call the claims process the most confusing part. A plain-English claims page written for {n} homeowners wins the job before the adjuster meeting." },
+        { "title": "Door-knocker distrust", "body": "After every storm, out-of-state crews canvass {n} and a share of them vanish after the deposit. A site showing your Houston address, years in business, and written warranty is how a local company separates itself on a {n} doorstep." }
+      ],
+      "siteNeeds": [
+        { "label": "A claims guide page", "why": "The {n} homeowner's first question is how the claim works, not shingle brands." },
+        { "label": "Warranty in writing", "why": "A published workmanship warranty beats every promise made on a {n} porch." },
+        { "label": "A storm-response page", "why": "When weather hits {n}, a dated event page captures the surge searches." },
+        { "label": "Local job photos", "why": "Roofs finished around {n} prove you were here before the storm and will be after." },
+        { "label": "Financing options", "why": "Deductibles and non-claim replacements in {n} both go easier with visible payment plans." }
+      ],
+      "faqs": [
+        { "q": "Do you build websites for roofing companies in {n}?", "a": "Yes: the $699 Starter Site includes an insurance claims guide, warranty page, and a gallery of your {n}-area work, live in 7 days. A free demo built from your {n} listing comes before any payment." },
+        { "q": "What is a storm-response page for {n}?", "a": "A page prepared in advance that you activate when weather hits {n}: the event, your response time, and a direct booking path. It captures the {n} surge while competitors are still updating their homepage." },
+        { "q": "Can you help with the insurance angle in {n}?", "a": "The site gets a plain-English claims page reflecting how you actually work claims, because that is the first question every {n} storm caller asks. It positions you ahead of the adjuster meeting instead of behind it." },
+        { "q": "How do I stand apart from door-knockers in {n}?", "a": "Local proof: your Houston address, years in business, warranty in writing, and reviews from {n} and the surrounding streets. An out-of-town crew canvassing {n} cannot fake that footprint." },
+        { "q": "What does it cost?", "a": "$699 for the five-page Starter Site in 7 days, or $399 for a three-day Launch Page when a storm is inbound and {n} needs a claim-ready page now." }
+      ]
+    },
+    {
+      "slug": "dentists",
+      "label": "Dentist",
+      "plural": "Dentists",
+      "servicesWord": "dental",
+      "intro": "A dental practice in {n} grows on new-patient flow, and industry benchmarks put the lifetime value of a recall patient in the thousands. That is why a {n} practice website has one real job: turning a search into a booked first visit with as few taps as possible.",
+      "painPoints": [
+        { "title": "Booking friction loses patients", "body": "Patients increasingly expect to book online, and practices without it lose the after-hours searcher entirely. A {n} practice whose site books straight into the schedule captures patients its phone-only {n} competitors never even see." },
+        { "title": "Insurance is the first question", "body": "Whether you take their plan decides the call before anything else does. A site that hides accepted plans forces a phone call many {n} patients will not make, and the practice never learns it lost them." },
+        { "title": "Reviews drive the choice", "body": "Healthcare selection studies consistently show most patients read reviews before choosing a provider, and the {n} practices atop the map hold hundreds. Automated post-visit review requests get a {n} practice there without awkward chairside asks." }
+      ],
+      "siteNeeds": [
+        { "label": "Online booking", "why": "The after-hours searcher in {n} books now or books with someone else." },
+        { "label": "An insurance page", "why": "Accepted plans are the first question {n} patients ask, so the answer lives one tap away." },
+        { "label": "Treatment pages", "why": "Implants, Invisalign, and whitening each carry their own {n} search volume and value." },
+        { "label": "Real office photos", "why": "Dental anxiety is real, and seeing the {n} office and team lowers the barrier." },
+        { "label": "Review integration", "why": "Reviews decide the {n} map pack and the patient shortlist at the same time." }
+      ],
+      "faqs": [
+        { "q": "Do you build websites for dental practices in {n}?", "a": "Yes: five pages with online booking, an insurance page, and treatment pages for the searches {n} patients run, $699 and live in 7 days. A free demo built from your {n} listing comes first." },
+        { "q": "Can {n} patients book online?", "a": "Booking connects to your scheduling system, and the AI Front Desk can also answer the practice line, verify basics, and book {n} patients into the same calendar around the clock." },
+        { "q": "How do you handle insurance content for {n}?", "a": "A dedicated accepted-plans page, editable in the CMS so your front office updates it without calling us. It is the page {n} patients check before anything else on the site." },
+        { "q": "What about HIPAA?", "a": "The site collects only appointment-request basics with encrypted transmission, and anything clinical stays in your practice management system. Nothing a {n} patient types into the site is health information." },
+        { "q": "What does it cost a {n} practice to start?", "a": "$699 for the Starter Site or $1,795 for the 12-page Pro Site with treatment content and a blog, and both include Google Business Profile setup for the {n} listing." }
+      ]
+    },
+    {
+      "slug": "med-spas",
+      "label": "Med Spa",
+      "plural": "Med spas",
+      "servicesWord": "med spa",
+      "intro": "Med spa clients in {n} shop visually: they arrive from Instagram or a Google search, and the decision is made by results photos, price transparency, and how fast a consult books. A {n} med spa site is a lookbook with a booking engine, not a brochure.",
+      "painPoints": [
+        { "title": "No gallery, no booking", "body": "Aesthetic patients overwhelmingly report choosing providers on before-and-after photos. A {n} med spa site without an organized gallery sends its own Instagram traffic to whichever {n} competitor shows the work." },
+        { "title": "Consults leak between channels", "body": "DMs, calls, and forms all carry consult requests, and the slowest channel silently loses them. Centralizing booking on the {n} site with instant confirmation, plus text-back on missed calls, keeps the whole {n} pipeline in one place." },
+        { "title": "One-visit clients", "body": "Memberships and packages are how med spas stabilize revenue, yet most sites never present them. A packages page with clear monthly pricing turns a single {n} tox visit into a standing appointment." }
+      ],
+      "siteNeeds": [
+        { "label": "A structured gallery", "why": "Results photos are the deciding content for {n} clients, so they get organization, not a collage." },
+        { "label": "Starting prices shown", "why": "Aesthetic shoppers in {n} screen on price range before ever booking a consult." },
+        { "label": "Instant consult booking", "why": "Instagram traffic from {n} converts in the moment or not at all." },
+        { "label": "Provider credentials", "why": "Injectables are medical, and the {n} client wants to see who holds the needle." },
+        { "label": "A packages page", "why": "Recurring plans smooth {n} revenue between the event seasons that drive visits." }
+      ],
+      "faqs": [
+        { "q": "Do you build websites for med spas in {n}?", "a": "Yes: five pages including a structured gallery and consult booking, $699 and live in 7 days. The free demo comes first, built from your {n} listing and photos, before any payment." },
+        { "q": "Can you do before-and-after galleries properly for {n}?", "a": "Organized by treatment, fast-loading, and easy for your team to update in the CMS. It is the page {n} clients actually decide on, so it gets built like one." },
+        { "q": "Should a {n} med spa show prices?", "a": "Starting prices, yes: aesthetic shoppers screen on range before booking, and hiding prices costs a {n} spa more consults than it protects. The site presents ranges you approve." },
+        { "q": "What happens to DMs and missed calls from {n} clients?", "a": "Missed calls get an automatic text-back within a minute, and the AI Front Desk can answer, quote your approved menu, and book {n} consults around the clock from $149 a month." },
+        { "q": "What does it cost to start?", "a": "$699 for the Starter Site, or $1,795 for the Pro Site when the treatment menu is large, with the first month of hosting free for any {n} launch." }
+      ]
+    },
+    {
+      "slug": "auto-repair",
+      "label": "Auto Repair",
+      "plural": "Auto repair shops",
+      "servicesWord": "auto repair",
+      "intro": "An independent shop in {n} competes with dealership service departments and national chains on trust and speed. The {n} driver with a check-engine light wants three answers fast: is this shop honest, what will it roughly cost, and can they take the car today. The website answers all three or the next tab does.",
+      "painPoints": [
+        { "title": "Chains outrank independents", "body": "National chains carry domain weight an independent cannot match head-on, but the {n} map pack is winnable. A complete Google Business Profile, neighborhood reviews, and LocalBusiness schema beat generic chain pages for {n} near-me searches." },
+        { "title": "Estimate anxiety", "body": "Distrust of repair pricing is the industry's oldest problem, and surveys keep confirming it. Publishing your diagnostic fee and honest ranges for common jobs converts the skeptical {n} drivers the chains ignore." },
+        { "title": "No-show appointments", "body": "Appointment no-shows run meaningfully high across auto service, and every empty bay hour in {n} is unbillable. Automated confirmations and reminder texts, wired to the booking form, cut those {n} losses without front-desk effort." }
+      ],
+      "siteNeeds": [
+        { "label": "Same-day booking", "why": "The {n} check-engine customer wants the car in today, not a callback tomorrow." },
+        { "label": "Published fee ranges", "why": "Price transparency is the trust move the chains around {n} will not make." },
+        { "label": "Pages by system", "why": "Brakes, AC, transmission, and inspections each carry their own {n} search volume." },
+        { "label": "Certifications shown", "why": "ASE badges and a written warranty answer the honesty question {n} drivers are silently asking." },
+        { "label": "Review integration", "why": "Neighborhood reviews are how {n} drivers pick an independent over a chain." }
+      ],
+      "faqs": [
+        { "q": "Do you build websites for auto repair shops in {n}?", "a": "Yes: five pages with same-day booking, service pages, and your certifications, $699 and live in 7 days. A free demo built from your {n} listing comes before any payment." },
+        { "q": "Can an independent really outrank the chains in {n}?", "a": "For {n} near-me searches, yes: the map pack rewards proximity, reviews, and profile completeness over domain size. That is the target of the site plus the $449 Local SEO Sprint for {n}." },
+        { "q": "Should a {n} shop publish prices?", "a": "Publish the diagnostic fee and honest ranges for common jobs, because transparency filters the price-shoppers you do not want. It simultaneously builds trust with every other {n} driver comparing tabs." },
+        { "q": "Can the site reduce no-shows at a {n} shop?", "a": "Booking confirmations and reminder texts run automatically, and the AI Front Desk answers and books {n} appointments while your writers are with customers." },
+        { "q": "What does it cost?", "a": "$399 for a Launch Page in 3 days, $699 for the Starter Site in 7 days, and hosting for the {n} site is free the first month." }
+      ]
+    }
+  ],
+  "neighborhoods": [
+    {
+      "slug": "heights",
+      "name": "the Heights",
+      "title": "Heights",
+      "blurb": "The Houston Heights sits about four miles northwest of downtown, a grid of Victorian bungalows and craftsman homes threaded by the MKT Hike and Bike Trail and the White Oak Bayou greenway. Its commercial life runs along 19th Street's storefront row, the Heights Mercantile shops on Yale, and the restaurant strip down Studewood. The housing stock skews historic, with strict historic-district rules on renovation, and the business mix is small and independent: boutiques, studios, trades, and services run by owners who live nearby. Customers here actively prefer hiring local over calling a chain."
+    },
+    {
+      "slug": "montrose",
+      "name": "Montrose",
+      "title": "Montrose",
+      "blurb": "Montrose sits barely two miles west of downtown Houston, one of the city's densest and most walkable districts. Lower Westheimer's curve carries its restaurants, vintage shops, and bars; the Menil Collection and Rothko Chapel anchor its museum blocks; and its side streets mix 1920s bungalows with new townhomes. Many of those bungalows now house businesses, and the neighborhood's customers are young, mobile-first, and quick to check reviews before spending. It is a place where a dated website reads as a dated business."
+    },
+    {
+      "slug": "garden-oaks",
+      "name": "Garden Oaks",
+      "title": "Garden Oaks",
+      "blurb": "Garden Oaks, with Oak Forest beside it, sits about seven miles northwest of downtown: ranch homes and cottages on unusually large, tree-heavy lots laid out in the 1930s and 40s. Its business spine is the North Shepherd corridor, where a wave of breweries, restaurants, and service businesses has replaced older industrial fronts. The homes are aging in exactly the way that keeps plumbers, electricians, and roofers busy, and the families in them tend to find those trades through neighborhood Facebook groups and Google rather than billboards."
+    },
+    {
+      "slug": "spring-branch",
+      "name": "Spring Branch",
+      "title": "Spring Branch",
+      "blurb": "Spring Branch stretches along the Long Point Road and Hammerly corridors between I-10 and US-290, roughly twelve miles west-northwest of downtown. It is one of Houston's most commercially dense neighborhoods for small business: strip centers, light industrial yards, and one of the city's best independent food scenes, with deep Korean and Hispanic business communities. Housing runs from 1950s ranches under renovation to new three-story townhomes. Competition among trades here is thick, which makes the map pack and reviews the whole game."
+    },
+    {
+      "slug": "katy",
+      "name": "Katy",
+      "title": "Katy",
+      "blurb": "Katy sits about twenty-five miles west of downtown Houston along I-10, and most of its growth is master-planned: Cinco Ranch, Firethorne, and the neighborhoods feeding some of the region's most sought-after schools. Retail clusters at LaCenterra at Cinco Ranch and Katy Mills, and the housing stock is dominated by newer two-story family homes on HOA streets. New rooftops mean first-time service relationships: families here are choosing their plumber, dentist, and repair shop for the first time, and they choose from their phones."
+    },
+    {
+      "slug": "cypress",
+      "name": "Cypress",
+      "title": "Cypress",
+      "blurb": "Cypress runs along the US-290 corridor about twenty-five miles northwest of downtown Houston, one of the fastest-growing suburban belts in Texas. Master-planned communities like Bridgeland and Towne Lake add thousands of new homes a year, the Cy-Fair school district anchors family life, and the Houston Premium Outlets and 290 frontage carry the retail. Nearly everything here is new construction, which means builder-warranty handoffs, first roofs reaching age, and households actively searching for the service businesses they will use for the next decade."
+    }
+  ]
+}

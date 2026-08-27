@@ -85,6 +85,16 @@ export async function RenderBlocks({
       arr.splice(svcIdx + 1, 0, lm)
       list = arr
     }
+    // 2026-08 punch list: FAQ reads as reference material, not persuasion, so
+    // it closes the page — last section above the footer, after the final
+    // "Still here?" CTA band. Objection-handling for the visitors who scrolled
+    // everything and still hesitated.
+    const faqIdx = arr.findIndex((b) => b.blockType === 'faq')
+    if (faqIdx > -1 && faqIdx < arr.length - 1) {
+      const [faq] = arr.splice(faqIdx, 1)
+      arr.push(faq)
+      list = arr
+    }
   }
 
   function renderOne(b: RenderBlock): React.ReactNode {

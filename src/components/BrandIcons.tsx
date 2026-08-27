@@ -79,10 +79,14 @@ export function IconPhoneRing(p: IconProps) {
 }
 
 export function IconLoop(p: IconProps) {
+  // Two arcs chasing each other; arrowheads sit exactly on the arc endpoints
+  // (lucide refresh-cw geometry, redrawn in-house at 1.5 stroke).
   return (
     <Base {...p}>
-      <path d="M4 9a6 6 0 0 1 10.5-4M20 15a6 6 0 0 1-10.5 4" pathLength={1} />
-      <path d="M14 4h4V0M10 18H6v4" pathLength={1} />
+      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" pathLength={1} />
+      <path d="M21 3v5h-5" pathLength={1} />
+      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" pathLength={1} />
+      <path d="M3 21v-5h5" pathLength={1} />
     </Base>
   )
 }

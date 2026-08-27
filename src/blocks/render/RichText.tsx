@@ -108,13 +108,13 @@ export function RichText(b: RichTextBlock) {
               </figcaption>
             </figure>
             <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-7 sm:p-10 shadow-[0_18px_40px_-24px_color-mix(in_srgb,var(--color-ink)_40%,transparent)] reveal-up">
-              <div className="flex items-center gap-3 mb-5">
-                <span className="h-[2px] w-8 bg-[var(--color-brass)] rounded-full" aria-hidden />
-                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-brass-text)]">
-                  {b.eyebrow}
-                </span>
-              </div>
-              <div className="lede-content">
+              {/* 2026-08 punch list: the eyebrow doubles as the section title
+                  at the same scale as every other section heading, and the
+                  body reads as a normal paragraph, not bold serif. */}
+              <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em]">
+                {b.eyebrow}
+              </h2>
+              <div className="card-content text-[17px] leading-[1.65] text-[var(--color-fg)] mt-5">
                 <RichTextRenderer content={b.content} />
               </div>
             </figure>
@@ -122,13 +122,10 @@ export function RichText(b: RichTextBlock) {
         ) : variant === 'lede' ? (
           <div className={inner}>
             <figure className="rounded-[var(--radius-lg)] border border-[var(--color-brass)] bg-[color-mix(in_srgb,var(--color-brass)_8%,var(--color-bg))] p-7 sm:p-10 shadow-[0_18px_40px_-24px_color-mix(in_srgb,var(--color-ink)_40%,transparent)]">
-              <div className="flex items-center gap-3 mb-5">
-                <span className="h-[2px] w-8 bg-[var(--color-brass)] rounded-full" aria-hidden />
-                <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[var(--color-brass-text)]">
-                  {b.eyebrow ?? 'Our mission'}
-                </span>
-              </div>
-              <div className="lede-content">
+              <h2 className="font-serif font-semibold text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] tracking-[-0.02em]">
+                {b.eyebrow ?? 'Our mission'}
+              </h2>
+              <div className="card-content text-[17px] leading-[1.65] text-[var(--color-fg)] mt-5">
                 <RichTextRenderer content={b.content} />
               </div>
             </figure>

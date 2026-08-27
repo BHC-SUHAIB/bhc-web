@@ -126,7 +126,10 @@ export async function FeaturedProjects(b: FeaturedProjectsBlock) {
         </div>
 
         <div className="work-grid">
-          {projects.map((p, idx) => {
+          {/* Cap at 2: the grid is two columns, so an odd third project would
+              sit alone with dead space beside it. The full list lives at
+              /portfolio behind the View-all button. */}
+          {projects.slice(0, 2).map((p, idx) => {
             const hero = typeof p.heroImage === 'object' ? (p.heroImage as Media | null) : null
             // .tags map from the project's industry + humanized projectType.
             const chips = [p.industry, p.projectType ? (PROJECT_TYPE_LABELS[p.projectType] ?? p.projectType) : null]

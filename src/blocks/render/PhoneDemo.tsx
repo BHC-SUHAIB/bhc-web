@@ -51,11 +51,12 @@ export function PhoneDemo(b: PhoneDemoProps) {
             ) : null}
           </div>
 
-          <div className="rounded-[var(--radius-xl)] border border-[var(--color-border-strong)] bg-[var(--color-surface)] p-8 sm:p-10 text-center">
+          <div className="rounded-[var(--radius-xl)] border border-[var(--color-border-strong)] bg-[var(--color-surface)] p-8 sm:p-10 text-center transition-[transform,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)]">
             {b.phoneLabel ? (
-              <p className="inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-brass-text)] mb-4">
-                {/* Live-line pulse: this number is genuinely answered around
-                    the clock, so the dot conveys real state, not decoration. */}
+              /* Heading row ABOVE the number (2026-08 punch list): pulse dot +
+                 label as their own centered line. The dot conveys real state:
+                 this line is genuinely answered around the clock. */
+              <p className="flex items-center justify-center gap-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-brass-text)] mb-4">
                 <span className="pulse-dot" aria-hidden />
                 {b.phoneLabel}
               </p>

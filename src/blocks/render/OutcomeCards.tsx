@@ -23,20 +23,20 @@ const CARD_ART: Array<{
 }> = [
   {
     match: /found/i,
-    src: 'https://bhc-media.nyc3.cdn.digitaloceanspaces.com/new-home-v3.png',
-    alt: 'A fast client website built by Black Hart',
+    src: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&q=75',
+    alt: 'An open sign hanging in a shop door, ready to be found',
     Icon: IconSearch,
   },
   {
     match: /call/i,
-    src: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=75',
-    alt: 'Inside a small retail storefront',
+    src: 'https://images.unsplash.com/photo-1534536281715-e28d76689b4d?w=1200&q=75',
+    alt: 'A brass rotary telephone waiting to be answered',
     Icon: IconPhoneRing,
   },
   {
     match: /hand/i,
-    src: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=75',
-    alt: 'Paperwork and planning documents on a desk',
+    src: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=75',
+    alt: 'Hands sorting paperwork with a calculator',
     Icon: IconLoop,
   },
 ]

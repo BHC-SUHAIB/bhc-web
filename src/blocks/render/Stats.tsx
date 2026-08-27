@@ -2,7 +2,19 @@ import { Container } from '@/components/Container'
 import { ParallaxBackground } from './ParallaxBackground'
 import { stripUnsplashFixedWidth } from '@/lib/unsplash'
 import { IconClock, IconGauge, IconWrench } from '@/components/BrandIcons'
+import { CountUpStat } from '@/components/CountUpStat'
 import type { StatsBlock } from '@/payload-types'
+
+/* Values are CMS strings ("7 days", "90+", "Same-week"). When one leads with
+   a number, split it so the number counts up on reveal and the remainder
+   renders as a plain suffix. Pure-text values render unchanged. */
+function StatValue({ value }: { value?: string | null }) {
+  const m = (value ?? '').trim().match(/^(\d[\d,]*)(.*)$/)
+  if (!m) return <>{value}</>
+  const num = parseInt(m[1].replace(/,/g, ''), 10)
+  if (Number.isNaN(num)) return <>{value}</>
+  return <CountUpStat value={num} suffix={m[2]} />
+}
 
 // Custom brass icons for the homepage promises band ("Three things we
 // promise": launch date / Lighthouse score / edit turnaround). Sentinel on
@@ -58,7 +70,7 @@ export function Stats(b: StatsBlock) {
             return (
               <div key={i} className="stat">
                 {Icon ? <Icon className="mb-4" /> : null}
-                <div className="s-val">{s.value}</div>
+                <div className="s-val"><StatValue value={s.value} /></div>
                 <div className="s-label">{s.label}</div>
                 {s.description ? <div className="s-desc">{s.description}</div> : null}
               </div>

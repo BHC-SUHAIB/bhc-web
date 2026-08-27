@@ -1,4 +1,5 @@
 import React from 'react'
+import { FrontDeskHero } from '@/components/FrontDeskHero'
 import { Hero } from './Hero'
 import { BundleOffer } from './BundleOffer'
 import { CalendlyBooking } from './CalendlyBooking'
@@ -67,11 +68,22 @@ export async function RenderBlocks({
   const effectivePhone = phoneOverride ?? siteSettings?.contactPhone ?? null
 
   // Home: fold the standalone "Want the full pricing menu?" CTA into Pricing.
-  let list = isHome
+  let list: RenderBlock[] = isHome
     ? blocks.filter(
         (b) => !(b.blockType === 'cta' && typeof (b as { headline?: unknown }).headline === 'string' && PRICING_MENU_RE.test((b as { headline: string }).headline)),
       )
     : blocks
+
+  // AI Front Desk: inject the Claude Design "living diagram" animation as a
+  // synthetic block directly under the page hero (2026-08). Code-side so no
+  // CMS schema change is needed; it participates in tone alternation like
+  // any block but pins its own dark band.
+  if (pageSlug === 'ai-front-desk') {
+    const arr = [...list]
+    const heroIdx = arr.findIndex((b) => b.blockType === 'hero')
+    arr.splice(heroIdx + 1, 0, { blockType: 'fdHeroAnim' } as unknown as RenderBlock)
+    list = arr
+  }
 
   if (isHome) {
     // Move the "Free Resource" lead magnet up to just after "What we do"
@@ -203,6 +215,8 @@ export async function RenderBlocks({
           />
         )
       }
+      case 'fdHeroAnim' as never:
+        return <FrontDeskHero />
       default: return null
     }
   }

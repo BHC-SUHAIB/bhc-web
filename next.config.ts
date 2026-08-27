@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
   // host (or the CDN), so the optimizer works normally.
   images: {
     unoptimized: process.env.NODE_ENV !== 'production',
+    // Next 16 only allows quality=75 unless whitelisted. 60 is used by the
+    // ParallaxBackground washes/heroes (photographic bgs behind gradient
+    // overlays; the drop from 75 is invisible there and saves ~40% bytes on
+    // the mobile LCP image).
+    qualities: [60, 75],
     remotePatterns: [
       { protocol: 'http', hostname: 'localhost' },
       { protocol: 'http', hostname: '127.0.0.1' },

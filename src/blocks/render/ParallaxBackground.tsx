@@ -25,9 +25,10 @@ type Props = {
   priority?: boolean
   /** Extra classes on the image, e.g. "opacity-30" for faded section washes. */
   imgClassName?: string
+  quality?: number
 }
 
-export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgClassName }: Props) {
+export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgClassName, quality = 60 }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
 
@@ -58,6 +59,7 @@ export function ParallaxBackground({ src, alt = '', sizes, priority = true, imgC
           className={imgClassName ? `object-cover ${imgClassName}` : 'object-cover'}
           priority={priority}
           fetchPriority={priority ? 'high' : 'auto'}
+          quality={quality}
         />
       </motion.div>
     </div>

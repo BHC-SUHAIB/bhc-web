@@ -41,6 +41,32 @@ export function ContactForm(b: ContactFormProps) {
     const params = new URLSearchParams(window.location.search)
     setTier(getTier(params.get('tier')))
   }, [])
+
+  const anchor = b.anchorId ?? anchorFromEyebrow(b.eyebrow)
+
+  // Land arrivals on the form deterministically. Next 16's own hash scroll
+  // calls scrollIntoView without forcing a reflow after it flips
+  // scroll-behavior to auto, so Chrome still animates the jump from the
+  // previous page's scroll depth and can get interrupted mid-flight (deep
+  // homepage scroll -> stranded at the FAQs). Jump instantly on mount, and
+  // once more after paint in case late layout above the form shifted it.
+  useEffect(() => {
+    if (!anchor) return
+    const wantsForm =
+      window.location.hash === `#${anchor}` ||
+      new URLSearchParams(window.location.search).has('tier')
+    if (!wantsForm) return
+    const el = document.getElementById(anchor)
+    if (!el) return
+    const jump = () => el.scrollIntoView({ behavior: 'instant', block: 'start' })
+    jump()
+    const t = setTimeout(() => {
+      // Only correct drift; don't yank if the user already scrolled away.
+      const top = el.getBoundingClientRect().top
+      if (Math.abs(top - 73) > 40) jump()
+    }, 250)
+    return () => clearTimeout(t)
+  }, [anchor])
   const contactEmail = b.contactEmail ?? ''
   const contactPhone = b.contactPhone ?? ''
   const emailHref = mailtoHref(contactEmail)
@@ -132,8 +158,6 @@ export function ContactForm(b: ContactFormProps) {
       setErrorMessage(err instanceof Error ? err.message : 'Something went wrong.')
     }
   }
-
-  const anchor = b.anchorId ?? anchorFromEyebrow(b.eyebrow)
 
   return (
     <section id={anchor} className="py-12 sm:py-16 scroll-mt-[73px]">

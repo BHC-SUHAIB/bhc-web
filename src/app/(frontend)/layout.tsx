@@ -66,6 +66,12 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   return (
     <html
       lang="en"
+      // Next 16 no longer forces `scroll-behavior: auto` during SPA
+      // navigations; without this attribute, our global smooth scrolling
+      // animates cross-page jumps from the old scroll position and hash
+      // targets land mid-page (e.g. /contact#contact-form from a deep
+      // homepage scroll ended up at the FAQs).
+      data-scroll-behavior="smooth"
       className={`${manrope.variable} ${fraunces.variable} ${jetbrains.variable}`}
     >
       <head>

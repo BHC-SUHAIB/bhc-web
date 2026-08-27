@@ -37,6 +37,10 @@ export default async function LpLayout({ children }: { children: React.ReactNode
   return (
     <html
       lang="en"
+      // Match the frontend layout: let Next force instant scroll during SPA
+      // navigations while keeping smooth in-page anchor scrolling (Next 16
+      // opt-in, see version-16 upgrade notes).
+      data-scroll-behavior="smooth"
       className={`${manrope.variable} ${fraunces.variable} ${jetbrains.variable}`}
     >
       <head>

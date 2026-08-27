@@ -77,7 +77,7 @@ export function Pricing(b: PricingBlock & { seeAllHref?: string; seeAllLabel?: s
         >
           {tiers.map((t, i) => {
             const tierSlug = resolveTierSlug(t.name, t.cta?.href)
-            const askHref = `/contact?tier=${tierSlug}`
+            const askHref = `/contact?tier=${tierSlug}#contact-form`
             const subscribeHref = t.subscribeHref || t.cta?.href || askHref
             return (
             <div

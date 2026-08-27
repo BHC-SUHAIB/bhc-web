@@ -47,7 +47,7 @@ export const rtDoc = (blocks: RTBlock[]) => ({
 // ── Tier fragments (facts table, exact) ─────────────────────────────────────
 
 const f = (labels: string[]) => labels.map((label) => ({ label, included: true }))
-const ask = (slug: string, label = 'Start this project') => ({ label, href: `/contact?tier=${slug}` })
+const ask = (slug: string, label = 'Start this project') => ({ label, href: `/contact?tier=${slug}#contact-form` })
 
 export const TIER_BLOCKS = {
   launchPage: {
@@ -261,7 +261,7 @@ export const bundlesBlock = {
         { label: 'Hosting included in the monthly' },
       ],
       note: 'Sold separately: $1,193 plus $208 a month.',
-      cta: { label: 'Start the bundle', href: '/contact?tier=bundle-open-for-business' },
+      cta: { label: 'Start the bundle', href: '/contact?tier=bundle-open-for-business#contact-form' },
     },
     {
       name: 'Booked Solid', price: '$1,395', monthly: '+ $149 a month',
@@ -271,7 +271,7 @@ export const bundlesBlock = {
         { label: 'One Automation Sprint: review requests or lead follow-up' },
       ],
       note: 'Sold separately: $2,441 plus $287 a month.',
-      cta: { label: 'Start the bundle', href: '/contact?tier=bundle-booked-solid' },
+      cta: { label: 'Start the bundle', href: '/contact?tier=bundle-booked-solid#contact-form' },
       highlighted: true,
     },
   ],
@@ -300,7 +300,7 @@ export const automationWorkflowCards = {
     { title: 'Review requests after every job', blurb: 'When a job closes, the customer gets a text with your Google review link, and a reminder three days later.' },
     { title: 'Calendar and CRM sync', blurb: 'Bookings, contacts, and job status stay in step across your calendar, your CRM, and your spreadsheet.' },
     { title: 'Weekly numbers report', blurb: 'Every Monday: leads, booked jobs, revenue, reviews, and unanswered calls, in one email.' },
-  ].map((c) => ({ ...c, priceLine: '$799 to build, $79 a month to run', href: '/contact?tier=automation-sprint', ctaLabel: 'Start this one' })),
+  ].map((c) => ({ ...c, priceLine: '$799 to build, $79 a month to run', href: '/contact?tier=automation-sprint#contact-form', ctaLabel: 'Start this one' })),
 }
 
 // Blocks carried over from the existing site (kept, with the Sprint repriced)
@@ -482,7 +482,7 @@ export const servicesPage = () => ({
       overlayStrength: 'heavy',
       ctas: [
         { label: 'See your site first', href: '/free-demo-site', variant: 'primary' },
-        { label: 'Ask a question', href: '/contact', variant: 'ghost' },
+        { label: 'Ask a question', href: '/contact#contact-form', variant: 'ghost' },
       ],
     },
     {
@@ -542,7 +542,7 @@ export const servicesPage = () => ({
       headline: 'Or send us a note instead.',
       description: 'Write what you need and you will have a reply within one business day, usually within an hour.',
       variant: 'emphasized',
-      primaryCta: { label: 'Start a conversation', href: '/contact' },
+      primaryCta: { label: 'Start a conversation', href: '/contact#contact-form' },
     },
   ],
 })
@@ -567,7 +567,7 @@ export const fixItPage = () => ({
       overlayStrength: 'heavy',
       ctas: [
         { label: 'Get my free audit first', href: '/#audit', variant: 'primary' },
-        { label: 'Ask which fix I need', href: '/contact?tier=fix-it', variant: 'ghost' },
+        { label: 'Ask which fix I need', href: '/contact?tier=fix-it#contact-form', variant: 'ghost' },
       ],
     },
     {
@@ -589,7 +589,7 @@ export const fixItPage = () => ({
       headline: 'Not sure which fix you need?',
       description: 'Tell us what is wrong in a sentence and we will point at the right one, no call needed.',
       variant: 'emphasized',
-      primaryCta: { label: 'Ask about a fix', href: '/contact?tier=fix-it' },
+      primaryCta: { label: 'Ask about a fix', href: '/contact?tier=fix-it#contact-form' },
     },
   ],
 })
@@ -614,7 +614,7 @@ export const aiFrontDeskPage = () => ({
       overlayStrength: 'heavy',
       ctas: [
         { label: `Call the demo ${PHONE_DISPLAY}`, href: PHONE_TEL, variant: 'primary' },
-        { label: 'Start setup, $299', href: '/contact?tier=front-desk-setup', variant: 'secondary' },
+        { label: 'Start setup, $299', href: '/contact?tier=front-desk-setup#contact-form', variant: 'secondary' },
       ],
     },
     phoneDemoBlock,
@@ -663,7 +663,7 @@ export const aiFrontDeskPage = () => ({
       description: 'Setup is $299 and it is live in five days. Call the demo first if you want proof.',
       variant: 'emphasized',
       backgroundImageUrl: 'https://images.unsplash.com/photo-1523966211575-eb4a01e7dd51?w=1920&q=80',
-      primaryCta: { label: 'Start setup, $299', href: '/contact?tier=front-desk-setup' },
+      primaryCta: { label: 'Start setup, $299', href: '/contact?tier=front-desk-setup#contact-form' },
       secondaryCta: { label: `Call the demo ${PHONE_DISPLAY}`, href: PHONE_TEL },
     },
     manualFaq(FAQ_FRONT_DESK, 'The front desk, answered.'),
@@ -689,7 +689,7 @@ export const automationPage = () => ({
       backgroundImageUrl: 'https://images.unsplash.com/photo-1560264280-88b68371db39?w=1920&q=80',
       overlayStrength: 'heavy',
       ctas: [
-        { label: 'Start a Sprint, $799', href: '/contact?tier=automation-sprint', variant: 'primary' },
+        { label: 'Start a Sprint, $799', href: '/contact?tier=automation-sprint#contact-form', variant: 'primary' },
         { label: 'See the workflows', href: '#workflows', variant: 'ghost' },
       ],
     },
@@ -731,7 +731,7 @@ export const automationPage = () => ({
       headline: 'Pick your first workflow.',
       description: 'Describe the thing you do by hand and you will have a one-page spec and a fixed price within one business day.',
       variant: 'emphasized',
-      primaryCta: { label: 'Start a Sprint, $799', href: '/contact?tier=automation-sprint' },
+      primaryCta: { label: 'Start a Sprint, $799', href: '/contact?tier=automation-sprint#contact-form' },
     },
   ],
 })

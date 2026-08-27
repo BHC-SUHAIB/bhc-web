@@ -273,7 +273,7 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
                 <Button href="/free-demo-site" variant="brass" size="md">
                   See your site first
                 </Button>
-                <Button href="/contact?tier=site-health-sprint" variant="secondary" size="md">
+                <Button href="/contact?tier=site-health-sprint#contact-form" variant="secondary" size="md">
                   Start a $249 Sprint
                 </Button>
                 <Button type="button" variant="ghost" size="md" onClick={reset}>

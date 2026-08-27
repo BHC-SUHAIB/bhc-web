@@ -1,5 +1,6 @@
 import React from 'react'
 import { FrontDeskHero } from '@/components/FrontDeskHero'
+import { BuildTimeline, WebsiteAssembly, ProcessLoop } from '@/components/CdAnimations'
 import { Hero } from './Hero'
 import { BundleOffer } from './BundleOffer'
 import { CalendlyBooking } from './CalendlyBooking'
@@ -74,15 +75,26 @@ export async function RenderBlocks({
       )
     : blocks
 
-  // AI Front Desk: inject the Claude Design "living diagram" animation as a
-  // synthetic block directly under the page hero (2026-08). Code-side so no
-  // CMS schema change is needed; it participates in tone alternation like
-  // any block but pins its own dark band.
+  // Claude Design animations (2026-08), injected as synthetic blocks so no
+  // CMS schema change is needed. Each participates in tone alternation like
+  // any block but pins its own dark band. Placement:
+  //  - ai-front-desk: the "living diagram" call-flow hero, under the page hero
+  //  - services: the 7-day build timeline, under the first pricing section
+  //  - free-demo-site: the website-assembling-itself diagram, under the hero
+  //  - automation: the "runs while you work" process loop, under the hero
+  const injectAfter = (arr: RenderBlock[], anchor: (b: RenderBlock) => boolean, blockType: string) => {
+    const idx = arr.findIndex(anchor)
+    arr.splice(idx + 1, 0, { blockType } as unknown as RenderBlock)
+    return arr
+  }
   if (pageSlug === 'ai-front-desk') {
-    const arr = [...list]
-    const heroIdx = arr.findIndex((b) => b.blockType === 'hero')
-    arr.splice(heroIdx + 1, 0, { blockType: 'fdHeroAnim' } as unknown as RenderBlock)
-    list = arr
+    list = injectAfter([...list], (b) => b.blockType === 'hero', 'fdHeroAnim')
+  } else if (pageSlug === 'services') {
+    list = injectAfter([...list], (b) => b.blockType === 'pricing', 'buildTimelineAnim')
+  } else if (pageSlug === 'free-demo-site') {
+    list = injectAfter([...list], (b) => b.blockType === 'hero', 'websiteAssemblyAnim')
+  } else if (pageSlug === 'automation') {
+    list = injectAfter([...list], (b) => b.blockType === 'hero', 'processLoopAnim')
   }
 
   if (isHome) {
@@ -217,6 +229,12 @@ export async function RenderBlocks({
       }
       case 'fdHeroAnim' as never:
         return <FrontDeskHero />
+      case 'buildTimelineAnim' as never:
+        return <BuildTimeline />
+      case 'websiteAssemblyAnim' as never:
+        return <WebsiteAssembly />
+      case 'processLoopAnim' as never:
+        return <ProcessLoop />
       default: return null
     }
   }

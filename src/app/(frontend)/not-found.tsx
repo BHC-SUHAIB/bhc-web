@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
+import { AntlerDrawIn } from '@/components/CdAnimations'
 import { ArrowUpRight } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -13,7 +14,8 @@ export default function NotFound() {
   return (
     <div className="flex-1 flex items-center">
       <Container size="xl" className="py-24 sm:py-32">
-        <div className="max-w-2xl">
+        <div className="grid gap-12 md:grid-cols-[1fr_minmax(180px,260px)] md:items-start max-w-4xl">
+        <div className="max-w-2xl md:order-first">
           <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)] mb-5">
             404 &middot; Page not found
           </p>
@@ -52,6 +54,11 @@ export default function NotFound() {
           <div className="mt-10">
             <Button href="/" variant="primary" size="md">Back to the home page</Button>
           </div>
+        </div>
+
+        {/* The antler draws itself in once on load (Claude Design handoff);
+            reduced motion gets the solid mark. currentColor = page ink. */}
+        <AntlerDrawIn className="hidden md:block text-[var(--color-fg)] opacity-90" />
         </div>
       </Container>
     </div>

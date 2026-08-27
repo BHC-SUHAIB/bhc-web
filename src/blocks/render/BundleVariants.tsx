@@ -145,7 +145,7 @@ export function BundleReceipt(b: BundleOfferBlock) {
             <div
               key={i}
               className={cn(
-                'rounded-[var(--radius-md)] border bg-[var(--color-surface)] px-7 py-8 flex flex-col h-full',
+                'group rounded-[var(--radius-md)] border bg-[var(--color-surface)] px-7 py-8 flex flex-col h-full',
                 'shadow-[0_18px_40px_-28px_color-mix(in_srgb,var(--color-ink)_45%,transparent)]',
                 // Inverts to the dark band with gold accents on hover
                 // (see .bundle-invert in components.css).

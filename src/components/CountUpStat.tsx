@@ -50,7 +50,9 @@ export function CountUpStat({ value, decimals = 0, prefix = '', suffix = '', dur
     return () => io.disconnect()
   }, [value, durationMs])
 
-  const formatted = decimals > 0 ? display.toFixed(decimals) : Math.round(display).toString()
+  // toLocaleString so 4+ digit values keep their comma mid-count
+  // (Claude Design motion-polish item 4).
+  const formatted = decimals > 0 ? display.toFixed(decimals) : Math.round(display).toLocaleString('en-US')
   return (
     <span ref={ref}>
       {prefix}

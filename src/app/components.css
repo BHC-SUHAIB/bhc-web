@@ -451,11 +451,69 @@ select.field { appearance: none; background-image: url("data:image/svg+xml,%3Csv
 
 /* Brand icons (see src/components/BrandIcons.tsx). Drawn by default; the
    hidden (undrawn) state only exists pre-reveal with JS + motion allowed. */
-.bic { width: 28px; height: 28px; color: var(--color-brass-text); flex: none; }
-.bic :is(path, circle) { transition: stroke-dashoffset 1.2s var(--ease-out) 0.15s; }
+.bic { width: 28px; height: 28px; color: var(--color-brass-text); flex: none; --anim-accent: #C9A36B; }
+.bic * { transform-box: view-box; }
+.bic :is(path, circle, rect) { transition: stroke-dashoffset 1.2s var(--ease-out) 0.15s; }
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-  :is(.reveal-up, [data-reveal-stagger]):not(.in) .bic :is(path, circle) { stroke-dasharray: 1; stroke-dashoffset: 1; }
-  :is(.reveal-up, [data-reveal-stagger]).in .bic :is(path, circle) { stroke-dasharray: 1; stroke-dashoffset: 0; }
+  :is(.reveal-up, [data-reveal-stagger]):not(.in) .bic :is(path, circle, rect) { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  :is(.reveal-up, [data-reveal-stagger]).in .bic :is(path, circle, rect) { stroke-dasharray: 1; stroke-dashoffset: 0; }
+}
+
+/* ── Icon hover micro-gestures (Claude Design handoff, 2026-08) ──
+   Fired by hovering the icon's parent card (.group:hover). ~850ms each on
+   the house ease, rest pose at both ends. Subpart classes (.h-min, .needle,
+   .chk, ...) are the contract between BrandIcons.tsx and these rules. */
+.bic .crownfill { fill: var(--anim-accent); stroke: none; clip-path: inset(101% -2% -2% -2%); transition: clip-path 0.85s var(--ease-out); }
+.bic :is(.sig, .ln, .sigline, .chk, .tl) { stroke-dasharray: 1 1; }
+.group:hover .bic-clock .h-min { transform-origin: 12px 12px; animation: bicTick 0.85s var(--ease-out) 1; }
+@keyframes bicTick { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(30deg); } }
+.group:hover .bic-gauge .needle { transform-origin: 12px 16.5px; animation: bicSweep 0.85s var(--ease-out) 1; }
+@keyframes bicSweep { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(26deg); } }
+.group:hover .bic-wrench .whole { transform-origin: 12px 12px; animation: bicTighten 0.85s var(--ease-out) 1; }
+@keyframes bicTighten { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(-12deg); } }
+.group:hover .bic-search .whole { animation: bicOrbit 0.85s var(--ease-out) 1; }
+@keyframes bicOrbit { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(1.6px, -1.2px); } 50% { transform: translate(0, -2.2px); } 75% { transform: translate(-1.6px, -1.2px); } }
+.group:hover .bic-phone-ring .hs { transform-origin: 12px 12px; animation: bicWiggle 0.85s var(--ease-out) 1; }
+.group:hover .bic-phone-ring .s1 { animation: bicRedraw 0.55s var(--ease-out) 0.07s 1; }
+.group:hover .bic-phone-ring .s2 { animation: bicRedraw 0.55s var(--ease-out) 0.25s 1; }
+@keyframes bicWiggle { 0%, 100% { transform: rotate(0); } 18% { transform: rotate(-9deg); } 38% { transform: rotate(8deg); } 58% { transform: rotate(-6deg); } 78% { transform: rotate(4deg); } }
+.group:hover .bic-loop .whole { transform-origin: 12px 12px; animation: bicSpin 0.85s var(--ease-out) 1; }
+@keyframes bicSpin { 0% { transform: rotate(0); } 100% { transform: rotate(180deg); } }
+.group:hover .bic-page .l1 { animation: bicRedraw 0.5s var(--ease-out) 1; }
+.group:hover .bic-page .l2 { animation: bicRedraw 0.5s var(--ease-out) 0.17s 1; }
+.group:hover .bic-page .l3 { animation: bicRedraw 0.5s var(--ease-out) 0.34s 1; }
+.group:hover .bic-stack .s1 { animation: bicLiftUp 0.85s var(--ease-out) 1; }
+.group:hover .bic-stack .s3 { animation: bicLiftDown 0.85s var(--ease-out) 1; }
+@keyframes bicLiftUp { 0%, 100% { transform: translate(0, 0); } 45% { transform: translate(0, -1px); } }
+@keyframes bicLiftDown { 0%, 100% { transform: translate(0, 0); } 45% { transform: translate(0, 1px); } }
+.group:hover .bic-pen .whole { transform-origin: 4px 20px; animation: bicNib 0.85s var(--ease-out) 1; }
+.group:hover .bic-pen .sigline { animation: bicRedraw 0.55s var(--ease-out) 0.17s 1; }
+@keyframes bicNib { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(-8deg); } }
+.group:hover .bic-compass .needle { transform-origin: 12px 12px; animation: bicSettle 0.85s var(--ease-out) 1; }
+@keyframes bicSettle { 0%, 100% { transform: rotate(0); } 35% { transform: rotate(20deg); } 65% { transform: rotate(-8deg); } 85% { transform: rotate(3deg); } }
+.group:hover .bic-store .awn { animation: bicBounce 0.85s var(--ease-out) 1; }
+@keyframes bicBounce { 0%, 100% { transform: translate(0, 0); } 40% { transform: translate(0, 1px); } 70% { transform: translate(0, -0.3px); } }
+.group:hover .bic-crown .crownfill { clip-path: inset(-2% -2% -2% -2%); }
+.group:hover .bic-shield .chk { animation: bicRedraw 0.6s var(--ease-out) 0.11s 1; }
+.group:hover .bic-eye .whole { animation: bicBlink 0.85s var(--ease-out) 1; }
+@keyframes bicBlink { 0%, 100% { clip-path: inset(-2px); } 38%, 50% { clip-path: inset(10.5px -2px); } }
+.group:hover .bic-trend .tl { animation: bicRedraw 0.6s var(--ease-out) 1; }
+.group:hover .bic-trend .ah { transform-origin: 17px 9.5px; animation: bicPop 0.45s var(--ease-out) 0.45s 1; }
+@keyframes bicPop { 0% { opacity: 0; transform: scale(0.5); } 60% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes bicRedraw { 0% { stroke-dashoffset: 1; } 100% { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .bic * { animation: none !important; }
+  .bic .crownfill { transition: none; clip-path: inset(101% -2% -2% -2%) !important; }
+}
+
+/* Portfolio/work card image reveal: clip up + settle as the card's reveal
+   group enters (Claude Design motion-polish item 9). */
+.work .shot img { transition: clip-path 0.82s var(--ease-out), transform 0.82s var(--ease-out); }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  /* Only the pre-reveal state is pinned; once `.in` lands the properties
+     fall back to their base values so the existing hover zoom keeps
+     working (a `.in ... transform` rule would out-specify `.work:hover`). */
+  :is(.reveal-up, [data-reveal-stagger]):not(.in) .work .shot img { clip-path: inset(0 0 8% 0); transform: scale(1.04); }
 }
 
 /* Eyebrow hairline draws across when its reveal group enters. */

@@ -37,7 +37,7 @@ export function Guarantees(b: GuaranteesProps) {
             return (
             <div
               key={i}
-              className="p-7 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] transition-[transform,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)]"
+              className="group p-7 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] transition-[transform,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--color-brass)]"
             >
               <div className="inline-flex items-center justify-center size-10 rounded-full bg-[color-mix(in_srgb,var(--color-brass)_16%,var(--color-bg))] mb-4">
                 <Icon className="size-5 text-[var(--color-brass)]" />

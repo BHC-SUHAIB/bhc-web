@@ -10,6 +10,10 @@ const isHttps = (process.env.NEXT_PUBLIC_SITE_URL || '').startsWith('https://')
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: {
+    // API keys let trusted internal services (hart-pipeline) push won leads
+    // into the CRM without a browser session. Enable the key per-user in the
+    // admin; requests authenticate with `Authorization: users API-Key <key>`.
+    useAPIKey: true,
     cookies: {
       secure: isHttps,
       sameSite: 'Lax',

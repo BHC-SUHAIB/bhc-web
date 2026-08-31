@@ -613,6 +613,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           'Mobile sticky CTA, custom-eased smooth scroll, respect for prefers-reduced-motion.',
         ]],
         ['p', 'The site now runs on a $12/month DigitalOcean droplet instead of Squarespace\u2019s $36/month Business plan \u2014 and the practice owns the stack, the content, and the roadmap.'],
+        ['p', 'Philip Parmar\u2019s other venture, Prometheus EQ, an organizational culture and climate consulting practice for businesses, schools, and faith-based groups, shares the Prometheus name and gold accent as a deliberate nod between the two brands.'],
       ]),
       metrics: [
         { value: '56', label: 'commits shipped in 5 days' },
@@ -782,6 +783,123 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         data: waygftProject,
       })
       payload.logger.info('[seed] project upserted: waygft (FORCE_WAYGFT_UPSERT)')
+    }
+
+    // --- Prometheus EQ media uploads ---
+    // ⚠️ Unique filenames (prefixed `prometheuseq-`, not the generic `hero.png`):
+    // every project ships a `hero.png` seed-asset, and on the flat Spaces bucket
+    // they collide (see the Misbah note below for the incident this avoids).
+    const peqMediaHero = await ensureMedia(
+      'Prometheus EQ: homepage hero (Warm Graphite theme, Classic Serif pairing)',
+      'public/seed-assets/prometheuseq/prometheuseq-hero.png',
+    )
+    const peqMediaServices = await ensureMedia(
+      'Prometheus EQ: Services page with the Illuminate, Ignite, Transform tiers',
+      'public/seed-assets/prometheuseq/prometheuseq-services.png',
+    )
+    const peqMediaProcess = await ensureMedia(
+      'Prometheus EQ: Our Process page walking the six-step methodology',
+      'public/seed-assets/prometheuseq/prometheuseq-process.png',
+    )
+    const peqMediaChristian = await ensureMedia(
+      'Prometheus EQ: Christian Organizational Consulting bonus page',
+      'public/seed-assets/prometheuseq/prometheuseq-christian-consulting.png',
+    )
+
+    // --- Prometheus EQ project (real client case study) ---
+    // Sister brand to Prometheus Minds (prometheus-minds project above): same
+    // founder, Philip Parmar, running a second, distinct consulting practice.
+    // Facts below are drawn from the live site (prometheuseq.com), the
+    // project's dist/index.html build, and Suhaib's original pitch email to
+    // Philip (Prometheus EQ - Email to Philip.docx) describing the remixable
+    // mockup process. No git history exists for this project (static HTML,
+    // not a git repo), so no commit/day counts are claimed here.
+    const prometheusEQProject: any = {
+      title: 'Prometheus EQ',
+      slug: 'prometheus-eq',
+      group: 'client',
+      summary: 'A hand-built culture and climate consulting site for Philip Parmar’s second brand, a sister site to Prometheus Minds. He picked the final look by remixing a live, self-contained mockup himself: six themes, five fonts, four hero styles, before a line of real content was written.',
+      client: 'Prometheus EQ',
+      industry: 'Organizational consulting / Culture & leadership',
+      projectType: 'website',
+      year: 2026,
+      teamSize: 1,
+      liveUrl: 'https://prometheuseq.com',
+      ...(peqMediaHero?.id ? { heroImage: peqMediaHero.id } : {}),
+      stack: [
+        { name: 'Hand-rolled HTML/CSS/JS (no framework)', category: 'language' },
+        { name: 'CSS custom-property theme engine', category: 'design' },
+        { name: 'Playfair Display + Source Serif 4 (Google Fonts)', category: 'design' },
+        { name: 'Node.js (contact microservice)', category: 'tool' },
+        { name: 'Resend (transactional email)', category: 'tool' },
+        { name: 'Caddy', category: 'hosting' },
+        { name: 'DigitalOcean', category: 'hosting' },
+      ],
+      challenge: rtDoc([
+        ['p', 'Philip Parmar was building a second consulting brand alongside Prometheus Minds, his ADHD and neurodiverse tutoring practice in the Twin Cities. Prometheus EQ needed to serve a different audience entirely: businesses, schools, nonprofits, healthcare organizations, and Christian ministries looking for culture and climate consulting, leadership development, and executive coaching.'],
+        ['p', 'The two brands share a founder but had to feel distinct. Prometheus EQ needed its own identity, not a re-skin of Prometheus Minds, while still reading as part of the same family to anyone who knew both. And Philip needed to feel confident in a direction before any real content or a real build began, without a slow back-and-forth of "try a different color" emails.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'A mockup he could remix himself'],
+        ['p', 'Instead of static comps, we sent one self-contained HTML file that opened straight in the browser: no server, no install. It carried all five pages (Home, About, Services, Our Process, Contact) built on a token-driven theme engine. A gear icon opened a live control panel: six color themes, five font pairings, three density settings, four hero layouts, and three homepage section orders, all switchable instantly. A "copy current combo" button serialized the exact picks into a short string Philip could paste straight into his reply, so feedback came back as a precise spec instead of a vague impression.'],
+        ['h3', 'Opening on the family resemblance'],
+        ['p', 'The mockup defaulted to a theme called Prometheus Gold (black and gold), a deliberate nod to Prometheus Minds’ palette so the two sites would read as siblings before Philip had touched a single setting. He ultimately picked a different direction, Warm Graphite (dark ink and a gold accent on parchment), which still carries the same gold thread.'],
+        ['h3', 'A dedicated page for faith-based clients'],
+        ['p', 'Part of Philip’s client base is Christian organizations and ministries, so the site ships a Christian Organizational Consulting page: scripture-anchored content that reframes the same culture and climate methodology around biblical stewardship and servant leadership. It’s linked from the Services page rather than the main nav, available without narrowing the site’s general positioning. It was added after launch with an idempotent script that patches the built HTML directly, so re-running it is a no-op once the section exists.'],
+        ['h3', 'Same engine, simpler production build'],
+        ['p', 'The shipped site reuses the exact CSS custom-property theme engine from the mockup (the same data-theme, data-font, and data-hero attributes drive both), but the live picker itself was stripped out for visitors. It’s still there for us: changing the production look is a one-line attribute change, not a redesign.'],
+        ['h3', 'A contact form with no framework to maintain'],
+        ['p', 'The backend is a single small Node.js service, no framework, under 50 lines, running behind Caddy on its own DigitalOcean droplet. It validates the organization and message fields and the email format server-side, drops a honeypot field to filter bots, and sends through Resend. A /api/contact/health endpoint reports whether the Resend key is configured.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'Prometheus EQ launched as its own site on its own infrastructure, separate from both Prometheus Minds and Black Hart Consulting.'],
+        ['ul', [
+          'Five core pages (Home, About, Services, Our Process, Contact) plus the Christian Organizational Consulting bonus page.',
+          'Services page built around three named tiers: Illuminate (assessment), Ignite (turning insight into action), and Transform (ongoing partnership).',
+          'Our Process page walks the full six-step methodology: Discovery, Organizational Assessment, Data Analysis, Executive Report & Strategic Recommendations, Leadership Presentation & Workshop, and Implementation & Ongoing Partnership.',
+          'Working contact form wired to Resend, with honeypot spam filtering and server-side validation.',
+          'Shares a founder and a visual thread (the gold accent) with Prometheus Minds, while standing as its own brand with its own theme, fonts, and hosting.',
+        ]],
+      ]),
+      metrics: [
+        { value: '6', label: 'live color themes previewed pre-build' },
+        { value: '5', label: 'font pairings tested in the interactive mockup' },
+        { value: '6', label: 'pages: 5 core + 1 faith-based bonus page' },
+        { value: '2', label: 'sister brands sharing one founder' },
+      ],
+      gallery: [
+        ...(peqMediaServices?.id ? [{
+          image: peqMediaServices.id,
+          caption: 'The Services page: three named tiers, Illuminate, Ignite, and Transform, each scoped to a different stage of engagement.',
+        }] : []),
+        ...(peqMediaProcess?.id ? [{
+          image: peqMediaProcess.id,
+          caption: 'The Our Process page lays out the full six-step methodology, from Discovery through Implementation & Ongoing Partnership.',
+        }] : []),
+        ...(peqMediaChristian?.id ? [{
+          image: peqMediaChristian.id,
+          caption: 'The Christian Organizational Consulting page: scripture-anchored content for faith-based clients, linked from Services rather than the main nav.',
+        }] : []),
+      ],
+      featured: true,
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingPEQ = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: prometheusEQProject.slug } },
+      limit: 1,
+    })
+    if (existingPEQ.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: prometheusEQProject })
+      payload.logger.info('[seed] project created: prometheus-eq')
+    } else if (process.env.FORCE_PEQ_UPSERT === 'true') {
+      await payload.update({
+        collection: 'projects',
+        id: existingPEQ.docs[0].id,
+        data: prometheusEQProject,
+      })
+      payload.logger.info('[seed] project upserted: prometheus-eq (FORCE_PEQ_UPSERT)')
     }
 
     // --- Misbah media uploads (composited iOS-simulator captures on warm panels) ---

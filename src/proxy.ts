@@ -90,6 +90,6 @@ export const config = {
   // Match every route EXCEPT static assets that don't reach app code anyway.
   // Listing them here saves the proxy-overhead per asset request.
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|icon.svg|apple-icon.png|brand/|robots.txt|sitemap.xml).*)',
+    '/((?!_next/static|_next/image|favicon.ico|icon.svg|apple-icon.png|brand/|robots.txt|sitemap.xml|llms.txt).*)',
   ],
 }

@@ -12,6 +12,19 @@ export const Articles: CollectionConfig = {
   },
   versions: { drafts: true },
   hooks: {
+    beforeChange: [
+      // A published article must always carry a publish date: the listing
+      // sorts on it, cards display it, and structured data needs it. It went
+      // missing once (2026-09: an article published by hand with the field
+      // left blank shipped dateless), so stamp it on first publish and never
+      // overwrite a date a human set.
+      async ({ data }) => {
+        if (data?._status === 'published' && !data.publishedAt) {
+          data.publishedAt = new Date().toISOString()
+        }
+        return data
+      },
+    ],
     afterChange: [
       async ({ doc, previousDoc }) => {
         const slug = (doc?.slug as string) ?? null

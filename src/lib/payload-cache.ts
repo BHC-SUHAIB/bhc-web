@@ -164,12 +164,18 @@ export const getCachedAllProjects = unstable_cache(
 )
 
 // --- Articles ---------------------------------------------------------
+// Every public-facing article query filters on _status: the collection has
+// drafts enabled, and payload.find() returns the main-table doc regardless
+// of status — so without this filter a never-published draft (e.g. the
+// weekly generated blog draft awaiting review) walks straight onto the live
+// site and into the sitemap (leaked live 2026-09-10).
 
 export const getCachedArticlesList = unstable_cache(
   async (): Promise<Article[]> => {
     const payload = await getPayloadClient()
     const res = await payload.find({
       collection: 'articles',
+      where: { _status: { equals: 'published' } },
       limit: 100,
       sort: '-publishedAt',
     })
@@ -184,7 +190,7 @@ export const getCachedArticleBySlug = unstable_cache(
     const payload = await getPayloadClient()
     const res = await payload.find({
       collection: 'articles',
-      where: { slug: { equals: slug } },
+      where: { and: [{ slug: { equals: slug } }, { _status: { equals: 'published' } }] },
       limit: 1,
     })
     return (res.docs[0] as Article | undefined) ?? null
@@ -198,7 +204,7 @@ export const getCachedArticlesExceptSlug = unstable_cache(
     const payload = await getPayloadClient()
     const res = await payload.find({
       collection: 'articles',
-      where: { slug: { not_equals: slug } },
+      where: { and: [{ slug: { not_equals: slug } }, { _status: { equals: 'published' } }] },
       limit,
       sort: '-publishedAt',
     })
@@ -250,7 +256,12 @@ export const getCachedFeaturedFaqs = unstable_cache(
 export const getCachedAllArticles = unstable_cache(
   async (): Promise<Array<Pick<Article, 'id' | 'slug' | 'updatedAt' | 'publishedAt'>>> => {
     const payload = await getPayloadClient()
-    const res = await payload.find({ collection: 'articles', limit: 500, depth: 0 })
+    const res = await payload.find({
+      collection: 'articles',
+      where: { _status: { equals: 'published' } },
+      limit: 500,
+      depth: 0,
+    })
     return res.docs as Array<Pick<Article, 'id' | 'slug' | 'updatedAt' | 'publishedAt'>>
   },
   ['articles:all'],

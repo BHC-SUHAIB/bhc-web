@@ -54,7 +54,10 @@ const LOCAL_PAGES: Array<{ title: string; slug: string; seo: Record<string, unkn
     title: 'Web Design in Houston Heights',
     slug: 'web-design-houston-heights',
     seo: {
-      metaTitle: 'Web Design in Houston Heights | Black Hart Consulting',
+      // No "| Black Hart Consulting" here: the site template already appends
+      // "· Black Hart Consulting", and both together doubled the brand in the
+      // rendered <title> (seen live 2026-09-10).
+      metaTitle: 'Web Design in Houston Heights',
       metaDescription:
         'Custom web design for Houston Heights small businesses. Fast, mobile-first sites that rank in the local pack and turn neighborhood searches into calls. Fixed price, 14-day build.',
       noIndex: false,
@@ -115,9 +118,11 @@ const LOCAL_PAGES: Array<{ title: string; slug: string; seo: Record<string, unkn
     title: 'Local SEO in Houston',
     slug: 'local-seo-houston',
     seo: {
-      metaTitle: 'Local SEO in Houston | Black Hart Consulting',
+      // Title targets "seo services houston texas": 48 impressions, 0 clicks
+      // in Search Console (Jun-Sep 2026). Front-load the query phrasing.
+      metaTitle: 'SEO Services in Houston, Texas',
       metaDescription:
-        'Local SEO for Houston businesses. Google Business Profile optimization, citations, and LocalBusiness schema that move you into the Houston local 3-pack. Monthly and measurable.',
+        'Local SEO services for Houston businesses from $499. Google Business Profile optimization, citations, and schema that move you into the local 3-pack. Start with a free audit of what is holding your rankings back.',
       noIndex: false,
     },
     layout: [

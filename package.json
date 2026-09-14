@@ -6,11 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "generate:types": "payload generate:types",
-    "generate:importmap": "payload generate:importmap",
+    "generate:types": "NODE_OPTIONS=\"--import tsx --require ./scripts/nextenv-shim.cjs\" payload generate:types",
+    "generate:importmap": "NODE_OPTIONS=\"--import tsx --require ./scripts/nextenv-shim.cjs\" payload generate:importmap",
     "stripe:setup": "tsx scripts/stripe-setup.ts",
     "dev:tunnel": "bash scripts/dev-tunnel.sh",
-    "payload": "payload"
+    "payload": "NODE_OPTIONS=\"--import tsx --require ./scripts/nextenv-shim.cjs\" payload"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.83.0",

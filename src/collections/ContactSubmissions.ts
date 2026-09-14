@@ -1,5 +1,30 @@
 import type { CollectionConfig } from 'payload'
 import { denyIfCrossOrigin, rateLimitFivePerHour } from '@/lib/api-guards'
+import { buildContactNotificationEmail } from '@/lib/contact-notification-email'
+
+// Attribution keys the public form may send (see src/lib/attribution.ts).
+// Anything else in the object is dropped; strings are length-capped so a
+// hostile client can't stuff megabytes into the row.
+const ATTRIBUTION_KEYS: Array<[key: string, max: number]> = [
+  ['gclid', 200], ['gbraid', 200], ['wbraid', 200], ['msclkid', 200], ['fbclid', 200],
+  ['utmSource', 200], ['utmMedium', 200], ['utmCampaign', 200], ['utmTerm', 200], ['utmContent', 200],
+  ['referrer', 500], ['landingPath', 500],
+]
+
+function sanitizeAttribution(input: unknown): Record<string, string> | undefined {
+  if (!input || typeof input !== 'object') return undefined
+  const src = input as Record<string, unknown>
+  const out: Record<string, string> = {}
+  for (const [key, max] of ATTRIBUTION_KEYS) {
+    const v = src[key]
+    if (typeof v === 'string' && v.trim()) out[key] = v.trim().slice(0, max)
+  }
+  if (typeof src.firstTouchAt === 'string') {
+    const d = new Date(src.firstTouchAt)
+    if (!Number.isNaN(d.getTime())) out.firstTouchAt = d.toISOString()
+  }
+  return Object.keys(out).length ? out : undefined
+}
 
 export const ContactSubmissions: CollectionConfig = {
   slug: 'contact-submissions',
@@ -17,8 +42,8 @@ export const ContactSubmissions: CollectionConfig = {
   admin: {
     group: 'Leads',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'email', 'company', 'projectType', 'status', 'createdAt'],
-    description: 'Inquiries submitted through the /contact form.',
+    defaultColumns: ['name', 'email', 'company', 'projectType', 'status', 'suspectedSpam', 'createdAt'],
+    description: 'Inquiries submitted through the /contact form, the free-demo form, the audit tool and the exit-intent popup.',
   },
   hooks: {
     beforeValidate: [
@@ -28,8 +53,7 @@ export const ContactSubmissions: CollectionConfig = {
 
         // Spam hardening for the PUBLIC create path only. Admin-created or
         // server-side records carry an authenticated user (or no HTTP method),
-        // so they skip the origin + rate-limit checks. A honeypot alone is
-        // weak for a lead form that attracts bot spam.
+        // so they skip the origin + rate-limit checks.
         const isPublicHttpPost =
           !req.user && typeof req.method === 'string' && req.method.toUpperCase() === 'POST'
         if (operation === 'create' && isPublicHttpPost) {
@@ -47,12 +71,47 @@ export const ContactSubmissions: CollectionConfig = {
           }
         }
 
-        // Honeypot: real humans never see this field, so any non-empty value
-        // flags a bot and we reject it without creating a record.
-        if (typeof data.honeypot === 'string' && data.honeypot.trim().length > 0) {
-          req.payload.logger.warn({ ip: ipKey, email: data.email }, '[contact] spam dropped (honeypot)')
-          throw new Error('Invalid submission')
+        if (operation === 'create') {
+          // Spam SIGNALS, not spam rejects. Until 2026-09-13 a filled honeypot
+          // threw and the record was never written. That is one autofill away
+          // from silently dropping a real person (iOS ignores autocomplete=off
+          // and happily fills an off-screen field labelled "Website"). Now we
+          // always save the record; a tripped honeypot only flags it and
+          // skips the notification email, so a false positive is still
+          // sitting in Admin > Leads instead of lost.
+          const signals: string[] = []
+          if (typeof data.honeypot === 'string' && data.honeypot.trim().length > 0) {
+            signals.push('honeypot')
+            data.suspectedSpam = true
+            req.payload.logger.warn(
+              { ip: ipKey, email: data.email },
+              '[contact] honeypot filled; saved as suspected spam, notification skipped',
+            )
+          } else {
+            data.suspectedSpam = false
+          }
+
+          // Time-to-submit: the form sends the epoch-ms timestamp of when it
+          // became interactive. Recorded for every lead; a sub-3-second submit
+          // is noted as a SOFT signal only (bots race, humans don't, but so do
+          // people re-submitting after a validation error).
+          const startedAt = Number(data.formStartedAt)
+          delete data.formStartedAt
+          data.timeToSubmitSec = undefined
+          if (Number.isFinite(startedAt) && startedAt > 0) {
+            const ms = Date.now() - startedAt
+            if (ms >= 0 && ms < 7 * 24 * 60 * 60 * 1000) {
+              data.timeToSubmitSec = Math.round(ms / 1000)
+              if (ms < 3000) signals.push(`fast-submit:${(ms / 1000).toFixed(1)}s`)
+            }
+          }
+          data.spamSignals = signals.length ? signals.join('; ') : undefined
+
+          // First-touch attribution from the client (localStorage). Whitelisted
+          // + length-capped; never trusted for anything but reporting.
+          data.attribution = sanitizeAttribution(data.attribution)
         }
+
         // Capture the source IP so we can rate-limit / block later.
         if (!data.ipAddress) {
           data.ipAddress = ipKey === 'unknown' ? undefined : ipKey
@@ -68,6 +127,8 @@ export const ContactSubmissions: CollectionConfig = {
       async ({ doc, operation, req }) => {
         if (operation !== 'create') return
         if (!doc.smsConsent || !doc.phone) return
+        // Don't manufacture consent records from suspected bots.
+        if (doc.suspectedSpam) return
         try {
           await req.payload.create({
             collection: 'sms-consents',
@@ -89,34 +150,28 @@ export const ContactSubmissions: CollectionConfig = {
       },
       async ({ doc, operation, req }) => {
         if (operation !== 'create') return
+        if (doc.suspectedSpam) {
+          req.payload.logger.info(
+            `[contact] suspected spam (${doc.spamSignals ?? 'flagged'}) saved as #${doc.id}; notification skipped`,
+          )
+          return
+        }
         const notifyTo = process.env.CONTACT_NOTIFY_EMAIL || 'hello@blackhartconsulting.com'
         const from = process.env.EMAIL_FROM || 'noreply@blackhartconsulting.com'
         try {
+          const { subject, html } = buildContactNotificationEmail(doc)
           await req.payload.sendEmail({
             to: notifyTo,
             from,
             // Reply-To points at the submitter so hitting "Reply" in your
             // inbox opens a draft to them, not to the no-reply sender.
             replyTo: doc.email,
-            subject: doc.formType === 'demo-request'
-              ? `Demo site request from ${doc.name}`
-              : `New inquiry from ${doc.name}`,
-            html: [
-              `<h2 style="font-family:Georgia,serif;">New contact inquiry</h2>`,
-              `<p><strong>Name:</strong> ${escapeHtml(doc.name)}</p>`,
-              `<p><strong>Email:</strong> <a href="mailto:${encodeURIComponent(doc.email)}">${escapeHtml(doc.email)}</a></p>`,
-              doc.company ? `<p><strong>Company:</strong> ${escapeHtml(doc.company)}</p>` : '',
-              doc.listingUrl ? `<p><strong>Listing / site:</strong> ${escapeHtml(doc.listingUrl)}</p>` : '',
-              doc.projectType ? `<p><strong>Project type:</strong> ${escapeHtml(doc.projectType)}</p>` : '',
-              doc.budgetRange ? `<p><strong>Budget:</strong> ${escapeHtml(doc.budgetRange)}</p>` : '',
-              `<hr style="border:none;border-top:1px solid #ccc;margin:16px 0;">`,
-              `<p style="white-space:pre-wrap;font-family:Arial,sans-serif;">${escapeHtml(doc.message)}</p>`,
-              doc.sourcePage ? `<p style="color:#888;font-size:12px;margin-top:24px;">Submitted from ${escapeHtml(doc.sourcePage)}</p>` : '',
-            ].filter(Boolean).join(''),
+            subject,
+            html,
           })
           req.payload.logger.info(`[contact] notification emailed to ${notifyTo}`)
         } catch (err) {
-          // No email adapter yet \u2014 Payload logs the email to console instead.
+          // No email adapter yet — Payload logs the email to console instead.
           // Wire @payloadcms/email-resend (or nodemailer) to deliver for real.
           req.payload.logger.warn({ err }, '[contact] email send failed (submission still saved)')
         }
@@ -195,15 +250,75 @@ export const ContactSubmissions: CollectionConfig = {
     },
     { name: 'message', type: 'textarea', required: true, minLength: 10, maxLength: 5000 },
     {
+      name: 'attribution', type: 'group',
+      admin: {
+        description:
+          'First-touch source captured in the visitor’s browser on their first page view (gclid / utm tags / referrer / landing page) and sent with the form. Read-only; blank for direct visits or when storage was blocked.',
+      },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'utmSource', type: 'text', label: 'utm_source', admin: { readOnly: true, width: '33%' } },
+            { name: 'utmMedium', type: 'text', label: 'utm_medium', admin: { readOnly: true, width: '33%' } },
+            { name: 'utmCampaign', type: 'text', label: 'utm_campaign', admin: { readOnly: true, width: '33%' } },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'utmTerm', type: 'text', label: 'utm_term (keyword)', admin: { readOnly: true, width: '50%' } },
+            { name: 'utmContent', type: 'text', label: 'utm_content', admin: { readOnly: true, width: '50%' } },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'gclid', type: 'text', admin: { readOnly: true, width: '20%', description: 'Google Ads click id' } },
+            { name: 'gbraid', type: 'text', admin: { readOnly: true, width: '20%' } },
+            { name: 'wbraid', type: 'text', admin: { readOnly: true, width: '20%' } },
+            { name: 'msclkid', type: 'text', admin: { readOnly: true, width: '20%', description: 'Microsoft Ads' } },
+            { name: 'fbclid', type: 'text', admin: { readOnly: true, width: '20%', description: 'Meta' } },
+          ],
+        },
+        { name: 'referrer', type: 'text', admin: { readOnly: true, description: 'External referrer on first touch, if any.' } },
+        { name: 'landingPath', type: 'text', admin: { readOnly: true, description: 'First page viewed, including query string.' } },
+        { name: 'firstTouchAt', type: 'date', admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },
+      ],
+    },
+    {
       name: 'status', type: 'select', defaultValue: 'new',
-      admin: { position: 'sidebar', description: 'Your workflow state \u2014 not shown to the sender.' },
+      admin: { position: 'sidebar', description: 'Your workflow state — not shown to the sender.' },
       options: [
         { label: 'New', value: 'new' },
         { label: 'Replying', value: 'replying' },
         { label: 'Replied', value: 'replied' },
         { label: 'Not a fit', value: 'declined' },
+        { label: 'Spam', value: 'spam' },
         { label: 'Archived', value: 'archived' },
       ],
+    },
+    {
+      name: 'suspectedSpam', type: 'checkbox', defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description:
+          'Set automatically when the hidden honeypot field was filled. The record is kept but no notification email is sent. Real person? Uncheck and reply as normal.',
+      },
+    },
+    {
+      name: 'spamSignals', type: 'text',
+      admin: {
+        position: 'sidebar', readOnly: true,
+        description: 'Soft signals recorded at submit time (honeypot, fast-submit). Informational only.',
+      },
+    },
+    {
+      name: 'timeToSubmitSec', type: 'number',
+      admin: {
+        position: 'sidebar', readOnly: true,
+        description: 'Seconds between the form becoming interactive and the submit click.',
+      },
     },
     {
       name: 'notes', type: 'textarea',
@@ -217,20 +332,12 @@ export const ContactSubmissions: CollectionConfig = {
       name: 'ipAddress', type: 'text',
       admin: { position: 'sidebar', readOnly: true },
     },
-    // Hidden from the admin UI; only set by bots.
+    // Hidden from the admin UI; only bots (or an over-eager autofill) set it.
+    // The submitted value is kept so a flagged record can be inspected.
     {
       name: 'honeypot', type: 'text',
       admin: { hidden: true, readOnly: true },
     },
   ],
   timestamps: true,
-}
-
-function escapeHtml(value: unknown): string {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
 }

@@ -11,7 +11,7 @@
  *                                                 Resend to suhaib@blackhart…
  *                                                 (requires RESEND_API_KEY).
  *
- * Types: invoice | care-plan | payment-failed
+ * Types: invoice | care-plan | payment-failed | contact | demo-request
  *
  * Locked behind denyIfProductionLocked (returns 403 in prod). Delete this
  * route before final prod deploy if you want.
@@ -27,6 +27,7 @@ import {
   sendPaymentFailedAlertEmail,
 } from '@/lib/billing-emails'
 import type Stripe from 'stripe'
+import { buildContactNotificationEmail, type ContactNotificationDoc } from '@/lib/contact-notification-email'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,6 +50,39 @@ const FIXTURE_INVOICE: Stripe.Invoice = {
     ],
   },
 } as unknown as Stripe.Invoice
+
+// Lead-notification fixtures. Mirrors what the public forms send after the
+// 2026-09 attribution + soft-spam changes, so the "Source:" block renders.
+const FIXTURE_CONTACT: ContactNotificationDoc = {
+  name: 'Maria Lopez',
+  email: 'maria@heightsdental.com',
+  company: 'Heights Family Dental',
+  projectType: 'website',
+  budgetRange: '1k-2500',
+  message: 'Our site is from 2016 and does not work on phones. Looking for a rebuild plus help showing up on Google for "dentist heights houston".',
+  formType: 'contact',
+  sourcePage: '/contact',
+  timeToSubmitSec: 84,
+  attribution: {
+    utmSource: 'google',
+    utmMedium: 'cpc',
+    utmCampaign: 'lp_express_website',
+    utmTerm: 'custom website design',
+    gclid: 'Cj0KCQjw_PREVIEW_gclid_1234567890',
+    referrer: 'https://www.google.com/',
+    landingPath: '/free-demo-site?utm_source=google&utm_medium=cpc&utm_campaign=lp_express_website&utm_term=custom%20website%20design',
+    firstTouchAt: new Date(Date.now() - 6 * 60_000).toISOString(),
+  },
+}
+const FIXTURE_DEMO: ContactNotificationDoc = {
+  ...FIXTURE_CONTACT,
+  name: 'Heights Family Dental',
+  formType: 'demo-request',
+  listingUrl: 'https://maps.app.goo.gl/preview123',
+  message: 'Demo site request for Heights Family Dental.\nListing: https://maps.app.goo.gl/preview123\nFamily dentistry in the Houston Heights.',
+  sourcePage: '/free-demo-site',
+  timeToSubmitSec: 41,
+}
 
 export async function GET(req: Request) {
   const denied = denyIfProductionLocked()
@@ -112,9 +146,16 @@ export async function GET(req: Request) {
         clientEmail: 'joe@joescoffee.com',
         subscriptionId: 'sub_PREVIEW1234567890',
       })
+    } else if (type === 'contact' || type === 'demo-request') {
+      // Pure template render: no DB row, no adapter. ?send=1 still forwards
+      // the built HTML to Resend so the real inbox rendering can be checked.
+      const built = buildContactNotificationEmail(type === 'demo-request' ? FIXTURE_DEMO : FIXTURE_CONTACT)
+      capturedSubject = built.subject
+      capturedHtml = built.html
+      if (shouldSend) await realSendEmail({ to: recipient, subject: built.subject, html: built.html })
     } else {
       return NextResponse.json(
-        { error: 'Unknown type. Use ?type=invoice | care-plan | payment-failed' },
+        { error: 'Unknown type. Use ?type=invoice | care-plan | payment-failed | contact | demo-request' },
         { status: 400 },
       )
     }
@@ -144,6 +185,8 @@ export async function GET(req: Request) {
     <a href="?type=invoice">invoice</a>
     <a href="?type=care-plan">care-plan</a>
     <a href="?type=payment-failed">payment-failed</a>
+    <a href="?type=contact">contact</a>
+    <a href="?type=demo-request">demo-request</a>
     <a href="?type=${type}&send=1&to=${encodeURIComponent(recipient)}">${shouldSend ? '↻ Resend' : '✉️ Send to ' + recipient}</a>
   </span>
 </div>

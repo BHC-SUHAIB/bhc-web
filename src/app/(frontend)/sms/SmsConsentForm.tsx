@@ -33,7 +33,7 @@ export function SmsConsentForm() {
     const payload: Record<string, string> = {
       name: String(data.get('name') ?? '').trim(),
       phone: String(data.get('phone') ?? '').trim(),
-      honeypot: String(data.get('website') ?? ''),
+      honeypot: String(data.get('bhc_confirm_field') ?? ''),
       source: 'sms-page',
       status: 'active',
       disclaimerText: SMS_DISCLAIMER_TEXT,
@@ -134,8 +134,8 @@ export function SmsConsentForm() {
 
       {/* Honeypot */}
       <div aria-hidden className="hidden" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
-        <label htmlFor="sms-website">Website</label>
-        <input id="sms-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+        {/* Non-semantic name + one-time-code: keeps iOS autofill from filling it (a real person would then be rejected). */}
+        <input id="sms-bhc-confirm" name="bhc_confirm_field" type="text" tabIndex={-1} autoComplete="one-time-code" data-lpignore="true" data-1p-ignore="true" data-form-type="other" />
       </div>
 
       <div className="flex flex-wrap items-center gap-4 mt-2">

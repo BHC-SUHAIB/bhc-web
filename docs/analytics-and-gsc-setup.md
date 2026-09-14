@@ -126,3 +126,43 @@ Before re-enabling Google Ads:
 - [ ] GSC↔GA4 link active (#13 step 6).
 
 Then resume the paused Search-Web-Design-US-LP-Express campaign — Smart Bidding will have `page_type = landing_page` as a quality signal from day one instead of having to learn it.
+
+## #14 — First-touch attribution on lead submissions (shipped 2026-09-13)
+
+Every lead form (contact, free-demo, audit tool, exit-intent popup) now sends the
+visitor's **first-touch attribution** with the submission, and the notification
+email carries a `Source:` block (e.g. `google / cpc / lp_express_website · keyword
+"custom website design" · gclid`). No more reconstructing origin from GA4 + Clarity.
+
+How it works (`src/lib/attribution.ts`):
+
+1. An inline `<script id="first-touch">` in both root layouts runs before anything
+   else and stores `gclid / gbraid / wbraid / msclkid / fbclid`, `utm_*`, the external
+   referrer, the landing path (with query string) and a timestamp in
+   `localStorage.bhc_first_touch`.
+2. A stored record is only overwritten when it has **no** campaign data and the
+   current visit does (organic first, ad later → the ad wins; an ad first-touch is
+   never clobbered).
+3. Forms call `getAttribution()` at submit time (falls back to the current URL when
+   storage is blocked, e.g. Safari Private Browsing) and send `attribution`.
+4. `ContactSubmissions` whitelists + length-caps the object and stores it in the
+   `attribution` group (visible in Admin → Leads → Contact submissions).
+
+Preview the email: `/dev-email-preview?type=contact` or `?type=demo-request` (dev only).
+
+### Related dataLayer event: `form_validation_error`
+
+Fired when a lead form's client-side required-field check blocks the submit.
+Params: `form` (`contact` | `demo_request`), `missing` (comma-joined field keys),
+`source_page`. Register it in GTM as a GA4 event (NOT a conversion) to see how
+often real visitors get stuck on a required field. Background: the 2026-09-13
+Google Ads visitor who tapped "Send me my demo" three times never produced a
+server request; this event would have shown why.
+
+### Spam handling is now soft
+
+A filled honeypot no longer rejects the submission. The record is saved with
+`suspectedSpam = true` + `spamSignals`, the notification email is skipped, and it
+still shows up in Admin → Leads (column "Suspected spam"). Time-to-submit is
+recorded on every lead; under 3s is noted as a soft signal only. Cross-origin
+and rate-limit checks are unchanged (still hard rejects).

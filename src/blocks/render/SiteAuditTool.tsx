@@ -7,6 +7,7 @@ import { CountUpStat } from '@/components/CountUpStat'
 import { AM_LOOP_CSS, AM_LOOP_HTML } from '@/components/antlerLoopMarkup'
 import { cn } from '@/lib/utils'
 import { pushEvent } from '@/lib/analytics'
+import { getAttribution } from '@/lib/attribution'
 
 // Instant PageSpeed Insights audit, on-LP. Visitor pastes their URL, hits run,
 // and gets back the four Lighthouse scores plus core web vitals.
@@ -148,6 +149,7 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
           email,
           message: `Requested the full PageSpeed report + fix list for ${auditedUrl ?? 'their site'} (${strategy} run). Lighthouse scores — ${scoreLine}.`,
           sourcePage,
+          attribution: getAttribution(),
         }),
       })
       if (!res.ok) {

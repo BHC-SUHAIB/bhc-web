@@ -5,6 +5,7 @@ import config from '@payload-config'
 import { Container } from '@/components/Container'
 import { verifyInvoiceToken } from '@/lib/invoice-token'
 import type { CarePlanSlug } from '@/lib/care-plans'
+import { getPaymentMethodTypes } from '@/lib/payment-methods'
 import { InvoiceClient } from './InvoiceClient'
 
 export const dynamic = 'force-dynamic'
@@ -68,6 +69,7 @@ export default async function InvoicePage({ params, searchParams }: RouteProps) 
   // pre-cache invoices.
   const isSubscriptionInvoice = Boolean(invoice.stripeSubscriptionId)
   const showCarePlanUpsell = invoice.allowCarePlanUpsell !== false && !isSubscriptionInvoice
+  const paymentMethodTypes = getPaymentMethodTypes()
 
   return (
     <Container size="lg" className="py-14 sm:py-20">
@@ -83,7 +85,9 @@ export default async function InvoicePage({ params, searchParams }: RouteProps) 
             ? 'Thanks — this invoice has been paid in full. A receipt was emailed to you.'
             : isVoid
               ? 'This invoice was voided and is no longer payable. Reach out to hello@blackhartconsulting.com if you think this is a mistake.'
-              : 'Review the line items, optionally add a Care Plan, and continue to a secure Stripe checkout.'}
+              : showCarePlanUpsell
+                ? 'Review the line items, optionally add a Care Plan, and continue to a secure Stripe checkout.'
+                : 'Review the line items and continue to a secure Stripe checkout.'}
         </p>
       </header>
 
@@ -97,6 +101,7 @@ export default async function InvoicePage({ params, searchParams }: RouteProps) 
           clientName={invoice.client?.displayName ?? 'Client'}
           allowCarePlanUpsell={showCarePlanUpsell}
           suggestedCarePlan={(invoice.suggestedCarePlan ?? 'care') as CarePlanSlug}
+          paymentMethodTypes={paymentMethodTypes}
           token={token}
         />
       ) : null}

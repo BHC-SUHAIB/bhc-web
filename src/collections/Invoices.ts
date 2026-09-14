@@ -205,7 +205,7 @@ export const Invoices: CollectionConfig = {
       required: true,
       options: [
         { label: 'Draft (not sent to Stripe)', value: 'draft' },
-        { label: 'Open (sent, awaiting payment)', value: 'open' },
+        { label: 'Open (finalized, awaiting payment)', value: 'open' },
         { label: 'Paid', value: 'paid' },
         { label: 'Refunded (full)', value: 'refunded' },
         { label: 'Partially refunded', value: 'partially_refunded' },
@@ -219,11 +219,11 @@ export const Invoices: CollectionConfig = {
       // from `charge.refunded` and `credit_note.created` webhooks.
       name: 'refundedCents',
       type: 'number',
+      label: 'Refunded',
       defaultValue: 0,
       admin: {
         position: 'sidebar',
         readOnly: true,
-        label: 'Refunded',
         description: 'Total refunded amount. Updated by Stripe webhooks.',
         components: {
           Field: '/components/admin/CentsAsDollarsField#default',

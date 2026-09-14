@@ -2,6 +2,13 @@ import type { Payload } from 'payload'
 import type Stripe from 'stripe'
 import { signInvoiceToken } from '@/lib/invoice-token'
 import { CARE_PLAN_TRIAL_DAYS, formatUSD, type CarePlanSlug } from '@/lib/care-plans'
+import { formatPaymentMethodList, getPaymentMethodTypes } from '@/lib/payment-methods'
+import {
+  buildInvoicePdf,
+  invoicePdfDataFromStripe,
+  type InvoicePdfClient,
+  type InvoicePdfSiteSettings,
+} from '@/lib/pdfs/invoice-pdf'
 
 // Branded transactional emails for the Stripe→BHC integration. All three
 // templates (invoice, care-plan signup, payment-failed alert) share a
@@ -135,8 +142,10 @@ export async function sendBrandedInvoiceEmail(args: {
   to: string
   clientName: string
   invoice: Stripe.Invoice
+  /** Payload client record; feeds the bill-to block on the PDF. Falls back to clientName + the Stripe customer fields. */
+  client?: InvoicePdfClient | null
 }): Promise<void> {
-  const { payload, to, clientName, invoice } = args
+  const { payload, to, clientName, invoice, client } = args
   if (!invoice.id) return
   const token = signInvoiceToken(invoice.id)
   const url = `${siteUrl()}/invoice/${invoice.id}?token=${encodeURIComponent(token)}`
@@ -161,29 +170,57 @@ export async function sendBrandedInvoiceEmail(args: {
     bodyHtml: `Hi ${escapeHtml(clientName)}, your invoice <strong>${escapeHtml(number)}</strong> for <strong>${total}</strong> is ready to pay. ${escapeHtml(dueLine)}`,
     rows,
     cta: { label: 'Review & pay invoice', href: url },
-    fineprintHtml: 'Card, ACH, Klarna, Affirm, and Cash App accepted. Receipt emailed once paid. Questions? Reply to this email.',
+    fineprintHtml: `${escapeHtml(formatPaymentMethodList(getPaymentMethodTypes()))} accepted. Receipt emailed once paid. Questions? Reply to this email.`,
   })
 
-  // (Phase E #22) Attach Stripe's auto-generated invoice PDF when available.
-  // Stripe exposes the PDF at invoice.invoice_pdf — we fetch the bytes,
-  // base64-encode, and attach. Failure to fetch the PDF should NOT block
-  // the email from sending, so we wrap in try/catch.
+  // Attach the Black Hart branded invoice PDF (src/lib/pdfs/invoice-pdf.ts).
+  // If generation throws for any reason we log it and fall back to Stripe's
+  // auto-generated invoice_pdf so the client still gets a document. Neither
+  // failure blocks the email itself.
   let attachments: Array<{ filename: string; content: string; contentType: string }> | undefined
-  if (invoice.invoice_pdf) {
+  const attachmentName = `${String(number).replace(/[^\w.-]+/g, '-')}.pdf`
+  try {
+    let settings: InvoicePdfSiteSettings | null = null
     try {
-      const pdfRes = await fetch(invoice.invoice_pdf)
-      if (pdfRes.ok) {
-        const buf = Buffer.from(await pdfRes.arrayBuffer())
-        attachments = [
-          {
-            filename: `invoice-${number}.pdf`,
-            content: buf.toString('base64'),
-            contentType: 'application/pdf',
-          },
-        ]
-      }
+      settings = (await payload.findGlobal({ slug: 'siteSettings', depth: 0 })) as InvoicePdfSiteSettings
     } catch (err) {
-      payload.logger.warn({ err, invoiceId: invoice.id }, '[email] PDF fetch failed; sending without attachment')
+      payload.logger.warn({ err }, '[email] could not load siteSettings for the invoice PDF; using defaults')
+    }
+    const pdfData = invoicePdfDataFromStripe({
+      invoice,
+      client: client ?? { displayName: clientName, email: to },
+      settings,
+      payUrl: url,
+    })
+    const bytes = await buildInvoicePdf(pdfData)
+    attachments = [
+      {
+        filename: attachmentName,
+        content: Buffer.from(bytes).toString('base64'),
+        contentType: 'application/pdf',
+      },
+    ]
+  } catch (err) {
+    payload.logger.error(
+      { err, invoiceId: invoice.id },
+      '[email] branded invoice PDF generation failed; falling back to the Stripe PDF',
+    )
+    if (invoice.invoice_pdf) {
+      try {
+        const pdfRes = await fetch(invoice.invoice_pdf)
+        if (pdfRes.ok) {
+          const buf = Buffer.from(await pdfRes.arrayBuffer())
+          attachments = [
+            {
+              filename: attachmentName,
+              content: buf.toString('base64'),
+              contentType: 'application/pdf',
+            },
+          ]
+        }
+      } catch (fetchErr) {
+        payload.logger.warn({ err: fetchErr, invoiceId: invoice.id }, '[email] Stripe PDF fetch failed; sending without attachment')
+      }
     }
   }
 

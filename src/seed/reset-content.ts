@@ -767,6 +767,32 @@ export const freeDemoSitePage = () => ({
       fineprint: 'No call. No obligation. Reply within one business day.',
       successMessage: 'Request received. Your demo link lands in your inbox within 48 hours.',
     },
+    // Added 2026-09-13. The first paid lead (Google Ads, "custom website
+    // design") bounced off this page in 90 seconds, then came back an hour
+    // later and converted from /services after clicking "See website pricing"
+    // three times and reading a case study. Ad visitors want the price and
+    // the proof on the page they land on, so both now sit under the form.
+    {
+      blockType: 'pricing',
+      eyebrow: 'If you say yes',
+      headline: 'What it costs to make the demo real.',
+      description: 'Fixed prices, published. The demo is free either way. Buy outright or subscribe and own the site after 12 months.',
+      layoutVariant: 'grid',
+      anchorId: 'pricing',
+      tiers: [TIER_BLOCKS.launchPage, TIER_BLOCKS.starterSite, TIER_BLOCKS.proSite],
+    },
+    {
+      blockType: 'featuredProjects',
+      eyebrow: 'Real work',
+      headline: 'Sites we have shipped.',
+      description: 'Click through a live client site before you decide. Every one was built the same way your demo will be.',
+      mode: 'latest',
+      limit: 3,
+      viewAllLabel: 'See all case studies',
+      viewAllHref: '/portfolio',
+      linked: true,
+      compact: false,
+    },
     {
       blockType: 'processSteps',
       eyebrow: 'How it works',

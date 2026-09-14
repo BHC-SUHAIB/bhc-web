@@ -170,10 +170,14 @@
     .strip span{display:none}
     .strip b{display:block}
   }
+  .draft{position:fixed;left:18px;bottom:18px;z-index:50;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:rgba(246,241,234,.94);border:1.5px solid var(--gold);border-radius:999px;padding:8px 14px;box-shadow:0 8px 20px -10px rgba(41,75,69,.4);display:flex;align-items:center;gap:8px}
+  .draft::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold)}
+  @media (max-width:900px){.draft{left:12px;bottom:12px;font-size:10px;padding:7px 11px}}
 </style>
 </head>
 <body>
 
+<div class="draft">Homepage concept · draft 1</div>
 <div class="strip"><b>9 Years in Grants &amp; Nonprofit Consulting</b><span>|</span><b>Grant Professional Certified</b><span>|</span><b>Certified Nonprofit Professional</b><span>|</span><b>$2M+ Secured Annually</b></div>
 
 <header>

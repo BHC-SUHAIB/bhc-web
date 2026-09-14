@@ -93,11 +93,11 @@ const ASCII_MAP: Record<string, string> = {
   '·': '.',
   '•': '-',
 }
-function sanitize(text: string): string {
+export function sanitize(text: string): string {
   return text.replace(/[—–‘’“”→… ·•]/g, (c) => ASCII_MAP[c] ?? c)
 }
 
-function wrap(text: string, font: PDFFont, size: number, width: number): string[] {
+export function wrap(text: string, font: PDFFont, size: number, width: number): string[] {
   const words = sanitize(text).split(/\s+/)
   const lines: string[] = []
   let current = ''

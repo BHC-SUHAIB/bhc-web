@@ -48,7 +48,7 @@ export async function POST(req: Request, ctx: RouteContext) {
     id: string | number
     status: string
     stripeInvoiceId?: string | null
-    client?: { displayName?: string; email?: string }
+    client?: { displayName?: string; email?: string; company?: string | null }
   }
 
   if (!inv.stripeInvoiceId) {
@@ -67,13 +67,16 @@ export async function POST(req: Request, ctx: RouteContext) {
   }
 
   const stripe = getStripe()
-  const stripeInvoice = await stripe.invoices.retrieve(inv.stripeInvoiceId)
+  // Expand the customer so the branded PDF can print the billing address
+  // when the invoice snapshot itself has no customer_address.
+  const stripeInvoice = await stripe.invoices.retrieve(inv.stripeInvoiceId, { expand: ['customer'] })
 
   await sendBrandedInvoiceEmail({
     payload,
     to: inv.client.email,
     clientName: inv.client.displayName ?? 'Client',
     invoice: stripeInvoice,
+    client: inv.client,
   })
 
   // Slack: log the operator action so you have a paper trail of what

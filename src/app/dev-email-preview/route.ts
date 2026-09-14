@@ -13,6 +13,16 @@
  *
  * Types: invoice | care-plan | payment-failed | contact | demo-request
  *
+ * GET /dev-email-preview?type=invoice-pdf      → streams the branded invoice
+ *                                                 PDF for the fixture invoice
+ *                                                 inline, so the layout can be
+ *                                                 eyeballed in the browser.
+ *                                                 Knobs: &items=N (synthesize N
+ *                                                 line items to check
+ *                                                 pagination), &tax=1 (add a
+ *                                                 tax row), &paid=1 (receipt
+ *                                                 state, no pay button).
+ *
  * Locked behind denyIfProductionLocked (returns 403 in prod). Delete this
  * route before final prod deploy if you want.
  */
@@ -28,6 +38,8 @@ import {
 } from '@/lib/billing-emails'
 import type Stripe from 'stripe'
 import { buildContactNotificationEmail, type ContactNotificationDoc } from '@/lib/contact-notification-email'
+import { signInvoiceToken } from '@/lib/invoice-token'
+import { buildInvoicePdf, invoicePdfDataFromStripe, type InvoicePdfSiteSettings } from '@/lib/pdfs/invoice-pdf'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,19 +49,56 @@ export const dynamic = 'force-dynamic'
 const FIXTURE_INVOICE: Stripe.Invoice = {
   id: 'in_PREVIEW1234567890',
   number: 'INV-PREVIEW-0042',
+  status: 'open',
   amount_due: 149_500,
+  amount_paid: 0,
+  subtotal: 149_500,
   total: 149_500,
+  tax: null,
+  customer: 'cus_PREVIEW1234567890',
+  customer_name: "Joe's Coffee",
   customer_email: 'joe@joescoffee.com',
+  customer_address: { line1: '1200 Heights Blvd', line2: 'Suite 210', city: 'Houston', state: 'TX', postal_code: '77008', country: 'US' },
+  created: Math.floor(Date.now() / 1000),
   due_date: Math.floor(Date.now() / 1000) + 14 * 86_400,
-  hosted_invoice_url: 'https://invoice.stripe.com/sample',
+  hosted_invoice_url: 'https://invoice.stripe.com/i/acct_1PreviewSample/test_YWNjdF8xUHJldmlld1NhbXBsZSxfUHJldmlld0ludm9pY2U0MiwxMjM0NTY3ODk',
   description: 'Starter Site rebuild + 30-day SEO content kickoff.',
   lines: {
     data: [
-      { description: 'Starter Site (5-page custom build, 14-day delivery)', amount: 149_500 },
-      { description: 'Launch discount applied', amount: 0 },
+      { description: 'Starter Site (5-page custom build, 14-day delivery)', amount: 149_500, quantity: 1, price: { unit_amount: 149_500 } },
+      { description: 'Launch discount applied', amount: 0, quantity: 1, price: { unit_amount: 0 } },
     ],
   },
 } as unknown as Stripe.Invoice
+
+// Variant of the fixture for the PDF preview knobs (?items, ?tax, ?paid).
+function pdfPreviewFixture(opts: { items: number; tax: boolean; paid: boolean }): Stripe.Invoice {
+  const base = FIXTURE_INVOICE as unknown as Record<string, unknown>
+  const lines = opts.items > 0
+    ? Array.from({ length: opts.items }, (_, i) => ({
+        description: i % 3 === 0
+          ? `Line item ${i + 1}: page build with copy, imagery, and a mobile-first layout pass`
+          : `Line item ${i + 1}`,
+        amount: 25_000,
+        quantity: 1,
+        price: { unit_amount: 25_000 },
+      }))
+    : (FIXTURE_INVOICE.lines.data as unknown as Array<Record<string, unknown>>)
+  const subtotal = lines.reduce((s, l) => s + Number(l.amount ?? 0), 0)
+  const tax = opts.tax ? Math.round(subtotal * 0.0825) : null
+  const total = subtotal + (tax ?? 0)
+  return {
+    ...base,
+    lines: { data: lines },
+    subtotal,
+    tax,
+    total,
+    amount_due: opts.paid ? 0 : total,
+    amount_paid: opts.paid ? total : 0,
+    status: opts.paid ? 'paid' : 'open',
+    status_transitions: opts.paid ? { paid_at: Math.floor(Date.now() / 1000) - 3600 } : undefined,
+  } as unknown as Stripe.Invoice
+}
 
 // Lead-notification fixtures. Mirrors what the public forms send after the
 // 2026-09 attribution + soft-spam changes, so the "Source:" block renders.
@@ -94,6 +143,38 @@ export async function GET(req: Request) {
   const recipient = url.searchParams.get('to') || 'suhaib@blackhartconsulting.com'
 
   const payload = await getPayload({ config })
+
+  if (type === 'invoice-pdf') {
+    const items = Math.min(Math.max(Number(url.searchParams.get('items') ?? 0) || 0, 0), 80)
+    const fixture = pdfPreviewFixture({
+      items,
+      tax: url.searchParams.get('tax') === '1',
+      paid: url.searchParams.get('paid') === '1',
+    })
+    let settings: InvoicePdfSiteSettings | null = null
+    try {
+      settings = (await payload.findGlobal({ slug: 'siteSettings', depth: 0 })) as InvoicePdfSiteSettings
+    } catch {
+      settings = null
+    }
+    const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://blackhartconsulting.com'
+    const token = signInvoiceToken(fixture.id)
+    const bytes = await buildInvoicePdf(
+      invoicePdfDataFromStripe({
+        invoice: fixture,
+        client: { displayName: "Joe's Coffee", company: 'Joe Coffee Roasters LLC', email: 'joe@joescoffee.com' },
+        settings,
+        payUrl: `${site}/invoice/${fixture.id}?token=${encodeURIComponent(token)}`,
+      }),
+    )
+    return new NextResponse(new Uint8Array(bytes), {
+      headers: {
+        'content-type': 'application/pdf',
+        'content-disposition': `inline; filename="${fixture.number}.pdf"`,
+        'cache-control': 'no-store',
+      },
+    })
+  }
 
   // Capture HTML by intercepting payload.sendEmail. We replace it with a
   // shim that records the html, optionally forwards to Resend if the user
@@ -155,7 +236,7 @@ export async function GET(req: Request) {
       if (shouldSend) await realSendEmail({ to: recipient, subject: built.subject, html: built.html })
     } else {
       return NextResponse.json(
-        { error: 'Unknown type. Use ?type=invoice | care-plan | payment-failed | contact | demo-request' },
+        { error: 'Unknown type. Use ?type=invoice | care-plan | payment-failed | contact | demo-request | invoice-pdf' },
         { status: 400 },
       )
     }
@@ -187,6 +268,7 @@ export async function GET(req: Request) {
     <a href="?type=payment-failed">payment-failed</a>
     <a href="?type=contact">contact</a>
     <a href="?type=demo-request">demo-request</a>
+    <a href="?type=invoice-pdf" target="_blank">invoice-pdf</a>
     <a href="?type=${type}&send=1&to=${encodeURIComponent(recipient)}">${shouldSend ? '↻ Resend' : '✉️ Send to ' + recipient}</a>
   </span>
 </div>

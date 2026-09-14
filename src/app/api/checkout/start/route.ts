@@ -5,6 +5,7 @@ import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { verifyInvoiceToken } from '@/lib/invoice-token'
 import { carePlanBySlug } from '@/lib/care-plans'
+import { getPaymentMethodTypes } from '@/lib/payment-methods'
 import { denyIfCrossOrigin, rateLimitFivePerHour } from '@/lib/api-guards'
 
 export const dynamic = 'force-dynamic'
@@ -206,17 +207,9 @@ export async function POST(req: Request) {
   const userAgent = req.headers.get('user-agent') ?? 'unknown'
 
   // Payment method types are gated by what's enabled in your Stripe account.
-  // Listing a method that isn't approved/enabled causes Checkout to error,
-  // so we drive this from STRIPE_PAYMENT_METHOD_TYPES (comma-separated env
-  // var) with sensible defaults that match a freshly-onboarded BHC account.
-  // To turn on Affirm later (after re-categorising the business), append
-  // `,affirm` to that env var — no code change needed.
-  const pmTypesEnv = process.env.STRIPE_PAYMENT_METHOD_TYPES
-  const paymentMethodTypes = (pmTypesEnv && pmTypesEnv.trim().length > 0
-    ? pmTypesEnv.split(',').map((s) => s.trim()).filter(Boolean)
-    : ['card', 'us_bank_account', 'klarna', 'link', 'cashapp']) as Array<
-    'card' | 'us_bank_account' | 'klarna' | 'affirm' | 'link' | 'cashapp' | 'amazon_pay'
-  >
+  // Driven by STRIPE_PAYMENT_METHOD_TYPES via the shared helper so the
+  // invoice page copy and this route never drift apart.
+  const paymentMethodTypes = getPaymentMethodTypes()
 
   // (Phase E #24) Stripe Tax — auto-calculates sales tax based on the
   // customer's country/state. Toggle via STRIPE_TAX_ENABLED. Texas does

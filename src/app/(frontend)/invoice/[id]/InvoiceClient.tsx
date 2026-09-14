@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { Button } from '@/components/Button'
 import { CARE_PLANS, CARE_PLAN_TRIAL_DAYS, type CarePlanSlug, formatUSD } from '@/lib/care-plans'
+import { bnplPaymentMethods, formatPaymentMethodList } from '@/lib/payment-methods'
 
 type LineItem = { description: string; amountCents: number; quantity?: number | null }
 
@@ -15,6 +16,9 @@ export type InvoiceClientProps = {
   clientName: string
   allowCarePlanUpsell: boolean
   suggestedCarePlan: CarePlanSlug
+  // Resolved server-side from STRIPE_PAYMENT_METHOD_TYPES; same list the
+  // checkout route sends to Stripe.
+  paymentMethodTypes: string[]
   token: string
 }
 
@@ -32,6 +36,7 @@ export function InvoiceClient(props: InvoiceClientProps) {
     clientName,
     allowCarePlanUpsell,
     suggestedCarePlan,
+    paymentMethodTypes,
     token,
   } = props
 
@@ -54,6 +59,12 @@ export function InvoiceClient(props: InvoiceClientProps) {
   }, [addCarePlan, tier])
 
   const canPay = !addCarePlan || authorized
+
+  const supportedMethods = useMemo(() => formatPaymentMethodList(paymentMethodTypes), [paymentMethodTypes])
+  const bnplMethods = useMemo(
+    () => formatPaymentMethodList(bnplPaymentMethods(paymentMethodTypes), 'or'),
+    [paymentMethodTypes],
+  )
 
   async function handlePay() {
     if (isSubmitting) return
@@ -225,11 +236,12 @@ export function InvoiceClient(props: InvoiceClientProps) {
           </Button>
 
           <p className="mt-4 text-[12px] text-[var(--color-fg-muted)] leading-[1.5]">
-            You&rsquo;ll continue to a secure Stripe checkout page. Card, ACH, Klarna, Affirm, and Link supported.
-            {addCarePlan ? (
+            You&rsquo;ll continue to a secure Stripe checkout page.
+            {supportedMethods ? <> {supportedMethods} supported.</> : null}
+            {addCarePlan && bnplMethods ? (
               <>
                 {' '}
-                If you pay this invoice with Klarna or Affirm, we&rsquo;ll ask you to enter a card on the next
+                If you pay this invoice with {bnplMethods}, we&rsquo;ll ask you to enter a card on the next
                 step so we can run the monthly hosting plan charges.
               </>
             ) : null}

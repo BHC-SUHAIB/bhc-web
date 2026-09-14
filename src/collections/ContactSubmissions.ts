@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import { APIError, type CollectionConfig } from 'payload'
 import { denyIfCrossOrigin, rateLimitFivePerHour } from '@/lib/api-guards'
 import { buildContactNotificationEmail } from '@/lib/contact-notification-email'
 
@@ -61,13 +61,13 @@ export const ContactSubmissions: CollectionConfig = {
           // own domain. Same-origin form posts and non-browser tools pass.
           if (denyIfCrossOrigin(req as unknown as Request)) {
             req.payload.logger.warn({ ip: ipKey }, '[contact] cross-origin POST blocked')
-            throw new Error('Invalid submission')
+            throw new APIError('Invalid submission', 403)
           }
           // Rate limit: 5 submissions per hour per IP. Blunts bulk bot spam
           // with no third-party dependency or CAPTCHA.
           if (!rateLimitFivePerHour(`contact:${ipKey}`)) {
             req.payload.logger.warn({ ip: ipKey }, '[contact] rate limit exceeded')
-            throw new Error('Too many submissions. Please wait a bit and try again.')
+            throw new APIError('Too many submissions. Please wait a bit and try again.', 429)
           }
         }
 
@@ -175,6 +175,29 @@ export const ContactSubmissions: CollectionConfig = {
           // Wire @payloadcms/email-resend (or nodemailer) to deliver for real.
           req.payload.logger.warn({ err }, '[contact] email send failed (submission still saved)')
         }
+      },
+    ],
+    afterError: [
+      // One grep finds every rejected public submission. Until 2026-09-13 the
+      // honeypot / cross-origin / rate-limit paths each logged a different
+      // string and Payload validation failures (bad email, short message)
+      // logged nothing, so a lead that got a 400 looked identical to a lead
+      // that never reached the server. grep "\[contact\] rejected" now covers all.
+      ({ error, req }) => {
+        const isPublicHttpPost =
+          !req.user && typeof req.method === 'string' && req.method.toUpperCase() === 'POST'
+        if (!isPublicHttpPost) return
+        const ipKey = (req.headers?.get?.('x-forwarded-for')?.split(',')[0] ?? '').trim() || 'unknown'
+        const err = error as Error & { status?: number; data?: { errors?: Array<{ path?: string; message?: string }> } }
+        const status = typeof err.status === 'number' ? err.status : 500
+        const fields = err.data?.errors?.map((e) => `${e.path ?? '?'}: ${e.message ?? ''}`).join(' | ') || undefined
+        const body = (req.data ?? {}) as Record<string, unknown>
+        const email = typeof body.email === 'string' ? body.email.slice(0, 200) : undefined
+        const sourcePage = typeof body.sourcePage === 'string' ? body.sourcePage.slice(0, 200) : undefined
+        req.payload.logger.warn(
+          { ip: ipKey, email, sourcePage, status, fields },
+          `[contact] rejected reason=${JSON.stringify(err.message)} status=${status}`,
+        )
       },
     ],
   },

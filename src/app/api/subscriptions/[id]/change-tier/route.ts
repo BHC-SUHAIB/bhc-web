@@ -10,13 +10,13 @@ export const dynamic = 'force-dynamic'
 
 // POST /api/subscriptions/[id]/change-tier
 //
-// Operator-triggered: changes a subscription's tier (Care ↔ Growth ↔ Scale).
+// Operator-triggered: changes a subscription's tier (Host, Care, Growth).
 // Stripe handles the proration: by default the client is credited for the
 // unused portion of their current tier and immediately billed the prorated
 // difference on the new tier.
 //
 // Body:
-//   { tier: 'care' | 'growth' | 'scale' }
+//   { tier: 'host' | 'care' | 'growth' }
 //
 // `id` is the Payload subscription ID.
 

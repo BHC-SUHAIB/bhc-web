@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDocumentInfo, useFormFields } from '@payloadcms/ui'
 import type { UIFieldClientProps } from 'payload'
+import { CARE_PLANS, type CarePlanSlug, formatUSD } from '@/lib/care-plans'
 
 // Custom admin field on the Client document — renders a tier picker and
 // "Send Care Plan signup email" button. POSTs to
@@ -12,12 +13,15 @@ import type { UIFieldClientProps } from 'payload'
 // existing clients (the doc must be saved first so we have an ID and a
 // Stripe Customer ID populated by the afterChange hook).
 
-const TIERS = [
-  { slug: 'care', label: 'Care · $149/mo' },
-  { slug: 'growth', label: 'Growth · $495/mo' },
-  { slug: 'scale', label: 'Scale · $1,295/mo' },
+type TierChoice = CarePlanSlug | 'custom'
+
+const TIERS: ReadonlyArray<{ slug: TierChoice; label: string }> = [
+  ...CARE_PLANS.map((p) => ({
+    slug: p.slug as TierChoice,
+    label: `${p.name} · ${formatUSD(p.monthlyAmountCents)}/mo (first month free)`,
+  })),
   { slug: 'custom', label: 'Custom · enter price' },
-] as const
+]
 
 type Status =
   | { kind: 'idle' }
@@ -32,7 +36,7 @@ export default function SendCarePlanSignupField(props: UIFieldClientProps) {
   // (e.g., right after creating the client and before the afterChange
   // hook ran, or if Stripe was unconfigured at the time).
   const stripeCustomerId = useFormFields(([fields]) => fields?.stripeCustomerId?.value as string | undefined)
-  const [tier, setTier] = useState<(typeof TIERS)[number]['slug']>('care')
+  const [tier, setTier] = useState<TierChoice>('care')
   // Custom-tier extras (only shown / used when tier === 'custom').
   const [customLabel, setCustomLabel] = useState('Hosting Friend Plan')
   const [customDollars, setCustomDollars] = useState('200')

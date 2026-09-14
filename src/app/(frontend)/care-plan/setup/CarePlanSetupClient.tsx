@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/Button'
-import { CARE_PLANS, type CarePlanSlug, formatUSD } from '@/lib/care-plans'
+import { CARE_PLANS, CARE_PLAN_TRIAL_DAYS, type CarePlanSlug, formatUSD } from '@/lib/care-plans'
 
 type Props = {
   initialTier: CarePlanSlug
@@ -17,7 +17,7 @@ type Props = {
 }
 
 // This page is reachable four ways:
-//   1. Standard tier admin email (URL has ?customer=cus_…&tier=care|growth|scale&token=…) —
+//   1. Standard tier admin email (URL has ?customer=cus_...&tier=host|care|growth&token=...):
 //      no email lookup needed; tier is locked to what the admin sent.
 //   2. Custom tier admin email (URL has ?customer=…&tier=custom&label=…&amount=…&token=…) —
 //      hosting-friend / negotiated price flow. Single locked tier card,
@@ -41,12 +41,18 @@ export function CarePlanSetupClient({
   const [error, setError] = useState<string | null>(null)
 
   const tierObj = CARE_PLANS.find((p) => p.slug === tier) ?? CARE_PLANS[0]
-  const displayLabel = isCustom ? customLabel! : `${tierObj.name} Care Plan`
+  const displayLabel = isCustom ? customLabel! : `${tierObj.name} plan`
   const displayAmountCents = isCustom ? customAmountCents! : tierObj.monthlyAmountCents
 
-  const consentText =
-    `I authorize Black Hart Consulting LLC to charge ${formatUSD(displayAmountCents)} per month ` +
-    `to my saved payment method for the ${displayLabel}, until I cancel.`
+  // Standard tiers are minted by the webhook with a 30-day trial, so the
+  // consent line spells that out. Custom plans are created by hand in the
+  // Stripe Dashboard, so their consent stays generic.
+  const consentText = isCustom
+    ? `I authorize Black Hart Consulting LLC to charge ${formatUSD(displayAmountCents)} per month ` +
+      `to my saved payment method for the ${displayLabel}, until I cancel.`
+    : `I authorize Black Hart Consulting LLC to charge ${formatUSD(displayAmountCents)} per month ` +
+      `to my saved payment method for the ${displayLabel}, until I cancel. The first ${CARE_PLAN_TRIAL_DAYS} days are free: ` +
+      `the first charge runs ${CARE_PLAN_TRIAL_DAYS} days after I activate, and the same amount is charged every month after that.`
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

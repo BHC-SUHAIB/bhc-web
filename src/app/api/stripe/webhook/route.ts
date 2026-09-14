@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import type Stripe from 'stripe'
 import { getStripe, isReusablePaymentMethod, isStripeConfigured } from '@/lib/stripe'
-import { CARE_PLANS, carePlanByLookupKey, carePlanBySlug } from '@/lib/care-plans'
+import { CARE_PLANS, CARE_PLAN_TRIAL_DAYS, carePlanByLookupKey, carePlanBySlug } from '@/lib/care-plans'
 import { sendBrandedInvoiceEmail, sendBrandedCarePlanSignupEmail, sendPaymentFailedAlertEmail } from '@/lib/billing-emails'
 import { notifySlack } from '@/lib/slack'
 import { recordAudit } from '@/lib/audit'
@@ -648,19 +648,21 @@ async function createCarePlanSubscription(args: {
   }
   const price = prices.data[0]
 
-  // Pre-pay billing: charge today, then every month on this same calendar
-  // day going forward. Matches the industry standard (Notion, Linear, GitHub,
-  // every agency Care Plan we've seen) and how clients mentally frame the
-  // purchase ("$495/mo, billed monthly").
-  //
-  // Stripe defaults to pre-pay when you omit billing_cycle_anchor — first
-  // invoice fires immediately, sub becomes active on payment, future
-  // invoices fire on the same calendar day each month.
+  // First month free, then pre-pay billing. The public promise on /services
+  // and the consent text on /invoice/[id] and /care-plan/setup both say the
+  // first charge runs 30 days after activation, so the subscription starts
+  // with a 30-day trial. Stripe creates a $0 invoice now, the sub is
+  // `trialing` until the trial ends, then charges the saved payment method
+  // off-session and bills every month on that same calendar day. This
+  // helper is the only place subscriptions are minted, so both the
+  // card/ACH path (payment-mode Checkout) and the setup-mode path (BNPL
+  // fallback and admin signup email) get the same trial.
   await stripe.subscriptions.create(
     {
       customer: customerId,
       items: [{ price: price.id }],
       default_payment_method: paymentMethodId,
+      trial_period_days: CARE_PLAN_TRIAL_DAYS,
       proration_behavior: 'none',
       metadata: {
         care_plan_lookup_key: carePlanLookupKey,
@@ -676,7 +678,10 @@ async function createCarePlanSubscription(args: {
   // The subscription.created webhook will fire next and will sync into Payload
   // via syncSubscription(). We don't write to Payload here to avoid duplicate
   // mirror logic across two code paths.
-  payload.logger.info({ customerId, lookupKey: carePlanLookupKey }, '[webhook] care plan subscription created')
+  payload.logger.info(
+    { customerId, lookupKey: carePlanLookupKey, trialDays: CARE_PLAN_TRIAL_DAYS },
+    '[webhook] care plan subscription created with free first month',
+  )
 }
 
 async function handleInvoicePaid(

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDocumentInfo } from '@payloadcms/ui'
 import type { UIFieldClientProps } from 'payload'
+import { BUILD_TIERS, CARE_PLANS } from '@/lib/care-plans'
 
 // Quick-create invoice button on the Project document. Lets the operator
 // pick a Client (loaded from /api/clients), enter line items, and create
@@ -33,12 +34,9 @@ type LineItem = {
 
 type TierPreset = { name: string; amountCents: number }
 const TIER_PRESETS: readonly TierPreset[] = [
-  { name: 'Single Page', amountCents: 79_500 },
-  { name: 'Starter Site', amountCents: 149_500 },
-  { name: 'The Pro Site', amountCents: 350_000 },
-  { name: 'Care Plan (mo)', amountCents: 14_900 },
-  { name: 'Growth Plan (mo)', amountCents: 49_500 },
-  { name: 'Scale Plan (mo)', amountCents: 129_500 },
+  // Build and hosting tiers come from the shared catalog so the presets track live pricing.
+  ...BUILD_TIERS.map((t) => ({ name: t.name, amountCents: t.amountCents })),
+  ...CARE_PLANS.map((p) => ({ name: `${p.name} plan (mo)`, amountCents: p.monthlyAmountCents })),
 ]
 
 type Status =

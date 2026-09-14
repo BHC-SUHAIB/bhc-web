@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
-import { carePlanByLookupKey, formatUSD } from '@/lib/care-plans'
+import { CARE_PLAN_TRIAL_DAYS, carePlanByLookupKey, formatUSD } from '@/lib/care-plans'
 import { signInvoiceToken } from '@/lib/invoice-token'
 
 export const dynamic = 'force-dynamic'
@@ -54,11 +54,11 @@ export default async function CarePlanThankYouPage({ searchParams }: RouteProps)
         Black Hart Consulting
       </p>
       <h1 className="font-serif font-semibold text-[clamp(2rem,4.5vw,3.25rem)] tracking-[-0.02em] leading-[1.05] mt-3">
-        {tierName ? `${tierName} Care Plan — activated.` : 'Care Plan activated.'}
+        {tierName ? `${tierName} plan activated.` : 'Plan activated.'}
       </h1>
       <p className="mt-4 text-[16px] leading-[1.55] text-[var(--color-fg-muted)] max-w-prose">
         {monthlyCents
-          ? `${formatUSD(monthlyCents)} was charged today. The next ${formatUSD(monthlyCents)} charge runs in 30 days, and the same amount every 30 days after. Cancel anytime from your customer portal or by emailing us.`
+          ? `Nothing was charged today. Your first ${CARE_PLAN_TRIAL_DAYS} days are free: the first ${formatUSD(monthlyCents)} charge runs in ${CARE_PLAN_TRIAL_DAYS} days, and the same amount every month after that. Cancel anytime from your customer portal or by emailing us.`
           : 'Your subscription is active. Cancel anytime by emailing us.'}
       </p>
       <div className="mt-12 flex flex-wrap gap-3">

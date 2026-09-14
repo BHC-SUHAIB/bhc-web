@@ -23,7 +23,7 @@ export const dynamic = 'force-dynamic'
 //   {
 //     invoiceId: string         // Payload invoice ID OR Stripe invoice ID
 //     token: string             // signed access token (verifyInvoiceToken)
-//     addCarePlan?: 'care' | 'growth' | 'scale' | null
+//     addCarePlan?: 'host' | 'care' | 'growth' | null
 //     consentText?: string      // verbatim text shown for MIT auth
 //     consentTimestamp?: string // client-side timestamp at consent moment
 //   }

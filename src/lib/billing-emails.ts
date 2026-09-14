@@ -1,7 +1,7 @@
 import type { Payload } from 'payload'
 import type Stripe from 'stripe'
 import { signInvoiceToken } from '@/lib/invoice-token'
-import { formatUSD, type CarePlanSlug } from '@/lib/care-plans'
+import { CARE_PLAN_TRIAL_DAYS, formatUSD, type CarePlanSlug } from '@/lib/care-plans'
 
 // Branded transactional emails for the Stripe→BHC integration. All three
 // templates (invoice, care-plan signup, payment-failed alert) share a
@@ -243,20 +243,27 @@ export async function sendBrandedCarePlanSignupEmail(args: {
   const portalUrl = `${siteUrl()}/portal/${encodeURIComponent(stripeCustomerId)}?token=${encodeURIComponent(token)}`
 
   // Custom labels often already include "Plan" or describe the offering
-  // ("Hosting Friend Plan"), so don't append "Care Plan" again. Standard
-  // tiers (Care/Growth/Scale) get the full "<Tier> Care Plan" name.
-  const fullPlanName = isCustom ? tierName : `${tierName} Care Plan`
-  const planRowLabel = isCustom ? tierName : `${tierName} Care Plan`
+  // ("Hosting Friend Plan"), so don't append "plan" again. Standard tiers
+  // (Host/Care/Growth) get "<Tier> plan".
+  const fullPlanName = isCustom ? tierName : `${tierName} plan`
+  const planRowLabel = isCustom ? tierName : `${tierName} plan`
+
+  // Standard tiers are minted by the webhook with a 30-day trial (first
+  // month free). Custom plans are created by hand in the Stripe Dashboard
+  // and bill from activation, so the copy differs.
+  const bodyHtml = isCustom
+    ? `Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(fullPlanName)}</strong> is ready to start. Add a card or U.S. bank account. You&rsquo;ll be charged <strong>${monthly}</strong> today and the same amount every 30 days going forward. Cancel anytime.`
+    : `Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(fullPlanName)}</strong> is ready to start. Add a card or U.S. bank account. Your first ${CARE_PLAN_TRIAL_DAYS} days are free: the first <strong>${monthly}</strong> charge runs ${CARE_PLAN_TRIAL_DAYS} days after you activate, then the same amount every month. Cancel anytime.`
 
   const html = renderEmailLayout({
     pageTitle: 'Activate your subscription',
     preheader: `Activate your ${fullPlanName} with Black Hart Consulting`,
     title: 'Activate your subscription',
-    bodyHtml: `Hi ${escapeHtml(clientName)}, your <strong>${escapeHtml(fullPlanName)}</strong> is ready to start. Add a card or U.S. bank account — you&rsquo;ll be charged <strong>${monthly}</strong> today and the same amount every 30 days going forward. Cancel anytime.`,
+    bodyHtml,
     rows: [
       { label: planRowLabel, value: `${monthly} / month` },
-      { label: 'First charge', value: 'Today' },
-      { label: 'Then', value: 'Every 30 days' },
+      { label: 'First charge', value: isCustom ? 'Today' : `In ${CARE_PLAN_TRIAL_DAYS} days (first month free)` },
+      { label: 'Then', value: isCustom ? 'Every 30 days' : 'Every month' },
       { label: 'Cancellation', value: 'Anytime, no fees' },
     ],
     cta: { label: 'Add a payment method', href: url },
@@ -270,7 +277,7 @@ export async function sendBrandedCarePlanSignupEmail(args: {
       headers: unsubscribeHeaders(),
       subject: isCustom
         ? `Activate your ${tierName} with Black Hart Consulting`
-        : `Activate your Care Plan with Black Hart Consulting`,
+        : `Activate your ${tierName} plan with Black Hart Consulting`,
       html,
     })
     payload.logger.info({ to, stripeCustomerId, tier }, '[email] sent branded care plan signup email')

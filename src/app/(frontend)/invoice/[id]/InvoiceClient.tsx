@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { Button } from '@/components/Button'
-import { CARE_PLANS, type CarePlanSlug, formatUSD } from '@/lib/care-plans'
+import { CARE_PLANS, CARE_PLAN_TRIAL_DAYS, type CarePlanSlug, formatUSD } from '@/lib/care-plans'
 
 type LineItem = { description: string; amountCents: number; quantity?: number | null }
 
@@ -47,8 +47,9 @@ export function InvoiceClient(props: InvoiceClientProps) {
     if (!addCarePlan) return ''
     return (
       `I authorize Black Hart Consulting LLC to charge ${formatUSD(tier.monthlyAmountCents)} per month ` +
-      `to my saved payment method for the ${tier.name} Care Plan, starting 30 days after this invoice is paid, ` +
-      `until I cancel. Cancellation is one-click via the Stripe customer portal or by emailing hello@blackhartconsulting.com.`
+      `to my saved payment method for the ${tier.name} plan, until I cancel. The first ${CARE_PLAN_TRIAL_DAYS} days are free: ` +
+      `the first charge runs ${CARE_PLAN_TRIAL_DAYS} days after this invoice is paid, and the same amount is charged every month after that. ` +
+      `Cancellation is one-click via the Stripe customer portal or by emailing hello@blackhartconsulting.com.`
     )
   }, [addCarePlan, tier])
 
@@ -133,10 +134,10 @@ export function InvoiceClient(props: InvoiceClientProps) {
                 className="mt-1 h-5 w-5 accent-[var(--color-brass)] cursor-pointer"
               />
               <div>
-                <p className="font-medium text-[15px]">Add a Care Plan</p>
+                <p className="font-medium text-[15px]">Add a hosting plan</p>
                 <p className="mt-1 text-[14px] text-[var(--color-fg-muted)] leading-[1.5]">
-                  Hosting, monitoring, backups, and ongoing edits — billed monthly. First charge starts
-                  30 days after today; cancel any time.
+                  Hosting, monitoring, backups, and ongoing edits, billed monthly. First month free: the
+                  first charge runs {CARE_PLAN_TRIAL_DAYS} days after you pay this invoice. Cancel any time.
                 </p>
               </div>
             </label>
@@ -173,6 +174,13 @@ export function InvoiceClient(props: InvoiceClientProps) {
                         </span>
                       </div>
                       <p className="mt-1.5 ml-7 text-[13px] text-[var(--color-fg-muted)] leading-[1.5]">{p.blurb}</p>
+                      {carePlanSlug === p.slug ? (
+                        <ul className="mt-2 ml-7 space-y-0.5 text-[13px] text-[var(--color-fg-muted)] leading-[1.5]">
+                          {p.inclusions.map((inc) => (
+                            <li key={inc}>{inc}</li>
+                          ))}
+                        </ul>
+                      ) : null}
                     </label>
                   ))}
                 </fieldset>
@@ -201,7 +209,7 @@ export function InvoiceClient(props: InvoiceClientProps) {
           </div>
           {addCarePlan ? (
             <div className="mt-2 flex items-baseline justify-between text-[var(--color-fg-muted)]">
-              <span className="text-[13px]">Then monthly</span>
+              <span className="text-[13px]">Starting in {CARE_PLAN_TRIAL_DAYS} days</span>
               <span className="font-mono text-[13px] tabular-nums">{formatUSD(tier.monthlyAmountCents)}/mo</span>
             </div>
           ) : null}
@@ -222,7 +230,7 @@ export function InvoiceClient(props: InvoiceClientProps) {
               <>
                 {' '}
                 If you pay this invoice with Klarna or Affirm, we&rsquo;ll ask you to enter a card on the next
-                step so we can run the monthly Care Plan charges.
+                step so we can run the monthly hosting plan charges.
               </>
             ) : null}
           </p>

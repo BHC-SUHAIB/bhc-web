@@ -121,10 +121,17 @@ export default async function TermsPage() {
                 on launch. Optional installment plans available on request.
               </li>
               <li>
-                <strong>Care Plans and SEO retainers</strong>: pre-pay
-                monthly. The first charge runs the day you activate the
-                subscription, with the same amount charged automatically
-                every 30 days thereafter to your saved payment method.
+                <strong>Hosting plans (Host, Care, Growth)</strong>: the
+                first 30 days are free. The first charge runs 30 days after
+                you activate the subscription, with the same amount charged
+                automatically every month thereafter to your saved payment
+                method.
+              </li>
+              <li>
+                <strong>SEO retainers</strong>: pre-pay monthly. The first
+                charge runs the day you activate the subscription, with the
+                same amount charged automatically every 30 days thereafter to
+                your saved payment method.
               </li>
               <li>
                 <strong>Late payment</strong>: invoices unpaid for 14 days

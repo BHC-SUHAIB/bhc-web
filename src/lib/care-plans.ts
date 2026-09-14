@@ -95,9 +95,10 @@ export function carePlanByLookupKey(key: string | null | undefined): CarePlanTie
   )
 }
 
-// One-time build tiers — kept here so Payment Links + the /pay routes can
-// resolve a slug to a Stripe price the same way Care Plans do.
-export type BuildTierSlug = 'single-page' | 'starter-site' | 'pro-site'
+// One-time website builds. Slugs match src/lib/tiers.ts and the
+// pricing-reset metadata.sku; lookup keys match the live Stripe prices in
+// docs/pricing-reset/stripe-catalog.live.json.
+export type BuildTierSlug = 'launch-page' | 'starter-site' | 'pro-site'
 
 export type BuildTier = {
   slug: BuildTierSlug
@@ -109,25 +110,25 @@ export type BuildTier = {
 
 export const BUILD_TIERS: readonly BuildTier[] = [
   {
-    slug: 'single-page',
-    name: 'Single Page',
-    lookupKey: 'bhc_single_page',
-    amountCents: 79_500,
-    blurb: 'One conversion-focused page, 5-day build.',
+    slug: 'launch-page',
+    name: 'Launch Page',
+    lookupKey: 'launch_page_399',
+    amountCents: 39_900,
+    blurb: 'One conversion-focused page, live in 3 days.',
   },
   {
     slug: 'starter-site',
     name: 'Starter Site',
-    lookupKey: 'bhc_starter_site',
-    amountCents: 149_500,
-    blurb: 'Up to 5 bespoke pages, 14-day build.',
+    lookupKey: 'starter_site_699',
+    amountCents: 69_900,
+    blurb: 'Up to 5 pages on a block-based CMS, live in 7 days.',
   },
   {
     slug: 'pro-site',
-    name: 'The Pro Site',
-    lookupKey: 'bhc_pro_site',
-    amountCents: 350_000,
-    blurb: 'Up to 12 bespoke pages, 21-day build.',
+    name: 'Pro Site',
+    lookupKey: 'pro_site_1795',
+    amountCents: 179_500,
+    blurb: 'Up to 12 pages with full CMS, blog, and 30 days of SEO content, live in 14 days.',
   },
 ] as const
 
@@ -137,17 +138,18 @@ export function buildTierBySlug(slug: string | null | undefined): BuildTier | nu
 }
 
 // Productized fixes / quick-win add-ons. One-time fixed-price packages
-// shown on /services. Kept separate from BUILD_TIERS so the
-// CarePlan-vs-BuildTier vs add-on distinction stays clean in flows
-// that only operate on the primary tiers.
+// shown on /services (the fix-it menu plus the Local SEO sprint). Kept
+// separate from BUILD_TIERS so the CarePlan-vs-BuildTier vs add-on
+// distinction stays clean in flows that only operate on the primary tiers.
 export type AddonSlug =
+  | 'site-health-sprint'
   | 'gbp-setup'
-  | 'site-speed-sprint'
   | 'schema-pack'
   | 'ga4-setup'
-  | 'seo-refresh-5-page'
-  | 'mobile-audit'
-  | 'local-seo-sprint'
+  | 'speed-sprint'
+  | 'mobile-fix'
+  | 'seo-refresh'
+  | 'seo-sprint'
 
 export type Addon = {
   slug: AddonSlug
@@ -159,53 +161,60 @@ export type Addon = {
 
 export const ADDONS: readonly Addon[] = [
   {
-    slug: 'gbp-setup',
-    name: 'Google Business Profile Setup',
-    lookupKey: 'bhc_addon_gbp_setup',
-    amountCents: 29_500,
-    blurb: 'Complete GBP setup or audit + repair. 3-day delivery.',
+    slug: 'site-health-sprint',
+    name: 'Site Health Sprint',
+    lookupKey: 'site_health_sprint_249',
+    amountCents: 24_900,
+    blurb: 'Three fixes from the menu in 5 days with a before-and-after report.',
   },
   {
-    slug: 'site-speed-sprint',
-    name: 'Site Speed Sprint',
-    lookupKey: 'bhc_addon_site_speed_sprint',
-    amountCents: 69_500,
-    blurb: 'Lighthouse + Core Web Vitals optimization. 5-day delivery.',
+    slug: 'gbp-setup',
+    name: 'Google Business Profile Setup',
+    lookupKey: 'gbp_setup_195',
+    amountCents: 19_500,
+    blurb: 'Profile audit, complete setup, and a 30-directory NAP check in 3 days.',
   },
   {
     slug: 'schema-pack',
     name: 'Schema Markup Pack',
-    lookupKey: 'bhc_addon_schema_pack',
-    amountCents: 39_500,
-    blurb: 'LocalBusiness, Service, FAQ, Breadcrumb schema. 3-day delivery.',
+    lookupKey: 'schema_pack_195',
+    amountCents: 19_500,
+    blurb: 'LocalBusiness, Service, FAQ, Article, and Breadcrumb schema, validated, in 3 days.',
   },
   {
     slug: 'ga4-setup',
-    name: 'GA4 + Conversion Tracking Setup',
-    lookupKey: 'bhc_addon_ga4_setup',
+    name: 'GA4 + Conversion Tracking',
+    lookupKey: 'ga4_setup_195',
+    amountCents: 19_500,
+    blurb: 'GA4, GTM events, and Google Ads conversion link with proof of firing, in 3 days.',
+  },
+  {
+    slug: 'speed-sprint',
+    name: 'Site Speed Sprint',
+    lookupKey: 'speed_sprint_395',
     amountCents: 39_500,
-    blurb: 'GA4 + GTM + Google Ads conversions wired end-to-end. 3-day delivery.',
+    blurb: 'Core Web Vitals audit and fixes with a before-and-after report, in 5 days.',
   },
   {
-    slug: 'seo-refresh-5-page',
-    name: '5-Page SEO Refresh',
-    lookupKey: 'bhc_addon_seo_refresh_5_page',
-    amountCents: 69_500,
-    blurb: 'Targeted SEO updates to 5 priority pages. 7-day delivery.',
-  },
-  {
-    slug: 'mobile-audit',
+    slug: 'mobile-fix',
     name: 'Mobile Audit + Fix',
-    lookupKey: 'bhc_addon_mobile_audit',
-    amountCents: 59_500,
-    blurb: 'Real-device mobile audit + on-the-spot fixes. 5-day delivery.',
+    lookupKey: 'mobile_fix_395',
+    amountCents: 39_500,
+    blurb: 'Real-device mobile testing and fixes with a before-and-after report, in 5 days.',
   },
   {
-    slug: 'local-seo-sprint',
-    name: 'Local SEO Sprint',
-    lookupKey: 'bhc_addon_local_seo_sprint',
-    amountCents: 119_500,
-    blurb: 'Full local SEO setup as a one-time engagement. 2-week delivery.',
+    slug: 'seo-refresh',
+    name: '5-Page SEO Refresh',
+    lookupKey: 'seo_refresh_395',
+    amountCents: 39_500,
+    blurb: 'Titles, metas, schema, and internal links rewritten across 5 pages in 7 days.',
+  },
+  {
+    slug: 'seo-sprint',
+    name: 'Local SEO + AI Search Sprint',
+    lookupKey: 'seo_sprint_449',
+    amountCents: 44_900,
+    blurb: 'Audit, Google Business Profile setup, citations, schema, FAQ page, and llms.txt in 10 days.',
   },
 ] as const
 
@@ -214,10 +223,12 @@ export function addonBySlug(slug: string | null | undefined): Addon | null {
   return ADDONS.find((a) => a.slug === slug) ?? null
 }
 
-// Recurring SEO retainers — separate from CARE_PLANS so the Care Plan
-// signup flow doesn't accidentally surface them as Care tiers, and so
+// Recurring SEO retainers. Separate from CARE_PLANS so the Care Plan
+// signup flow doesn't accidentally surface them as hosting tiers, and so
 // webhook handlers can label them correctly on the Subscription mirror.
-export type SeoRetainerSlug = 'local-seo-monthly' | 'seo-growth'
+// The live catalog has one SEO retainer; the old SEO Growth retainer was
+// retired in the pricing reset.
+export type SeoRetainerSlug = 'seo-monthly'
 
 export type SeoRetainer = {
   slug: SeoRetainerSlug
@@ -229,18 +240,11 @@ export type SeoRetainer = {
 
 export const SEO_RETAINERS: readonly SeoRetainer[] = [
   {
-    slug: 'local-seo-monthly',
-    name: 'Local SEO Monthly',
-    lookupKey: 'bhc_seo_local_monthly',
-    monthlyAmountCents: 39_500,
-    blurb: 'Single-location service businesses competing locally.',
-  },
-  {
-    slug: 'seo-growth',
-    name: 'SEO Growth',
-    lookupKey: 'bhc_seo_growth_monthly',
-    monthlyAmountCents: 89_500,
-    blurb: 'Full-stack SEO: monthly content, internal linking, AI-search optimization.',
+    slug: 'seo-monthly',
+    name: 'Local SEO + AI Search Monthly',
+    lookupKey: 'seo_monthly_295m',
+    monthlyAmountCents: 29_500,
+    blurb: 'Weekly Google Business Profile posts, citations, one article, and a ranking report.',
   },
 ] as const
 

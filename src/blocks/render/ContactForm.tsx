@@ -1,13 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Mail, Phone, MapPin, Clock, Check, Calendar } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { phoneHref, mailtoHref, BOOKING_URL } from '@/lib/contact'
 import { SMS_DISCLAIMER_TEXT, SMS_CHECKBOX_LABEL } from '@/lib/sms-disclaimer'
 import { pushEvent } from '@/lib/analytics'
+import { getAttribution } from '@/lib/attribution'
+import { describeMissing, missingKeys, type MissingField } from '@/lib/form-validation'
 import { getTier, type TierInfo } from '@/lib/tiers'
 import type { ContactFormBlockBlock } from '@/payload-types'
 
@@ -76,6 +78,20 @@ export function ContactForm(b: ContactFormProps) {
   const [phoneValue, setPhoneValue] = useState('')
   const [smsConsent, setSmsConsent] = useState(false)
 
+  // When the form became interactive. Sent with the submission so the server
+  // can record time-to-submit as a soft spam signal (never a hard reject).
+  const startedAtRef = useRef(0)
+  useEffect(() => { startedAtRef.current = Date.now() }, [])
+
+  // The error banner renders above the fields. On a phone that is off-screen
+  // from the submit button, so a validation error can look like a dead button
+  // (see the 2026-09-13 lost demo-form lead). Scroll it into view.
+  const alertRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!errorMessage) return
+    alertRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }, [errorMessage])
+
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
     if (state === 'submitting') return
@@ -88,7 +104,7 @@ export function ContactForm(b: ContactFormProps) {
       name:      String(data.get('name') ?? '').trim(),
       email:     String(data.get('email') ?? '').trim(),
       message:   String(data.get('message') ?? '').trim(),
-      honeypot:  String(data.get('website') ?? ''), // bot trap
+      honeypot:  String(data.get('bhc_confirm_field') ?? ''), // bot trap; server only FLAGS a filled value
       sourcePage: typeof window !== 'undefined' ? window.location.pathname : '',
     }
     // Carry the Express-LP bundle selection into the message so it lands in the
@@ -115,9 +131,14 @@ export function ContactForm(b: ContactFormProps) {
       payload.smsConsentDisclaimerText = SMS_DISCLAIMER_TEXT
     }
 
-    if (!payload.name || !payload.email || payload.message.length < 10) {
+    const missing: MissingField[] = []
+    if (!payload.name) missing.push({ key: 'name', label: 'your name' })
+    if (!payload.email) missing.push({ key: 'email', label: 'your email' })
+    if (payload.message.length < 10) missing.push({ key: 'message', label: 'a sentence about what you need' })
+    if (missing.length) {
       setState('error')
-      setErrorMessage('Please fill in your name, email, and at least a sentence.')
+      setErrorMessage(describeMissing(missing))
+      pushEvent('form_validation_error', { form: 'contact', missing: missingKeys(missing), source_page: payload.sourcePage })
       return
     }
     if (smsConsent && !phone) {
@@ -130,7 +151,11 @@ export function ContactForm(b: ContactFormProps) {
       const res = await fetch('/api/contact-submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          formStartedAt: startedAtRef.current,
+          attribution: getAttribution(),
+        }),
       })
       if (!res.ok) {
         let msg = `Submission failed (${res.status})`
@@ -204,7 +229,7 @@ export function ContactForm(b: ContactFormProps) {
               </div>
             ) : null}
             {errorMessage ? (
-              <div role="alert" className="rounded-[var(--radius-md)] border border-red-500/40 bg-red-500/5 px-4 py-3 text-[14px] text-red-700 dark:text-red-300">
+              <div ref={alertRef} role="alert" className="rounded-[var(--radius-md)] border border-red-500/40 bg-red-500/5 px-4 py-3 text-[14px] text-red-700 dark:text-red-300">
                 {errorMessage}
               </div>
             ) : null}
@@ -317,10 +342,23 @@ export function ContactForm(b: ContactFormProps) {
               </label>
             ) : null}
 
-            {/* Honeypot: invisible to humans, filled by bots. Label targets bots with a common field name. */}
+            {/* Honeypot. Invisible to people, filled by naive bots. Deliberately
+                NOT named/labelled website/url/email/phone: iOS Safari ignores
+                autocomplete="off" and will fill a field it recognises even when
+                it is off-screen, which turns a real lead into "spam". A
+                nonsense name plus autocomplete="one-time-code" (only ever
+                filled from an SMS prompt the user taps) keeps autofill away. */}
             <div aria-hidden className="hidden" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
-              <label htmlFor="cf-website">Website</label>
-              <input id="cf-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+              <input
+                id="cf-bhc-confirm"
+                name="bhc_confirm_field"
+                type="text"
+                tabIndex={-1}
+                autoComplete="one-time-code"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-form-type="other"
+              />
             </div>
 
             <div className="flex flex-wrap items-center gap-4 mt-2">

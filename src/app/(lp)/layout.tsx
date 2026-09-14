@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import { delayedAnalyticsSnippet } from '@/lib/analytics-loader'
+import { firstTouchSnippet } from '@/lib/attribution'
 import Link from 'next/link'
 import { manrope, fraunces, jetbrains } from '@/lib/fonts'
 import { Container } from '@/components/Container'
@@ -45,6 +46,15 @@ export default async function LpLayout({ children }: { children: React.ReactNode
       className={`${manrope.variable} ${fraunces.variable} ${jetbrains.variable}`}
     >
       <head>
+        {/* First-touch attribution: stash gclid / utm_* / referrer / landing
+            path in localStorage on the first page view, before any client
+            navigation strips the query string. First-party only; the lead
+            forms read it back and send it with each submission so the
+            notification email can say WHICH ad or referrer produced the lead.
+            Not gated on GTM: it must work in dev and for opted-out staff too. */}
+        <Script id="first-touch" strategy="beforeInteractive">
+          {firstTouchSnippet}
+        </Script>
         {gtmId ? (
           <>
             {/* page_type pushed before GTM loads so the first pageview tag

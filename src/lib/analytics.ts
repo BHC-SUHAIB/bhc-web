@@ -25,6 +25,7 @@ type EventName =
   | 'exit_intent_shown'          // Exit-intent / deep-scroll lead modal was displayed
   | 'checkout_click'             // Buy now / Subscribe button on a pricing tier or bundle
   | 'purchase'                   // /thanks?sku= landed after a Stripe Payment Link checkout
+  | 'form_validation_error'      // Lead form blocked client-side by a missing required field (UX signal, not a lead)
 
 type EventParams = {
   /** Page or section the event fired from. */

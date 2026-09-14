@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Check } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { pushEvent } from '@/lib/analytics'
+import { getAttribution } from '@/lib/attribution'
+import { describeMissing, missingKeys, type MissingField } from '@/lib/form-validation'
 
 // Free-demo-site request form. Submissions land in the same collection and
 // email pipeline as the contact form, tagged formType: 'demo-request'.
@@ -24,6 +26,20 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
   const [state, setState] = useState<State>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
+  // When the form became interactive. Sent with the submission so the server
+  // can record time-to-submit as a soft spam signal (never a hard reject).
+  const startedAtRef = useRef(0)
+  useEffect(() => { startedAtRef.current = Date.now() }, [])
+
+  // The error banner renders above the fields. On a phone that is off-screen
+  // from the submit button, so a validation error looked like a dead button
+  // (the 2026-09-13 lost lead tapped "Send" three times). Scroll it into view.
+  const alertRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!errorMessage) return
+    alertRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }, [errorMessage])
+
   async function handleSubmit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
     if (state === 'submitting') return
@@ -37,25 +53,41 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
     const email = String(data.get('email') ?? '').trim()
     const phone = String(data.get('phone') ?? '').trim()
     const oneLiner = String(data.get('oneLiner') ?? '').trim()
+    const sourcePage = typeof window !== 'undefined' ? window.location.pathname : ''
 
-    if (!businessName || !listingUrl || !email) {
+    const missing: MissingField[] = []
+    if (!businessName) missing.push({ key: 'businessName', label: 'your business name' })
+    if (!email) missing.push({ key: 'email', label: 'your email' })
+    if (missing.length) {
       setState('error')
-      setErrorMessage('Please fill in your business name, your listing or website link, and your email.')
+      setErrorMessage(describeMissing(missing))
+      pushEvent('form_validation_error', { form: 'demo_request', missing: missingKeys(missing), source_page: sourcePage })
       return
     }
 
-    const payload: Record<string, string> = {
+    const payload: Record<string, unknown> = {
       formType: 'demo-request',
       name: businessName,
       company: businessName,
       email,
-      listingUrl,
+      listingUrl: listingUrl || undefined,
       projectType: 'website',
-      message: [`Demo site request for ${businessName}.`, `Listing: ${listingUrl}`, oneLiner]
+      // The listing link is optional (2026-09-13: requiring it is the likeliest
+      // reason a paid visitor with no website yet gave up). A blank one is
+      // called out in the message so the follow-up email asks for it.
+      message: [
+        `Demo site request for ${businessName}.`,
+        listingUrl ? `Listing: ${listingUrl}` : 'Listing: none provided (no website or GBP link yet; ask in the reply).',
+        oneLiner,
+      ]
         .filter(Boolean)
         .join('\n'),
-      honeypot: String(data.get('website') ?? ''),
-      sourcePage: typeof window !== 'undefined' ? window.location.pathname : '',
+      // Bot trap. The hidden input below has a non-semantic name so browser
+      // autofill never targets it; the server only FLAGS a filled value.
+      honeypot: String(data.get('bhc_confirm_field') ?? ''),
+      formStartedAt: startedAtRef.current,
+      attribution: getAttribution(),
+      sourcePage,
     }
     if (phone) payload.phone = phone
 
@@ -75,7 +107,7 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
       }
       setState('success')
       pushEvent('generate_lead', {
-        source_page: typeof window !== 'undefined' ? window.location.pathname : '',
+        source_page: sourcePage,
         project_type: 'website',
         source: 'demo_request',
         currency: 'USD',
@@ -114,7 +146,7 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
         ) : (
           <form onSubmit={handleSubmit} className="form-fields" noValidate>
             {errorMessage ? (
-              <div role="alert" className="rounded-[var(--radius-md)] border border-red-500/40 bg-red-500/5 px-4 py-3 text-[14px] text-red-700 dark:text-red-300">
+              <div ref={alertRef} role="alert" className="rounded-[var(--radius-md)] border border-red-500/40 bg-red-500/5 px-4 py-3 text-[14px] text-red-700 dark:text-red-300">
                 {errorMessage}
               </div>
             ) : null}
@@ -132,8 +164,8 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
 
             <div className="frow">
               <div>
-                <label htmlFor="drf-listing" className="flabel">Google Business Profile link or current website *</label>
-                <input id="drf-listing" name="listingUrl" type="url" required inputMode="url" className="field" placeholder="https://..." />
+                <label htmlFor="drf-listing" className="flabel">Google Business Profile link or current website (optional, but it makes the demo better)</label>
+                <input id="drf-listing" name="listingUrl" type="url" inputMode="url" className="field" placeholder="https://... or leave blank if you have neither yet" />
               </div>
             </div>
 
@@ -148,10 +180,23 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
               </div>
             </div>
 
-            {/* Honeypot: invisible to humans, filled by bots. */}
+            {/* Honeypot. Invisible to people, filled by naive bots. Deliberately
+                NOT named/labelled website/url/email/phone: iOS Safari ignores
+                autocomplete="off" and will fill a field it recognises even when
+                it is off-screen, which turns a real lead into "spam". A
+                nonsense name plus autocomplete="one-time-code" (only ever
+                filled from an SMS prompt the user taps) keeps autofill away. */}
             <div aria-hidden className="hidden" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
-              <label htmlFor="drf-website">Website</label>
-              <input id="drf-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+              <input
+                id="drf-bhc-confirm"
+                name="bhc_confirm_field"
+                type="text"
+                tabIndex={-1}
+                autoComplete="one-time-code"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-form-type="other"
+              />
             </div>
 
             <div className="flex flex-wrap items-center gap-4 mt-2">

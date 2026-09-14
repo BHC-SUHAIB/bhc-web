@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { Logo } from './Logo'
 import { pushEvent } from '@/lib/analytics'
+import { getAttribution } from '@/lib/attribution'
 
 // Exit-intent / deep-scroll lead modal.
 //
@@ -104,6 +105,7 @@ export function ExitIntentModal() {
           email,
           message: `Requested a free website audit via the exit-intent popup${sourcePage ? ` on ${sourcePage}` : ''}. Please send the audit to ${email}.`,
           sourcePage,
+          attribution: getAttribution(),
         }),
       })
       if (!res.ok) {

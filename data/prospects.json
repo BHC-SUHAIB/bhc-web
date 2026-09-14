@@ -2,43 +2,68 @@
   "spotlesscarspa": {
     "password": "Spotless$11",
     "label": "Spotless Car Spa",
-    "tiers": ["essentials", "studio", "signature"],
+    "tiers": [
+      "essentials",
+      "studio",
+      "signature"
+    ],
     "defaultTier": "signature",
     "created": "2026-05-28"
   },
   "inasthreadingbeauty": {
     "password": "Ina$11",
     "label": "Ina's Threading and Beauty",
-    "tiers": ["essential", "studio", "signature"],
+    "tiers": [
+      "essential",
+      "studio",
+      "signature"
+    ],
     "defaultTier": "signature",
     "created": "2026-05-29"
   },
   "tokeproperties": {
     "password": "Toke$11",
     "label": "Toke Properties",
-    "tiers": ["main"],
+    "tiers": [
+      "main"
+    ],
     "defaultTier": "main",
     "created": "2026-05-30"
   },
   "prometheuseq": {
     "password": "Philip$11",
     "label": "Prometheus EQ",
-    "tiers": ["main"],
+    "tiers": [
+      "main"
+    ],
     "defaultTier": "main",
     "created": "2026-07-09"
   },
   "medtracker": {
     "password": "Sooby$11",
     "label": "Med Tracker",
-    "tiers": ["app"],
+    "tiers": [
+      "app"
+    ],
     "defaultTier": "app",
     "created": "2026-07-09"
   },
   "prometheus-parent": {
     "password": "Philip$11",
     "label": "Prometheus Parent",
-    "tiers": ["app"],
+    "tiers": [
+      "app"
+    ],
     "defaultTier": "app",
     "created": "2026-07-14"
+  },
+  "grants-within-reach": {
+    "password": "reach2026",
+    "label": "Grants Within Reach",
+    "tiers": [
+      "home"
+    ],
+    "defaultTier": "home",
+    "created": "2026-09-14"
   }
 }

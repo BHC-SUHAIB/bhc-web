@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Grants Within Reach · Connecting purpose to possibilities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sage:#6E9C89; --seafoam:#A7C4BC; --gold:#E3B458; --sand:#F6F1EA; --gray:#6B6B6B; --ink:#294B45;
+    --sage-deep:#4F7A69; --sand-deep:#EFE7DA; --line:rgba(41,75,69,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Lora',Georgia,serif;color:var(--ink);background:var(--sand);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4,.btn,nav,.eyebrow,.strip,.stat b{font-family:'Montserrat',system-ui,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--sage-deep)}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:999px;font-weight:600;font-size:15px;transition:transform .15s ease,background .15s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:#1f3a35}
+  .btn-gold{background:var(--gold);color:var(--ink)}
+  .btn-gold:hover{background:#d9a94a}
+  .btn-ghost{border:1.5px solid var(--ink);color:var(--ink)}
+  .btn-ghost:hover{background:rgba(41,75,69,.06)}
+  .arrow{display:inline-block;transition:transform .15s}
+  a:hover .arrow{transform:translateX(3px)}
+
+  /* credentials strip */
+  .strip{background:var(--ink);color:#fff;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:500;text-align:center;padding:9px 16px}
+  .strip span{opacity:.55;margin:0 10px}
+
+  /* header */
+  header{position:sticky;top:0;z-index:20;background:rgba(246,241,234,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo svg{width:54px;height:44px}
+  .logo .name{font-family:'Montserrat',sans-serif;font-weight:600;font-size:21px;letter-spacing:-.01em;line-height:1}
+  .logo .tag{display:block;font-family:'Montserrat',sans-serif;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--sage-deep);margin-top:4px}
+  nav ul{display:flex;gap:28px;list-style:none;font-size:14px;font-weight:500}
+  nav a{padding:6px 0;border-bottom:2px solid transparent}
+  nav a:hover,nav a.active{border-color:var(--gold)}
+  .menu-btn{display:none}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;padding:88px 0 96px}
+  .hero::before{content:"";position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=2000&q=70') center/cover no-repeat;opacity:.16;filter:saturate(.7)}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--sand) 0%,rgba(246,241,234,.92) 45%,rgba(246,241,234,.55) 100%)}
+  .hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .quote{font-family:'Lora',serif;font-style:italic;font-size:19px;color:var(--sage-deep);margin-bottom:18px;display:flex;align-items:center;gap:12px}
+  .quote::before{content:"";width:36px;height:2px;background:var(--gold)}
+  .hero h1{font-size:clamp(40px,5.4vw,64px);font-weight:700;line-height:1.04;letter-spacing:-.025em;margin-bottom:22px}
+  .hero h1 em{font-family:'Lora',serif;font-style:italic;font-weight:500;color:var(--sage-deep)}
+  .hero p{font-size:19px;max-width:600px;color:#3d5550;margin-bottom:14px}
+  .hero p.small{font-size:16px;color:var(--gray)}
+  .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+  .hero-card{background:#fff;border-radius:22px;padding:30px 30px 26px;box-shadow:0 30px 60px -30px rgba(41,75,69,.35);border:1px solid var(--line)}
+  .hero-card .eyebrow{margin-bottom:14px}
+  .hero-card ul{list-style:none;display:grid;gap:12px}
+  .hero-card li{display:flex;gap:12px;align-items:flex-start;font-size:16px}
+  .hero-card li i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--seafoam);display:grid;place-items:center;margin-top:2px}
+  .hero-card li i::after{content:"";width:7px;height:11px;border:solid var(--ink);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .hero-card .sun{position:absolute;right:-18px;top:-18px;width:64px;height:64px;border-radius:50%;background:var(--gold)}
+  .hero-card{position:relative}
+
+  /* pathways */
+  .pathways{padding:88px 0}
+  .section-head{max-width:720px;margin-bottom:40px}
+  .section-head h2{font-size:clamp(30px,3.6vw,42px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:10px 0 12px}
+  .section-head p{color:#3d5550;font-size:18px}
+  .paths{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .path{border-radius:22px;padding:38px 36px 34px;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:360px}
+  .path.np{background:var(--ink);color:#fff}
+  .path.fd{background:#fff;border:1.5px solid var(--seafoam)}
+  .path .eyebrow{color:var(--gold)}
+  .path.fd .eyebrow{color:var(--sage-deep)}
+  .path h3{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.12;margin:12px 0 10px}
+  .path .sub{font-family:'Montserrat',sans-serif;font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.8;margin-bottom:22px}
+  .path ul{list-style:none;display:grid;gap:8px;margin-bottom:28px;font-size:16px}
+  .path li::before{content:"·";color:var(--gold);font-weight:700;margin-right:8px}
+  .path .btn{margin-top:auto;align-self:flex-start}
+  .path.np .btn{background:var(--gold);color:var(--ink)}
+  .path.fd .btn{background:var(--ink);color:#fff}
+  .path .arc{position:absolute;right:-60px;bottom:-90px;width:260px;height:260px;border-radius:50%;border:34px solid rgba(255,255,255,.07)}
+  .path.fd .arc{border-color:rgba(167,196,188,.28)}
+
+  /* proof / how I work */
+  .how{background:#fff;padding:88px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .how .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+  .how h2{font-size:clamp(30px,3.4vw,40px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:10px 0 16px}
+  .how p.lede{font-size:18px;color:#3d5550}
+  .principles{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .principle{background:var(--sand);border-radius:18px;padding:24px 24px 22px}
+  .principle b{display:block;font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
+  .principle b::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--gold);margin-right:10px;vertical-align:1px}
+  .principle p{font-size:15.5px;color:#3d5550}
+
+  /* meet deja */
+  .meet{padding:96px 0}
+  .meet .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+  .photo{aspect-ratio:4/5;border-radius:24px;background:linear-gradient(160deg,var(--seafoam),var(--sage));position:relative;overflow:hidden;display:grid;place-items:center;color:#fff;font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px;text-align:center;padding:24px}
+  .photo::after{content:"";position:absolute;left:-40px;bottom:-60px;width:220px;height:220px;border-radius:50%;border:28px solid rgba(255,255,255,.18)}
+  .photo .sun{position:absolute;right:26px;top:26px;width:48px;height:48px;border-radius:50%;background:var(--gold)}
+  .meet h2{font-size:clamp(30px,3.4vw,40px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:10px 0 18px}
+  .meet p{color:#3d5550;margin-bottom:14px;font-size:17.5px}
+  .creds{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px}
+  .creds span{font-family:'Montserrat',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.04em;background:#fff;border:1px solid var(--seafoam);border-radius:999px;padding:8px 14px}
+
+  /* speaking */
+  .speaking{background:var(--ink);color:#fff;padding:88px 0}
+  .speaking .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .speaking .eyebrow{color:var(--gold)}
+  .speaking h2{font-size:clamp(30px,3.4vw,40px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:10px 0 16px}
+  .speaking p{color:rgba(255,255,255,.82);font-size:17.5px;margin-bottom:24px}
+  .events{list-style:none;display:grid;gap:14px}
+  .events li{border-left:2px solid var(--gold);padding-left:16px}
+  .events b{display:block;font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--seafoam);margin-bottom:2px}
+  .events span{font-size:16px}
+
+  /* cta band */
+  .cta{padding:96px 0;text-align:center}
+  .cta .sunline{width:56px;height:56px;border-radius:50%;background:var(--gold);margin:0 auto 22px}
+  .cta h2{font-size:clamp(34px,4.6vw,56px);font-weight:700;letter-spacing:-.025em;line-height:1.05;margin-bottom:14px}
+  .cta p{font-size:19px;color:#3d5550;max-width:560px;margin:0 auto 30px}
+
+  footer{border-top:1px solid var(--line);padding:34px 0 40px;font-size:14px;color:var(--gray)}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  footer .tag{font-family:'Lora',serif;font-style:italic;color:var(--sage-deep)}
+
+  @media (max-width:900px){
+    nav ul{display:none}
+    .menu-btn{display:inline-flex;white-space:nowrap;font-family:'Montserrat',sans-serif;font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;border:1.5px solid var(--ink);border-radius:999px;background:var(--gold);border-color:var(--gold)}
+    .logo .name{font-size:17px;white-space:nowrap}
+    .logo .tag{display:none}
+    .logo svg{width:44px;height:36px}
+    .nav{height:66px}
+    .hero{padding:56px 0 64px}
+    .hero .wrap,.how .wrap,.meet .wrap,.speaking .wrap{grid-template-columns:1fr;gap:32px}
+    .paths,.principles{grid-template-columns:1fr}
+    .path{min-height:0}
+    .photo{max-width:360px}
+    .strip{font-size:11px;line-height:1.7}
+    .strip span{display:none}
+    .strip b{display:block}
+  }
+</style>
+</head>
+<body>
+
+<div class="strip"><b>9 Years in Grants &amp; Nonprofit Consulting</b><span>|</span><b>Grant Professional Certified</b><span>|</span><b>Certified Nonprofit Professional</b><span>|</span><b>$2M+ Secured Annually</b></div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#">
+      <svg viewBox="0 0 120 96" aria-hidden="true">
+        <path d="M6 88 C 30 30, 80 24, 112 46" fill="none" stroke="#A7C4BC" stroke-width="15" stroke-linecap="round"/>
+        <path d="M14 92 C 44 44, 86 40, 116 70" fill="none" stroke="#6E9C89" stroke-width="16" stroke-linecap="round"/>
+        <circle cx="100" cy="18" r="13" fill="#E3B458"/>
+      </svg>
+      <span><span class="name">Grants Within Reach</span><span class="tag">Connecting purpose to possibilities</span></span>
+    </a>
+    <nav>
+      <ul>
+        <li><a class="active" href="#">Home</a></li>
+        <li><a href="#speaking">Speaking &amp; Training</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact" class="btn btn-gold" style="padding:11px 18px;border-bottom:0">Let's Talk</a></li>
+      </ul>
+      <a class="menu-btn" href="#contact">Let's Talk</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="quote">Systems and strategy to make grant work feel less like grunt work.</div>
+      <h1>More than <em>grant writing.</em></h1>
+      <p>Grants Within Reach helps nonprofits build the strategy, systems, and capacity behind successful grant seeking, from identifying the right opportunities and developing competitive proposals to managing funding well after the award.</p>
+      <p class="small">We also partner with foundations and philanthropic organizations to strengthen grantee capacity and help more resources reach the communities they are intended to serve.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#services">Explore services <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href="#contact">Let's talk</a>
+      </div>
+    </div>
+    <aside class="hero-card">
+      <div class="sun"></div>
+      <div class="eyebrow">Full lifecycle grant support</div>
+      <ul>
+        <li><i></i>Grant readiness assessment and systems</li>
+        <li><i></i>Funder research that fits your mission</li>
+        <li><i></i>Competitive, funder-aligned proposals</li>
+        <li><i></i>Grant and contract management after the award</li>
+        <li><i></i>Fundraising strategy and board development</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section class="pathways" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Who we work with</div>
+      <h2>Two pathways. One goal: the right grants within reach.</h2>
+      <p>Whether you are seeking funding or giving it, the work starts long before the application.</p>
+    </div>
+    <div class="paths">
+      <a class="path np" href="#services">
+        <div class="arc"></div>
+        <div class="eyebrow">For nonprofits</div>
+        <h3>Build what's next.</h3>
+        <div class="sub">Grant strategy · Fundraising · Organizational development</div>
+        <ul>
+          <li>Grant readiness, funder research, proposal development</li>
+          <li>Development and fundraising strategy</li>
+          <li>Strategic planning and board development</li>
+          <li>Grant and contract management through closeout</li>
+        </ul>
+        <span class="btn">Explore nonprofit services <span class="arrow">→</span></span>
+      </a>
+      <a class="path fd" href="#services">
+        <div class="arc"></div>
+        <div class="eyebrow">For foundations</div>
+        <h3>Stronger grantees, greater impact.</h3>
+        <div class="sub">Applicant support · Capacity building · Grantmaking strategy</div>
+        <ul>
+          <li>1:1 application coaching for your applicants and grantees</li>
+          <li>Custom 1 to 2 day grant-writing workshops for cohorts</li>
+          <li>Grantmaking strategy assessment and refinement</li>
+          <li>Equitable, community-informed funding design</li>
+        </ul>
+        <span class="btn">Explore foundation services <span class="arrow">→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">How I work</div>
+      <h2>All strategy, less chase.</h2>
+      <p class="lede">Good organizations deserve good opportunities. Sustainable funding takes more than a strong proposal: it takes strategy, readiness, strong programs, thoughtful partnerships, and the systems to manage funding well once it arrives.</p>
+    </div>
+    <div class="principles">
+      <div class="principle"><b>All strategy, less chase</b><p>Not every grant is the right grant. We focus on fit, alignment, and where your organization has the strongest chance of success.</p></div>
+      <div class="principle"><b>Partnership over transactions</b><p>The best consulting relationships feel like an extension of your team.</p></div>
+      <div class="principle"><b>Capacity matters</b><p>Winning funding only works when an organization is prepared to manage it successfully.</p></div>
+      <div class="principle"><b>Practical, not theoretical</b><p>Recommendations should work in the real world, with real nonprofit budgets, staffing, and constraints.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="meet" id="about">
+  <div class="wrap">
+    <div class="photo"><div class="sun"></div>Headshot of Deja<br>goes here</div>
+    <div>
+      <div class="eyebrow">Meet Deja</div>
+      <h2>Good grant work starts long before the application.</h2>
+      <p>Hi, I'm Deja Hasness. Nearly a decade in grants and nonprofit consulting has taught me that successful grant seeking doesn't happen in a silo. It intersects with programs, finances, leadership, evaluation, partnerships, and organizational strategy.</p>
+      <p>I work with organizations from roughly $1 million to $30 million in annual budget, across healthcare, human services, education, arts and culture, economic mobility, and community development. Houston is home, and Houston-area nonprofits are at the heart of my work.</p>
+      <div class="creds">
+        <span>Grant Professional Certified (GPC)</span>
+        <span>Certified Nonprofit Professional (CNP)</span>
+        <span>Speaker &amp; Trainer</span>
+        <span>Houston, Texas</span>
+      </div>
+      <a class="btn btn-primary" href="#about">Read Deja's story <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="speaking" id="speaking">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Speaking · Training · Thought leadership</div>
+      <h2>Practical expertise. Engaging conversations. Stronger organizations.</h2>
+      <p>Sessions on grant readiness, funder research, proposal strategy, compliance, and the power of "no," customized for conferences, staff trainings, board retreats, and funder-sponsored grantee cohorts.</p>
+      <a class="btn btn-gold" href="#contact">Inquire about speaking &amp; training <span class="arrow">→</span></a>
+    </div>
+    <ul class="events">
+      <li><b>2026 GrantSummit · Grant Professionals Association</b><span>A Grant Professional's Guide to the Power of "No"</span></li>
+      <li><b>Elevate Your Impact · 2026</b><span>The Cost of Being Unprepared: Grant Readiness and Compliance as Your Competitive Advantage</span></li>
+      <li><b>Nonprofits First · 2026</b><span>How to Identify Great Funding Sources</span></li>
+      <li><b>State of African American Health Power Summit · 2026</b><span>Fueling the Mission: Grant Strategies for Health Equity and Impact</span></li>
+      <li><b>Visual Eyes Podcast · 2025</b><span>From Nurse to Grant Strategist: Deja Hasness on Funding Change</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="wrap">
+    <div class="sunline"></div>
+    <div class="eyebrow">Let's make more possible</div>
+    <h2>Ready to bring better funding opportunities within reach?</h2>
+    <p>Tell us about your organization and the goal you are working toward. Someone will reach out shortly to talk through how Grants Within Reach can support your mission.</p>
+    <a class="btn btn-primary" href="#contact">Let's Talk <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong style="font-family:Montserrat,sans-serif;color:var(--ink)">Grants Within Reach</strong> · Houston, Texas · Serving nonprofits and funders across the Greater Houston region and beyond</div>
+    <div class="tag">Connecting purpose to possibilities.</div>
+  </div>
+</footer>
+
+</body>
+</html>

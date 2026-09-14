@@ -247,20 +247,20 @@ export const SERVICE_ADDONS: PdfDoc = {
     {
       type: 'bullets',
       items: [
-        'Google Business Profile Setup — $295. Photos, services, hours, schema, review templates. 3-day delivery.',
-        'Site Speed Sprint — $695. Image optimization, JS audit, render-blocking removal, CDN setup. Targets Lighthouse 85+ mobile. 5-day delivery.',
-        'Schema Markup Pack — $395. LocalBusiness, Service, FAQPage, Article, BreadcrumbList. 3-day delivery.',
-        'GA4 + Conversion Tracking — $395. GA4, GTM, Google Ads conversions, dataLayer events. 3-day delivery.',
-        '5-Page SEO Refresh — $695. Targeted SEO updates to 5 priority pages. 7-day delivery.',
-        'Mobile Audit + Fix — $595. Full mobile audit with on-the-spot fixes. 5-day delivery.',
+        'Google Business Profile Setup, $195. Profile audit, complete setup, and a 30-directory NAP check. 3-day delivery.',
+        'Schema Markup Pack, $195. LocalBusiness, Service, FAQ, Article, and Breadcrumb schema, validated. 3-day delivery.',
+        'GA4 + Conversion Tracking, $195. GA4, GTM events, and Google Ads conversion link with proof of firing. 3-day delivery.',
+        'Site Speed Sprint, $395. Core Web Vitals audit and fixes with a before-and-after report. 5-day delivery.',
+        'Mobile Audit + Fix, $395. Real-device mobile testing and fixes with a before-and-after report. 5-day delivery.',
+        '5-Page SEO Refresh, $395. Titles, metas, schema, and internal links rewritten across 5 pages. 7-day delivery.',
       ],
     },
 
     {
       type: 'callout',
-      title: 'Bundle and save',
+      title: 'Three fixes for $249',
       body:
-        'Buy 3 add-ons together → 15% off the bundle. Buy 4+ → 25% off. Most clients start with GBP Setup + Schema Pack + GA4 Tracking — the "local SEO foundation" bundle, $922 instead of $1,085.',
+        'The Site Health Sprint bundles any three fixes from the menu into one $249 package, shipped in 5 days with a before-and-after report. It is cheaper than buying the fixes separately. Most clients start with GBP Setup, Schema Pack, and GA4 Tracking, the local SEO foundation.',
     },
 
     // Tick suppressed here only — sits directly under the callout and the

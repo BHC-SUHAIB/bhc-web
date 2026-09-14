@@ -1,9 +1,10 @@
 # bhc-clients droplet — shared client-hosting server (runbook)
 
-**Status (2026-09-13):** provisioned, verified, snapshotted, then **destroyed** so it
-costs nothing until the first Starter Site / Launch Page client pays. The snapshot
-is the only copy. Restore it with the one command in
-[Restore from snapshot](#restore-from-snapshot).
+**Status (2026-09-13):** provisioned, verified, snapshotted, and **left running** for the
+first client (Suhaib's call after the build; a powered-off droplet bills the same USD 24/mo,
+so it was powered back on rather than destroyed). The snapshot below is the clean base image:
+if the box ever needs to be rebuilt, or is destroyed during a dry spell, restore it with the
+one command in [Restore from snapshot](#6-restore-from-snapshot).
 
 | Item | Value |
 |---|---|
@@ -11,9 +12,9 @@ is the only copy. Restore it with the one command in
 | Snapshot ID | `245391002` |
 | Snapshot cost | USD 0.06 / GB / month × 4.99 GiB ≈ USD 0.30 / month |
 | Droplet (when running) | `s-2vcpu-4gb`, nyc3, USD 24/mo, ~USD 0.036/hr |
-| Original droplet ID / IP | 600246126 / 159.203.90.123 (both gone after destroy; a restored droplet gets a NEW IP) |
+| Droplet ID / IP | **600246126 / 159.203.90.123** (live). A droplet restored from the snapshot gets a NEW IP. |
 | Health URL | `https://clients.getblackhart.com` returns `200` + `bhc-clients ok` |
-| DNS | Cloudflare zone `getblackhart.com`, A record `clients` (DNS only / grey cloud). Left in place after destroy, pointing at the dead IP 159.203.90.123. Update it after restore. |
+| DNS | Cloudflare zone `getblackhart.com`, A record `clients` → 159.203.90.123 (DNS only / grey cloud). Edit it if the droplet is ever rebuilt. |
 | SSH | `ssh deploy@<ip>` with the `suhaib-mbpro` key (`~/.ssh/id_rsa`). Root login and password auth are off. |
 | Templates in this repo | [`docs/ops/bhc-clients/`](bhc-clients/) (compose, Caddyfile, scripts, backup) |
 
@@ -258,7 +259,7 @@ Downtime is 1-3 minutes; the IP does not change. Do it in a maintenance window.
 
 ## 6. Restore from snapshot
 
-The day the first client pays:
+Only if the droplet was destroyed (dry spell) or needs a clean rebuild:
 
 ```bash
 SNAP=245391002      # bhc-clients-base-2026-09-13 (doctl compute snapshot list)
@@ -292,7 +293,8 @@ doctl compute droplet-action power-on $ID --wait
 ```
 
 Remember: a **powered-off droplet still bills at full price**. Only destroying it stops
-the charge; only the snapshot survives a destroy.
+the charge; only the snapshot survives a destroy. To mothball during a dry spell:
+`doctl compute droplet delete 600246126` after confirming a fresh snapshot exists.
 
 ---
 

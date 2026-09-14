@@ -11,8 +11,9 @@
 <style>
 :root{--sage:#6E9C89;--seafoam:#A7C4BC;--gold:#E3B458;--sand:#F6F1EA;--sand2:#EFE7DA;--gray:#6B6B6B;--ink:#294B45;--ink2:#1E3A35;--sage-deep:#4F7A69;--line:rgba(41,75,69,.12);--serif:'Lora',Georgia,serif;--sans:'Montserrat',system-ui,sans-serif;--ease:cubic-bezier(.2,.7,.2,1)}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--serif);color:var(--ink);background:var(--sand);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html,body{overflow-x:clip}
+html{scroll-padding-top:84px}
+body{font-family:var(--serif);color:var(--ink);background:var(--sand);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.012em;line-height:1.08}
 a{color:inherit;text-decoration:none}
 img,video,svg{display:block;max-width:100%}
@@ -401,6 +402,18 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
     }, { threshold: .14, rootMargin: '0px 0px -8% 0px' });
     els.forEach(function(el){ io.observe(el); });
   } else { els.forEach(function(el){ el.classList.add('in'); }); }
+  /* in-page links: smooth scroll in JS (no CSS scroll-behavior), honouring the sticky header offset and reduced motion */
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if (!id) return;
+    var target = document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: rm ? 'auto' : 'smooth', block: 'start' });
+    if (history.pushState) history.pushState(null, '', '#' + id);
+  });
   /* header state */
   var header = document.querySelector('header');
   function onScroll(){ header.classList.toggle('scrolled', window.scrollY > 40); }

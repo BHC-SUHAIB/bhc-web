@@ -1,0 +1,35 @@
+# Example per-client site block. add-client.sh writes one of these as
+# caddy/sites/<slug>.caddy. Files must end in ".caddy" to be imported;
+# this ".example" file is ignored by Caddy.
+
+www.acme-plumbing.com {
+	redir https://acme-plumbing.com{uri} 308
+}
+
+acme-plumbing.com {
+	encode gzip zstd
+
+	@nextStatic path /_next/static/*
+	header @nextStatic Cache-Control "public, max-age=31536000, immutable"
+
+	@nextImage path /_next/image*
+	header @nextImage >Cache-Control "public, max-age=2592000, immutable"
+
+	reverse_proxy acme-plumbing:3000 {
+		header_up Host {host}
+		header_up X-Real-IP {remote}
+	}
+
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(), microphone=(), camera=()"
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+	}
+
+	log {
+		output stdout
+		format json
+	}
+}

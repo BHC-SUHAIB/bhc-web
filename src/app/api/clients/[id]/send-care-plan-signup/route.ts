@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { carePlanBySlug } from '@/lib/care-plans'
+import { carePlanBySlug, type CarePlanSlug } from '@/lib/care-plans'
 import { sendBrandedCarePlanSignupEmail } from '@/lib/billing-emails'
 import { denyIfCrossOrigin } from '@/lib/api-guards'
 import { recordAudit } from '@/lib/audit'
@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 // POST /api/clients/[id]/send-care-plan-signup
 //
 // Body shapes:
-//   Standard tier:  { tier: 'care' | 'growth' | 'scale' }
+//   Standard tier:  { tier: 'host' | 'care' | 'growth' }
 //   Custom tier:    { tier: 'custom', label: string, monthlyAmountCents: number }
 //
 // Sends the Client a branded BHC email with a one-click link to the
@@ -63,7 +63,7 @@ export async function POST(req: Request, ctx: RouteContext) {
   // custom tiers come from the request body with strict validation.
   let resolvedName: string
   let resolvedAmountCents: number
-  let resolvedSlug: 'care' | 'growth' | 'scale' | 'custom'
+  let resolvedSlug: CarePlanSlug | 'custom'
 
   if (isCustom) {
     const label = (body.label ?? '').trim()

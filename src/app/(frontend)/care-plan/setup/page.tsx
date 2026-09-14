@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container'
-import { CARE_PLANS, formatUSD } from '@/lib/care-plans'
+import { CARE_PLANS, CARE_PLAN_TRIAL_DAYS, type CarePlanSlug, formatUSD } from '@/lib/care-plans'
 import { verifyInvoiceToken } from '@/lib/invoice-token'
 import { CarePlanSetupClient } from './CarePlanSetupClient'
 
@@ -56,13 +56,13 @@ export default async function CarePlanSetupPage({ searchParams }: RouteProps) {
   const isCustomFlow = customLabel !== null && customAmountCents !== null
 
   const initialTier = !isCustomFlow && sp.tier && CARE_PLANS.find((p) => p.slug === sp.tier)
-    ? (sp.tier as 'care' | 'growth' | 'scale')
+    ? (sp.tier as CarePlanSlug)
     : 'care'
 
   const heading = isCustomFlow ? `Activate your ${customLabel}` : 'Activate your Care Plan'
   const intro = isCustomFlow
     ? `Add a card or U.S. bank account to start your ${customLabel} subscription. You can cancel any time from the Stripe customer portal or by emailing us.`
-    : 'Add a card or U.S. bank account to start a recurring Care Plan subscription. You can cancel any time from the Stripe customer portal or by emailing us.'
+    : `Add a card or U.S. bank account to start your hosting plan. The first ${CARE_PLAN_TRIAL_DAYS} days are free, so the first charge runs ${CARE_PLAN_TRIAL_DAYS} days after you activate. You can cancel any time from the Stripe customer portal or by emailing us.`
 
   return (
     <Container size="md" className="py-20 sm:py-28">

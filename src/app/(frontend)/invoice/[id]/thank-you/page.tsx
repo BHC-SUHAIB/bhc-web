@@ -7,7 +7,7 @@ import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { getStripe, isStripeConfigured, isReusablePaymentMethod } from '@/lib/stripe'
 import { verifyInvoiceToken } from '@/lib/invoice-token'
-import { carePlanBySlug, formatUSD } from '@/lib/care-plans'
+import { CARE_PLAN_TRIAL_DAYS, carePlanBySlug, formatUSD } from '@/lib/care-plans'
 import { CarePlanFallbackButton } from './CarePlanFallbackButton'
 
 export const dynamic = 'force-dynamic'
@@ -101,16 +101,17 @@ export default async function InvoiceThankYouPage({ params, searchParams }: Rout
           <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)]">
             One more step
           </p>
-          <h2 className="font-serif font-semibold text-2xl mt-2">Activate your {tier.name} Care Plan</h2>
+          <h2 className="font-serif font-semibold text-2xl mt-2">Activate your {tier.name} plan</h2>
           <p className="mt-3 text-[15px] leading-[1.55] text-[var(--color-fg-muted)] max-w-prose">
             Klarna and Affirm cover the project payment but can&rsquo;t handle recurring charges. Add a card now
-            to start your {tier.name} Care Plan ({formatUSD(tier.monthlyAmountCents)}/mo, first charge in 30 days).
+            to start your {tier.name} plan ({formatUSD(tier.monthlyAmountCents)}/mo, first month free, first charge in{' '}
+            {CARE_PLAN_TRIAL_DAYS} days).
           </p>
           <CarePlanFallbackButton
             carePlanSlug={tier.slug}
             invoiceToken={token}
             payloadInvoiceId={String(invoice.id)}
-            consentText={`I authorize Black Hart Consulting LLC to charge ${formatUSD(tier.monthlyAmountCents)} per month to my saved card for the ${tier.name} Care Plan, until I cancel.`}
+            consentText={`I authorize Black Hart Consulting LLC to charge ${formatUSD(tier.monthlyAmountCents)} per month to my saved card for the ${tier.name} plan, until I cancel. The first ${CARE_PLAN_TRIAL_DAYS} days are free: the first charge runs ${CARE_PLAN_TRIAL_DAYS} days after I activate, and the same amount is charged every month after that.`}
           />
           <p className="mt-3 text-[12px] text-[var(--color-fg-muted)]">
             Skip for now? Reach out anytime at hello@blackhartconsulting.com.
@@ -121,10 +122,11 @@ export default async function InvoiceThankYouPage({ params, searchParams }: Rout
           <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-[var(--color-fg-muted)]">
             Care Plan
           </p>
-          <h2 className="font-serif font-semibold text-2xl mt-2">{tier.name} Care Plan — active</h2>
+          <h2 className="font-serif font-semibold text-2xl mt-2">{tier.name} plan active</h2>
           <p className="mt-3 text-[15px] leading-[1.55] text-[var(--color-fg-muted)]">
-            Your {tier.name} Care Plan is set up. First charge of {formatUSD(tier.monthlyAmountCents)} runs in 30 days
-            on the saved payment method. You can cancel from your Stripe customer portal or by emailing us.
+            Your {tier.name} plan is set up and your first month is free. The first charge of{' '}
+            {formatUSD(tier.monthlyAmountCents)} runs in {CARE_PLAN_TRIAL_DAYS} days on the saved payment method,
+            then every month after that. You can cancel from your Stripe customer portal or by emailing us.
           </p>
         </div>
       ) : null}

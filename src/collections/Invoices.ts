@@ -188,9 +188,9 @@ export const Invoices: CollectionConfig = {
       name: 'suggestedCarePlan',
       type: 'select',
       options: [
-        { label: 'Care — $149/mo', value: 'care' },
-        { label: 'Growth — $495/mo', value: 'growth' },
-        { label: 'Scale — $1,295/mo', value: 'scale' },
+        { label: 'Host · $59/mo', value: 'host' },
+        { label: 'Care · $129/mo', value: 'care' },
+        { label: 'Growth · $395/mo', value: 'growth' },
       ],
       defaultValue: 'care',
       admin: {

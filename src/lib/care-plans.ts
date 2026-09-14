@@ -1,21 +1,37 @@
-// Single source of truth for the Care Plan catalog. The names + prices here
-// are mirrored in three places:
-//   1. The /pricing page rendering (kept in sync via Payload seed data)
-//   2. Stripe Products/Prices (created by scripts/stripe-setup.ts using the
-//      `lookupKey` field as Stripe's idempotent identifier)
-//   3. Webhook + checkout code that resolves a tier slug to its Stripe Price
+// Single source of truth for the Care Plan (hosting tier) catalog. The
+// names + prices here mirror the live Stripe catalog built by
+// scripts/pricing-reset/stripe-catalog.mts (see
+// docs/pricing-reset/stripe-catalog.live.json) and are used in:
+//   1. The /invoice/[id] upsell card and the /care-plan/setup picker
+//   2. Webhook + checkout code that resolves a tier slug to its Stripe Price
+//      via `lookupKey` (prices.list({ lookup_keys }))
+//   3. Admin UI tier pickers (SendCarePlanSignupField, ChangeTierField)
 //
-// To add or rename a tier: update this file, re-run the setup script, redeploy.
-// Existing subscriptions on retired tiers keep working — Stripe never deletes
-// archived prices, it just stops accepting new subscriptions on them.
+// The pricing-reset script owns the Stripe objects for these lookup keys.
+// scripts/stripe-setup.ts only fills in prices that are missing and never
+// renames, archives, or re-prices a key that already exists.
+//
+// Existing subscriptions on retired tiers keep working: Stripe never
+// deletes archived prices, it just stops accepting new subscriptions on
+// them. `legacyLookupKeys` lets the webhook keep labelling those rows.
 
-export type CarePlanSlug = 'care' | 'growth' | 'scale'
+export type CarePlanSlug = 'host' | 'care' | 'growth'
+
+/**
+ * Every hosting tier starts with a free month: the subscription is created
+ * with a 30-day trial, so the first charge runs 30 days after activation
+ * and the same amount recurs every 30 days after that. Matches the public
+ * "first month free" promise on /services and the bundle configurator.
+ */
+export const CARE_PLAN_TRIAL_DAYS = 30
 
 export type CarePlanTier = {
   slug: CarePlanSlug
   name: string
-  /** Stripe Product `lookup_key` — what we query by when minting subscriptions. */
+  /** Stripe Price `lookup_key` (pricing-reset naming, e.g. host_59m). */
   lookupKey: string
+  /** Retired lookup keys that should still resolve to this tier for existing subscriptions. */
+  legacyLookupKeys: readonly string[]
   /** Monthly price in cents (USD). */
   monthlyAmountCents: number
   /** Short marketing description rendered on /invoice/[id] toggle. */
@@ -26,44 +42,41 @@ export type CarePlanTier = {
 
 export const CARE_PLANS: readonly CarePlanTier[] = [
   {
+    slug: 'host',
+    name: 'Host',
+    lookupKey: 'host_59m',
+    legacyLookupKeys: [],
+    monthlyAmountCents: 5_900,
+    blurb: 'Managed hosting, backups, monitoring, and 30 minutes of edits a month.',
+    inclusions: [
+      'Managed hosting',
+      'Backups and monitoring',
+      '30 minutes of edits a month',
+    ],
+  },
+  {
     slug: 'care',
     name: 'Care',
-    lookupKey: 'bhc_care_monthly',
-    monthlyAmountCents: 14_900,
-    blurb: 'Managed hosting + monitoring + backups, plus an hour a month for small edits.',
+    lookupKey: 'care_129m',
+    legacyLookupKeys: ['bhc_care_monthly'],
+    monthlyAmountCents: 12_900,
+    blurb: 'Hosting plus 2 hours of edits and a monthly traffic and calls report.',
     inclusions: [
-      'Managed hosting + monitoring + backups',
-      'SSL, CDN, uptime monitoring',
-      '1 hr/mo for small edits',
-      'Monthly performance + uptime report',
-      'Email support',
+      'Everything in Host',
+      '2 hours of edits a month',
+      'Monthly traffic and calls report',
     ],
   },
   {
     slug: 'growth',
     name: 'Growth',
-    lookupKey: 'bhc_growth_monthly',
-    monthlyAmountCents: 49_500,
-    blurb: 'Care, plus 4 hours a month of dev/SEO work and same-week change turnaround.',
+    lookupKey: 'growth_395m',
+    legacyLookupKeys: ['bhc_growth_monthly'],
+    monthlyAmountCents: 39_500,
+    blurb: 'Hosting plus 6 hours of development or SEO a month.',
     inclusions: [
       'Everything in Care',
-      '4 hrs/mo of dev or SEO work',
-      'Monthly strategy email',
-      'Same-week turnaround on changes',
-      'Slack / SMS channel',
-    ],
-  },
-  {
-    slug: 'scale',
-    name: 'Scale',
-    lookupKey: 'bhc_scale_monthly',
-    monthlyAmountCents: 129_500,
-    blurb: 'Growth, expanded to 10 hours a month with same-day SLA and quarterly architecture reviews.',
-    inclusions: [
-      'Everything in Growth',
-      '10 hrs/mo of dev or SEO work',
-      'Same-day SLA on small changes',
-      'Quarterly architecture review',
+      '6 hours of development or SEO a month',
     ],
   },
 ] as const
@@ -75,7 +88,11 @@ export function carePlanBySlug(slug: string | null | undefined): CarePlanTier | 
 
 export function carePlanByLookupKey(key: string | null | undefined): CarePlanTier | null {
   if (!key) return null
-  return CARE_PLANS.find((p) => p.lookupKey === key) ?? null
+  return (
+    CARE_PLANS.find((p) => p.lookupKey === key) ??
+    CARE_PLANS.find((p) => p.legacyLookupKeys.includes(key)) ??
+    null
+  )
 }
 
 // One-time build tiers — kept here so Payment Links + the /pay routes can

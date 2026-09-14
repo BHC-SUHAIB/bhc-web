@@ -15,8 +15,8 @@ export const dynamic = 'force-dynamic'
 //
 //   1. BNPL fallback: client paid the invoice with Klarna/Affirm, so no
 //      reusable PM was saved. The thank-you page redirects them here.
-//   2. Standalone signup (standard tier): client wants a Care/Growth/Scale
-//      Care Plan; admin sends the branded email link.
+//   2. Standalone signup (standard tier): client wants a Host/Care/Growth
+//      plan; admin sends the branded email link.
 //   3. Standalone signup (custom): hosting-friend / negotiated price.
 //      Admin sends the branded email link with carePlan='custom' plus
 //      customLabel + customAmountCents. The card-capture flow is
@@ -25,7 +25,7 @@ export const dynamic = 'force-dynamic'
 //
 // Body:
 //   {
-//     carePlan: 'care' | 'growth' | 'scale' | 'custom'
+//     carePlan: 'host' | 'care' | 'growth' | 'custom'
 //     customLabel?: string           // required when carePlan === 'custom'
 //     customAmountCents?: number     // required when carePlan === 'custom'
 //     stripeCustomerId?: string      // for standalone (no invoice token)

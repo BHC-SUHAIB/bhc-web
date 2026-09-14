@@ -208,9 +208,9 @@ export const SERVICE_CARE: PdfDoc = {
     {
       type: 'bullets',
       items: [
-        'Care — $149/mo. Hosting + maintenance + 1 hour of edits/mo.',
-        'Growth — $495/mo. Care + 5 hours of dev or SEO work/mo.',
-        'Scale — $1,295/mo. Growth + 10 hrs/mo, monthly strategy call, priority on-call.',
+        'Host, $59/mo. Managed hosting, backups, monitoring, and 30 minutes of edits a month.',
+        'Care, $129/mo. Everything in Host plus 2 hours of edits and a monthly traffic and calls report.',
+        'Growth, $395/mo. Everything in Care plus 6 hours of development or SEO a month.',
       ],
     },
 

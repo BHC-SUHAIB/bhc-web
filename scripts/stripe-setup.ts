@@ -25,20 +25,19 @@
  * branded /invoice/[id] page exactly as Stripe issued it.
  *
  * Run this once after creating your Stripe account, and again any time the
- * Care Plan / Build Tier catalog in src/lib/care-plans.ts changes. The
- * script:
+ * catalog in src/lib/care-plans.ts changes. The script:
  *
- *   - Looks up each Product by `lookup_key` (Stripe's idempotent identifier
- *     for prices — products themselves we look up by metadata.bhc_lookup_key)
- *   - Creates the Product if it doesn't exist
- *   - Creates a new Price if the price doesn't already exist for that
- *     lookup_key, OR re-uses the existing one
- *   - Never deletes or archives anything — old prices stay around so existing
- *     subscriptions keep working
+ *   - Looks up each Price by Stripe `lookup_key` (account-wide, so it finds
+ *     prices created by scripts/pricing-reset/stripe-catalog.mts too)
+ *   - If a Price already exists for that lookup_key, leaves it and its
+ *     Product alone, even if the amount differs (it warns instead). The
+ *     pricing-reset script owns the live hosting tiers (host_59m, care_129m,
+ *     growth_395m); this script must never rename, re-price, or archive them.
+ *   - Otherwise finds the Product by metadata.bhc_lookup_key or metadata.sku,
+ *     creates it if missing, and creates the Price
+ *   - Never deletes or archives anything, so existing subscriptions keep working
  *
- * Safe to re-run. Re-running with the same prices is a no-op. Changing a
- * price (e.g. $149 → $159) creates a NEW Price object; old subs keep their
- * old price unless you manually migrate them.
+ * Safe to re-run. Re-running with the same prices is a no-op.
  */
 /* eslint-disable no-console */
 
@@ -51,15 +50,20 @@ type CatalogItem = {
   productDescription: string
   amountCents: number
   recurring: 'monthly' | null
+  /** metadata.sku used by scripts/pricing-reset/stripe-catalog.mts for the same Product. */
+  productSku?: string
 }
 
 const items: CatalogItem[] = [
+  // Hosting tiers. Product names and SKUs match the pricing-reset catalog so
+  // a fresh account ends up with the same objects either script would build.
   ...CARE_PLANS.map((p) => ({
     lookupKey: p.lookupKey,
-    productName: `Care Plan — ${p.name}`,
+    productName: p.name,
     productDescription: p.blurb,
     amountCents: p.monthlyAmountCents,
     recurring: 'monthly' as const,
+    productSku: p.slug,
   })),
   ...BUILD_TIERS.map((t) => ({
     lookupKey: t.lookupKey,
@@ -86,6 +90,22 @@ const items: CatalogItem[] = [
   })),
 ]
 
+async function findProductId(stripe: Stripe, item: CatalogItem): Promise<string | null> {
+  const byLookupKey = await stripe.products.search({
+    query: `metadata['bhc_lookup_key']:'${item.lookupKey}'`,
+    limit: 1,
+  })
+  if (byLookupKey.data.length > 0) return byLookupKey.data[0].id
+  if (item.productSku) {
+    const bySku = await stripe.products.search({
+      query: `metadata['sku']:'${item.productSku}'`,
+      limit: 1,
+    })
+    if (bySku.data.length > 0) return bySku.data[0].id
+  }
+  return null
+}
+
 async function main(): Promise<void> {
   const key = process.env.STRIPE_SECRET_KEY
   if (!key) {
@@ -101,50 +121,43 @@ async function main(): Promise<void> {
   for (const item of items) {
     console.log(`\n[stripe-setup] ${item.productName} (${item.lookupKey})`)
 
-    // Find or create the Product.
-    const productSearch = await stripe.products.search({
-      query: `metadata['bhc_lookup_key']:'${item.lookupKey}'`,
-      limit: 1,
-    })
-
-    let productId: string
-    if (productSearch.data.length > 0) {
-      productId = productSearch.data[0].id
-      console.log(`  ↳ existing product: ${productId}`)
-      // Sync description in case it was updated
-      await stripe.products.update(productId, {
-        name: item.productName,
-        description: item.productDescription,
-      })
-    } else {
-      const created = await stripe.products.create({
-        name: item.productName,
-        description: item.productDescription,
-        metadata: { bhc_lookup_key: item.lookupKey },
-      })
-      productId = created.id
-      console.log(`  ↳ created product: ${productId}`)
-    }
-
-    // Find or create the Price (by lookup_key).
-    const priceList = await stripe.prices.list({
-      product: productId,
+    // Lookup keys are unique per Stripe account, so check for the Price
+    // first. If it exists (created here or by the pricing-reset script),
+    // leave it and its Product untouched.
+    const existingPrices = await stripe.prices.list({
       lookup_keys: [item.lookupKey],
       active: true,
       limit: 1,
     })
-
-    if (priceList.data.length > 0) {
-      const existing = priceList.data[0]
+    if (existingPrices.data.length > 0) {
+      const existing = existingPrices.data[0]
+      const productId = typeof existing.product === 'string' ? existing.product : existing.product.id
       if (existing.unit_amount === item.amountCents) {
-        console.log(`  ↳ price already correct: ${existing.id} ($${(existing.unit_amount! / 100).toFixed(2)})`)
-        continue
+        console.log(`  price already in catalog: ${existing.id} on ${productId} ($${(existing.unit_amount! / 100).toFixed(2)})`)
+      } else {
+        console.warn(
+          `  WARNING: ${item.lookupKey} exists at $${((existing.unit_amount ?? 0) / 100).toFixed(2)} but src/lib/care-plans.ts says $${(item.amountCents / 100).toFixed(2)}. ` +
+            'Not touching it. Fix the catalog file or re-run scripts/pricing-reset/stripe-catalog.mts.',
+        )
       }
-      // Price changed — archive the old, create a new one. Old subscriptions
-      // continue billing on the old price; only NEW subscriptions use the
-      // new amount.
-      console.log(`  ↳ price changed (was $${(existing.unit_amount! / 100).toFixed(2)}, now $${(item.amountCents / 100).toFixed(2)}); creating new price`)
-      await stripe.prices.update(existing.id, { active: false, lookup_key: `${item.lookupKey}_archived_${Date.now()}` })
+      continue
+    }
+
+    // No Price yet: find or create the Product, then create the Price.
+    let productId = await findProductId(stripe, item)
+    if (productId) {
+      console.log(`  existing product: ${productId}`)
+    } else {
+      const created = await stripe.products.create({
+        name: item.productName,
+        description: item.productDescription,
+        metadata: {
+          bhc_lookup_key: item.lookupKey,
+          ...(item.productSku ? { sku: item.productSku } : {}),
+        },
+      })
+      productId = created.id
+      console.log(`  created product: ${productId}`)
     }
 
     const newPrice = await stripe.prices.create({
@@ -157,7 +170,7 @@ async function main(): Promise<void> {
         : {}),
       metadata: { bhc_lookup_key: item.lookupKey },
     })
-    console.log(`  ↳ created price: ${newPrice.id} ($${(item.amountCents / 100).toFixed(2)}${item.recurring ? '/mo' : ''})`)
+    console.log(`  created price: ${newPrice.id} ($${(item.amountCents / 100).toFixed(2)}${item.recurring ? '/mo' : ''})`)
   }
 
   console.log('\n[stripe-setup] done. Catalog is in sync with src/lib/care-plans.ts.')

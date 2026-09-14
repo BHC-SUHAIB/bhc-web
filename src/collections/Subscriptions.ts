@@ -43,9 +43,10 @@ export const Subscriptions: CollectionConfig = {
       type: 'select',
       required: true,
       options: [
+        { label: 'Host', value: 'host' },
         { label: 'Care', value: 'care' },
         { label: 'Growth', value: 'growth' },
-        { label: 'Scale', value: 'scale' },
+        { label: 'Scale (retired tier)', value: 'scale' },
         { label: 'Hosting (friend rate)', value: 'hosting-friend' },
         { label: 'Custom', value: 'custom' },
       ],

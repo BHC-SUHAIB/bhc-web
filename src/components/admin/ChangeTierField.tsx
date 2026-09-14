@@ -3,16 +3,16 @@
 import React, { useState } from 'react'
 import { useDocumentInfo, useFormFields } from '@payloadcms/ui'
 import type { UIFieldClientProps } from 'payload'
+import { CARE_PLANS, type CarePlanSlug, formatUSD } from '@/lib/care-plans'
 
 // Tier change button on the Subscriptions document. POSTs to
 // /api/subscriptions/[id]/change-tier — Stripe handles proration, the
 // webhook syncs the change back to Payload within seconds.
 
-const TIERS = [
-  { slug: 'care', label: 'Care · $149/mo' },
-  { slug: 'growth', label: 'Growth · $495/mo' },
-  { slug: 'scale', label: 'Scale · $1,295/mo' },
-] as const
+const TIERS: ReadonlyArray<{ slug: CarePlanSlug; label: string }> = CARE_PLANS.map((p) => ({
+  slug: p.slug,
+  label: `${p.name} · ${formatUSD(p.monthlyAmountCents)}/mo`,
+}))
 
 const PRORATION_OPTIONS = [
   { value: 'create_prorations', label: 'Create prorations (default — apply diff to next invoice)' },
@@ -30,7 +30,7 @@ export default function ChangeTierField(props: UIFieldClientProps) {
   const { id: subId } = useDocumentInfo()
   const currentTier = useFormFields(([fields]) => fields?.tier?.value as string | undefined)
   const subStatus = useFormFields(([fields]) => fields?.status?.value as string | undefined)
-  const [tier, setTier] = useState<(typeof TIERS)[number]['slug']>('growth')
+  const [tier, setTier] = useState<CarePlanSlug>('growth')
   const [proration, setProration] = useState<(typeof PRORATION_OPTIONS)[number]['value']>('create_prorations')
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
 

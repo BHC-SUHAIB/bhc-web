@@ -57,7 +57,6 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
 
     const missing: MissingField[] = []
     if (!businessName) missing.push({ key: 'businessName', label: 'your business name' })
-    if (!listingUrl) missing.push({ key: 'listingUrl', label: 'your Google Business Profile link or current website' })
     if (!email) missing.push({ key: 'email', label: 'your email' })
     if (missing.length) {
       setState('error')
@@ -71,9 +70,16 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
       name: businessName,
       company: businessName,
       email,
-      listingUrl,
+      listingUrl: listingUrl || undefined,
       projectType: 'website',
-      message: [`Demo site request for ${businessName}.`, `Listing: ${listingUrl}`, oneLiner]
+      // The listing link is optional (2026-09-13: requiring it is the likeliest
+      // reason a paid visitor with no website yet gave up). A blank one is
+      // called out in the message so the follow-up email asks for it.
+      message: [
+        `Demo site request for ${businessName}.`,
+        listingUrl ? `Listing: ${listingUrl}` : 'Listing: none provided (no website or GBP link yet; ask in the reply).',
+        oneLiner,
+      ]
         .filter(Boolean)
         .join('\n'),
       // Bot trap. The hidden input below has a non-semantic name so browser
@@ -158,8 +164,8 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
 
             <div className="frow">
               <div>
-                <label htmlFor="drf-listing" className="flabel">Google Business Profile link or current website *</label>
-                <input id="drf-listing" name="listingUrl" type="url" required inputMode="url" className="field" placeholder="https://..." />
+                <label htmlFor="drf-listing" className="flabel">Google Business Profile link or current website (optional, but it makes the demo better)</label>
+                <input id="drf-listing" name="listingUrl" type="url" inputMode="url" className="field" placeholder="https://... or leave blank if you have neither yet" />
               </div>
             </div>
 

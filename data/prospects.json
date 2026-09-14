@@ -61,7 +61,10 @@
     "password": "reach2026",
     "label": "Grants Within Reach",
     "tiers": [
-      "home"
+      "home",
+      "option-a",
+      "option-b",
+      "option-c"
     ],
     "defaultTier": "home",
     "created": "2026-09-14"

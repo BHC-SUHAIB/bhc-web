@@ -1,0 +1,3 @@
+# root crontab on bhc-clients (system TZ = America/Chicago). Install with:
+#   sudo crontab -l 2>/dev/null | grep -v db-backups > /tmp/cron; cat crontab.txt | grep -v '^#' >> /tmp/cron; sudo crontab /tmp/cron
+30 3 * * * /root/db-backups/backup.sh >/dev/null 2>&1

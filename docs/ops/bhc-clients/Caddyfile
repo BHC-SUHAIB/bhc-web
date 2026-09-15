@@ -1,0 +1,21 @@
+# bhc-clients Caddy config.
+#
+# Per-client site blocks live in caddy/sites/<slug>.caddy (one file per client,
+# written by scripts/add-client.sh) and are pulled in by the `import` below.
+# Caddy obtains + renews Let's Encrypt certificates automatically for every
+# hostname it sees, as soon as that hostname's DNS points at this droplet
+# (Cloudflare "DNS only" / grey cloud, exactly like blackhartconsulting.com).
+
+{
+	email hello@blackhartconsulting.com
+	# Per-client access logs go to stdout (docker compose logs caddy).
+}
+
+# ---- Health check: proves the box, Caddy, and TLS issuance work ----
+clients.getblackhart.com {
+	respond "bhc-clients ok" 200
+	header X-Robots-Tag "noindex, nofollow"
+}
+
+# ---- Client sites ----
+import /etc/caddy/sites/*.caddy

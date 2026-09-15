@@ -1,0 +1,95 @@
+# bhc-clients: shared client-hosting stack for Black Hart Consulting.
+#
+#   one Caddy      -> routes by hostname, auto Let's Encrypt (Caddyfile + caddy/sites/*.caddy)
+#   one Postgres   -> one database + one role per client (never exposed publicly)
+#   N client apps  -> one Next.js + Payload container per client site
+#
+# Lives at /opt/bhc-clients on the droplet. `volumes:` is declared ABOVE
+# `services:` on purpose: scripts/add-client.sh appends new client services
+# to the END of this file, so nothing may come after the services block.
+#
+# Secrets: POSTGRES_PASSWORD lives in /opt/bhc-clients/.env (never committed).
+# Per-client secrets live in clients/<slug>/.env (written by add-client.sh).
+
+name: bhc-clients
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: bhc-clients-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # One file per client site, imported by the Caddyfile. add-client.sh
+      # writes caddy/sites/<slug>.caddy and reloads Caddy.
+      - ./caddy/sites:/etc/caddy/sites:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    healthcheck:
+      # Caddy's admin API binds 127.0.0.1:2019 inside the container (not ::1, so no "localhost").
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:2019/config/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: bhc-clients-postgres
+    restart: unless-stopped
+    # No `ports:` block on purpose: only reachable on the compose network.
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-bhc_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: postgres
+      TZ: America/Chicago
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bhc_admin} -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # EXAMPLE CLIENT SITE (commented out). scripts/add-client.sh generates a block
+  # exactly like this and appends it below. Do not uncomment this one.
+  #
+  #   service name   = client slug            (acme-plumbing)
+  #   container name = bhc-client-<slug>      (bhc-client-acme-plumbing)
+  #   database/role  = slug with underscores  (acme_plumbing)  <- see clients/<slug>/.env
+  #   env file       = clients/<slug>/.env    (DATABASE_URI, PAYLOAD_SECRET, site URL...)
+  #   code           = clients/<slug>/        (git clone of the client's repo; has a Dockerfile)
+  #   media          = clients/<slug>/media   (bind mount, backed up nightly)
+  #   Caddy block    = caddy/sites/<slug>.caddy (hostname -> reverse_proxy <slug>:3000)
+  #
+  # acme-plumbing:
+  #   build:
+  #     context: ./clients/acme-plumbing
+  #     dockerfile: Dockerfile
+  #   container_name: bhc-client-acme-plumbing
+  #   restart: unless-stopped
+  #   env_file: ./clients/acme-plumbing/.env
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   expose:
+  #     - "3000"
+  #   volumes:
+  #     - ./clients/acme-plumbing/media:/app/media
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 768M
+  # ---------------------------------------------------------------------------
+
+# ---- client services are appended below this line by scripts/add-client.sh ----

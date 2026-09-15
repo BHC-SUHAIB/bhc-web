@@ -82,9 +82,20 @@ export function InvoiceClient(props: InvoiceClientProps) {
           consentTimestamp: addCarePlan ? new Date().toISOString() : undefined,
         }),
       })
-      const json = (await res.json()) as { url?: string; error?: string }
+      // The server normally answers JSON, but a proxy or runtime error can
+      // return HTML; parse defensively so the client sees a sentence, not a
+      // browser parse error ("The string did not match the expected pattern").
+      let json: { url?: string; error?: string } = {}
+      try {
+        json = (await res.json()) as { url?: string; error?: string }
+      } catch {
+        json = {}
+      }
       if (!res.ok || !json.url) {
-        throw new Error(json.error ?? `Checkout failed (${res.status}).`)
+        throw new Error(
+          json.error ??
+            `We could not start the secure checkout (error ${res.status}). Please try again, or reply to the invoice email and we will send a direct payment link.`,
+        )
       }
       window.location.href = json.url
     } catch (err) {

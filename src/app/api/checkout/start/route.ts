@@ -219,7 +219,9 @@ export async function POST(req: Request) {
   // Requires Stripe Tax to be enabled in the dashboard first.
   const stripeTaxEnabled = process.env.STRIPE_TAX_ENABLED === 'true'
 
-  const session = await stripe.checkout.sessions.create({
+  let session: Stripe.Checkout.Session
+  try {
+    session = await stripe.checkout.sessions.create({
     mode: 'payment',
     customer: stripeCustomerId,
     line_items: lineItems,
@@ -271,6 +273,16 @@ export async function POST(req: Request) {
       care_plan_tier: carePlan?.slug ?? '',
     },
   })
-
+  } catch (err) {
+    // Stripe rejects the whole session when any listed payment method is not
+    // active on the account (or on a bad param). Log it and answer with JSON so
+    // the invoice page can show a real message instead of a parse error.
+    const message = err instanceof Error ? err.message : String(err)
+    payload.logger.error({ err, invoiceId: tokenSubject }, '[checkout] Stripe refused to create the Checkout session')
+    return NextResponse.json(
+      { error: 'We could not start the secure checkout. Please try again in a moment, or reply to the invoice email and we will send a direct payment link.' , detail: message.slice(0, 300) },
+      { status: 502 },
+    )
+  }
   return NextResponse.json({ url: session.url, sessionId: session.id })
 }

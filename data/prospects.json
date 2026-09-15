@@ -76,10 +76,7 @@
     "tiers": [
       "home",
       "services",
-      "services-tiles",
-      "services-story",
       "speaking",
-      "speaking-lab",
       "resources"
     ],
     "defaultTier": "home",

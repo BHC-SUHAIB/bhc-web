@@ -161,7 +161,8 @@ cd /opt/bhc-clients
 bash scripts/add-client.sh acme-plumbing acme-plumbing.com
 ```
 
-The script (idempotent) creates role + database `acme_plumbing`, writes
+The script (idempotent) creates role + database `acme_plumbing` (and revokes CONNECT on it from
+PUBLIC, so only that role can open it), writes
 `clients/acme-plumbing/.env` (DATABASE_URI with a generated password, PAYLOAD_SECRET, site
 URL, a seed admin password, empty Resend keys), appends the `acme-plumbing` service to
 `docker-compose.yml`, writes `caddy/sites/acme-plumbing.caddy`, reloads Caddy, and prints:

@@ -7,6 +7,7 @@
 #
 # What it does (idempotent; re-running is safe):
 #   1. creates Postgres role + database named after the slug (hyphens -> underscores)
+#      and revokes CONNECT on that database from PUBLIC (only its role can open it)
 #   2. writes clients/<slug>/.env  (DATABASE_URI, PAYLOAD_SECRET, NEXT_PUBLIC_SITE_URL)
 #   3. appends the <slug> service to docker-compose.yml
 #   4. writes caddy/sites/<slug>.caddy and reloads Caddy
@@ -73,6 +74,12 @@ else
   log "Creating database $DBNAME"
   psql_admin -c "CREATE DATABASE \"$DBNAME\" OWNER \"$DBNAME\""
 fi
+# Postgres grants CONNECT on every new database to PUBLIC by default, so any
+# client's role could open a session against another client's database (it
+# would see no tables, but the door should not be open at all). Revoke it;
+# the owner role keeps CONNECT implicitly. Idempotent.
+log "Restricting CONNECT on $DBNAME to its owner"
+psql_admin -c "REVOKE CONNECT ON DATABASE \"$DBNAME\" FROM PUBLIC"
 
 # 2. per-client env ----------------------------------------------------------
 if [[ ! -f "$ENV_FILE" ]]; then

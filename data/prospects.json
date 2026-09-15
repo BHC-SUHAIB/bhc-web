@@ -76,6 +76,9 @@
     "tiers": [
       "home",
       "services",
+      "services-tabs",
+      "services-tiles",
+      "services-story",
       "speaking",
       "resources"
     ],

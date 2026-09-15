@@ -468,6 +468,47 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
 .frame-svc .bgwrap{position:absolute;inset:0;overflow:hidden;animation:kb 32s ease-in-out infinite alternate}
 .frame-svc::after{content:"";position:absolute;inset:0;background:linear-gradient(200deg,rgba(41,75,69,0) 55%,rgba(41,75,69,.45) 100%);pointer-events:none}
 .frame-svc .sun{position:absolute;left:26px;bottom:26px;width:56px;height:56px;border-radius:50%;background:var(--gold);z-index:2;box-shadow:0 0 0 0 rgba(227,180,88,.5);animation:pulse 3.4s ease-out infinite}
+
+/* about */
+.about-arch img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+.story-cols{display:grid;grid-template-columns:.9fr 1.1fr;gap:72px;align-items:start}
+.story-cols .stick{position:sticky;top:110px}
+.story-cols h2{font-size:clamp(28px,3.2vw,40px);line-height:1.15;margin-top:14px;max-width:18ch}
+.prose p{font-size:17px;line-height:1.75;color:#41605a;margin-bottom:18px;max-width:60ch}
+.creds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.cred{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px 22px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.cred:hover{transform:translateY(-4px);box-shadow:0 30px 50px -30px rgba(41,75,69,.35)}
+.cred b{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1;color:var(--ink)}
+.cred span{font-family:var(--sans);font-size:12.5px;line-height:1.45;color:#41605a;margin-top:14px}
+.focus{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
+.focus>div{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px 26px}
+.focus p{font-size:15.5px;color:#41605a}
+.how .curve{margin-bottom:60px}
+/* work with us */
+.contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:32px;align-items:start}
+.contact-side{display:grid;gap:16px;position:sticky;top:104px}
+.side-card{background:var(--sand);border-radius:20px;padding:24px 26px}
+.side-card.quiet{background:transparent;border:1px dashed rgba(41,75,69,.3)}
+.side-card p{font-size:16px;line-height:1.6}
+.side-card a{border-bottom:1px solid rgba(41,75,69,.3)}
+.muted{color:#41605a}
+.steps-mini{list-style:none;counter-reset:s;display:grid;gap:12px}
+.steps-mini li{counter-increment:s;position:relative;padding-left:38px;font-size:15.5px;line-height:1.5}
+.steps-mini li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:2px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--sage-deep)}
+.form-card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:34px 34px 30px;box-shadow:0 40px 70px -46px rgba(41,75,69,.35)}
+.inq{display:grid;gap:16px}
+.inq label{display:grid;gap:7px;font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--ink)}
+.inq .opt{font-weight:500;color:var(--sage-deep);text-transform:uppercase;font-size:10px;letter-spacing:.16em;margin-left:6px}
+.inq input,.inq select,.inq textarea{font:400 16px/1.4 var(--serif);color:var(--ink);background:var(--sand);border:1px solid transparent;border-radius:12px;padding:13px 14px;width:100%;transition:border-color .25s,background .25s,box-shadow .25s}
+.inq input:focus,.inq select:focus,.inq textarea:focus{outline:none;background:#fff;border-color:var(--sage);box-shadow:0 0 0 4px rgba(110,156,137,.15)}
+.inq textarea{resize:vertical}
+.inq .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.inq button{justify-self:start;margin-top:6px;border:0;cursor:pointer}
+.inq .fine{font-family:var(--sans);font-size:12px;color:#6B6B6B;line-height:1.5}
+.success{text-align:center;padding:40px 10px}
+.success .sun{width:56px;height:56px;border-radius:50%;background:var(--gold);margin:0 auto 20px;animation:pulse 3.4s ease-out infinite}
+.success h3{font-size:32px;margin-bottom:10px}
+.success p{color:#41605a;max-width:44ch;margin:0 auto}
 /* imagery */
 .ph-split .archv{opacity:1;transform:none;animation:none;width:100%;max-width:460px;justify-self:end}
 .archv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -493,6 +534,10 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   .svtiles{grid-template-columns:1fr}.tile{aspect-ratio:4/3}
   .story-row,.story-row.flip{grid-template-columns:1fr;gap:22px}.story-row.flip .story-img{order:0}.story-grid{grid-template-columns:1fr}
   .layouts{font-size:12px}
+  .story-cols{grid-template-columns:1fr;gap:28px}.story-cols .stick{position:static}
+  .creds-grid{grid-template-columns:1fr 1fr}.focus{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}.contact-side{position:static;order:2}
+  .form-card{padding:24px 20px}.inq .row2{grid-template-columns:1fr}
   .trow{grid-template-columns:44px 1fr;gap:8px 14px}.trow p{grid-column:2}.trow-ar{display:none}
   .ev-cards,.feat{grid-template-columns:1fr}
   .rail-track{grid-auto-columns:82%}
@@ -510,7 +555,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
 </head>
 <body>
 
-<div class="sw"><i></i>Rev 1<a href="/p/grants-within-reach-dev/home">Home</a><a href="/p/grants-within-reach-dev/services">Services</a><a href="/p/grants-within-reach-dev/speaking">Speaking</a><a class="on" href="/p/grants-within-reach-dev/resources">Resources</a></div>
+<div class="sw"><i></i>Rev 1<a href="/p/grants-within-reach-dev/home">Home</a><a href="/p/grants-within-reach-dev/services">Services</a><a href="/p/grants-within-reach-dev/speaking">Speaking</a><a href="/p/grants-within-reach-dev/about">About</a><a class="on" href="/p/grants-within-reach-dev/resources">Resources</a><a href="/p/grants-within-reach-dev/work-with-us">Contact</a></div>
 
 <header>
   <div class="wrap nav">
@@ -523,9 +568,9 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         <li><a href="/p/grants-within-reach-dev/home">Home</a></li>
         <li><a href="/p/grants-within-reach-dev/speaking">Speaking &amp; Training</a></li>
         <li><a href="/p/grants-within-reach-dev/services">Services</a></li>
-        <li><a href="/p/grants-within-reach-dev/home#about">About</a></li>
+        <li><a href="/p/grants-within-reach-dev/about">About</a></li>
         <li><a class="active" href="/p/grants-within-reach-dev/resources">Resources</a></li>
-        <li><a href="/p/grants-within-reach-dev/home#contact" class="pill gold">Let's Talk</a></li>
+        <li><a href="/p/grants-within-reach-dev/work-with-us" class="pill gold">Let's Talk</a></li>
       </ul>
       <button class="menu" type="button" aria-label="Open menu">Menu</button>
     </nav>
@@ -533,7 +578,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
 </header>
 <div class="mnav" id="mnav">
   <button class="close" type="button">Close</button>
-  <a href="/p/grants-within-reach-dev/home" style="--i:0">Home</a><a href="/p/grants-within-reach-dev/speaking" style="--i:1">Speaking &amp; Training</a><a href="/p/grants-within-reach-dev/services" style="--i:2">Services</a><a href="/p/grants-within-reach-dev/home#about" style="--i:3">About</a><a href="/p/grants-within-reach-dev/resources" style="--i:4">Resources</a><a href="/p/grants-within-reach-dev/home#contact" style="--i:5">Work With Us</a>
+  <a href="/p/grants-within-reach-dev/home" style="--i:0">Home</a><a href="/p/grants-within-reach-dev/speaking" style="--i:1">Speaking &amp; Training</a><a href="/p/grants-within-reach-dev/services" style="--i:2">Services</a><a href="/p/grants-within-reach-dev/about" style="--i:3">About</a><a href="/p/grants-within-reach-dev/resources" style="--i:4">Resources</a><a href="/p/grants-within-reach-dev/work-with-us" style="--i:5">Work With Us</a>
 </div>
 <div class="wrap"><div class="layouts genkey"><i></i><span><b>Pink highlight</b> = wording we wrote to connect the sections. Everything without pink is from your outline. Tell us what to change.</span></div></div>
 
@@ -568,7 +613,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
     <div class="eyebrow">Let's make more possible</div>
     <h2><mark class="gen">Have a question the library cannot answer yet?</mark></h2>
     <p><mark class="gen">Tell us about your organization and the goal you are working toward.</mark> Someone will reach out shortly to talk through how Grants Within Reach can support your mission.</p>
-    <a class="pill white" href="/p/grants-within-reach-dev/home#contact">Let's Talk <span class="ar">→</span></a>
+    <a class="pill white" href="/p/grants-within-reach-dev/work-with-us">Let's Talk <span class="ar">→</span></a>
   </div>
 </section>
 
@@ -586,7 +631,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         <p><a href="tel:+10000000000"><mark class="gen">(000) 000-0000</mark></a><br><a href="mailto:deja@grantswithinreach.com">deja@grantswithinreach.com</a></p>
       </div>
       <nav><ul>
-        <li><a class="tlink" href="/p/grants-within-reach-dev/home">Home</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/speaking">Speaking &amp; Training</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/services">Services</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/home#about">About</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/resources">Resources</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/home#contact">Work With Us</a></li>
+        <li><a class="tlink" href="/p/grants-within-reach-dev/home">Home</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/speaking">Speaking &amp; Training</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/services">Services</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/about">About</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/resources">Resources</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/work-with-us">Work With Us</a></li>
       </ul></nav>
     </div>
     <div class="bottom">

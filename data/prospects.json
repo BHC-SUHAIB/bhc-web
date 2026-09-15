@@ -74,7 +74,10 @@
     "password": "reachdev2026",
     "label": "Grants Within Reach (dev)",
     "tiers": [
-      "home"
+      "home",
+      "services",
+      "speaking",
+      "resources"
     ],
     "defaultTier": "home",
     "created": "2026-09-14"

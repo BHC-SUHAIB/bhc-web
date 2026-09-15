@@ -77,10 +77,7 @@
       "home",
       "services",
       "speaking",
-      "resources",
-      "services-hers",
-      "speaking-hers",
-      "resources-hers"
+      "resources"
     ],
     "defaultTier": "home",
     "created": "2026-09-14"

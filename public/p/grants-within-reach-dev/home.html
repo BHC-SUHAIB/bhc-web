@@ -191,6 +191,8 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
 .sw a{padding:8px 10px;border-radius:999px;opacity:.6}.sw a.all{margin-left:8px;opacity:.85;border:1px solid currentColor}
 .sw a:hover{opacity:1;background:rgba(255,255,255,.1)}
 .sw a.on{opacity:1;background:var(--gold);color:var(--ink)}
+.sw{white-space:nowrap;max-width:calc(100vw - 36px);overflow:hidden}
+@media (max-width:600px){.sw{font-size:9.5px;padding:5px 6px 5px 10px;gap:2px}.sw a{padding:7px 7px}.sw a.all{margin-left:4px}}
 
 @media (max-width:960px){
   nav ul{display:none}.menu{display:inline-flex}

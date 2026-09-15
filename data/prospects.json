@@ -62,6 +62,9 @@
     "label": "Grants Within Reach",
     "tiers": [
       "home",
+      "services",
+      "speaking",
+      "resources",
       "option-a",
       "option-b",
       "option-c",

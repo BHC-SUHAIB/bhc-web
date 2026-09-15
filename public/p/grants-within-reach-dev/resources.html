@@ -191,6 +191,11 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
 .sw a{padding:8px 10px;border-radius:999px;opacity:.6}.sw a.all{margin-left:8px;opacity:.85;border:1px solid currentColor}
 .sw a:hover{opacity:1;background:rgba(255,255,255,.1)}
 .sw a.on{opacity:1;background:var(--gold);color:var(--ink)}
+mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-radius:4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.band.ink mark.gen,.close mark.gen,.speak mark.gen,.pband mark.gen,.card.np mark.gen,.tile mark.gen,.feat-main mark.gen,footer mark.gen{background:rgba(242,168,190,.6);color:#fff}
+.genkey{margin:18px 0 -6px;display:flex;align-items:center;gap:10px;font-size:12.5px}
+.genkey i{flex:none;width:18px;height:12px;border-radius:3px;background:rgba(242,168,190,.6)}
+.genkey b{color:var(--ink)}
 .sw{white-space:nowrap;max-width:calc(100vw - 36px);overflow:hidden}
 @media (max-width:600px){.sw{font-size:9.5px;padding:5px 6px 5px 10px;gap:2px}.sw a{padding:7px 7px}.sw a.all{margin-left:4px}}
 
@@ -519,6 +524,7 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
   <button class="close" type="button">Close</button>
   <a href="/p/grants-within-reach-dev/home" style="--i:0">Home</a><a href="/p/grants-within-reach-dev/speaking" style="--i:1">Speaking &amp; Training</a><a href="/p/grants-within-reach-dev/services" style="--i:2">Services</a><a href="/p/grants-within-reach-dev/home#about" style="--i:3">About</a><a href="/p/grants-within-reach-dev/resources" style="--i:4">Resources</a><a href="/p/grants-within-reach-dev/home#contact" style="--i:5">Work With Us</a>
 </div>
+<div class="wrap"><div class="layouts genkey"><i></i><span><b>Pink highlight</b> = wording we wrote to connect the sections. Everything without pink is from your outline. Tell us what to change.</span></div></div>
 
 
 <section class="ph ph-split">
@@ -527,7 +533,7 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
     <div>
       <div class="eyebrow up">Resources</div>
       <h1 class="up">Systems and strategy to make grant work feel less like grunt work.</h1>
-      <p class="lede up">Checklists, guides, and funding round-ups from the same playbook we use with clients. The library is being assembled now; the first pieces land soon.</p>
+      <p class="lede up"><mark class="gen">Checklists, guides, and funding round-ups from the same playbook we use with clients. The library is being assembled now; the first pieces land soon.</mark></p>
     </div>
     <div class="archv rv"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=70" alt=""><div class="sun"></div></div>
   </div>
@@ -536,9 +542,9 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
 <section class="band white">
   <div class="wrap">
     <div class="res">
-      <div class="rc rv"><span class="soon">Coming soon</span><div class="ic"><i></i></div><h3>Grant readiness checklist</h3><p>The systems, documents, and decisions funders expect to see before you apply. Work through it before the next deadline, not during it.</p><span class="tlink">Download →</span></div>
-      <div class="rc rv" style="--d:.1s"><span class="soon">Coming soon</span><div class="ic"><i></i></div><h3>Active funding opportunities</h3><p>A curated list of open grants for health and human services and K-12 education organizations, refreshed as opportunities open and close.</p><span class="tlink">View the list →</span></div>
-      <div class="rc rv" style="--d:.2s"><span class="soon">Coming soon</span><div class="ic"><i></i></div><h3>Guides and templates</h3><p>Short, practical guides on funder research, proposal structure, budgets, and post-award management.</p><span class="tlink">Browse guides →</span></div>
+      <div class="rc rv"><span class="soon">Coming soon</span><div class="ic"><i></i></div><h3><mark class="gen">Grant readiness checklist</mark></h3><p><mark class="gen">The systems, documents, and decisions funders expect to see before you apply. Work through it before the next deadline, not during it.</mark></p><span class="tlink">Download →</span></div>
+      <div class="rc rv" style="--d:.1s"><span class="soon">Coming soon</span><div class="ic"><i></i></div><h3><mark class="gen">Active funding opportunities</mark></h3><p><mark class="gen">A curated list of open grants for health and human services and K-12 education organizations, refreshed as opportunities open and close.</mark></p><span class="tlink">View the list →</span></div>
+      <div class="rc rv" style="--d:.2s"><span class="soon">Coming soon</span><div class="ic"><i></i></div><h3><mark class="gen">Guides and templates</mark></h3><p><mark class="gen">Short, practical guides on funder research, proposal structure, budgets, and post-award management.</mark></p><span class="tlink">Browse guides →</span></div>
     </div>
     <div class="note rv"><b>Note for review:</b> this page ships as a shell. The three cards are placeholders for the material you decide to publish; each becomes a real download or list in the admin when you are ready, with no design work needed.</div>
   </div>
@@ -549,8 +555,8 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
   <div class="wrap rv">
     <div class="sun"></div>
     <div class="eyebrow">Let's make more possible</div>
-    <h2>Have a question the library cannot answer yet?</h2>
-    <p>Tell us about your organization and the goal you are working toward. Someone will reach out shortly to talk through how Grants Within Reach can support your mission.</p>
+    <h2><mark class="gen">Have a question the library cannot answer yet?</mark></h2>
+    <p><mark class="gen">Tell us about your organization and the goal you are working toward.</mark> Someone will reach out shortly to talk through how Grants Within Reach can support your mission.</p>
     <a class="pill white" href="/p/grants-within-reach-dev/home#contact">Let's Talk <span class="ar">→</span></a>
   </div>
 </section>
@@ -565,8 +571,8 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
       </div>
       <div class="contact">
         <div class="fl">Contact</div>
-        <p>Grants Within Reach<br>Humble, Texas 77338</p>
-        <p><a href="tel:+10000000000">(000) 000-0000</a><br><a href="mailto:deja@grantswithinreach.com">deja@grantswithinreach.com</a></p>
+        <p>Grants Within Reach<br><mark class="gen">Humble, Texas 77338</mark></p>
+        <p><a href="tel:+10000000000"><mark class="gen">(000) 000-0000</mark></a><br><a href="mailto:deja@grantswithinreach.com">deja@grantswithinreach.com</a></p>
       </div>
       <nav><ul>
         <li><a class="tlink" href="/p/grants-within-reach-dev/home">Home</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/speaking">Speaking &amp; Training</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/services">Services</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/home#about">About</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/resources">Resources</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/home#contact">Work With Us</a></li>

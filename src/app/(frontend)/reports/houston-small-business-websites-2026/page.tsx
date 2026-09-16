@@ -249,7 +249,7 @@ export default function HoustonWebsiteReport2026() {
               <p>We will build you a free demo of what your site could be, or run the same checks on the one you have. No meeting required.</p>
               <div className="cta-row">
                 <Link href="/free-demo-site" className="btn btn-brass btn-lg">See your site first</Link>
-                <Link href="/#audit" className="btn btn-onphoto btn-lg">Run the free audit</Link>
+                <Link href="/houston/website-audit" className="btn btn-onphoto btn-lg">Run the free audit</Link>
               </div>
             </div>
           </Container>

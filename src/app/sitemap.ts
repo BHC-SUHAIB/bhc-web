@@ -116,6 +116,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     })
 
+    // Free audit tool pages (static routes wrapping the SiteAuditTool block).
+    for (const path of ['/free-website-audit', '/houston/website-audit']) {
+      entries.push({
+        url: `${SITE_URL}${path}`,
+        lastModified: new Date('2026-09-16'),
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      })
+    }
+
     // Hard-coded legal / compliance routes (not Payload-backed).
     entries.push({
       url: `${SITE_URL}/sms`,

@@ -74,6 +74,19 @@ export default function HoustonHubPage() {
         </section>
       ))}
 
+      <section className="py-10 border-t border-[var(--color-border)]">
+        <Container size="xl">
+          <h2 className="font-serif font-semibold text-[22px] mb-2">How does your site compare?</h2>
+          <p className="text-[15px] leading-[1.6] text-[var(--color-fg-muted)] max-w-2xl">
+            We scored the websites of 1,178 Houston service businesses in September 2026. The median mobile
+            speed score is 60 and a third of businesses have no site at all.{' '}
+            <Link href="/houston/website-audit" className="text-[var(--color-link)] underline underline-offset-4">Run the free audit</Link>{' '}
+            to see where yours lands, or read{' '}
+            <Link href="/reports/houston-small-business-websites-2026" className="text-[var(--color-link)] underline underline-offset-4">the full report</Link>.
+          </p>
+        </Container>
+      </section>
+
       <section className="py-12 sm:py-16">
         <Container size="xl">
           <div className="cta-band emph">

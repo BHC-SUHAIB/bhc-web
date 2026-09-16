@@ -186,6 +186,22 @@ footer nav ul{display:grid;gap:10px;color:#fff}
 footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:26px;font-size:12.5px;font-family:var(--sans)}
 
 /* switcher */
+/* review strips (2026-09-16): clip / photo / finish pickers that swap the section above in place */
+.vpick{gap:10px;align-items:flex-start}
+.vpick b{width:100%}
+.vpick button{display:flex;flex-direction:column;gap:6px;width:136px;padding:5px;border:2px solid transparent;border-radius:12px;background:none;cursor:pointer;font:inherit;color:var(--ink);text-align:left;transition:background .25s}
+.vpick button img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;display:block;background:var(--sand)}
+.vpick button span{font:600 10.5px/1.3 var(--sans);letter-spacing:.04em;padding:0 2px}
+.vpick button:hover{background:var(--sand)}
+.vpick button.on{border-color:var(--ink)}
+.fpick button{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);cursor:pointer}
+.fpick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.archv.soft .bgv{filter:blur(2px) saturate(.7)}
+.archv.soft .bgwrap{opacity:.72}
+.archv.soft::before{content:"";position:absolute;inset:0;background:rgba(246,241,234,.24);z-index:1;pointer-events:none}
+footer .social{display:flex;gap:16px;margin-top:12px}
+footer .social a{display:inline-flex;align-items:center;gap:7px;border-bottom:0;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.04em}
+footer .social svg{width:16px;height:16px;fill:currentColor}
 .sw{position:fixed;left:18px;bottom:18px;z-index:70;display:flex;align-items:center;gap:6px;background:rgba(30,58,53,.92);color:#fff;border-radius:999px;padding:6px 8px 6px 14px;font:600 10.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;box-shadow:0 10px 30px -12px rgba(0,0,0,.5);backdrop-filter:blur(8px)}
 .sw i{width:7px;height:7px;border-radius:50%;background:var(--gold);margin-right:6px}
 .sw a{padding:8px 10px;border-radius:999px;opacity:.6}.sw a.all{margin-left:8px;opacity:.85;border:1px solid currentColor}
@@ -555,7 +571,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
 </head>
 <body>
 
-<div class="sw"><i></i>Rev 1<a href="/p/grants-within-reach-dev/home">Home</a><a href="/p/grants-within-reach-dev/services">Services</a><a href="/p/grants-within-reach-dev/speaking">Speaking</a><a href="/p/grants-within-reach-dev/about">About</a><a class="on" href="/p/grants-within-reach-dev/resources">Resources</a><a href="/p/grants-within-reach-dev/work-with-us">Contact</a></div>
+<div class="sw"><i></i>Rev 2<a href="/p/grants-within-reach-dev/home">Home</a><a href="/p/grants-within-reach-dev/services">Services</a><a href="/p/grants-within-reach-dev/speaking">Speaking</a><a href="/p/grants-within-reach-dev/about">About</a><a class="on" href="/p/grants-within-reach-dev/resources">Resources</a><a href="/p/grants-within-reach-dev/work-with-us">Contact</a></div>
 
 <header>
   <div class="wrap nav">
@@ -602,7 +618,17 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
       <div class="rc rv" style="--d:.1s"><span class="soon">Coming soon</span><div class="ic"><i></i></div><h3><mark class="gen">Active funding opportunities</mark></h3><p><mark class="gen">A curated list of open grants for health and human services and K-12 education organizations, refreshed as opportunities open and close.</mark></p><span class="tlink">View the list →</span></div>
       <div class="rc rv" style="--d:.2s"><span class="soon">Coming soon</span><div class="ic"><i></i></div><h3><mark class="gen">Guides and templates</mark></h3><p><mark class="gen">Short, practical guides on funder research, proposal structure, budgets, and post-award management.</mark></p><span class="tlink">Browse guides →</span></div>
     </div>
-    <div class="note rv"><b>Note for review:</b> this page ships as a shell. The three cards are placeholders for the material you decide to publish; each becomes a real download or list in the admin when you are ready, with no design work needed.</div>
+    <div class="band-head rv" style="margin-top:72px;margin-bottom:24px">
+      <div class="eyebrow"><mark class="gen">Tools I use and recommend</mark></div>
+      <h2><mark class="gen">Trusted platforms and free tools worth knowing about.</mark></h2>
+      <p><mark class="gen">Outside resources I point clients to. Each card links out to the tool or the person behind it.</mark></p>
+    </div>
+    <div class="res">
+      <div class="rc rv"><span class="soon">Placeholder</span><div class="ic"><i></i></div><h3><mark class="gen">Grant management platform</mark></h3><p><mark class="gen">The platform I use to track deadlines, awards, and reporting. Your one-line note on why it works goes here.</mark></p><span class="tlink">Visit the platform →</span></div>
+      <div class="rc rv" style="--d:.1s"><span class="soon">Placeholder</span><div class="ic"><i></i></div><h3><mark class="gen">Free grant readiness assessment</mark></h3><p><mark class="gen">A colleague's free self-assessment tool. Name, a sentence on what it tells you, and the link.</mark></p><span class="tlink">Take the assessment →</span></div>
+      <div class="rc rv" style="--d:.2s"><span class="soon">Placeholder</span><div class="ic"><i></i></div><h3><mark class="gen">Free funder research platforms</mark></h3><p><mark class="gen">Two or three free places to research funders, each with a line on what it is best for.</mark></p><span class="tlink">See the list →</span></div>
+    </div>
+    <div class="note rv"><b>Note for review:</b> this page ships as a shell. The first three cards are placeholders for material you publish yourself (downloads, lists, guides). The second row is the pattern for outside links you recommend: platforms, colleagues' free tools, funder research sites. Send the names and links whenever you are ready; each becomes a live card in the admin with no design work needed.</div>
   </div>
 </section>
 
@@ -627,8 +653,12 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
       </div>
       <div class="contact">
         <div class="fl">Contact</div>
-        <p>Grants Within Reach<br><mark class="gen">Humble, Texas 77338</mark></p>
-        <p><a href="tel:+10000000000"><mark class="gen">(000) 000-0000</mark></a><br><a href="mailto:deja@grantswithinreach.com">deja@grantswithinreach.com</a></p>
+        <p>Grants Within Reach<br>9490 FM 1960 Bypass Rd W #285<br>Humble, TX 77338</p>
+        <p><a href="tel:+15613168606">(561) 316-8606</a><br><a href="mailto:info@grantswithinreach.com">info@grantswithinreach.com</a></p>
+        <div class="social">
+          <a href="https://www.linkedin.com/company/grants-within-reach/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
+          <a href="https://www.instagram.com/grantswithinreach/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.9 5.9 0 0 0-2.13 1.38A5.9 5.9 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13a5.9 5.9 0 0 0 2.13 1.38c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.9 5.9 0 0 0 2.13-1.38 5.9 5.9 0 0 0 1.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.38-2.13A5.9 5.9 0 0 0 19.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>@GrantsWithinReach</a>
+        </div>
       </div>
       <nav><ul>
         <li><a class="tlink" href="/p/grants-within-reach-dev/home">Home</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/speaking">Speaking &amp; Training</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/services">Services</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/about">About</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/resources">Resources</a></li><li><a class="tlink" href="/p/grants-within-reach-dev/work-with-us">Work With Us</a></li>
@@ -713,8 +743,39 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
       }, { rootMargin: '400px 0px 400px 0px', threshold: 0 });
       io.observe(w.parentElement);
       if (w.hasAttribute('data-eager')) { prime(); wanted = true; safePlay(a); }
+      /* review strips: swap both copies to another clip and restart the loop from copy A */
+      w._swap = function(src, poster){
+        vids.forEach(function(v){ v.pause(); v.classList.remove('b'); });
+        if (b) b.classList.add('b');
+        vids.forEach(function(v){ var s = v.querySelector('source'); if (s) s.src = src; v.removeAttribute('src'); });
+        a.poster = poster || ''; a.preload = 'auto'; a.load(); if (b) { b.preload = 'none'; b.load(); }
+        cur = a; nxt = b; busy = false; fading = false; failed = false; primed = true; wanted = true;
+        safePlay(a);
+      };
     });
   }
+  /* review strips (2026-09-16): pick a clip (.vpick), a photo (.vpick[data-mode=img]) or a finish (.fpick) and see it in place */
+  document.querySelectorAll('.vpick').forEach(function(bar){
+    var target = document.querySelector(bar.dataset.target); if (!target) return;
+    bar.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === btn); });
+        var src = btn.dataset.src, img = btn.querySelector('img'), poster = img ? img.getAttribute('src') : '';
+        if (bar.dataset.mode === 'img') { target.src = src; return; }
+        if (target._swap) { target._swap(src, poster); return; }
+        target.querySelectorAll('video').forEach(function(v){ v.poster = poster; var s = v.querySelector('source'); if (s) s.src = src; v.load(); });
+      });
+    });
+  });
+  document.querySelectorAll('.fpick').forEach(function(bar){
+    var target = document.querySelector(bar.dataset.target), cls = bar.dataset.class; if (!target) return;
+    bar.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === btn); });
+        target.classList.toggle(cls, btn.dataset.on === '1');
+      });
+    });
+  });
   /* parallax watermarks */
   var ps = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
   if (ps.length && !rm) {

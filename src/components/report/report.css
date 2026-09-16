@@ -1,0 +1,44 @@
+/* Research report pages: stat tiles, bar lists, share bar, histogram.
+   Colors come from the site tokens so dark mode follows prefers-color-scheme. */
+.report-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+.report-stat { display: flex; flex-direction: column; gap: 0.35rem; padding: 1.4rem 1.3rem; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); }
+.report-stat-value { font-family: var(--font-serif); font-weight: 600; font-size: clamp(2rem, 3.6vw, 2.8rem); line-height: 1; letter-spacing: -0.02em; color: var(--color-fg); }
+.report-stat-label { font-size: 0.95rem; line-height: 1.4; color: var(--color-fg); }
+.report-stat-sub { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-fg-faint); }
+
+.report-figure { margin: 1.6rem 0 0; }
+.report-caption { margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--color-fg-faint); line-height: 1.5; }
+
+.report-bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+.report-bar-row { display: grid; grid-template-columns: minmax(120px, 34%) 1fr 3.6rem; align-items: center; gap: 0.8rem; }
+@media (max-width: 560px) { .report-bar-row { grid-template-columns: 1fr 3.4rem; } .report-bar-track { grid-column: 1 / 2; grid-row: 2; } .report-bar-value { grid-row: 2; } }
+.report-bar-label { font-size: 0.9rem; line-height: 1.3; color: var(--color-fg); }
+.report-bar-n { font-family: var(--font-mono); font-size: 0.66rem; color: var(--color-fg-faint); margin-left: 0.3rem; }
+.report-bar-track { position: relative; height: 10px; border-radius: 4px; background: var(--color-surface-raised); overflow: hidden; }
+.report-bar-fill { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--color-brass-dark); }
+.report-bar-value { font-family: var(--font-mono); font-size: 0.78rem; text-align: right; color: var(--color-fg); font-variant-numeric: tabular-nums; }
+
+.report-share { display: flex; height: 2.6rem; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--color-border-strong); }
+.report-share-fill { display: flex; align-items: center; padding: 0 0.8rem; background: var(--color-brass-dark); color: var(--color-accent-fg); white-space: nowrap; overflow: hidden; }
+.report-share-rest { flex: 1; display: flex; align-items: center; padding: 0 0.8rem; background: transparent; white-space: nowrap; overflow: hidden; }
+.report-share-text { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.04em; }
+.report-share-text.muted { color: var(--color-fg-muted); }
+
+.report-hist { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; align-items: end; height: 190px; padding-top: 1.2rem; }
+.report-hist-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 0.35rem; }
+.report-hist-count { font-family: var(--font-mono); font-size: 0.66rem; color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.report-hist-bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--color-brass-dark); }
+.report-hist-bar.poor { background: var(--color-fg-muted); }
+.report-hist-label { font-family: var(--font-mono); font-size: 0.6rem; color: var(--color-fg-faint); }
+
+.report-prose p { margin-top: 1rem; color: var(--color-fg-muted); line-height: 1.7; font-size: 1.02rem; }
+.report-prose h2 { font-family: var(--font-serif); font-weight: 600; font-size: clamp(1.6rem, 2.8vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.1; margin-top: 3rem; }
+.report-prose h3 { font-family: var(--font-serif); font-weight: 600; font-size: 1.25rem; margin-top: 2rem; }
+.report-prose ul { margin-top: 1rem; padding-left: 1.2rem; color: var(--color-fg-muted); line-height: 1.7; }
+.report-prose li + li { margin-top: 0.4rem; }
+.report-prose strong { color: var(--color-fg); font-weight: 600; }
+.report-table { width: 100%; margin-top: 1.2rem; border-collapse: collapse; font-size: 0.9rem; }
+.report-table th, .report-table td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+.report-table th { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-fg-faint); font-weight: 500; }
+.report-table td.num { font-family: var(--font-mono); font-size: 0.8rem; text-align: right; font-variant-numeric: tabular-nums; }
+.report-table th.num { text-align: right; }

@@ -108,6 +108,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })
     }
 
+    // Research reports (static routes, numbers in src/lib/*-report-*.ts).
+    entries.push({
+      url: `${SITE_URL}/reports/houston-small-business-websites-2026`,
+      lastModified: new Date('2026-09-16'),
+      changeFrequency: 'yearly',
+      priority: 0.7,
+    })
+
     // Hard-coded legal / compliance routes (not Payload-backed).
     entries.push({
       url: `${SITE_URL}/sms`,

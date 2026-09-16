@@ -139,8 +139,10 @@ docker compose restart caddy
 
 # Verify the result instead of sleeping and hoping. Every container must be
 # running, and web must answer HTTP inside the container (port 3000 is only
-# exposed on the compose network). A failed check exits non-zero so the
-# GitHub Actions run goes red and the deploy log shows the container logs.
+# exposed on the compose network). Next's standalone server binds to the
+# container's HOSTNAME (Docker sets it to the container id), not loopback, so
+# the probe targets $(hostname) rather than 127.0.0.1. A failed check exits
+# non-zero so the GitHub Actions run goes red with the container logs shown.
 log "Verifying the stack"
 for svc in "${SERVICES[@]}"; do
   if [[ "$(docker inspect -f '{{.State.Running}}' "bhc-$svc" 2>/dev/null)" != "true" ]]; then
@@ -152,7 +154,7 @@ for svc in "${SERVICES[@]}"; do
 done
 WEB_OK=0
 for i in $(seq 1 30); do
-  code="$(docker exec bhc-web wget -q -S -O /dev/null --timeout=3 http://127.0.0.1:3000/ 2>&1 | awk '/HTTP\//{c=$2} END{print c}')"
+  code="$(docker exec bhc-web sh -c 'wget -q -S -O /dev/null --timeout=3 "http://$(hostname):3000/" 2>&1' | awk '/HTTP\//{c=$2} END{print c}')"
   if [[ "$code" =~ ^(200|301|302|307|308)$ ]]; then WEB_OK=1; break; fi
   sleep 2
 done

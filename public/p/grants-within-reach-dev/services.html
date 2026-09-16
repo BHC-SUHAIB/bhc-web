@@ -196,9 +196,12 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
 .vpick button.on{border-color:var(--ink)}
 .fpick button{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);cursor:pointer}
 .fpick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.archv.soft .bgv{filter:blur(2px) saturate(.7)}
-.archv.soft .bgwrap{opacity:.72}
-.archv.soft::before{content:"";position:absolute;inset:0;background:rgba(246,241,234,.24);z-index:1;pointer-events:none}
+.fpick .hint{font-weight:400;opacity:.75;margin-left:4px}
+/* finishes: "cloud" = blur + warm veil (clouded over), "fade" = the clip itself less opaque; they combine */
+.archv.cloud .bgv,.panel.cloud .bgv{filter:blur(2px) saturate(.7)}
+.archv.cloud::before,.panel.cloud::before{content:"";position:absolute;inset:0;background:rgba(246,241,234,.24);z-index:1;pointer-events:none}
+.archv.fade .bgwrap{opacity:.5}
+.panel.fade .bgwrap{opacity:.45}
 footer .social{display:flex;gap:16px;margin-top:12px}
 footer .social a{display:inline-flex;align-items:center;gap:7px;border-bottom:0;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.04em}
 footer .social svg{width:16px;height:16px;fill:currentColor}
@@ -787,12 +790,11 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
     });
   });
   document.querySelectorAll('.fpick').forEach(function(bar){
-    var target = document.querySelector(bar.dataset.target), cls = bar.dataset.class; if (!target) return;
+    var target = document.querySelector(bar.dataset.target); if (!target) return;
     bar.querySelectorAll('button').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === btn); });
-        target.classList.toggle(cls, btn.dataset.on === '1');
-      });
+      var cls = btn.dataset.class;
+      btn.classList.toggle('on', target.classList.contains(cls));
+      btn.addEventListener('click', function(){ var on = target.classList.toggle(cls); btn.classList.toggle('on', on); });
     });
   });
   /* parallax watermarks */

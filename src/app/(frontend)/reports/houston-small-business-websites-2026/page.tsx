@@ -8,6 +8,11 @@ import { REPORT as R } from '@/lib/houston-report-2026'
 import { BarList, Histogram, ShareBar, StatTile } from '@/components/report/ReportCharts'
 import '@/components/report/report.css'
 
+// Rendered per request like every other public route here: the Docker build has
+// no NEXT_PUBLIC_SITE_URL, so a prerendered page would bake a localhost
+// metadataBase into its canonical and JSON-LD URLs.
+export const dynamic = 'force-dynamic'
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://blackhartconsulting.com'
 const PATH = `/reports/${R.slug}`
 

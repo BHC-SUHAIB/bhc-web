@@ -434,6 +434,13 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
 .lab-label{margin:56px 0 0;background:var(--sand)}
 .svct-img.tall{aspect-ratio:16/9}
 .rail{position:relative}
+.rail-view{position:relative}
+.rail-btn{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 14px 30px -14px rgba(41,75,69,.45);z-index:2;transition:opacity .35s var(--ease),visibility .35s,transform .35s var(--ease),background .25s}
+.rail-btn svg{width:20px;height:20px}
+.rail-btn.prev{left:-23px}.rail-btn.prev svg{transform:rotate(180deg)}
+.rail-btn.next{right:-23px}
+.rail-btn:hover{background:var(--sand)}
+.rail-btn.off{opacity:0;visibility:hidden;pointer-events:none}
 .rail-track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(300px,32%);gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;scrollbar-width:none}
 .rail-track::-webkit-scrollbar{display:none}
 .rail-card{scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
@@ -562,6 +569,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   .trow{grid-template-columns:44px 1fr;gap:8px 14px}.trow p{grid-column:2}.trow-ar{display:none}
   .ev-cards,.feat{grid-template-columns:1fr}
   .rail-track{grid-auto-columns:82%}
+  .rail-btn{width:40px;height:40px}.rail-btn.prev{left:6px}.rail-btn.next{right:6px}
   .svct-list{position:static;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .svct-list::-webkit-scrollbar{display:none}
   .svct-tab{flex:0 0 auto;width:auto;min-width:200px;max-width:240px;padding:14px 16px}
@@ -769,6 +777,23 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         target.querySelectorAll('video').forEach(function(v){ v.poster = poster; var s = v.querySelector('source'); if (s) s.src = src; v.load(); });
       });
     });
+  });
+  /* sideways rails: arrows appear only in the direction you can still scroll */
+  document.querySelectorAll('.rail-view').forEach(function(view){
+    var track = view.querySelector('.rail-track'), prev = view.querySelector('.rail-btn.prev'), next = view.querySelector('.rail-btn.next');
+    if (!track || !prev || !next) return;
+    function step(){ var c = track.firstElementChild; return c ? c.getBoundingClientRect().width + 20 : track.clientWidth * .8; }
+    function update(){
+      var max = track.scrollWidth - track.clientWidth;
+      prev.classList.toggle('off', track.scrollLeft <= 2);
+      next.classList.toggle('off', max <= 2 || track.scrollLeft >= max - 2);
+    }
+    prev.addEventListener('click', function(){ track.scrollBy({ left: -step(), behavior: rm ? 'auto' : 'smooth' }); });
+    next.addEventListener('click', function(){ track.scrollBy({ left: step(), behavior: rm ? 'auto' : 'smooth' }); });
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    if ('ResizeObserver' in window) new ResizeObserver(update).observe(track);
+    update(); window.addEventListener('load', update);
   });
   /* text options (.tpick): click a wording to see it in place */
   document.querySelectorAll('.tpick').forEach(function(bar){

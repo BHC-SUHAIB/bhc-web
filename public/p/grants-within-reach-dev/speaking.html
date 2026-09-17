@@ -434,6 +434,13 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
 .lab-label{margin:56px 0 0;background:var(--sand)}
 .svct-img.tall{aspect-ratio:16/9}
 .rail{position:relative}
+.rail-view{position:relative}
+.rail-btn{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 14px 30px -14px rgba(41,75,69,.45);z-index:2;transition:opacity .35s var(--ease),visibility .35s,transform .35s var(--ease),background .25s}
+.rail-btn svg{width:20px;height:20px}
+.rail-btn.prev{left:-23px}.rail-btn.prev svg{transform:rotate(180deg)}
+.rail-btn.next{right:-23px}
+.rail-btn:hover{background:var(--sand)}
+.rail-btn.off{opacity:0;visibility:hidden;pointer-events:none}
 .rail-track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(300px,32%);gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;scrollbar-width:none}
 .rail-track::-webkit-scrollbar{display:none}
 .rail-card{scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
@@ -562,6 +569,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   .trow{grid-template-columns:44px 1fr;gap:8px 14px}.trow p{grid-column:2}.trow-ar{display:none}
   .ev-cards,.feat{grid-template-columns:1fr}
   .rail-track{grid-auto-columns:82%}
+  .rail-btn{width:40px;height:40px}.rail-btn.prev{left:6px}.rail-btn.next{right:6px}
   .svct-list{position:static;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .svct-list::-webkit-scrollbar{display:none}
   .svct-tab{flex:0 0 auto;width:auto;min-width:200px;max-width:240px;padding:14px 16px}
@@ -617,15 +625,15 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   </div>
 </section>
 
-<section class="band white" style="padding-bottom:0">
+<section class="band white">
   <div class="wrap">
-    <div class="band-head rv" style="margin-bottom:20px">
+    <div class="band-head rv" style="margin-bottom:28px">
       <div class="eyebrow">Topics</div>
       <h2>Sessions that leave the room more capable than it arrived.</h2>
     </div>
+    <div class="rail rv"><div class="rail-view"><div class="rail-track"><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">01</span><h3>Grant readiness &amp; organizational capacity</h3><p>What it really means to be grant ready, and how organizations can build the systems, documentation, and infrastructure funders expect.</p></article><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">02</span><h3>Funder research &amp; funding strategy</h3><p>Finding the right opportunities, evaluating alignment, and building a more strategic funding pipeline.</p></article><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">03</span><h3>Grant strategy &amp; proposal development</h3><p>Moving beyond good writing to develop competitive, funder-aligned proposals.</p></article><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1573164574572-cb89e39749b4?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">04</span><h3>Grant compliance &amp; management</h3><p>Preparing organizations to manage funding successfully from award through reporting and closeout.</p></article><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">05</span><h3>Grant consulting &amp; professional practice</h3><p>Practical strategies for grant professionals navigating client relationships, capacity, contracting, decision-making, and the business of consulting.</p></article></div><button type="button" class="rail-btn prev" aria-label="Previous topics"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="rail-btn next" aria-label="More topics"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class="rail-hint">Scroll sideways →</div></div>
   </div>
 </section>
-<section class="band white" style="padding-top:8px"><div class="wrap"><div class="rail rv"><div class="rail-track"><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">01</span><h3>Grant readiness &amp; organizational capacity</h3><p>What it really means to be grant ready, and how organizations can build the systems, documentation, and infrastructure funders expect.</p></article><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">02</span><h3>Funder research &amp; funding strategy</h3><p>Finding the right opportunities, evaluating alignment, and building a more strategic funding pipeline.</p></article><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">03</span><h3>Grant strategy &amp; proposal development</h3><p>Moving beyond good writing to develop competitive, funder-aligned proposals.</p></article><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1573164574572-cb89e39749b4?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">04</span><h3>Grant compliance &amp; management</h3><p>Preparing organizations to manage funding successfully from award through reporting and closeout.</p></article><article class="rail-card"><div class="rail-img"><img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200&q=70&fit=crop" alt="" loading="lazy"></div><span class="n">05</span><h3>Grant consulting &amp; professional practice</h3><p>Practical strategies for grant professionals navigating client relationships, capacity, contracting, decision-making, and the business of consulting.</p></article></div><div class="rail-hint">Scroll sideways →</div></div></div></section>
 
 <div class="wrap"><div class="layouts tpick" data-target="#speaker-h2"><b>Option for review · headline for this block (you retired "From nurse to grant strategist"). Click one to see it in place:</b><button type="button" class="on" data-text="Making grants feel less complicated, and a lot more strategic." title="Making grants feel less complicated, and a lot more strategic.">1 · Your bio line</button><button type="button" data-text="Grant strategy from someone who has done the work." title="Grant strategy from someone who has done the work.">2 · Done the work</button><button type="button" data-text="Nearly a decade of grant work, brought into the room." title="Nearly a decade of grant work, brought into the room.">3 · Decade in the room</button><button type="button" data-text="A speaker who has sat on your side of the table." title="A speaker who has sat on your side of the table.">4 · Your side of the table</button><button type="button" data-text="Real strategies from real nonprofit experience." title="Real strategies from real nonprofit experience.">5 · Real strategies</button><button type="button" data-text="Deja Hasness, GPC, CNP." title="Deja Hasness, GPC, CNP.">6 · Just your name</button></div></div>
 <section class="band" style="background:var(--sand)">
@@ -783,6 +791,23 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         target.querySelectorAll('video').forEach(function(v){ v.poster = poster; var s = v.querySelector('source'); if (s) s.src = src; v.load(); });
       });
     });
+  });
+  /* sideways rails: arrows appear only in the direction you can still scroll */
+  document.querySelectorAll('.rail-view').forEach(function(view){
+    var track = view.querySelector('.rail-track'), prev = view.querySelector('.rail-btn.prev'), next = view.querySelector('.rail-btn.next');
+    if (!track || !prev || !next) return;
+    function step(){ var c = track.firstElementChild; return c ? c.getBoundingClientRect().width + 20 : track.clientWidth * .8; }
+    function update(){
+      var max = track.scrollWidth - track.clientWidth;
+      prev.classList.toggle('off', track.scrollLeft <= 2);
+      next.classList.toggle('off', max <= 2 || track.scrollLeft >= max - 2);
+    }
+    prev.addEventListener('click', function(){ track.scrollBy({ left: -step(), behavior: rm ? 'auto' : 'smooth' }); });
+    next.addEventListener('click', function(){ track.scrollBy({ left: step(), behavior: rm ? 'auto' : 'smooth' }); });
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    if ('ResizeObserver' in window) new ResizeObserver(update).observe(track);
+    update(); window.addEventListener('load', update);
   });
   /* text options (.tpick): click a wording to see it in place */
   document.querySelectorAll('.tpick').forEach(function(bar){

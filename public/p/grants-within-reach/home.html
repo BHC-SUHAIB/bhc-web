@@ -537,6 +537,23 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
       });
     });
   });
+  /* sideways rails: arrows appear only in the direction you can still scroll */
+  document.querySelectorAll('.rail-view').forEach(function(view){
+    var track = view.querySelector('.rail-track'), prev = view.querySelector('.rail-btn.prev'), next = view.querySelector('.rail-btn.next');
+    if (!track || !prev || !next) return;
+    function step(){ var c = track.firstElementChild; return c ? c.getBoundingClientRect().width + 20 : track.clientWidth * .8; }
+    function update(){
+      var max = track.scrollWidth - track.clientWidth;
+      prev.classList.toggle('off', track.scrollLeft <= 2);
+      next.classList.toggle('off', max <= 2 || track.scrollLeft >= max - 2);
+    }
+    prev.addEventListener('click', function(){ track.scrollBy({ left: -step(), behavior: rm ? 'auto' : 'smooth' }); });
+    next.addEventListener('click', function(){ track.scrollBy({ left: step(), behavior: rm ? 'auto' : 'smooth' }); });
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    if ('ResizeObserver' in window) new ResizeObserver(update).observe(track);
+    update(); window.addEventListener('load', update);
+  });
   /* text options (.tpick): click a wording to see it in place */
   document.querySelectorAll('.tpick').forEach(function(bar){
     var target = document.querySelector(bar.dataset.target); if (!target) return;

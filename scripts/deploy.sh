@@ -154,7 +154,9 @@ for svc in "${SERVICES[@]}"; do
 done
 WEB_OK=0
 for i in $(seq 1 30); do
-  code="$(docker exec bhc-web sh -c 'wget -q -S -O /dev/null --timeout=3 "http://$(hostname):3000/" 2>&1' | awk '/HTTP\//{c=$2} END{print c}')"
+  # `|| true` inside the substitution: while web is still booting wget fails, and
+  # under `set -e -o pipefail` a failing assignment would silently abort the script.
+  code="$(docker exec bhc-web sh -c 'wget -q -S -O /dev/null --timeout=3 "http://$(hostname):3000/" 2>&1' | awk '/HTTP\//{c=$2} END{print c}' || true)"
   if [[ "$code" =~ ^(200|301|302|307|308)$ ]]; then WEB_OK=1; break; fi
   sleep 2
 done

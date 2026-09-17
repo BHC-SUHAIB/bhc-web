@@ -35,7 +35,11 @@ jobs:
           command_timeout: 20m
           # `set -e` in the script body handles fail-on-first-error; the old
           # `script_stop` input was removed in appleboy/ssh-action v1.x.
+          # Pull BEFORE invoking the script: bash keeps reading the file it
+          # started with, so a deploy.sh change would otherwise only take
+          # effect on the run after the one that shipped it.
           script: |
             set -e
             cd /opt/bhc-web
+            git pull --ff-only
             bash scripts/deploy.sh

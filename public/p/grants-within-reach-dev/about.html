@@ -197,6 +197,8 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
 .fpick button{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);cursor:pointer}
 .fpick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .fpick .hint{font-weight:400;opacity:.75;margin-left:4px}
+.tpick button{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;font:500 12.5px var(--sans);color:var(--ink);cursor:pointer;text-align:left}
+.tpick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 /* finishes: "cloud" = blur + warm veil (clouded over), "fade" = the clip itself less opaque; they combine */
 .archv.cloud .bgv,.panel.cloud .bgv{filter:blur(2px) saturate(.7)}
 .archv.cloud::before,.panel.cloud::before{content:"";position:absolute;inset:0;background:rgba(246,241,234,.24);z-index:1;pointer-events:none}
@@ -648,8 +650,8 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
       <div class="cred rv" style="--d:.32s"><b>Speaker</b><span>Speaker &amp; trainer</span></div>
     </div>
     <div class="focus rv" style="--d:.2s">
-      <div><div class="fl"><mark class="gen">Where I focus</mark></div><p><mark class="gen">Health and human services, including healthcare providers, disability services, behavioral health, and substance-use recovery, and K-12 education. Nonprofits from roughly $1 million to $30 million in annual budget.</mark></p></div>
-      <div><div class="fl"><mark class="gen">Where I work</mark></div><p><mark class="gen">Greater Houston and South Florida's Palm Beach County, with clients beyond both when the partnership is the right fit.</mark></p></div>
+      <div><div class="fl">Where I focus</div><p>Healthcare, disability services, behavioral health, substance use recovery, youth and family services, food access and nutrition, housing and financial stability, community development, and K&ndash;12 education. I primarily work with established nonprofits with annual operating budgets ranging from $1 million to $30 million.</p></div>
+      <div><div class="fl">Where I work</div><p>Greater Houston and Palm Beach County, Florida, with select clients beyond both regions when the partnership is the right fit.</p></div>
     </div>
   </div>
 </section>
@@ -659,7 +661,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   <div class="wrap">
     <div class="stick rv">
       <div class="eyebrow">How I work</div>
-      <h2><mark class="gen">Four things you can count on.</mark></h2>
+      <h2>Strategy grounded in partnership.</h2>
     </div>
     <div class="prs">
       <div class="pr rv"><b>All strategy, less chase</b><p>Not every grant is the right grant. We focus on fit, alignment, and where your organization has the strongest chance of success.</p></div>
@@ -801,6 +803,16 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         if (bar.dataset.mode === 'img') { target.src = src; return; }
         if (target._swap) { target._swap(src, poster); return; }
         target.querySelectorAll('video').forEach(function(v){ v.poster = poster; var s = v.querySelector('source'); if (s) s.src = src; v.load(); });
+      });
+    });
+  });
+  /* text options (.tpick): click a wording to see it in place */
+  document.querySelectorAll('.tpick').forEach(function(bar){
+    var target = document.querySelector(bar.dataset.target); if (!target) return;
+    bar.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === btn); });
+        target.innerHTML = '<mark class="gen">' + btn.dataset.text + '</mark>';
       });
     });
   });

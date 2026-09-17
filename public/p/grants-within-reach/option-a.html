@@ -486,9 +486,10 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
     if (!track || !prev || !next) return;
     function step(){ var c = track.firstElementChild; return c ? c.getBoundingClientRect().width + 20 : track.clientWidth * .8; }
     function update(){
-      var max = track.scrollWidth - track.clientWidth;
-      prev.classList.toggle('off', track.scrollLeft <= 2);
-      next.classList.toggle('off', max <= 2 || track.scrollLeft >= max - 2);
+      /* compare card edges, not scrollLeft: scroll-snap can park the last card a few px short of the true end */
+      var first = track.firstElementChild, last = track.lastElementChild, tr = track.getBoundingClientRect();
+      prev.classList.toggle('off', !first || first.getBoundingClientRect().left >= tr.left - 2);
+      next.classList.toggle('off', !last || last.getBoundingClientRect().right <= tr.right + 2);
     }
     prev.addEventListener('click', function(){ track.scrollBy({ left: -step(), behavior: rm ? 'auto' : 'smooth' }); });
     next.addEventListener('click', function(){ track.scrollBy({ left: step(), behavior: rm ? 'auto' : 'smooth' }); });

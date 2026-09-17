@@ -441,7 +441,9 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
 .rail-btn.next{right:-23px}
 .rail-btn:hover{background:var(--gold);color:var(--ink)}
 .rail-btn.off{opacity:0;visibility:hidden;pointer-events:none}
-.rail-track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(300px,32%);gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;scrollbar-width:none}
+/* the track is a scroll container, so it clips anything that leaves its box: give it room for the hover lift + shadow on every side,
+   then pull the box back with negative margins so the cards still line up with the page. scroll-padding keeps the snap points on the page edge. */
+.rail-track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(300px,32%);gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:24px;padding:14px 24px 48px;margin:-14px -24px -34px;scrollbar-width:none}
 .rail-track::-webkit-scrollbar{display:none}
 .rail-card{scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
 .rail-card:hover{transform:translateY(-6px);box-shadow:0 40px 60px -34px rgba(41,75,69,.4)}
@@ -568,7 +570,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   .form-card{padding:24px 20px}.inq .row2{grid-template-columns:1fr}
   .trow{grid-template-columns:44px 1fr;gap:8px 14px}.trow p{grid-column:2}.trow-ar{display:none}
   .ev-cards,.feat{grid-template-columns:1fr}
-  .rail-track{grid-auto-columns:82%}
+  .rail-track{grid-auto-columns:82%;scroll-padding-inline:16px;padding-inline:16px;margin-inline:-16px}
   .rail-btn{width:40px;height:40px}.rail-btn.prev{left:6px}.rail-btn.next{right:6px}
   .svct-list{position:static;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .svct-list::-webkit-scrollbar{display:none}
@@ -785,9 +787,10 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
     function step(){ var c = track.firstElementChild; return c ? c.getBoundingClientRect().width + 20 : track.clientWidth * .8; }
     function update(){
       /* compare card edges, not scrollLeft: scroll-snap can park the last card a few px short of the true end */
-      var first = track.firstElementChild, last = track.lastElementChild, tr = track.getBoundingClientRect();
-      prev.classList.toggle('off', !first || first.getBoundingClientRect().left >= tr.left - 2);
-      next.classList.toggle('off', !last || last.getBoundingClientRect().right <= tr.right + 2);
+      var first = track.firstElementChild, last = track.lastElementChild, tr = track.getBoundingClientRect(), cs = getComputedStyle(track);
+      var pl = parseFloat(cs.paddingLeft) || 0, pr = parseFloat(cs.paddingRight) || 0;
+      prev.classList.toggle('off', !first || first.getBoundingClientRect().left >= tr.left + pl - 2);
+      next.classList.toggle('off', !last || last.getBoundingClientRect().right <= tr.right - pr + 2);
     }
     prev.addEventListener('click', function(){ track.scrollBy({ left: -step(), behavior: rm ? 'auto' : 'smooth' }); });
     next.addEventListener('click', function(){ track.scrollBy({ left: step(), behavior: rm ? 'auto' : 'smooth' }); });

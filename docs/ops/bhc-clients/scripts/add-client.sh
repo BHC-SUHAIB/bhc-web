@@ -13,8 +13,9 @@
 #   4. writes caddy/sites/<slug>.caddy and reloads Caddy
 #   5. prints the DNS records the client needs + the deploy commands
 #
-# It does NOT clone or build the client's app: put the client's repo (with a
-# Dockerfile that serves on :3000) at clients/<slug>/ and run
+# It does NOT clone or build the client's app: run add-deploy-key.sh <slug> <owner/repo>
+# (read-only GitHub deploy key + ssh alias), clone the client's repo (with a
+# Dockerfile that serves on :3000) through that alias at clients/<slug>/ and run
 #   docker compose up -d --build <slug>
 #
 # For a pre-launch preview use the preview hostname first, e.g.
@@ -94,7 +95,7 @@ PAYLOAD_SECRET=$PAYLOAD_SECRET
 NEXT_PUBLIC_SITE_URL=https://$HOST
 SITE_DOMAIN=$HOST
 # Seed admin (first boot only) — client resets it via the login page.
-SEED_ADMIN_EMAIL=hello@blackhartconsulting.com
+SEED_ADMIN_EMAIL=suhaib@blackhartconsulting.com
 SEED_ADMIN_PASSWORD=$(openssl rand -base64 18 | tr -d '/+=')
 # Transactional email (fill in per client)
 RESEND_API_KEY=
@@ -196,9 +197,12 @@ DNS records for $HOST (Cloudflare: DNS only / grey cloud, or the registrar):
   A     www    $IPV4$( [[ -n "$IPV6" ]] && printf '\n  AAAA  @      %s   (optional)\n  AAAA  www    %s   (optional)' "$IPV6" "$IPV6" )
 
 Deploy the app:
-  git clone <client repo> /opt/bhc-clients/clients/$SLUG      # must contain a Dockerfile serving :3000
-  cd /opt/bhc-clients && docker compose up -d --build $SLUG
+  bash scripts/add-deploy-key.sh $SLUG <github-owner/repo>    # prints a read-only key; Suhaib adds it to the repo's Deploy keys
+  git clone git@github.com-$SLUG:<github-owner/repo>.git clients/$SLUG   # must contain a Dockerfile serving :3000
+  docker compose up -d --build $SLUG
   docker compose logs -f $SLUG
+Redeploy later:
+  git -C clients/$SLUG pull --ff-only && docker compose up -d --build $SLUG
 
 Files:
   clients/$SLUG/.env        secrets (DATABASE_URI, PAYLOAD_SECRET, seed admin)

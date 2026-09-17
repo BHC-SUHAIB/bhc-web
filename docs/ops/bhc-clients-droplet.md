@@ -16,6 +16,7 @@ one command in [Restore from snapshot](#6-restore-from-snapshot).
 | Health URL | `https://clients.getblackhart.com` returns `200` + `bhc-clients ok` |
 | DNS | Cloudflare zone `getblackhart.com`, A record `clients` → 159.203.90.123 (DNS only / grey cloud). Edit it if the droplet is ever rebuilt. |
 | SSH | `ssh deploy@<ip>` with the `suhaib-mbpro` key (`~/.ssh/id_rsa`). Root login and password auth are off. |
+| GitHub access from the box | None by default. Each client clone pulls through its own read-only deploy key (`~/.ssh/github-deploy-<slug>`, alias `github.com-<slug>`), see [Deploy key](#deploy-key-one-per-client). No token, no gh CLI. |
 | Templates in this repo | [`docs/ops/bhc-clients/`](bhc-clients/) (compose, Caddyfile, scripts, backup) |
 
 Source of the design: `docs/ops/BHC-Service-Implementation-Playbook-2026-09.pdf`, Part 2
@@ -43,12 +44,13 @@ postgres (bhc-clients-postgres, postgres:16-alpine, NOT published on any host po
 ├── docker-compose.yml        caddy + postgres (+ one appended service per client)
 ├── Caddyfile                 health site + `import /etc/caddy/sites/*.caddy`
 ├── caddy/sites/<slug>.caddy  per-client vhost (www→apex 308, cache headers, security headers)
-├── clients/<slug>/           git clone of the client's repo (has a Dockerfile serving :3000)
+├── clients/<slug>/           git clone of the client's repo (has a Dockerfile serving :3000); origin = git@github.com-<slug>:...
 │   ├── .env                  DATABASE_URI, PAYLOAD_SECRET, NEXT_PUBLIC_SITE_URL, seed admin, Resend
 │   └── media/                bind-mounted to /app/media (uid 1001 = nextjs)
 ├── .env                      POSTGRES_USER / POSTGRES_PASSWORD (mode 600, never committed)
 └── scripts/
     ├── add-client.sh         <slug> <hostname>   → DB + role, .env, compose service, Caddy site, DNS hints
+    ├── add-deploy-key.sh     <slug> <owner/repo> [--check] → read-only GitHub deploy key + ssh alias for the clone
     ├── remove-client.sh      <slug> [--purge] [--yes]
     └── restore-client.sh     <slug> <dumpfile> [--yes]   (run with sudo)
 
@@ -173,10 +175,38 @@ DNS records for acme-plumbing.com (Cloudflare: DNS only / grey cloud, or the reg
   A     www    <droplet ip>
 ```
 
-Then deploy the app:
+### Deploy key (one per client)
+
+Client repos are private and the droplet has no GitHub token and no `gh` CLI, so a plain
+`https://github.com/...` origin cannot be pulled unattended (`could not read Username for
+'https://github.com'`). Each client gets its own **read-only deploy key** instead:
 
 ```bash
-git clone git@github.com:BHC-SUHAIB/<client-repo>.git clients/acme-plumbing
+bash scripts/add-deploy-key.sh acme-plumbing BHC-SUHAIB/acme-plumbing
+```
+
+The script (idempotent) generates `~/.ssh/github-deploy-acme-plumbing` (ed25519, no
+passphrase), pins github.com's host key, adds a `Host github.com-acme-plumbing` alias to
+`~/.ssh/config` that uses only that key, repoints `clients/acme-plumbing` at
+`git@github.com-acme-plumbing:BHC-SUHAIB/acme-plumbing.git` if the clone already exists,
+and prints the public key. Suhaib then adds that key himself (it is an account-settings
+change, so an agent must ask, never do it):
+**github.com/BHC-SUHAIB/acme-plumbing → Settings → Deploy keys → Add deploy key**, title
+`bhc-clients droplet (read-only)`, **Allow write access unchecked**. Confirm with
+
+```bash
+bash scripts/add-deploy-key.sh acme-plumbing BHC-SUHAIB/acme-plumbing --check
+```
+
+One key per repo because GitHub allows a deploy key on exactly one repository, and the
+`IdentitiesOnly` alias means a clone can never reach another client's repo. Until the key
+is on GitHub, the stopgap is a bundle: on the Mac `git bundle create /tmp/<slug>.bundle main`,
+`scp` it up, then `git -C clients/<slug> pull --ff-only /tmp/<slug>.bundle main`.
+
+### Clone and build
+
+```bash
+git clone git@github.com-acme-plumbing:BHC-SUHAIB/acme-plumbing.git clients/acme-plumbing   # the alias, not github.com
 # fill RESEND_API_KEY / EMAIL_FROM / CONTACT_NOTIFY_EMAIL in clients/acme-plumbing/.env
 docker compose up -d --build acme-plumbing
 docker compose logs -f acme-plumbing        # wait for "Ready"
@@ -193,7 +223,14 @@ docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
 docker compose up -d --force-recreate acme-plumbing
 ```
 
-Update code later: `cd clients/acme-plumbing && git pull && cd ../.. && docker compose up -d --build acme-plumbing`.
+Redeploy after a push to the client repo's `main`:
+
+```bash
+git -C clients/acme-plumbing pull --ff-only && docker compose up -d --build acme-plumbing
+```
+
+This only works once the deploy key is on GitHub (above). The clone is read-only from the
+droplet's side; commits happen on the Mac and go up through GitHub.
 
 Remove a client (keeps DB + files unless `--purge`):
 
@@ -307,6 +344,7 @@ cd /opt/bhc-clients
 docker compose ps                          # health
 docker compose logs -f caddy               # TLS + access logs (json)
 docker compose logs -f <slug>              # a client's app
+git -C clients/<slug> pull --ff-only && docker compose up -d --build <slug>   # redeploy one client
 sudo tail -20 /root/db-backups/backup.log
 sudo ufw status; sudo fail2ban-client status sshd
 sudo apt-get update && sudo apt-get upgrade -y   # monthly patch window (Host plan promise)

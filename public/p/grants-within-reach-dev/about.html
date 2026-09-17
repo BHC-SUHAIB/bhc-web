@@ -601,8 +601,6 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   <button class="close" type="button">Close</button>
   <a href="/p/grants-within-reach-dev/home" style="--i:0">Home</a><a href="/p/grants-within-reach-dev/speaking" style="--i:1">Speaking &amp; Training</a><a href="/p/grants-within-reach-dev/services" style="--i:2">Services</a><a href="/p/grants-within-reach-dev/about" style="--i:3">About</a><a href="/p/grants-within-reach-dev/resources" style="--i:4">Resources</a><a href="/p/grants-within-reach-dev/work-with-us" style="--i:5">Work With Us</a>
 </div>
-<div class="wrap"><div class="layouts genkey"><i></i><span><b>Pink highlight</b> = wording we wrote to connect the sections. Everything without pink is from your outline. Tell us what to change.</span></div></div>
-
 
 <section class="ph ph-split">
   <img class="wm" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMTI4IiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjEyOCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJHcmFudHMgV2l0aGluIFJlYWNoIG1hcmsiPgogIDx0aXRsZT5HcmFudHMgV2l0aGluIFJlYWNoPC90aXRsZT4KICA8cGF0aCBmaWxsPSIjNkU5Qzg5IiBkPSJNNiwxMjIgQTEyNi4wLDEyNi4wIDAgMCAxIDE5Niw0OCBBMTYwLjAsMTYwLjAgMCAwIDAgNTQsMTIyIFoiLz4KICA8cGF0aCBmaWxsPSIjQTdDNEJDIiBkPSJNMjUwLDEyMiBBODkuOCw4OS44IDAgMCAwIDExOSw3NiBBMTA0LjcsMTA0LjcgMCAwIDEgMjA2LDEyMiBaIi8+CiAgPGNpcmNsZSBjeD0iMjMwIiBjeT0iNDAiIHI9IjIyIiBmaWxsPSIjRTNCNDU4Ii8+Cjwvc3ZnPg==" alt="" data-parallax=".08">
@@ -625,7 +623,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
     <div class="prose rv" style="--d:.12s">
       <p>Nearly a decade in grants and nonprofit consulting has taught me that successful grant seeking doesn't happen in a silo. It intersects with programs, finances, leadership, evaluation, partnerships, and organizational strategy. That's why my work goes beyond the next deadline or application. I help organizations think strategically about what they're pursuing, why they're pursuing it, and whether they're truly positioned to succeed.</p>
       <p>I'm a Grant Professional Certified (GPC) and Certified Nonprofit Professional (CNP) with experience across healthcare, human services, education, arts and culture, economic mobility, and community development. I work with organizations ranging from approximately $1 million to $30 million in annual operating budgets, bringing a practical understanding of the opportunities and challenges that come with organizations at different stages of growth.</p>
-      <p>Houston is home, and Houston-area nonprofits are at the heart of my work. I specialize in working with organizations across the Greater Houston region, <mark class="gen">with South Florida's Palm Beach County as a second base,</mark> while also bringing experience with nonprofits and funders in other communities. Grants Within Reach works with clients beyond Houston, too, when the partnership is the right fit.</p>
+      <p>Houston is home, and Houston-area nonprofits are at the heart of my work. I specialize in working with organizations across the Greater Houston region, with South Florida's Palm Beach County as a second base, while also bringing experience with nonprofits and funders in other communities. Grants Within Reach works with clients beyond Houston, too, when the partnership is the right fit.</p>
       <p>I'm also a speaker and trainer who loves making grants feel a little less complicated, and a lot more strategic. Through Grants Within Reach, I bring all of those pieces together to help nonprofits build stronger strategies, pursue better-aligned opportunities, and create the capacity to manage funding well.</p>
     </div>
   </div>
@@ -812,7 +810,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
     bar.querySelectorAll('button').forEach(function(btn){
       btn.addEventListener('click', function(){
         bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === btn); });
-        target.innerHTML = '<mark class="gen">' + btn.dataset.text + '</mark>';
+        target.textContent = btn.dataset.text;
       });
     });
   });

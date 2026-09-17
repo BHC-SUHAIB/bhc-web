@@ -197,6 +197,8 @@ footer .bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wra
 .fpick button{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);cursor:pointer}
 .fpick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .fpick .hint{font-weight:400;opacity:.75;margin-left:4px}
+.tpick button{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;font:500 12.5px var(--sans);color:var(--ink);cursor:pointer;text-align:left}
+.tpick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 /* finishes: "cloud" = blur + warm veil (clouded over), "fade" = the clip itself less opaque; they combine */
 .archv.cloud .bgv,.panel.cloud .bgv{filter:blur(2px) saturate(.7)}
 .archv.cloud::before,.panel.cloud::before{content:"";position:absolute;inset:0;background:rgba(246,241,234,.24);z-index:1;pointer-events:none}
@@ -599,15 +601,13 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   <button class="close" type="button">Close</button>
   <a href="/p/grants-within-reach/home" style="--i:0">Home</a><a href="/p/grants-within-reach/speaking" style="--i:1">Speaking &amp; Training</a><a href="/p/grants-within-reach/services" style="--i:2">Services</a><a href="/p/grants-within-reach/about" style="--i:3">About</a><a href="/p/grants-within-reach/resources" style="--i:4">Resources</a><a href="/p/grants-within-reach/work-with-us" style="--i:5">Work With Us</a>
 </div>
-<div class="wrap"><div class="layouts genkey"><i></i><span><b>Pink highlight</b> = wording we wrote to connect the sections. Everything without pink is from your outline. Tell us what to change.</span></div></div>
-
 
 <section class="ph">
   <img class="wm" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMTI4IiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjEyOCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJHcmFudHMgV2l0aGluIFJlYWNoIG1hcmsiPgogIDx0aXRsZT5HcmFudHMgV2l0aGluIFJlYWNoPC90aXRsZT4KICA8cGF0aCBmaWxsPSIjNkU5Qzg5IiBkPSJNNiwxMjIgQTEyNi4wLDEyNi4wIDAgMCAxIDE5Niw0OCBBMTYwLjAsMTYwLjAgMCAwIDAgNTQsMTIyIFoiLz4KICA8cGF0aCBmaWxsPSIjQTdDNEJDIiBkPSJNMjUwLDEyMiBBODkuOCw4OS44IDAgMCAwIDExOSw3NiBBMTA0LjcsMTA0LjcgMCAwIDEgMjA2LDEyMiBaIi8+CiAgPGNpcmNsZSBjeD0iMjMwIiBjeT0iNDAiIHI9IjIyIiBmaWxsPSIjRTNCNDU4Ii8+Cjwvc3ZnPg==" alt="" data-parallax=".08">
   <div class="wrap">
     <div class="eyebrow up">Work with us</div>
     <h1 class="up">Let's find what's possible together.</h1>
-    <p class="lede up">Whether you're looking for strategic support, additional grant capacity, or a <mark class="gen">thought</mark> partner to help you navigate what's next, I'd love to learn more about your organization and how we can work together.</p>
+    <p class="lede up">Whether you're looking for strategic support, additional grant capacity, or a thought partner to help you navigate what's next, I'd love to learn more about your organization and how we can work together.</p>
   </div>
 </section>
 
@@ -615,12 +615,8 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   <div class="wrap contact-grid">
     <aside class="contact-side rv">
       <div class="side-card">
-        <div class="fl"><mark class="gen">What happens next</mark></div>
-        <ol class="steps-mini">
-          <li><mark class="gen">You send the form.</mark></li>
-          <li><mark class="gen">I read it and reach out to set up a one-on-one Zoom.</mark></li>
-          <li><mark class="gen">We talk through where you are, what you are pursuing, and whether we are the right fit.</mark></li>
-        </ol>
+        <div class="fl">What happens next</div>
+        <p style="margin:0">Send the form and someone will reach out to schedule a discovery call.</p>
       </div>
       <div class="side-card">
         <div class="fl">Reach me directly</div>
@@ -629,12 +625,12 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         <p><a href="https://www.linkedin.com/company/grants-within-reach/" target="_blank" rel="noopener">LinkedIn</a> &nbsp;·&nbsp; <a href="https://www.instagram.com/grantswithinreach/" target="_blank" rel="noopener">@GrantsWithinReach</a></p>
       </div>
       <div class="side-card quiet">
-        <p class="muted" style="margin:0"><mark class="gen">Speaking or training inquiry? Use the same form and choose “Speaking or training” under support type.</mark></p>
+        <p class="muted" style="margin:0">Speaking or training inquiry? Use the same form and choose “Speaking or training” under support type.</p>
       </div>
     </aside>
     <div class="form-card rv" style="--d:.1s">
       <div class="eyebrow" style="margin-bottom:8px">Start the conversation</div>
-      <p class="muted" style="margin-bottom:22px"><mark class="gen">A few details help me come to our first conversation prepared.</mark></p>
+      <p class="muted" style="margin-bottom:22px">A few details help me come to our first conversation prepared.</p>
       <form class="inq" novalidate>
         <div class="row2">
           <label>Name<input type="text" name="name" placeholder="Your name" required></label>
@@ -651,7 +647,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         </div>
         <label>What is the goal you are trying to reach?<textarea name="goal" rows="5" placeholder="A sentence or two is plenty."></textarea></label>
         <button class="pill gold" type="submit">Send <span class="ar">→</span></button>
-        <p class="fine"><mark class="gen">Preview only: this form is not connected yet. On the live site it delivers to your inbox with the sender's email as reply-to.</mark></p>
+        <p class="fine">Preview only: this form is not connected yet. On the live site it delivers to your inbox with the sender's email as reply-to.</p>
       </form>
       <div class="success" hidden>
         <div class="sun"></div>
@@ -794,6 +790,16 @@ document.querySelectorAll('form.inq').forEach(function(f){
         if (bar.dataset.mode === 'img') { target.src = src; return; }
         if (target._swap) { target._swap(src, poster); return; }
         target.querySelectorAll('video').forEach(function(v){ v.poster = poster; var s = v.querySelector('source'); if (s) s.src = src; v.load(); });
+      });
+    });
+  });
+  /* text options (.tpick): click a wording to see it in place */
+  document.querySelectorAll('.tpick').forEach(function(bar){
+    var target = document.querySelector(bar.dataset.target); if (!target) return;
+    bar.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === btn); });
+        target.textContent = btn.dataset.text;
       });
     });
   });

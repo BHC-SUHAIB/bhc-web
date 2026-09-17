@@ -601,15 +601,13 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   <button class="close" type="button">Close</button>
   <a href="/p/grants-within-reach-dev/home" style="--i:0">Home</a><a href="/p/grants-within-reach-dev/speaking" style="--i:1">Speaking &amp; Training</a><a href="/p/grants-within-reach-dev/services" style="--i:2">Services</a><a href="/p/grants-within-reach-dev/about" style="--i:3">About</a><a href="/p/grants-within-reach-dev/resources" style="--i:4">Resources</a><a href="/p/grants-within-reach-dev/work-with-us" style="--i:5">Work With Us</a>
 </div>
-<div class="wrap"><div class="layouts genkey"><i></i><span><b>Pink highlight</b> = wording we wrote to connect the sections. Everything without pink is from your outline. Tell us what to change.</span></div></div>
-
 
 <section class="ph">
   <img class="wm" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMTI4IiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjEyOCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJHcmFudHMgV2l0aGluIFJlYWNoIG1hcmsiPgogIDx0aXRsZT5HcmFudHMgV2l0aGluIFJlYWNoPC90aXRsZT4KICA8cGF0aCBmaWxsPSIjNkU5Qzg5IiBkPSJNNiwxMjIgQTEyNi4wLDEyNi4wIDAgMCAxIDE5Niw0OCBBMTYwLjAsMTYwLjAgMCAwIDAgNTQsMTIyIFoiLz4KICA8cGF0aCBmaWxsPSIjQTdDNEJDIiBkPSJNMjUwLDEyMiBBODkuOCw4OS44IDAgMCAwIDExOSw3NiBBMTA0LjcsMTA0LjcgMCAwIDEgMjA2LDEyMiBaIi8+CiAgPGNpcmNsZSBjeD0iMjMwIiBjeT0iNDAiIHI9IjIyIiBmaWxsPSIjRTNCNDU4Ii8+Cjwvc3ZnPg==" alt="" data-parallax=".08">
   <div class="wrap">
     <div class="eyebrow up">Work with us</div>
     <h1 class="up">Let's find what's possible together.</h1>
-    <p class="lede up">Whether you're looking for strategic support, additional grant capacity, or a <mark class="gen">thought</mark> partner to help you navigate what's next, I'd love to learn more about your organization and how we can work together.</p>
+    <p class="lede up">Whether you're looking for strategic support, additional grant capacity, or a thought partner to help you navigate what's next, I'd love to learn more about your organization and how we can work together.</p>
   </div>
 </section>
 
@@ -617,7 +615,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
   <div class="wrap contact-grid">
     <aside class="contact-side rv">
       <div class="side-card">
-        <div class="fl"><mark class="gen">What happens next</mark></div>
+        <div class="fl">What happens next</div>
         <p style="margin:0">Send the form and someone will reach out to schedule a discovery call.</p>
       </div>
       <div class="side-card">
@@ -627,12 +625,12 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         <p><a href="https://www.linkedin.com/company/grants-within-reach/" target="_blank" rel="noopener">LinkedIn</a> &nbsp;·&nbsp; <a href="https://www.instagram.com/grantswithinreach/" target="_blank" rel="noopener">@GrantsWithinReach</a></p>
       </div>
       <div class="side-card quiet">
-        <p class="muted" style="margin:0"><mark class="gen">Speaking or training inquiry? Use the same form and choose “Speaking or training” under support type.</mark></p>
+        <p class="muted" style="margin:0">Speaking or training inquiry? Use the same form and choose “Speaking or training” under support type.</p>
       </div>
     </aside>
     <div class="form-card rv" style="--d:.1s">
       <div class="eyebrow" style="margin-bottom:8px">Start the conversation</div>
-      <p class="muted" style="margin-bottom:22px"><mark class="gen">A few details help me come to our first conversation prepared.</mark></p>
+      <p class="muted" style="margin-bottom:22px">A few details help me come to our first conversation prepared.</p>
       <form class="inq" novalidate>
         <div class="row2">
           <label>Name<input type="text" name="name" placeholder="Your name" required></label>
@@ -649,7 +647,7 @@ mark.gen{background:rgba(242,168,190,.42);color:inherit;padding:0 .18em;border-r
         </div>
         <label>What is the goal you are trying to reach?<textarea name="goal" rows="5" placeholder="A sentence or two is plenty."></textarea></label>
         <button class="pill gold" type="submit">Send <span class="ar">→</span></button>
-        <p class="fine"><mark class="gen">Preview only: this form is not connected yet. On the live site it delivers to your inbox with the sender's email as reply-to.</mark></p>
+        <p class="fine">Preview only: this form is not connected yet. On the live site it delivers to your inbox with the sender's email as reply-to.</p>
       </form>
       <div class="success" hidden>
         <div class="sun"></div>
@@ -801,7 +799,7 @@ document.querySelectorAll('form.inq').forEach(function(f){
     bar.querySelectorAll('button').forEach(function(btn){
       btn.addEventListener('click', function(){
         bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === btn); });
-        target.innerHTML = '<mark class="gen">' + btn.dataset.text + '</mark>';
+        target.textContent = btn.dataset.text;
       });
     });
   });

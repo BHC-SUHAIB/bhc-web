@@ -1,0 +1,5 @@
+.env
+clients/*
+!clients/.gitkeep
+caddy/sites/*.caddy
+backups/

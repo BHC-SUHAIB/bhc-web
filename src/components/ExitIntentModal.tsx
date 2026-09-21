@@ -1,11 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { X } from 'lucide-react'
 import { Logo } from './Logo'
 import { pushEvent } from '@/lib/analytics'
 import { pushLeadEvent, readJsonSafe } from '@/lib/lead-event'
 import { getAttribution } from '@/lib/attribution'
+import { isTransactionalPath } from '@/lib/transactional-routes'
 
 // Exit-intent / deep-scroll lead modal.
 //
@@ -20,6 +22,11 @@ import { getAttribution } from '@/lib/attribution'
 // Behavior: arms 4s after load, then opens ONCE PER SESSION on either a desktop
 // pointer-exit at the top of the window OR scrolling past 75% of the page.
 // Stored in sessionStorage so it never nags a visitor twice in one visit.
+//
+// Route guard: mounted once per layout, so it would otherwise fire everywhere,
+// including over the Pay button on /invoice/<id>. It never arms or renders on
+// transactional routes (lib/transactional-routes.ts): invoices, care-plan
+// checkout, the client portal and thank-you pages. Marketing pages only.
 
 const ENABLED = process.env.NEXT_PUBLIC_EXIT_INTENT_ENABLED !== 'false'
 const SESSION_KEY = 'bhc_exit_modal_seen'
@@ -31,11 +38,12 @@ export function ExitIntentModal() {
   const [error, setError] = useState<string | null>(null)
   const armed = useRef(false)
   const shown = useRef(false)
+  const suppressed = isTransactionalPath(usePathname())
 
   const close = useCallback(() => setOpen(false), [])
 
   useEffect(() => {
-    if (!ENABLED) return
+    if (!ENABLED || suppressed) return
     try {
       if (sessionStorage.getItem(SESSION_KEY) === '1') return
     } catch {
@@ -82,7 +90,7 @@ export function ExitIntentModal() {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('keydown', onKey)
     }
-  }, [])
+  }, [suppressed])
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -130,7 +138,7 @@ export function ExitIntentModal() {
     }
   }
 
-  if (!ENABLED) return null
+  if (!ENABLED || suppressed) return null
 
   return (
     <div

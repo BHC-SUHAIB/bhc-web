@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { Logo } from './Logo'
 import { pushEvent } from '@/lib/analytics'
+import { pushLeadEvent, readJsonSafe } from '@/lib/lead-event'
 import { getAttribution } from '@/lib/attribution'
 
 // Exit-intent / deep-scroll lead modal.
@@ -118,8 +119,9 @@ export function ExitIntentModal() {
         }
         throw new Error(msg)
       }
-      // Real lead captured — this is now a genuine primary conversion.
-      pushEvent('generate_lead', { source: 'exit_intent', method: 'email', source_page: sourcePage })
+      // Real lead captured: a genuine primary conversion, unless the server
+      // flagged the submission as spam (lib/lead-event.ts).
+      pushLeadEvent(await readJsonSafe(res), { source: 'exit_intent', method: 'email', source_page: sourcePage })
       setDone(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')

@@ -750,12 +750,15 @@ export const freeDemoSitePage = () => ({
       blockType: 'hero',
       eyebrow: 'Free demo site',
       headline: 'See your new site before you pay a dollar.',
-      subheadline: 'Send your business name and your Google listing. Within 48 hours you get a link to a working mockup built from your real services, hours, and reviews. If you like it, $399 to $699 puts it live this week. If you do not, you owe nothing and it disappears.',
+      // 2026-09-21: shortened so the two-field quick form (HeroQuickDemo, a
+      // code-side addition in Hero.tsx for this slug) fits the first screen
+      // on a phone, and the monthly option is visible before any scrolling.
+      subheadline: 'Send your business name. Within 48 hours you get a working mockup built from your real services, hours, and reviews. Like it and $399 to $699 puts it live this week, or from $119 a month with nothing up front. If not, you owe nothing.',
       align: 'left',
       backgroundImageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1920&q=80',
       overlayStrength: 'heavy',
       ctas: [
-        { label: 'Request my demo', href: '#demo-request', variant: 'primary' },
+        { label: 'See pricing', href: '#pricing', variant: 'secondary' },
       ],
     },
     {

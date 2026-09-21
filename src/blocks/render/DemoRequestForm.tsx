@@ -7,6 +7,7 @@ import { Button } from '@/components/Button'
 import { pushEvent } from '@/lib/analytics'
 import { getAttribution } from '@/lib/attribution'
 import { describeMissing, missingKeys, type MissingField } from '@/lib/form-validation'
+import { pushLeadEvent, readJsonSafe } from '@/lib/lead-event'
 
 // Free-demo-site request form. Submissions land in the same collection and
 // email pipeline as the contact form, tagged formType: 'demo-request'.
@@ -105,8 +106,10 @@ export function DemoRequestForm(b: DemoRequestFormProps) {
         } catch { /* noop */ }
         throw new Error(msg)
       }
+      const saved = await readJsonSafe(res)
       setState('success')
-      pushEvent('generate_lead', {
+      // Conversion only for a clean submission; see lib/lead-event.ts.
+      pushLeadEvent(saved, {
         source_page: sourcePage,
         project_type: 'website',
         source: 'demo_request',

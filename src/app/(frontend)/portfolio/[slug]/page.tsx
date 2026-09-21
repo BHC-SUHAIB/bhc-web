@@ -231,7 +231,8 @@ export default async function ProjectPage({ params }: Args) {
               in exchange for a published case study.
             </p>
             <div className="cta-row">
-              <Button href="/contact#contact-form" variant="brass" size="lg">Start a project</Button>
+              <Button href="/free-demo-site" variant="brass" size="lg">See your site first</Button>
+              <Button href="/contact#contact-form" variant="onPhotoGhost" size="lg">Start a project</Button>
               <Button href="/services#website-packages" variant="onPhotoGhost" size="lg">See all pricing</Button>
             </div>
           </div>

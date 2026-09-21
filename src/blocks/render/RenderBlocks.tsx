@@ -97,7 +97,9 @@ export async function RenderBlocks({
     } else if (pageSlug === 'services') {
       list = injectAfter([...list], (b) => b.blockType === 'pricing', 'buildTimelineAnim')
     } else if (pageSlug === 'free-demo-site') {
-      list = injectAfter([...list], (b) => b.blockType === 'hero', 'websiteAssemblyAnim')
+      // Below the form, not between the hero and the form: on a phone the
+      // animation pushed the form a full extra screen down (2026-09-21).
+      list = injectAfter([...list], (b) => (b.blockType as string) === 'demoRequestForm', 'websiteAssemblyAnim')
     } else if (pageSlug === 'automation') {
       list = injectAfter([...list], (b) => b.blockType === 'hero', 'processLoopAnim')
     }
@@ -141,7 +143,7 @@ export async function RenderBlocks({
             ),
           }
         }
-        return <Hero {...hb} phoneOverride={phoneOverride} />
+        return <Hero {...hb} phoneOverride={phoneOverride} quickDemo={pageSlug === 'free-demo-site'} />
       }
       case 'bundleOffer': return <BundleOffer {...b} />
       case 'calendlyBooking': return <CalendlyBooking {...b} />

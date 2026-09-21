@@ -3,6 +3,7 @@ import { Container } from '@/components/Container'
 import { Placeholder } from '@/components/Placeholder'
 import { HeroCta } from './HeroCta'
 import { HeroPhoneCta } from './HeroPhoneCta'
+import { HeroQuickDemo } from './HeroQuickDemo'
 import { ParallaxBackground } from './ParallaxBackground'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref } from '@/lib/contact'
@@ -20,7 +21,7 @@ import { cn } from '@/lib/utils'
 // The overlay strength is editor-controllable so dark photos and bright photos
 // both keep the headline readable.
 
-export async function Hero(b: HeroBlock & { phoneOverride?: string }) {
+export async function Hero(b: HeroBlock & { phoneOverride?: string; quickDemo?: boolean }) {
   const align = b.align ?? 'left'
   const img = typeof b.image === 'object' ? (b.image as Media | null) : null
   const hasUpload = !!img?.url
@@ -100,6 +101,10 @@ export async function Hero(b: HeroBlock & { phoneOverride?: string }) {
                 {b.subheadline}
               </p>
             ) : null}
+            {/* Code-only prop (like phoneOverride), set by RenderBlocks for
+                /free-demo-site: the two-field demo request lives in the first
+                screen instead of one scroll down. See HeroQuickDemo.tsx. */}
+            {b.quickDemo ? <HeroQuickDemo /> : null}
             {(b.ctas && b.ctas.length > 0) || (phoneRaw && phoneHrefVal) ? (
               <div
                 className={cn(

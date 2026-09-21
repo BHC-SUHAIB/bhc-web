@@ -26,6 +26,8 @@ type EventName =
   | 'checkout_click'             // Buy now / Subscribe button on a pricing tier or bundle
   | 'purchase'                   // /thanks?sku= landed after a Stripe Payment Link checkout
   | 'form_validation_error'      // Lead form blocked client-side by a missing required field (UX signal, not a lead)
+  | 'lead_flagged_spam'          // Submission saved but flagged by server spam checks; NOT a conversion (see lib/lead-event.ts)
+  | 'sms_click'                  // sms: link tapped (sticky mobile bar on /free-demo-site)
 
 type EventParams = {
   /** Page or section the event fired from. */

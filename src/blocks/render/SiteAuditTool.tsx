@@ -7,6 +7,7 @@ import { CountUpStat } from '@/components/CountUpStat'
 import { AM_LOOP_CSS, AM_LOOP_HTML } from '@/components/antlerLoopMarkup'
 import { cn } from '@/lib/utils'
 import { pushEvent } from '@/lib/analytics'
+import { pushLeadEvent, readJsonSafe } from '@/lib/lead-event'
 import { getAttribution } from '@/lib/attribution'
 
 // Instant PageSpeed Insights audit, on-LP. Visitor pastes their URL, hits run,
@@ -162,7 +163,7 @@ export function SiteAuditTool({ eyebrow, headline, description }: Props) {
         }
         throw new Error(msg)
       }
-      pushEvent('generate_lead', { source_page: sourcePage, source: 'audit_report', audited_url: auditedUrl ?? undefined })
+      pushLeadEvent(await readJsonSafe(res), { source_page: sourcePage, source: 'audit_report', audited_url: auditedUrl ?? undefined })
       setLeadState('sent')
     } catch (err) {
       setLeadError(err instanceof Error ? err.message : 'Something went wrong. Try again.')

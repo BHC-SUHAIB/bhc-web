@@ -10,6 +10,7 @@ import { SMS_DISCLAIMER_TEXT, SMS_CHECKBOX_LABEL } from '@/lib/sms-disclaimer'
 import { pushEvent } from '@/lib/analytics'
 import { getAttribution } from '@/lib/attribution'
 import { describeMissing, missingKeys, type MissingField } from '@/lib/form-validation'
+import { pushLeadEvent, readJsonSafe } from '@/lib/lead-event'
 import { getTier, type TierInfo } from '@/lib/tiers'
 import type { ContactFormBlockBlock } from '@/payload-types'
 
@@ -165,11 +166,13 @@ export function ContactForm(b: ContactFormProps) {
         } catch { /* noop */ }
         throw new Error(msg)
       }
+      const saved = await readJsonSafe(res)
       setState('success')
       // Primary Google Ads conversion. Uses GA4's recommended event name so
       // GTM can route it without a custom mapping. Project type / budget
       // are sent as event params so audience segmentation works downstream.
-      pushEvent('generate_lead', {
+      // Skipped for submissions the server flagged as spam (lib/lead-event.ts).
+      pushLeadEvent(saved, {
         source_page: typeof window !== 'undefined' ? window.location.pathname : '',
         project_type: payload.projectType || 'unspecified',
         budget_range: payload.budgetRange || 'unspecified',

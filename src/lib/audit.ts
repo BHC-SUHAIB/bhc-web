@@ -9,6 +9,7 @@ import type { Payload } from 'payload'
 
 export type AuditAction =
   | 'invoice.email_sent'
+  | 'invoice.pushed_to_stripe'
   | 'invoice.refund_issued'
   | 'care_plan.signup_sent'
   | 'client.created'

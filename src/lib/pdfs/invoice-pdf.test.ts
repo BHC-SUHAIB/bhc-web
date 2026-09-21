@@ -182,3 +182,33 @@ test('renders a paid invoice as a receipt without the pay button', async () => {
   assert.ok(!text.includes('(Pay online)'))
   assert.ok(text.includes('($1,495.00)'))
 })
+
+test('prints the hosting note when hosting is included in the order', async () => {
+  const note =
+    'Host hosting starts with this payment. The first month is free: the first $59.00 monthly ' +
+    'charge runs on October 21, 2026, then the same amount every month. Cancel any time.'
+  const bytes = await buildInvoicePdf(baseData({ hostingNote: note }))
+  const { doc, text } = await pdfStreamsText(bytes)
+  assert.equal(doc.getPageCount(), 1, 'the note still fits on the first page')
+  // Drawn as wrapped lines, so assert on fragments that can't straddle a
+  // wrap boundary rather than on the whole sentence. (The band's "HOSTING"
+  // label is drawn one character at a time for letter tracking, so it never
+  // appears as a single string in the content stream.)
+  assert.ok(text.includes('Host hosting starts with this payment.'), 'the opening line is drawn')
+  assert.ok(text.includes('The first month is free'), 'the free-month promise is drawn')
+  assert.ok(text.includes('October 21, 2026'), 'the first charge date is drawn')
+  assert.ok(text.includes('Cancel any time.'), 'the cancellation promise is drawn')
+})
+
+test('an invoice without a hosting note is byte-identical to before the field existed', async () => {
+  // Every non-`included` invoice must print exactly as it always has.
+  const withoutField = await buildInvoicePdf(baseData())
+  const withNullField = await buildInvoicePdf(baseData({ hostingNote: null }))
+  const withBlankField = await buildInvoicePdf(baseData({ hostingNote: '   ' }))
+  const a = await pdfStreamsText(withoutField)
+  const b = await pdfStreamsText(withNullField)
+  const c = await pdfStreamsText(withBlankField)
+  assert.equal(b.text, a.text)
+  assert.equal(c.text, a.text)
+  assert.ok(!a.text.includes('Cancel any time.'), 'no hosting copy without a note')
+})

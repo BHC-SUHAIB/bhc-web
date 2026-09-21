@@ -22,6 +22,7 @@ type Invoice = {
   paidAt?: string | null
   issuedAt?: string | null
   stripeInvoiceId?: string | null
+  skipStripePush?: boolean | null
 }
 
 type Subscription = {
@@ -66,7 +67,9 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
   const [error, setError] = useState<string | null>(null)
   const [showArchived, setShowArchived] = useState(false)
   const [sendStatus, setSendStatus] = useState<Record<string, { state: 'sending' | 'sent' | 'error'; message?: string }>>({})
-  const [refundConfirm, setRefundConfirm] = useState<string | null>(null)
+  // Key of the row action awaiting a second click to confirm (refund, or
+  // finalize-and-send on a draft). Only one row can be pending at a time.
+  const [confirmKey, setConfirmKey] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     if (!clientId) return
@@ -115,6 +118,37 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
     }
   }
 
+  // Draft rows: finalize in Stripe, then send the branded email — the same
+  // two-step the invoice document's "Finalize and send" button runs. Kept
+  // here so a draft can be sent without opening the invoice. The confirmation
+  // lives on the row (two clicks: "Finalize & send" → "Confirm send?").
+  async function finalizeAndSend(invoiceId: string | number, key: string) {
+    setSendStatus((s) => ({ ...s, [key]: { state: 'sending' } }))
+    try {
+      const sync = await fetch(`/api/invoices/${invoiceId}/sync`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+      const syncJson = (await sync.json()) as { ok?: boolean; error?: string }
+      if (!sync.ok) throw new Error(syncJson.error ?? `Stripe push failed (${sync.status}).`)
+
+      const send = await fetch(`/api/invoices/${invoiceId}/send-email`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+      const sendJson = (await send.json()) as { ok?: boolean; error?: string }
+      if (!send.ok) throw new Error(sendJson.error ?? `Send failed (${send.status}).`)
+
+      setSendStatus((s) => ({ ...s, [key]: { state: 'sent' } }))
+      setTimeout(() => {
+        void refresh()
+      }, 1500)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Finalize and send failed.'
+      setSendStatus((s) => ({ ...s, [key]: { state: 'error', message } }))
+    }
+  }
+
   async function refundInvoice(invoiceId: string | number, key: string) {
     setSendStatus((s) => ({ ...s, [key]: { state: 'sending' } }))
     try {
@@ -152,13 +186,41 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
             rows={data.invoices.map((inv) => {
               const sendK = `inv-send-${inv.id}`
               const refundK = `inv-refund-${inv.id}`
+              const finalizeK = `inv-finalize-${inv.id}`
               const sent = sendStatus[sendK]
               const refunding = sendStatus[refundK]
+              const finalizing = sendStatus[finalizeK]
               const unpaid = inv.status === 'open' || inv.status === 'overdue'
               const paid = inv.status === 'paid' || inv.status === 'partially_refunded'
+              const sendableDraft = inv.status === 'draft' && !inv.skipStripePush
 
               const actionCell =
-                unpaid ? (
+                sendableDraft ? (
+                  confirmKey === finalizeK ? (
+                    <ActionButton
+                      key="act"
+                      label="Confirm send?"
+                      onClick={() => {
+                        setConfirmKey(null)
+                        void finalizeAndSend(inv.id, finalizeK)
+                      }}
+                      state={finalizing}
+                    />
+                  ) : finalizing ? (
+                    <ActionButton
+                      key="act"
+                      label="Finalize & send"
+                      onClick={() => void finalizeAndSend(inv.id, finalizeK)}
+                      state={finalizing}
+                    />
+                  ) : (
+                    <ActionButton
+                      key="act"
+                      label="Finalize & send"
+                      onClick={() => setConfirmKey(finalizeK)}
+                    />
+                  )
+                ) : unpaid ? (
                   <ActionButton
                     key="act"
                     onClick={() => sendInvoiceEmail(inv.id, sendK)}
@@ -172,11 +234,11 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
                       onClick={() => sendInvoiceEmail(inv.id, sendK)}
                       state={sent}
                     />
-                    {refundConfirm === refundK ? (
+                    {confirmKey === refundK ? (
                       <ActionButton
                         label="Confirm refund?"
                         onClick={() => {
-                          setRefundConfirm(null)
+                          setConfirmKey(null)
                           void refundInvoice(inv.id, refundK)
                         }}
                         state={refunding}
@@ -184,7 +246,7 @@ export default function ClientRelatedRecordsField(_props: UIFieldClientProps) {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => setRefundConfirm(refundK)}
+                        onClick={() => setConfirmKey(refundK)}
                         disabled={refunding?.state === 'sending'}
                         style={{
                           padding: '4px 10px',

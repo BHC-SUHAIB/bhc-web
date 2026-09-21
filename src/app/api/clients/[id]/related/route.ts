@@ -149,6 +149,7 @@ export async function GET(req: Request, ctx: RouteContext) {
         paidAt?: string | null
         issuedAt?: string | null
         stripeInvoiceId?: string | null
+        skipStripePush?: boolean | null
       }
       return {
         id: i.id,
@@ -158,6 +159,9 @@ export async function GET(req: Request, ctx: RouteContext) {
         paidAt: i.paidAt,
         issuedAt: i.issuedAt,
         stripeInvoiceId: i.stripeInvoiceId,
+        // Lets the admin row hide "Finalize & send" for off-platform
+        // (Zelle / check / cash) drafts, which never go to Stripe.
+        skipStripePush: Boolean(i.skipStripePush),
       }
     }),
     subscriptions: subscriptionsWithInvoices,

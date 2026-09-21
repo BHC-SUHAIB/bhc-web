@@ -3,6 +3,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { signInvoiceToken } from '@/lib/invoice-token'
+import { denyIfCrossOrigin } from '@/lib/api-guards'
+import { recordAudit } from '@/lib/audit'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +21,11 @@ export const dynamic = 'force-dynamic'
 type RouteContext = { params: Promise<{ id: string }> }
 
 export async function POST(req: Request, ctx: RouteContext) {
+  // CSRF defense, same as send-email. Same-origin admin fetches and
+  // non-browser callers (curl / scripts) are allowed through.
+  const csrfDeny = denyIfCrossOrigin(req)
+  if (csrfDeny) return csrfDeny
+
   if (!isStripeConfigured()) {
     return NextResponse.json({ error: 'Stripe not configured.' }, { status: 503 })
   }
@@ -80,6 +87,9 @@ export async function POST(req: Request, ctx: RouteContext) {
   }
 
   let stripeInvoiceId = invoice.stripeInvoiceId ?? null
+  // True only when this call is what created the Stripe invoice — a repeat
+  // call is idempotent and shouldn't log a second audit event.
+  const pushed = !stripeInvoiceId
 
   if (!stripeInvoiceId) {
     // Create draft invoice + line items + finalize
@@ -123,6 +133,20 @@ export async function POST(req: Request, ctx: RouteContext) {
   const token = signInvoiceToken(stripeInvoiceId ?? String(invoice.id))
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   const brandedUrl = `${siteUrl}/invoice/${stripeInvoiceId ?? invoice.id}?token=${encodeURIComponent(token)}`
+
+  // Audit trail: who pushed which invoice to Stripe, and when. Matches the
+  // pattern in send-email / refund. Best-effort; never blocks the response.
+  if (pushed) {
+    await recordAudit(payload, {
+      action: 'invoice.pushed_to_stripe',
+      actor: auth.user.email ?? 'admin',
+      summary: `Pushed ${invoice.invoiceNumber} to Stripe (${stripeInvoiceId ?? 'no id'})`,
+      subjectType: 'invoice',
+      subjectId: invoice.id,
+      stripeId: stripeInvoiceId,
+      ipAddress: (req.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || null,
+    })
+  }
 
   return NextResponse.json({
     ok: true,

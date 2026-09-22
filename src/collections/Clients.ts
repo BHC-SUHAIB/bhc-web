@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
+import { HOSTING_AGREED_OPTIONS } from '@/lib/invoice-hosting'
 import {
   collectAppInvoicePrefixes,
   createStripeCustomerWithPrefix,
@@ -270,6 +271,22 @@ export const Clients: CollectionConfig = {
         position: 'sidebar',
         description:
           'Friend & family enables editable price overrides on the Quick-Create invoice form, with the standard tier price shown struck-through.',
+      },
+    },
+    {
+      // Drives the default hosting mode on NEW invoices for this client (see
+      // src/lib/invoice-hosting.ts + the Invoices create hook). Purely a
+      // default: it never changes an invoice that already exists, and it
+      // never starts a subscription on its own.
+      name: 'hostingAgreed',
+      label: 'Hosting agreed',
+      type: 'select',
+      defaultValue: 'none',
+      options: [...HOSTING_AGREED_OPTIONS],
+      admin: {
+        position: 'sidebar',
+        description:
+          'Set this when the client accepts a proposal that includes hosting. New invoices for this client will include it automatically.',
       },
     },
     {

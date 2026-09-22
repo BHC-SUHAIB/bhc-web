@@ -5,6 +5,8 @@ import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { verifyInvoiceToken } from '@/lib/invoice-token'
 import { carePlanBySlug } from '@/lib/care-plans'
+import { effectiveHostingMode, hostingPlanRefusal } from '@/lib/invoice-hosting'
+import { clientHasLiveSubscription } from '@/lib/hosting-subscriptions'
 import { getPaymentMethodTypes } from '@/lib/payment-methods'
 import { denyIfCrossOrigin, rateLimitFivePerHour } from '@/lib/api-guards'
 import {
@@ -114,6 +116,8 @@ export async function POST(req: Request) {
       stripeInvoicePrefix?: string | null
     }
     allowCarePlanUpsell?: boolean
+    hostingMode?: string | null
+    stripeSubscriptionId?: string | null
   }
 
   // Token must be tied to this invoice's Stripe ID (or fall back to Payload ID
@@ -130,6 +134,36 @@ export async function POST(req: Request) {
   }
   if (invoice.status === 'void') {
     return NextResponse.json({ error: 'Invoice is voided.' }, { status: 409 })
+  }
+
+  // Validate care plan opt-in. We accept the slug now but defer the actual
+  // subscription creation to the webhook — that's where we know which
+  // payment method the client used and whether it's reusable.
+  const carePlan = body.addCarePlan ? carePlanBySlug(body.addCarePlan) : null
+  if (body.addCarePlan && !carePlan) {
+    return NextResponse.json({ error: 'Unknown care plan.' }, { status: 400 })
+  }
+
+  // Server-side hosting guard. The browser is not trusted: re-resolve the
+  // invoice's hosting mode (including the legacy allowCarePlanUpsell
+  // fallback) and refuse to start a plan when the client is already on one
+  // or when this invoice doesn't offer hosting. `hidden` covers the old
+  // "upsell disabled for this invoice" case.
+  const clientHasLiveSub = await clientHasLiveSubscription(payload, invoice.client?.id)
+  const hostingMode = effectiveHostingMode({
+    hostingMode: invoice.hostingMode,
+    allowCarePlanUpsell: invoice.allowCarePlanUpsell,
+    isSubscriptionInvoice: Boolean(invoice.stripeSubscriptionId),
+    // Handled separately below so the client gets the friendlier message.
+    clientHasLiveSubscription: false,
+  })
+  const refusal = hostingPlanRefusal({
+    requestedPlan: carePlan?.slug ?? null,
+    mode: hostingMode,
+    clientHasLiveSubscription: clientHasLiveSub,
+  })
+  if (refusal) {
+    return NextResponse.json({ error: refusal.error }, { status: refusal.status })
   }
 
   // (#5) Pre-checkout status check against Stripe. If the invoice was
@@ -197,17 +231,6 @@ export async function POST(req: Request) {
         data: { stripeCustomerId, ...(stripeInvoicePrefix ? { stripeInvoicePrefix } : {}) },
       })
     }
-  }
-
-  // Validate care plan opt-in. We accept the slug now but defer the actual
-  // subscription creation to the webhook — that's where we know which
-  // payment method the client used and whether it's reusable.
-  const carePlan = body.addCarePlan ? carePlanBySlug(body.addCarePlan) : null
-  if (body.addCarePlan && !carePlan) {
-    return NextResponse.json({ error: 'Unknown care plan.' }, { status: 400 })
-  }
-  if (carePlan && invoice.allowCarePlanUpsell === false) {
-    return NextResponse.json({ error: 'Care plan upsell disabled for this invoice.' }, { status: 400 })
   }
 
   // Build the line items from the Payload invoice. We mint these inline as

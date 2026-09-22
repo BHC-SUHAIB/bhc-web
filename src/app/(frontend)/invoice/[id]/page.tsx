@@ -5,6 +5,12 @@ import config from '@payload-config'
 import { Container } from '@/components/Container'
 import { verifyInvoiceToken } from '@/lib/invoice-token'
 import type { CarePlanSlug } from '@/lib/care-plans'
+import {
+  effectiveHostingMode,
+  firstHostingChargeDate,
+  formatHostingChargeDate,
+} from '@/lib/invoice-hosting'
+import { clientHasLiveSubscription } from '@/lib/hosting-subscriptions'
 import { getPaymentMethodTypes } from '@/lib/payment-methods'
 import { InvoiceClient } from './InvoiceClient'
 
@@ -49,8 +55,9 @@ export default async function InvoicePage({ params, searchParams }: RouteProps) 
     totalCents: number
     status: string
     lineItems?: Array<{ description: string; amountCents: number; quantity?: number | null }>
-    client?: { displayName?: string }
+    client?: { id?: string | number; displayName?: string }
     allowCarePlanUpsell?: boolean
+    hostingMode?: string | null
     suggestedCarePlan?: CarePlanSlug | null
   }
 
@@ -68,7 +75,25 @@ export default async function InvoicePage({ params, searchParams }: RouteProps) 
   // Avoids a per-render Stripe API call. Falls through to false for
   // pre-cache invoices.
   const isSubscriptionInvoice = Boolean(invoice.stripeSubscriptionId)
-  const showCarePlanUpsell = invoice.allowCarePlanUpsell !== false && !isSubscriptionInvoice
+
+  // Never sell a second hosting plan to a client who is already on one. The
+  // Subscriptions collection is the webhook-maintained mirror, so this is a
+  // DB read, not a Stripe call.
+  const clientHasLiveSub = await clientHasLiveSubscription(payload, invoice.client?.id)
+
+  const hostingMode = effectiveHostingMode({
+    hostingMode: invoice.hostingMode,
+    allowCarePlanUpsell: invoice.allowCarePlanUpsell,
+    isSubscriptionInvoice,
+    clientHasLiveSubscription: clientHasLiveSub,
+  })
+  const suggestedCarePlan = (invoice.suggestedCarePlan ?? 'care') as CarePlanSlug
+
+  // Formatted server-side and passed down as a string: the client component
+  // must not compute a date during render or the markup would differ between
+  // the server pass and hydration.
+  const firstChargeLabel = formatHostingChargeDate(firstHostingChargeDate())
+
   const paymentMethodTypes = getPaymentMethodTypes()
 
   return (
@@ -85,9 +110,11 @@ export default async function InvoicePage({ params, searchParams }: RouteProps) 
             ? 'Thanks — this invoice has been paid in full. A receipt was emailed to you.'
             : isVoid
               ? 'This invoice was voided and is no longer payable. Reach out to hello@blackhartconsulting.com if you think this is a mistake.'
-              : showCarePlanUpsell
-                ? 'Review the line items, optionally add a Care Plan, and continue to a secure Stripe checkout.'
-                : 'Review the line items and continue to a secure Stripe checkout.'}
+              : hostingMode === 'included'
+                ? 'Review your order, authorize the monthly hosting charge, and continue to a secure Stripe checkout.'
+                : hostingMode === 'offer'
+                  ? 'Review the line items, optionally add a Care Plan, and continue to a secure Stripe checkout.'
+                  : 'Review the line items and continue to a secure Stripe checkout.'}
         </p>
       </header>
 
@@ -99,8 +126,9 @@ export default async function InvoicePage({ params, searchParams }: RouteProps) 
           description={invoice.description}
           lineItems={invoice.lineItems ?? []}
           clientName={invoice.client?.displayName ?? 'Client'}
-          allowCarePlanUpsell={showCarePlanUpsell}
-          suggestedCarePlan={(invoice.suggestedCarePlan ?? 'care') as CarePlanSlug}
+          hostingMode={hostingMode}
+          suggestedCarePlan={suggestedCarePlan}
+          firstChargeLabel={firstChargeLabel}
           paymentMethodTypes={paymentMethodTypes}
           token={token}
         />

@@ -41,6 +41,7 @@ export const AuditEvents: CollectionConfig = {
         { label: 'Care plan signup email sent', value: 'care_plan.signup_sent' },
         { label: 'Client created', value: 'client.created' },
         { label: 'Client updated', value: 'client.updated' },
+        { label: 'Invoice prefix set', value: 'client.invoice_prefix_set' },
         // Webhook-driven (server-of-record)
         { label: 'Payment received', value: 'invoice.paid' },
         { label: 'Payment failed', value: 'invoice.payment_failed' },

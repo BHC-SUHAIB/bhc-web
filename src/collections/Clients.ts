@@ -1,6 +1,11 @@
 import type { CollectionConfig } from 'payload'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { HOSTING_AGREED_OPTIONS } from '@/lib/invoice-hosting'
+import {
+  collectAppInvoicePrefixes,
+  createStripeCustomerWithPrefix,
+  resolveInvoicePrefix,
+} from '@/lib/invoice-prefix'
 
 // One Client = one human/business we bill. Mirrors a Stripe Customer 1:1
 // after their first invoice. We dedupe by email so a returning client on
@@ -79,28 +84,44 @@ export const Clients: CollectionConfig = {
             const stripe = getStripe()
             const existing = await stripe.customers.list({ email: doc.email, limit: 1 })
             let stripeCustomerId: string
+            // Mirror of the Stripe Customer's invoice_prefix. We only ever
+            // SET it on customers we create — an existing customer's prefix
+            // is read, never rewritten (changing it shifts invoice numbering
+            // going forward). Use the "Set invoice prefix" action for those.
+            let stripeInvoicePrefix: string | null = null
             if (existing.data.length > 0) {
               stripeCustomerId = existing.data[0].id
+              stripeInvoicePrefix = existing.data[0].invoice_prefix ?? null
               req.payload.logger.info(
                 { clientId: doc.id, stripeCustomerId, email: doc.email },
                 '[clients] linked existing Stripe Customer by email',
               )
             } else {
-              const created = await stripe.customers.create({
-                email: doc.email,
-                name: doc.displayName,
-                phone: doc.phone || undefined,
-                metadata: {
-                  payload_client_id: String(doc.id),
-                  ...(doc.company ? { company: doc.company } : {}),
-                  ...(doc.firstName ? { first_name: doc.firstName } : {}),
-                  ...(doc.lastName ? { last_name: doc.lastName } : {}),
-                  ...(doc.sourceLp ? { source_lp: doc.sourceLp } : {}),
-                },
+              const invoicePrefix = await resolveInvoicePrefix(stripe, doc, {
+                knownPrefixes: await collectAppInvoicePrefixes(req.payload),
+                logger: req.payload.logger,
               })
+              const { customer: created, invoicePrefix: appliedPrefix } =
+                await createStripeCustomerWithPrefix(
+                  stripe,
+                  {
+                    email: doc.email,
+                    name: doc.displayName,
+                    phone: doc.phone || undefined,
+                    metadata: {
+                      payload_client_id: String(doc.id),
+                      ...(doc.company ? { company: doc.company } : {}),
+                      ...(doc.firstName ? { first_name: doc.firstName } : {}),
+                      ...(doc.lastName ? { last_name: doc.lastName } : {}),
+                      ...(doc.sourceLp ? { source_lp: doc.sourceLp } : {}),
+                    },
+                  },
+                  { invoicePrefix, logger: req.payload.logger },
+                )
               stripeCustomerId = created.id
+              stripeInvoicePrefix = appliedPrefix ?? created.invoice_prefix ?? null
               req.payload.logger.info(
-                { clientId: doc.id, stripeCustomerId },
+                { clientId: doc.id, stripeCustomerId, stripeInvoicePrefix },
                 '[clients] created Stripe Customer',
               )
             }
@@ -108,10 +129,10 @@ export const Clients: CollectionConfig = {
             await req.payload.update({
               collection: 'clients',
               id: doc.id,
-              data: { stripeCustomerId },
+              data: { stripeCustomerId, ...(stripeInvoicePrefix ? { stripeInvoicePrefix } : {}) },
               context: { skipStripeSync: true } as never,
             })
-            return { ...doc, stripeCustomerId }
+            return { ...doc, stripeCustomerId, ...(stripeInvoicePrefix ? { stripeInvoicePrefix } : {}) }
           } catch (err) {
             req.payload.logger.error(
               { err, clientId: doc.id, email: doc.email },
@@ -206,6 +227,35 @@ export const Clients: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'cus_… ID. Set automatically by the first checkout/webhook; do not edit.',
+      },
+    },
+    {
+      // Mirror of the Stripe Customer's `invoice_prefix`. Read-only: Stripe
+      // is the server of record. Written by the customer-create paths, and by
+      // the "Set invoice prefix" action for customers created before this
+      // existed (or whose prefix Stripe randomised).
+      name: 'stripeInvoicePrefix',
+      label: 'Stripe invoice prefix',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description:
+          'Set automatically when the Stripe customer is created. Invoices from Stripe are numbered PREFIX-0001, PREFIX-0002...',
+      },
+    },
+    {
+      // UI-only field: "Set invoice prefix" action for EXISTING Stripe
+      // customers. Previews the computed prefix + the current one, then
+      // POSTs to /api/clients/[id]/set-invoice-prefix on confirm.
+      name: 'setInvoicePrefix',
+      type: 'ui',
+      label: 'Invoice prefix',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '/components/admin/SetInvoicePrefixField#default',
+        },
       },
     },
     {

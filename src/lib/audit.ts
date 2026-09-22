@@ -14,6 +14,7 @@ export type AuditAction =
   | 'care_plan.signup_sent'
   | 'client.created'
   | 'client.updated'
+  | 'client.invoice_prefix_set'
   | 'invoice.paid'
   | 'invoice.payment_failed'
   | 'invoice.refund_completed'

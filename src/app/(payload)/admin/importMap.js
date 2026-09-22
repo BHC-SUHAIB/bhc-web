@@ -1,3 +1,4 @@
+import { default as default_fa6470b59f1dd12288a5aa2cedd027d7 } from '../../../components/admin/SetInvoicePrefixField'
 import { default as default_1efe7aed5006f10bc2c7f984e43e38c5 } from '../../../components/admin/DelinquentBadgeCell'
 import { default as default_4513330e4e5fbebfbe0c9734748ab83c } from '../../../components/admin/SendCarePlanSignupField'
 import { default as default_27e05b5a5add4ff62dbd239994f1e58c } from '../../../components/admin/ClientRelatedRecordsField'
@@ -44,6 +45,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "/components/admin/SetInvoicePrefixField#default": default_fa6470b59f1dd12288a5aa2cedd027d7,
   "/components/admin/DelinquentBadgeCell#default": default_1efe7aed5006f10bc2c7f984e43e38c5,
   "/components/admin/SendCarePlanSignupField#default": default_4513330e4e5fbebfbe0c9734748ab83c,
   "/components/admin/ClientRelatedRecordsField#default": default_27e05b5a5add4ff62dbd239994f1e58c,

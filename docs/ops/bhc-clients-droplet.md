@@ -1,16 +1,17 @@
 # bhc-clients droplet — shared client-hosting server (runbook)
 
-**Status (2026-09-13):** provisioned, verified, snapshotted, and **left running** for the
-first client (Suhaib's call after the build; a powered-off droplet bills the same USD 24/mo,
-so it was powered back on rather than destroyed). The snapshot below is the clean base image:
-if the box ever needs to be rebuilt, or is destroyed during a dry spell, restore it with the
-one command in [Restore from snapshot](#6-restore-from-snapshot).
+**Status (2026-09-21):** live. Hosts one **paying client**, `grantswithinreach.com`, so every
+change on this box is a change to production: nothing here may take the site down. Off-box
+backups to DO Spaces are now wired (§4), and the GWR clone pulls from GitHub through its own
+read-only deploy key (§3) — the git-bundle stopgap is retired.
 
 | Item | Value |
 |---|---|
-| Snapshot name | `bhc-clients-base-2026-09-13` |
-| Snapshot ID | `245391002` |
-| Snapshot cost | USD 0.06 / GB / month × 4.99 GiB ≈ USD 0.30 / month |
+| Snapshot name (latest) | `bhc-clients-gwr-live-2026-09-21` — taken live, with the client site up |
+| Snapshot ID (latest) | `246510152` (29.77 GiB, nyc3) |
+| Snapshot name (base) | `bhc-clients-base-2026-09-13` — clean box, no clients. Keep it. |
+| Snapshot ID (base) | `245391002` |
+| Snapshot cost | USD 0.06 / GB / month: base 4.99 GiB ≈ USD 0.30/mo, GWR-live 29.77 GiB ≈ USD 1.79/mo |
 | Droplet (when running) | `s-2vcpu-4gb`, nyc3, USD 24/mo, ~USD 0.036/hr |
 | Droplet ID / IP | **600246126 / 159.203.90.123** (live). A droplet restored from the snapshot gets a NEW IP. |
 | Health URL | `https://clients.getblackhart.com` returns `200` + `bhc-clients ok` |
@@ -21,6 +22,23 @@ one command in [Restore from snapshot](#6-restore-from-snapshot).
 
 Source of the design: `docs/ops/BHC-Service-Implementation-Playbook-2026-09.pdf`, Part 2
 ("Where the sites live: a shared clients droplet") and Part 5 (Host plan, line by line).
+
+### Snapshot cadence
+
+**Take a fresh snapshot before every client add and every cutover** — i.e. before any
+`add-client.sh` run, before repointing a live domain, and before a Postgres or Docker
+upgrade. A snapshot on a running droplet is safe: no power-off, no downtime, and the live
+site keeps serving throughout (the 2026-09-21 one took ~5 minutes with GWR up).
+
+```bash
+doctl compute droplet-action snapshot 600246126 \
+  --snapshot-name bhc-clients-<what-changed>-$(date +%F) --wait
+doctl compute snapshot list --resource droplet        # confirm it landed
+```
+
+Keep the base image and the newest pre-change snapshot; delete older ones by hand once a
+newer good one exists, since each costs USD 0.06/GB/month. A snapshot is a whole-box
+rollback, **not** a data backup — for per-client data use §4.
 
 ---
 
@@ -160,8 +178,22 @@ Prereqs: the client's repo has a `Dockerfile` that serves on `:3000` and reads
 ```bash
 ssh deploy@<ip>
 cd /opt/bhc-clients
-bash scripts/add-client.sh acme-plumbing acme-plumbing.com
+GTM_ID=GTM-XXXXXXX CLARITY_ID=abcdefghij \
+  bash scripts/add-client.sh acme-plumbing acme-plumbing.com "Acme Plumbing"
 ```
+
+The 3rd argument (public site name) and the two analytics env vars are optional; the name
+defaults to the title-cased slug and empty IDs simply render no tags.
+
+**`NEXT_PUBLIC_*` must be compose build args, not just `env_file` entries.** Next.js inlines
+anything `NEXT_PUBLIC_*` at `next build`, so a value that only exists in `.env` at runtime
+never reaches the browser bundle — that is why GWR's service block had to be hand-edited on
+2026-09-21 to add GTM and Clarity. `add-client.sh` now writes the `args:` block itself for
+`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_NAME`, `NEXT_PUBLIC_GTM_ID` and
+`NEXT_PUBLIC_CLARITY_PROJECT_ID`, and writes the same four keys into `clients/<slug>/.env`.
+To change one later, edit **both** copies and `docker compose up -d --build <slug>` — a
+`--force-recreate` will not re-inline it. `SEED_ADMIN_EMAIL` is
+`suhaib@blackhartconsulting.com`; `hello@` is a forwarding alias only and must never be a login.
 
 The script (idempotent) creates role + database `acme_plumbing` (and revokes CONNECT on it from
 PUBLIC, so only that role can open it), writes
@@ -189,8 +221,20 @@ The script (idempotent) generates `~/.ssh/github-deploy-acme-plumbing` (ed25519,
 passphrase), pins github.com's host key, adds a `Host github.com-acme-plumbing` alias to
 `~/.ssh/config` that uses only that key, repoints `clients/acme-plumbing` at
 `git@github.com-acme-plumbing:BHC-SUHAIB/acme-plumbing.git` if the clone already exists,
-and prints the public key. Suhaib then adds that key himself (it is an account-settings
-change, so an agent must ask, never do it):
+and prints the public key.
+
+The generated key does nothing until it is **registered on the repo**. From the Mac, where
+`gh` is authenticated as `BHC-SUHAIB`, that is one command (no browser, no control panel):
+
+```bash
+scp deploy@159.203.90.123:~/.ssh/github-deploy-acme-plumbing.pub /tmp/
+gh repo deploy-key add /tmp/github-deploy-acme-plumbing.pub \
+  --repo BHC-SUHAIB/acme-plumbing --title "bhc-clients droplet (read-only)"
+gh repo deploy-key list --repo BHC-SUHAIB/acme-plumbing      # must show "read-only"
+```
+
+`gh repo deploy-key add` without `--allow-write` is read-only, which is what we want: the
+droplet can pull and can never push. Equivalent by hand:
 **github.com/BHC-SUHAIB/acme-plumbing → Settings → Deploy keys → Add deploy key**, title
 `bhc-clients droplet (read-only)`, **Allow write access unchecked**. Confirm with
 
@@ -198,10 +242,32 @@ change, so an agent must ask, never do it):
 bash scripts/add-deploy-key.sh acme-plumbing BHC-SUHAIB/acme-plumbing --check
 ```
 
-One key per repo because GitHub allows a deploy key on exactly one repository, and the
-`IdentitiesOnly` alias means a clone can never reach another client's repo. Until the key
-is on GitHub, the stopgap is a bundle: on the Mac `git bundle create /tmp/<slug>.bundle main`,
-`scp` it up, then `git -C clients/<slug> pull --ff-only /tmp/<slug>.bundle main`.
+**Every new client needs its own key + its own `Host` alias.** One key per repo because
+GitHub allows a deploy key on exactly one repository, and the `IdentitiesOnly` alias means a
+clone can never reach another client's repo. Skipping this is what forced the git-bundle
+workaround for GWR through 2026-09-18.
+
+Gotcha seen on 2026-09-21: GWR's key had existed on the droplet since 2026-09-17 but had
+**never been added to the repo**, so every pull failed with
+`git@github.com: Permission denied (publickey)` and looked like a broken key. Before
+regenerating anything, check `gh repo deploy-key list` — an empty list is the usual cause.
+Also allow ~1 minute after `deploy-key add` before the first fetch succeeds.
+
+Verify from the droplet:
+
+```bash
+cd /opt/bhc-clients/clients/acme-plumbing
+git remote -v                 # must be git@github.com-acme-plumbing:...
+git fetch origin && git status -sb     # want "## main...origin/main" with no ahead/behind
+```
+
+The bundle stopgap (only if a key genuinely cannot be added): on the Mac
+`git bundle create /tmp/<slug>.bundle main`, `scp` it up, then
+`git -C clients/<slug> pull --ff-only /tmp/<slug>.bundle main`.
+
+Current state: `grants-within-reach` uses key `~/.ssh/github-deploy-grants-within-reach`,
+alias `github.com-grants-within-reach`, registered on `BHC-SUHAIB/grantswithinreach` as
+deploy key **164031225** (read-only). `git fetch` works; the clone sits at `origin/main`.
 
 ### Clone and build
 
@@ -247,8 +313,13 @@ bash scripts/remove-client.sh acme-plumbing          # or: acme-plumbing --purge
 - Per client DB: `pg_dump -F c` → `/root/db-backups/<db>/<db>-<stamp>.dump`; if
   `clients/<slug>/media` is non-empty, also `<db>-media-<stamp>.tar.gz`.
 - Rotation: anything under `/root/db-backups` older than 14 days is deleted.
-- Log: `/root/db-backups/backup.log` (one `ok`/`FAIL` line per DB, one `done:` line per run).
+- Log: `/root/db-backups/backup.log` (one `ok`/`FAIL` line per DB, one `done:` line per run,
+  then one `ok`/`FAIL`/`WARN offsite:` line for the Spaces sync).
+- Off-box: every run also syncs the tree to `s3://bhc-client-backups/bhc-clients/` (below).
 - Run by hand: `sudo /root/db-backups/backup.sh`.
+- Templates in this repo: [`bhc-clients/backup/backup.sh`](bhc-clients/backup/backup.sh),
+  [`crontab.txt`](bhc-clients/backup/crontab.txt),
+  [`s3cfg.example`](bhc-clients/backup/s3cfg.example) (Spaces credentials).
 
 Restore one client:
 
@@ -262,12 +333,73 @@ It stops the container, takes a safety dump (`pre-restore-<stamp>.dump`), drops 
 recreates the DB, `pg_restore`s with `--no-owner --role=<db>`, starts the container.
 Media: `sudo tar -xzf <db>-media-<stamp>.tar.gz -C /opt/bhc-clients/clients/<slug>/media`.
 
-**TODO (not wired yet): weekly off-box copy to DO Spaces.** Playbook Part 5 calls for
-it. Plan: create a Space `bhc-client-backups` (USD 5/mo), `apt-get install rclone`,
-`rclone config` with the Spaces key, then add to the end of `backup.sh`:
-`rclone sync /root/db-backups spaces:bhc-client-backups/$(hostname) --min-age 0 --exclude backup.sh`
-on a `0 4 * * 0` cron. Until then a droplet loss loses all backups — the DO snapshot
-is a base image, not a data backup. Also: test a restore once a quarter and note the date here.
+### Off-box copy to DO Spaces (wired 2026-09-21)
+
+`backup.sh` now ends with an `s3cmd sync` of the whole `/root/db-backups` tree to Spaces, so
+a droplet loss no longer loses the backups.
+
+| Item | Value |
+|---|---|
+| Bucket | `s3://bhc-client-backups`, nyc3, **private** (no public policy, owner-only ACL) |
+| Prefix | `bhc-clients/` — one prefix per droplet, so a second box can share the bucket |
+| Credentials | `/root/.config/bhc-backups/s3cfg`, mode `600`, root-only. DO key name `bhc-clients-backup-droplet`, scoped **readwrite to `bhc-client-backups` only** — it cannot touch `bhc-media` or any other Space. |
+| Tool | `s3cmd` 2.4.0 from Ubuntu `apt` (no pip, no snap) |
+| Encryption | uploaded with `--server-side-encryption`; Spaces also encrypts at rest by default |
+| Remote retention | bucket lifecycle rule, `Expiration > Days = 30` (local rotation is 14 days, so Spaces keeps roughly twice the history) |
+| Cost | Spaces base USD 5/mo for 250 GB; current usage ~36 MB |
+
+Why `s3cmd` and not `rclone` (the earlier plan): one apt package covers bucket creation,
+sync, SSE **and** the lifecycle rule (`s3cmd expire`), where rclone cannot set lifecycle.
+
+Design notes, both load-bearing:
+
+- The sync is **additive** (`--no-delete-removed`). The 14-day local rotation must never
+  propagate deletions to the bucket, or the off-box copy would be no older than the local one.
+- Remote expiry is the bucket's own lifecycle rule, not the script's job.
+- A missing config or missing `s3cmd` logs `WARN offsite: ... skipping` and still lets the
+  local backup count as a success; a *failed* sync logs `FAIL offsite` and makes the script
+  exit non-zero, so cron mails about it.
+
+Useful commands (all as root):
+
+```bash
+sudo s3cmd --config=/root/.config/bhc-backups/s3cfg ls -r s3://bhc-client-backups/
+sudo s3cmd --config=/root/.config/bhc-backups/s3cfg du s3://bhc-client-backups/
+sudo s3cmd --config=/root/.config/bhc-backups/s3cfg getlifecycle s3://bhc-client-backups
+sudo /root/db-backups/backup.sh            # dumps + syncs; safe to run any time
+```
+
+Rotating the Spaces key (it is scoped, so this is low-risk):
+
+```bash
+# on the Mac
+doctl spaces keys create bhc-clients-backup-droplet-2 \
+  --grants 'bucket=bhc-client-backups;permission=readwrite' -o json
+# put access_key/secret_key into /root/.config/bhc-backups/s3cfg on the droplet (mode 600),
+# run backup.sh once to confirm, then:
+doctl spaces keys delete <OLD-ACCESS-KEY>
+```
+
+Bucket creation needed a temporary `fullaccess` key (`doctl spaces keys create ... 'bucket=;permission=fullaccess'`)
+because a bucket-scoped key cannot create its own bucket; that temp key was deleted
+immediately after. `doctl` cannot create Spaces buckets directly — use `s3cmd mb` as above.
+
+### Restore drill
+
+Prove the dumps are restorable **without** touching the live database: `pg_restore --list`
+parses the archive and prints its table of contents, and writes nothing.
+
+```bash
+F=/root/db-backups/grants_within_reach/grants_within_reach-$(date +%F)_033001.dump
+sudo file "$F"                                    # want: PostgreSQL custom database dump
+sudo cat "$F" | docker exec -i bhc-clients-postgres pg_restore --list | head -12
+```
+
+Last drill **2026-09-21**: `grants_within_reach-2026-09-21_033001.dump`, 527,535 bytes,
+mtime `2026-09-21 03:30:02 -0500`, custom format v1.15-0, **1167 TOC entries**, parsed clean.
+Do this once a quarter (next: 2026-12) and add a line here. A full restore into a scratch
+database is the stronger drill; `scripts/restore-client.sh` is the live-DB path and must not
+be pointed at a client in service.
 
 ---
 

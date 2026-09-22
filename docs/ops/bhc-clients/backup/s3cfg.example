@@ -1,0 +1,27 @@
+[default]
+# DigitalOcean Spaces credentials used by backup.sh for the off-box copy.
+#
+# Install on the droplet as root-only:
+#   sudo install -d -m 700 -o root -g root /root/.config/bhc-backups
+#   sudo install -m 600 -o root -g root s3cfg /root/.config/bhc-backups/s3cfg
+#
+# Create the key pair on the Mac (never reuse a fullaccess key here) with:
+#   doctl spaces keys create bhc-clients-backup-droplet \
+#     --grants 'bucket=bhc-client-backups;permission=readwrite'
+# The secret is shown ONCE at creation. Paste the two values below, then run
+#   sudo /root/db-backups/backup.sh
+# and confirm the log ends with "ok   offsite: synced to s3://bhc-client-backups/...".
+#
+# The bucket itself must already exist and be private. A bucket-scoped key cannot
+# create it, so create it once with a temporary fullaccess key and delete that key:
+#   doctl spaces keys create tmp-bootstrap --grants 'bucket=;permission=fullaccess'
+#   s3cmd -c <tmp-cfg> --region=nyc3 mb s3://bhc-client-backups
+#   s3cmd -c <tmp-cfg> expire s3://bhc-client-backups --expiry-days=30
+#   doctl spaces keys delete <TMP-ACCESS-KEY>
+
+host_base = nyc3.digitaloceanspaces.com
+host_bucket = %(bucket)s.nyc3.digitaloceanspaces.com
+use_https = True
+signature_v2 = False
+access_key = PASTE_SPACES_ACCESS_KEY
+secret_key = PASTE_SPACES_SECRET_KEY

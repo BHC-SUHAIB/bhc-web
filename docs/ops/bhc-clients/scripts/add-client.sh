@@ -2,14 +2,22 @@
 # Add a client site to the bhc-clients stack.
 #
 # Usage (on the droplet, as deploy):
-#   cd /opt/bhc-clients && bash scripts/add-client.sh <slug> <hostname>
-#   e.g. bash scripts/add-client.sh acme-plumbing acme-plumbing.com
+#   cd /opt/bhc-clients && bash scripts/add-client.sh <slug> <hostname> [site name]
+#   e.g. bash scripts/add-client.sh acme-plumbing acme-plumbing.com "Acme Plumbing"
+#
+# Analytics IDs are optional and come from the environment, because they are only
+# known once the client's GTM container / Clarity project exist:
+#   GTM_ID=GTM-XXXXXXX CLARITY_ID=abcdefghij bash scripts/add-client.sh <slug> <host> "<name>"
+# Leaving them unset writes empty build args, which is fine: the app renders no
+# tags for an empty ID, and you can fill them in later (see step 3 note below).
 #
 # What it does (idempotent; re-running is safe):
 #   1. creates Postgres role + database named after the slug (hyphens -> underscores)
 #      and revokes CONNECT on that database from PUBLIC (only its role can open it)
-#   2. writes clients/<slug>/.env  (DATABASE_URI, PAYLOAD_SECRET, NEXT_PUBLIC_SITE_URL)
-#   3. appends the <slug> service to docker-compose.yml
+#   2. writes clients/<slug>/.env  (DATABASE_URI, PAYLOAD_SECRET, NEXT_PUBLIC_*)
+#   3. appends the <slug> service to docker-compose.yml, including the NEXT_PUBLIC_*
+#      build args (Next.js inlines NEXT_PUBLIC_* at `next build`, so env_file alone
+#      is not enough — they must be build args or the tags never reach the bundle)
 #   4. writes caddy/sites/<slug>.caddy and reloads Caddy
 #   5. prints the DNS records the client needs + the deploy commands
 #
@@ -20,16 +28,18 @@
 #
 # For a pre-launch preview use the preview hostname first, e.g.
 #   add-client.sh acme-plumbing acme-plumbing.preview.getblackhart.com
-# then at cutover edit caddy/sites/<slug>.caddy + NEXT_PUBLIC_SITE_URL and
+# then at cutover edit caddy/sites/<slug>.caddy, the NEXT_PUBLIC_SITE_URL build arg in
+# docker-compose.yml AND the same key in clients/<slug>/.env, then
 #   docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
-#   docker compose up -d --force-recreate <slug>
+#   docker compose up -d --build <slug>      # --build, not --force-recreate:
+#                                            # NEXT_PUBLIC_* is baked in at build time
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-SLUG="${1:-}"; HOST="${2:-}"
+SLUG="${1:-}"; HOST="${2:-}"; SITE_NAME="${3:-}"
 if [[ -z "$SLUG" || -z "$HOST" ]]; then
-  echo "usage: $0 <slug> <hostname>" >&2; exit 1
+  echo "usage: $0 <slug> <hostname> [site name]" >&2; exit 1
 fi
 if [[ ! "$SLUG" =~ ^[a-z0-9][a-z0-9-]{1,40}$ ]]; then
   echo "slug must be lowercase [a-z0-9-], 2-41 chars: $SLUG" >&2; exit 1
@@ -47,6 +57,13 @@ DBNAME="${SLUG//-/_}"
 CLIENT_DIR="clients/$SLUG"
 ENV_FILE="$CLIENT_DIR/.env"
 SITE_FILE="caddy/sites/$SLUG.caddy"
+# Public site name: 3rd arg, else the slug title-cased ("acme-plumbing" -> "Acme Plumbing").
+if [[ -z "$SITE_NAME" ]]; then
+  SITE_NAME="$(printf '%s' "${SLUG//-/ }" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')"
+fi
+# Analytics IDs: optional, from the environment. Empty is valid.
+GTM_ID="${GTM_ID:-}"
+CLARITY_ID="${CLARITY_ID:-}"
 IPV4="$(curl -fsS -4 https://api.ipify.org 2>/dev/null || hostname -I | awk '{print $1}')"
 IPV6="$(curl -fsS -6 https://api64.ipify.org 2>/dev/null || true)"
 
@@ -93,8 +110,14 @@ DB_PASSWORD=$DB_PASSWORD
 DATABASE_URI=postgres://$DBNAME:$DB_PASSWORD@postgres:5432/$DBNAME
 PAYLOAD_SECRET=$PAYLOAD_SECRET
 NEXT_PUBLIC_SITE_URL=https://$HOST
+NEXT_PUBLIC_SITE_NAME=$SITE_NAME
 SITE_DOMAIN=$HOST
+# Analytics — must ALSO be build args in docker-compose.yml (Next.js inlines these
+# at build time); keep the two copies in sync or a rebuild will drop the tags.
+NEXT_PUBLIC_GTM_ID=$GTM_ID
+NEXT_PUBLIC_CLARITY_PROJECT_ID=$CLARITY_ID
 # Seed admin (first boot only) — client resets it via the login page.
+# suhaib@ is the real mailbox; hello@ is only a forwarding alias, never a login.
 SEED_ADMIN_EMAIL=suhaib@blackhartconsulting.com
 SEED_ADMIN_PASSWORD=$(openssl rand -base64 18 | tr -d '/+=')
 # Transactional email (fill in per client)
@@ -120,6 +143,15 @@ else
     build:
       context: ./clients/$SLUG
       dockerfile: Dockerfile
+      # NEXT_PUBLIC_* values are inlined by \`next build\`, so they have to be
+      # build args, not just env_file entries. Keep them in sync with
+      # clients/$SLUG/.env, and rebuild (not just recreate) after changing one:
+      #   docker compose up -d --build $SLUG
+      args:
+        NEXT_PUBLIC_SITE_URL: https://$HOST
+        NEXT_PUBLIC_SITE_NAME: $SITE_NAME
+        NEXT_PUBLIC_GTM_ID: "$GTM_ID"
+        NEXT_PUBLIC_CLARITY_PROJECT_ID: "$CLARITY_ID"
     container_name: bhc-client-$SLUG
     restart: unless-stopped
     env_file: ./clients/$SLUG/.env
@@ -204,8 +236,16 @@ Deploy the app:
 Redeploy later:
   git -C clients/$SLUG pull --ff-only && docker compose up -d --build $SLUG
 
+Analytics (build args, already written into docker-compose.yml):
+  NEXT_PUBLIC_SITE_NAME            $SITE_NAME
+  NEXT_PUBLIC_GTM_ID               ${GTM_ID:-(empty — no GTM tag will render)}
+  NEXT_PUBLIC_CLARITY_PROJECT_ID   ${CLARITY_ID:-(empty — no Clarity tag will render)}
+  To change one: edit BOTH the args: block in docker-compose.yml and clients/$SLUG/.env,
+  then 'docker compose up -d --build $SLUG' (a plain recreate will not re-inline them).
+
 Files:
   clients/$SLUG/.env        secrets (DATABASE_URI, PAYLOAD_SECRET, seed admin)
   caddy/sites/$SLUG.caddy   hostname -> $SLUG:3000
   database: $DBNAME  (role $DBNAME)  — backed up nightly to /root/db-backups/$DBNAME/
+                                       and off-box to s3://bhc-client-backups/bhc-clients/
 NEXT

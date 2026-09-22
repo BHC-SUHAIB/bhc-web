@@ -1786,6 +1786,9 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       // "Show on the public portfolio" in the admin.
       published: false,
       featured: false,
+      // Stored as a published version like every other seeded project (PR #77);
+      // visibility is governed by `published` above, not by `_status`.
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 

@@ -3,6 +3,11 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { signInvoiceToken } from '@/lib/invoice-token'
+import {
+  collectAppInvoicePrefixes,
+  createStripeCustomerWithPrefix,
+  resolveInvoicePrefix,
+} from '@/lib/invoice-prefix'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,7 +53,16 @@ export async function POST(req: Request, ctx: RouteContext) {
     description?: string | null
     lineItems?: Array<{ description: string; amountCents: number; quantity?: number }>
     stripeInvoiceId?: string | null
-    client?: { id: string | number; email?: string; displayName?: string; stripeCustomerId?: string | null }
+    client?: {
+      id: string | number
+      email?: string
+      displayName?: string
+      company?: string | null
+      firstName?: string | null
+      lastName?: string | null
+      stripeCustomerId?: string | null
+      stripeInvoicePrefix?: string | null
+    }
     dueAt?: string | null
   }
 
@@ -62,20 +76,35 @@ export async function POST(req: Request, ctx: RouteContext) {
   // Resolve / create Stripe Customer
   let stripeCustomerId = invoice.client.stripeCustomerId ?? null
   if (!stripeCustomerId) {
+    // New customers get a branded `BHC…` invoice_prefix so Stripe numbers
+    // their invoices BHCXXX-0001 instead of using a random prefix. An
+    // existing customer's prefix is read, never rewritten.
+    let stripeInvoicePrefix: string | null = null
     const existing = await stripe.customers.list({ email: invoice.client.email, limit: 1 })
-    stripeCustomerId =
-      existing.data[0]?.id ??
-      (
-        await stripe.customers.create({
+    if (existing.data[0]) {
+      stripeCustomerId = existing.data[0].id
+      stripeInvoicePrefix = existing.data[0].invoice_prefix ?? null
+    } else {
+      const invoicePrefix = await resolveInvoicePrefix(stripe, invoice.client, {
+        knownPrefixes: await collectAppInvoicePrefixes(payload),
+        logger: payload.logger,
+      })
+      const { customer: created, invoicePrefix: appliedPrefix } = await createStripeCustomerWithPrefix(
+        stripe,
+        {
           email: invoice.client.email,
           name: invoice.client.displayName,
           metadata: { payload_client_id: String(invoice.client.id) },
-        })
-      ).id
+        },
+        { invoicePrefix, logger: payload.logger },
+      )
+      stripeCustomerId = created.id
+      stripeInvoicePrefix = appliedPrefix ?? created.invoice_prefix ?? null
+    }
     await payload.update({
       collection: 'clients',
       id: invoice.client.id,
-      data: { stripeCustomerId },
+      data: { stripeCustomerId, ...(stripeInvoicePrefix ? { stripeInvoicePrefix } : {}) },
     })
   }
 

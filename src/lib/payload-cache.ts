@@ -109,12 +109,28 @@ export const getCachedAllLandingPages = unstable_cache(
 )
 
 // --- Projects ---------------------------------------------------------
+// Every public-facing projects query goes through PUBLISHED_PROJECT so a
+// case study can be saved in the admin without going live: it stays off
+// /portfolio, off the home page featured block, out of the sitemap, and
+// 404s on its own URL until someone ticks "Show on the public portfolio".
+//
+// Why a `published` checkbox and not the collection's `_status`: the
+// projects collection does have drafts enabled, but every existing project
+// row carries `_status: 'draft'` (Payload's default for a drafts-enabled
+// collection when the seed doesn't say otherwise), so filtering on
+// `_status` would take the entire live portfolio down. `exists: false`
+// covers rows written before this field existed, which read as NULL rather
+// than picking up the `true` default.
+const PUBLISHED_PROJECT = {
+  or: [{ published: { equals: true } }, { published: { exists: false } }],
+}
 
 export const getCachedProjectsList = unstable_cache(
   async (): Promise<Project[]> => {
     const payload = await getPayloadClient()
     const res = await payload.find({
       collection: 'projects',
+      where: PUBLISHED_PROJECT,
       limit: 100,
       sort: '-publishedAt',
     })
@@ -129,7 +145,7 @@ export const getCachedFeaturedProjects = unstable_cache(
     const payload = await getPayloadClient()
     const res = await payload.find({
       collection: 'projects',
-      where: { featured: { equals: true } },
+      where: { and: [{ featured: { equals: true } }, PUBLISHED_PROJECT] },
       limit,
       sort: '-publishedAt',
     })
@@ -144,7 +160,7 @@ export const getCachedProjectBySlug = unstable_cache(
     const payload = await getPayloadClient()
     const res = await payload.find({
       collection: 'projects',
-      where: { slug: { equals: slug } },
+      where: { and: [{ slug: { equals: slug } }, PUBLISHED_PROJECT] },
       limit: 1,
     })
     return (res.docs[0] as Project | undefined) ?? null
@@ -156,7 +172,12 @@ export const getCachedProjectBySlug = unstable_cache(
 export const getCachedAllProjects = unstable_cache(
   async (): Promise<Array<Pick<Project, 'id' | 'slug' | 'updatedAt'>>> => {
     const payload = await getPayloadClient()
-    const res = await payload.find({ collection: 'projects', limit: 500, depth: 0 })
+    const res = await payload.find({
+      collection: 'projects',
+      where: PUBLISHED_PROJECT,
+      limit: 500,
+      depth: 0,
+    })
     return res.docs as Array<Pick<Project, 'id' | 'slug' | 'updatedAt'>>
   },
   ['projects:all'],

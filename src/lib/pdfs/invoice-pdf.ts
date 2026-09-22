@@ -76,6 +76,12 @@ export type InvoicePdfData = {
   hostedInvoiceUrl?: string | null
   /** Already formatted, e.g. "Card, ACH, Klarna, Link, or Cash App Pay". */
   paymentMethods: string
+  /**
+   * Short note printed under the totals band when hosting is part of this
+   * order (invoice `hostingMode === 'included'`). Omitted for every other
+   * mode, so invoices that don't include hosting print exactly as before.
+   */
+  hostingNote?: string | null
   /** IANA zone for date display. Defaults to America/Chicago. */
   timeZone?: string
 }
@@ -550,6 +556,27 @@ function drawTotalsAndPayment(ctx: Ctx): Ctx {
   return ctx
 }
 
+// Hosting note. Only drawn when the invoice includes hosting, so the layout
+// of every other invoice is byte-for-byte what it was before.
+function drawHostingNote(ctx: Ctx): Ctx {
+  const note = ctx.data.hostingNote?.trim()
+  if (!note) return ctx
+  const lines = wrap(note, ctx.fonts.sans, 8.5, CONTENT_W)
+  ctx = ensureSpace(ctx, 18 + lines.length * 11 + 8)
+  const page = ctx.page
+  ctx.y -= 6
+  hairline(page, MARGIN, ctx.y, CONTENT_W)
+  ctx.y -= 14
+  drawTracked(page, 'HOSTING', MARGIN, ctx.y, ctx.fonts.sans, 6.5, MUTED, 0.2)
+  ctx.y -= 12
+  for (const l of lines) {
+    draw(page, l, MARGIN, ctx.y, ctx.fonts.sans, 8.5, INK)
+    ctx.y -= 11
+  }
+  ctx.y -= 4
+  return ctx
+}
+
 // ────────────────── entry points ──────────────────
 
 export async function buildInvoicePdf(data: InvoicePdfData): Promise<Uint8Array> {
@@ -577,6 +604,7 @@ export async function buildInvoicePdf(data: InvoicePdfData): Promise<Uint8Array>
   ctx = drawLineItems(ctx)
   ctx.y -= 10
   ctx = drawTotalsAndPayment(ctx)
+  ctx = drawHostingNote(ctx)
 
   const pages = doc.getPages()
   pages.forEach((p, i) => drawFooter(p, fonts, data, i + 1, pages.length))
@@ -625,6 +653,8 @@ export function invoicePdfDataFromStripe(args: {
   settings?: InvoicePdfSiteSettings | null
   payUrl: string
   paymentMethodTypes?: readonly string[]
+  /** Passed straight through; set only when the invoice includes hosting. */
+  hostingNote?: string | null
 }): InvoicePdfData {
   const { invoice, client, settings, payUrl } = args
   const paymentMethodTypes = args.paymentMethodTypes ?? getPaymentMethodTypes()
@@ -680,6 +710,7 @@ export function invoicePdfDataFromStripe(args: {
       addressLines: stripeAddressLines(address),
     },
     memo: invoice.description ?? null,
+    hostingNote: args.hostingNote ?? null,
     lineItems,
     subtotalCents,
     discountCents,

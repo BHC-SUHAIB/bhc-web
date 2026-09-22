@@ -5,8 +5,15 @@ import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { verifyInvoiceToken } from '@/lib/invoice-token'
 import { carePlanBySlug } from '@/lib/care-plans'
+import { effectiveHostingMode, hostingPlanRefusal } from '@/lib/invoice-hosting'
+import { clientHasLiveSubscription } from '@/lib/hosting-subscriptions'
 import { getPaymentMethodTypes } from '@/lib/payment-methods'
 import { denyIfCrossOrigin, rateLimitFivePerHour } from '@/lib/api-guards'
+import {
+  collectAppInvoicePrefixes,
+  createStripeCustomerWithPrefix,
+  resolveInvoicePrefix,
+} from '@/lib/invoice-prefix'
 
 export const dynamic = 'force-dynamic'
 
@@ -98,8 +105,19 @@ export async function POST(req: Request) {
     totalCents: number
     status: string
     lineItems?: Array<{ description: string; amountCents: number; quantity?: number }>
-    client?: { id: string | number; email?: string; displayName?: string; stripeCustomerId?: string | null }
+    client?: {
+      id: string | number
+      email?: string
+      displayName?: string
+      company?: string | null
+      firstName?: string | null
+      lastName?: string | null
+      stripeCustomerId?: string | null
+      stripeInvoicePrefix?: string | null
+    }
     allowCarePlanUpsell?: boolean
+    hostingMode?: string | null
+    stripeSubscriptionId?: string | null
   }
 
   // Token must be tied to this invoice's Stripe ID (or fall back to Payload ID
@@ -116,6 +134,36 @@ export async function POST(req: Request) {
   }
   if (invoice.status === 'void') {
     return NextResponse.json({ error: 'Invoice is voided.' }, { status: 409 })
+  }
+
+  // Validate care plan opt-in. We accept the slug now but defer the actual
+  // subscription creation to the webhook — that's where we know which
+  // payment method the client used and whether it's reusable.
+  const carePlan = body.addCarePlan ? carePlanBySlug(body.addCarePlan) : null
+  if (body.addCarePlan && !carePlan) {
+    return NextResponse.json({ error: 'Unknown care plan.' }, { status: 400 })
+  }
+
+  // Server-side hosting guard. The browser is not trusted: re-resolve the
+  // invoice's hosting mode (including the legacy allowCarePlanUpsell
+  // fallback) and refuse to start a plan when the client is already on one
+  // or when this invoice doesn't offer hosting. `hidden` covers the old
+  // "upsell disabled for this invoice" case.
+  const clientHasLiveSub = await clientHasLiveSubscription(payload, invoice.client?.id)
+  const hostingMode = effectiveHostingMode({
+    hostingMode: invoice.hostingMode,
+    allowCarePlanUpsell: invoice.allowCarePlanUpsell,
+    isSubscriptionInvoice: Boolean(invoice.stripeSubscriptionId),
+    // Handled separately below so the client gets the friendlier message.
+    clientHasLiveSubscription: false,
+  })
+  const refusal = hostingPlanRefusal({
+    requestedPlan: carePlan?.slug ?? null,
+    mode: hostingMode,
+    clientHasLiveSubscription: clientHasLiveSub,
+  })
+  if (refusal) {
+    return NextResponse.json({ error: refusal.error }, { status: refusal.status })
   }
 
   // (#5) Pre-checkout status check against Stripe. If the invoice was
@@ -150,35 +198,39 @@ export async function POST(req: Request) {
 
   let stripeCustomerId = invoice.client?.stripeCustomerId ?? null
   if (!stripeCustomerId) {
+    // Branded invoice numbering: new customers get `BHC…` as their
+    // invoice_prefix instead of Stripe's random 8-char string. Existing
+    // customers keep whatever prefix they already have.
+    let stripeInvoicePrefix: string | null = null
     const existing = await stripe.customers.list({ email: clientEmail, limit: 1 })
     if (existing.data.length > 0) {
       stripeCustomerId = existing.data[0].id
+      stripeInvoicePrefix = existing.data[0].invoice_prefix ?? null
     } else {
-      const created = await stripe.customers.create({
-        email: clientEmail,
-        name: invoice.client?.displayName,
-        metadata: { payload_client_id: String(invoice.client?.id ?? '') },
-      })
+      const invoicePrefix = await resolveInvoicePrefix(
+        stripe,
+        { ...invoice.client, email: clientEmail },
+        { knownPrefixes: await collectAppInvoicePrefixes(payload), logger: payload.logger },
+      )
+      const { customer: created, invoicePrefix: appliedPrefix } = await createStripeCustomerWithPrefix(
+        stripe,
+        {
+          email: clientEmail,
+          name: invoice.client?.displayName,
+          metadata: { payload_client_id: String(invoice.client?.id ?? '') },
+        },
+        { invoicePrefix, logger: payload.logger },
+      )
       stripeCustomerId = created.id
+      stripeInvoicePrefix = appliedPrefix ?? created.invoice_prefix ?? null
     }
     if (invoice.client?.id) {
       await payload.update({
         collection: 'clients',
         id: invoice.client.id,
-        data: { stripeCustomerId },
+        data: { stripeCustomerId, ...(stripeInvoicePrefix ? { stripeInvoicePrefix } : {}) },
       })
     }
-  }
-
-  // Validate care plan opt-in. We accept the slug now but defer the actual
-  // subscription creation to the webhook — that's where we know which
-  // payment method the client used and whether it's reusable.
-  const carePlan = body.addCarePlan ? carePlanBySlug(body.addCarePlan) : null
-  if (body.addCarePlan && !carePlan) {
-    return NextResponse.json({ error: 'Unknown care plan.' }, { status: 400 })
-  }
-  if (carePlan && invoice.allowCarePlanUpsell === false) {
-    return NextResponse.json({ error: 'Care plan upsell disabled for this invoice.' }, { status: 400 })
   }
 
   // Build the line items from the Payload invoice. We mint these inline as

@@ -1,9 +1,11 @@
+import { default as default_fa6470b59f1dd12288a5aa2cedd027d7 } from '../../../components/admin/SetInvoicePrefixField'
 import { default as default_1efe7aed5006f10bc2c7f984e43e38c5 } from '../../../components/admin/DelinquentBadgeCell'
 import { default as default_4513330e4e5fbebfbe0c9734748ab83c } from '../../../components/admin/SendCarePlanSignupField'
 import { default as default_27e05b5a5add4ff62dbd239994f1e58c } from '../../../components/admin/ClientRelatedRecordsField'
 import { default as default_a09d236d33a794d4df28e59d84dcaf63 } from '../../../components/admin/DocActivityField'
 import { default as default_1f9e1f99af6e7943792fff79ea436155 } from '../../../components/admin/CentsAsDollarsCell'
 import { default as default_d6b9f7b673b728ed62d3996622d418a6 } from '../../../components/admin/CentsAsDollarsField'
+import { default as default_218dc39d8c039905c9e665618cdf3b95 } from '../../../components/admin/InvoiceWorkflowField'
 import { default as default_188afc714df0f7f38de573de358e2826 } from '../../../components/admin/ChangeTierField'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -43,12 +45,14 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "/components/admin/SetInvoicePrefixField#default": default_fa6470b59f1dd12288a5aa2cedd027d7,
   "/components/admin/DelinquentBadgeCell#default": default_1efe7aed5006f10bc2c7f984e43e38c5,
   "/components/admin/SendCarePlanSignupField#default": default_4513330e4e5fbebfbe0c9734748ab83c,
   "/components/admin/ClientRelatedRecordsField#default": default_27e05b5a5add4ff62dbd239994f1e58c,
   "/components/admin/DocActivityField#default": default_a09d236d33a794d4df28e59d84dcaf63,
   "/components/admin/CentsAsDollarsCell#default": default_1f9e1f99af6e7943792fff79ea436155,
   "/components/admin/CentsAsDollarsField#default": default_d6b9f7b673b728ed62d3996622d418a6,
+  "/components/admin/InvoiceWorkflowField#default": default_218dc39d8c039905c9e665618cdf3b95,
   "/components/admin/ChangeTierField#default": default_188afc714df0f7f38de573de358e2826,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,

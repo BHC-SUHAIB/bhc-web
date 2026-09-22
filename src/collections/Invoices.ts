@@ -1,4 +1,11 @@
 import type { CollectionConfig } from 'payload'
+import { clientHasLiveSubscription } from '@/lib/hosting-subscriptions'
+import {
+  allowCarePlanUpsellFor,
+  defaultHostingForNewInvoice,
+  HOSTING_MODE_OPTIONS,
+  isHostingMode,
+} from '@/lib/invoice-hosting'
 
 // Invoices mirror Stripe Invoice objects 1:1 after sync. The flow:
 //   1. You create an Invoice in Payload admin with line items
@@ -10,6 +17,13 @@ import type { CollectionConfig } from 'payload'
 // The accessToken lives only on the issued URL (signed via PAYLOAD_SECRET).
 // We don't store it server-side — anyone with the link has access for the
 // configured TTL.
+//
+// `hostingMode` (see src/lib/invoice-hosting.ts) decides how the /invoice
+// page presents hosting: included in the order, offered as an add-on, or not
+// shown. It is defaulted on CREATE from the client's "Hosting agreed" field
+// and whether they already have a live subscription; the operator can change
+// it freely afterwards. The legacy `allowCarePlanUpsell` checkbox is kept in
+// sync from it and is deprecated.
 
 export const Invoices: CollectionConfig = {
   slug: 'invoices',
@@ -28,7 +42,7 @@ export const Invoices: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      async ({ data, req, operation }) => {
+      async ({ data, req, operation, originalDoc }) => {
         if (!data) return data
         // Auto-compute totalCents from lineItems on every save so the admin
         // never needs to keep them in sync manually.
@@ -44,14 +58,15 @@ export const Invoices: CollectionConfig = {
 
         // Resolve the client once, lazily — used for invoice numbering AND
         // friend-mode defaults below.
-        let client: { displayName?: string; priceMode?: string } | null = null
+        let client: { displayName?: string; priceMode?: string; hostingAgreed?: string | null } | null =
+          null
         if (data.client) {
           try {
             client = (await req.payload.findByID({
               collection: 'clients',
               id: data.client as string | number,
               depth: 0,
-            })) as { displayName?: string; priceMode?: string } | null
+            })) as { displayName?: string; priceMode?: string; hostingAgreed?: string | null } | null
           } catch {
             client = null
           }
@@ -101,6 +116,39 @@ export const Invoices: CollectionConfig = {
         if (operation === 'create' && client?.priceMode === 'friend_and_family') {
           data.skipStripePush = true
           data.allowCarePlanUpsell = false
+          data.hostingMode = 'hidden'
+        }
+
+        // Hosting mode defaults — CREATE only, and only when the operator
+        // hasn't already picked one on the form. Never re-runs on update, so
+        // an operator override is permanent.
+        if (operation === 'create' && !data.hostingMode) {
+          let hasLiveSub = false
+          if (data.client) {
+            hasLiveSub = await clientHasLiveSubscription(
+              req.payload,
+              data.client as string | number,
+            )
+          }
+          const defaults = defaultHostingForNewInvoice({
+            clientHasLiveSubscription: hasLiveSub,
+            hostingAgreed: client?.hostingAgreed ?? null,
+          })
+          data.hostingMode = defaults.hostingMode
+          if (defaults.suggestedCarePlan) data.suggestedCarePlan = defaults.suggestedCarePlan
+        }
+
+        // Keep the deprecated `allowCarePlanUpsell` mirror truthful whenever a
+        // mode exists, so anything still reading the boolean (reports, older
+        // code paths) agrees with the mode.
+        //
+        // Deliberately does nothing for an invoice that has no mode stored:
+        // those are the pre-existing rows whose boolean is still the source of
+        // truth via deriveHostingMode(), and a partial update (e.g. the webhook
+        // patching only `status`) must not flip it.
+        const incomingMode = 'hostingMode' in data ? data.hostingMode : originalDoc?.hostingMode
+        if (isHostingMode(incomingMode)) {
+          data.allowCarePlanUpsell = allowCarePlanUpsellFor(incomingMode)
         }
 
         return data
@@ -176,12 +224,34 @@ export const Invoices: CollectionConfig = {
       },
     },
     {
+      // Three-way replacement for `allowCarePlanUpsell`. Left with no
+      // defaultValue on purpose: an empty value means "this invoice predates
+      // the field", and deriveHostingMode() falls back to the old boolean so
+      // existing invoices render exactly as before. New invoices always get a
+      // value from the create hook above.
+      name: 'hostingMode',
+      label: 'Hosting on this invoice',
+      type: 'select',
+      options: [...HOSTING_MODE_OPTIONS],
+      admin: {
+        position: 'sidebar',
+        description:
+          'Included = the client already agreed to hosting, so the invoice presents it as part of the order (with a one-tick authorization they must give before paying). Offer = optional add-on. Hidden = no hosting section. Defaulted on create from the client’s "Hosting agreed" field; change it freely.',
+      },
+    },
+    {
+      // Deprecated: superseded by `hostingMode`. Kept so the prod column
+      // isn't dropped and so anything still reading the boolean keeps
+      // working — the create/update hook mirrors the mode into it. Read-only
+      // in the admin so it can't contradict the mode.
       name: 'allowCarePlanUpsell',
       type: 'checkbox',
       defaultValue: true,
       admin: {
         position: 'sidebar',
-        description: 'When checked, the /invoice page shows a Care Plan toggle alongside the Pay button.',
+        readOnly: true,
+        description:
+          'Deprecated — use "Hosting on this invoice" above. Auto-mirrored from it (checked for Included/Offer, unchecked for Hidden). Invoices created before the mode existed still use this value.',
       },
     },
     {
@@ -195,7 +265,8 @@ export const Invoices: CollectionConfig = {
       defaultValue: 'care',
       admin: {
         position: 'sidebar',
-        description: 'Pre-selected tier on the upsell card. Client can switch.',
+        description:
+          'Offer mode: pre-selected tier on the upsell card, client can switch. Included mode: the plan on the order — fixed, the client cannot change it.',
       },
     },
     {
@@ -334,6 +405,19 @@ export const Invoices: CollectionConfig = {
       name: 'internalNotes',
       type: 'textarea',
       admin: { description: 'Private notes — never visible to the client.' },
+    },
+    {
+      // UI-only field: "Push to Stripe" + "Finalize and send" buttons. No DB
+      // column. Posts to /api/invoices/[id]/sync and
+      // /api/invoices/[id]/send-email.
+      name: 'invoiceWorkflow',
+      type: 'ui',
+      label: 'Send this invoice',
+      admin: {
+        components: {
+          Field: '/components/admin/InvoiceWorkflowField#default',
+        },
+      },
     },
     {
       // Activity timeline — audit + webhook events scoped to this invoice.

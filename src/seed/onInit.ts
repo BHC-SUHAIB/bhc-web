@@ -392,15 +392,13 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         sortOrder: 10,
       },
       {
-        // Multi-paragraph quote \u2014 \n\n triggers a paragraph break in
-        // the public renderer, single \n becomes a soft line break.
-        quote: [
-          'Black Hart Consulting completely transformed my website from the ground up, and I couldn\u2019t be more impressed with the result. They rebuilt everything from scratch, adding multiple pages and features that have significantly improved how my business presents itself to the public. The site now feels professional, polished, and truly aligned with the level of service I provide.',
-          'Since launching the new site, I\u2019ve noticed a clear difference in how clients engage with my business. Parents are coming in with a better understanding of what we offer, which has made conversations smoother and helped with conversions.',
-          'They didn\u2019t just design a website, they built something functional and strategic. From the structure of the pages to the overall user experience, everything was clearly thought through with the business in mind.',
-          'Beyond the quality of their work, their team was incredibly easy to work with. They were responsive, communicative, and made the entire process smooth from start to finish. I always felt confident that things were moving in the right direction.',
-          'I\u2019d highly recommend Black Hart Consulting to any business owner looking for more than just a good-looking website. They build platforms that actually help your business grow.',
-        ].join('\n\n'),
+        // Single-paragraph excerpt, 398 characters. Testimonials.quote is
+        // capped at maxLength 400 so every slide fits the carousel's fixed
+        // h-[420px] slot; the original five-paragraph review blew past that,
+        // failed validation on a fresh database and aborted the whole seed
+        // (no projects, no articles). This is the exact text live in
+        // production, so a rebuilt database matches what visitors see.
+        quote: 'Black Hart Consulting rebuilt my site from the ground up, adding professional features that perfectly align with my service level. Since launching, clients have a clearer understanding of our value, making sales easier and boosting conversions. More than just design, they delivered a strategic, functional tool. The team was responsive and easy to work with. Highly recommended for driving growth!',
         author: 'Philip Parmar',
         role: 'Founder',
         company: 'Prometheus Minds',
@@ -645,6 +643,11 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         role: 'Parent, Prometheus Minds (Google review)',
       },
       featured: true,
+      // Projects has drafts enabled. Without an explicit status Payload stores
+      // the row as _status 'draft' and it only renders because no public query
+      // filters on _status. Every seeded project below sets this too; the
+      // backfill at the end of this function fixes rows created before it.
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -765,6 +768,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         }] : []),
       ],
       featured: true,
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -882,6 +886,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         }] : []),
       ],
       featured: true,
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -1013,6 +1018,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         platformNote: 'iPhone & iPad — iOS 17+',
       },
       featured: true,
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -1141,6 +1147,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         }] : []),
       ],
       featured: true,
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -1252,6 +1259,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         }] : []),
       ],
       featured: true,
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -1354,6 +1362,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         }] : []),
       ],
       featured: true,
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -1461,6 +1470,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         }] : []),
       ],
       featured: false,
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -1612,6 +1622,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         platformNote: 'iPhone & iPad — iOS 17+',
       },
       featured: true,
+      _status: 'published',
       publishedAt: new Date().toISOString(),
     }
 
@@ -2065,6 +2076,49 @@ export async function seedOnInit(payload: Payload): Promise<void> {
         })
         payload.logger.info(`[seed] article upserted: ${art.slug} (FORCE_ARTICLES_UPSERT)`)
       }
+    }
+
+    // --- Backfill: seeded projects must carry _status 'published' ---
+    // Every project row created by earlier versions of this seed sits in the
+    // database as _status 'draft' (Payload's default for a drafts-enabled
+    // collection when create() is not told otherwise). They only render
+    // because no public query filters on _status. Flip the seed-owned rows
+    // to 'published' so the drafts mechanism means what it says: Publish and
+    // Save Draft in the admin behave as an editor expects, and a future
+    // _status filter would not blank the portfolio. Scoped to the slugs this
+    // seed owns so an admin-authored draft is never published behind their
+    // back. Idempotent: a no-op once every listed row is published.
+    //
+    // Public visibility is a separate concern: PR #76 adds a `published`
+    // checkbox on Projects (read by src/lib/payload-cache.ts) that decides
+    // whether a case study shows on the site, and this backfill never touches
+    // it. That is why grants-within-reach is listed even though that PR seeds
+    // it hidden: its _status should still read 'published' once it exists.
+    const SEEDED_PROJECT_SLUGS = [
+      'prometheus-minds',
+      'waygft',
+      'prometheus-eq',
+      'misbah',
+      'estimatedtax',
+      'sidecar',
+      'scrubbr',
+      'sidecar-teachable',
+      'certo',
+      'grants-within-reach',
+    ]
+    const unpublishedSeeded = await payload.find({
+      collection: 'projects',
+      where: { and: [{ slug: { in: SEEDED_PROJECT_SLUGS } }, { _status: { not_equals: 'published' } }] },
+      limit: SEEDED_PROJECT_SLUGS.length,
+      depth: 0,
+    })
+    for (const doc of unpublishedSeeded.docs) {
+      await payload.update({
+        collection: 'projects',
+        id: doc.id,
+        data: { _status: 'published' } as any,
+      })
+      payload.logger.info(`[seed] project _status backfilled to published: ${doc.slug}`)
     }
 
     payload.logger.info('[seed] complete.')

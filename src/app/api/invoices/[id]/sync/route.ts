@@ -3,6 +3,13 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { signInvoiceToken } from '@/lib/invoice-token'
+import { denyIfCrossOrigin } from '@/lib/api-guards'
+import { recordAudit } from '@/lib/audit'
+import {
+  collectAppInvoicePrefixes,
+  createStripeCustomerWithPrefix,
+  resolveInvoicePrefix,
+} from '@/lib/invoice-prefix'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +26,11 @@ export const dynamic = 'force-dynamic'
 type RouteContext = { params: Promise<{ id: string }> }
 
 export async function POST(req: Request, ctx: RouteContext) {
+  // CSRF defense, same as send-email. Same-origin admin fetches and
+  // non-browser callers (curl / scripts) are allowed through.
+  const csrfDeny = denyIfCrossOrigin(req)
+  if (csrfDeny) return csrfDeny
+
   if (!isStripeConfigured()) {
     return NextResponse.json({ error: 'Stripe not configured.' }, { status: 503 })
   }
@@ -48,7 +60,16 @@ export async function POST(req: Request, ctx: RouteContext) {
     description?: string | null
     lineItems?: Array<{ description: string; amountCents: number; quantity?: number }>
     stripeInvoiceId?: string | null
-    client?: { id: string | number; email?: string; displayName?: string; stripeCustomerId?: string | null }
+    client?: {
+      id: string | number
+      email?: string
+      displayName?: string
+      company?: string | null
+      firstName?: string | null
+      lastName?: string | null
+      stripeCustomerId?: string | null
+      stripeInvoicePrefix?: string | null
+    }
     dueAt?: string | null
   }
 
@@ -62,24 +83,42 @@ export async function POST(req: Request, ctx: RouteContext) {
   // Resolve / create Stripe Customer
   let stripeCustomerId = invoice.client.stripeCustomerId ?? null
   if (!stripeCustomerId) {
+    // New customers get a branded `BHC…` invoice_prefix so Stripe numbers
+    // their invoices BHCXXX-0001 instead of using a random prefix. An
+    // existing customer's prefix is read, never rewritten.
+    let stripeInvoicePrefix: string | null = null
     const existing = await stripe.customers.list({ email: invoice.client.email, limit: 1 })
-    stripeCustomerId =
-      existing.data[0]?.id ??
-      (
-        await stripe.customers.create({
+    if (existing.data[0]) {
+      stripeCustomerId = existing.data[0].id
+      stripeInvoicePrefix = existing.data[0].invoice_prefix ?? null
+    } else {
+      const invoicePrefix = await resolveInvoicePrefix(stripe, invoice.client, {
+        knownPrefixes: await collectAppInvoicePrefixes(payload),
+        logger: payload.logger,
+      })
+      const { customer: created, invoicePrefix: appliedPrefix } = await createStripeCustomerWithPrefix(
+        stripe,
+        {
           email: invoice.client.email,
           name: invoice.client.displayName,
           metadata: { payload_client_id: String(invoice.client.id) },
-        })
-      ).id
+        },
+        { invoicePrefix, logger: payload.logger },
+      )
+      stripeCustomerId = created.id
+      stripeInvoicePrefix = appliedPrefix ?? created.invoice_prefix ?? null
+    }
     await payload.update({
       collection: 'clients',
       id: invoice.client.id,
-      data: { stripeCustomerId },
+      data: { stripeCustomerId, ...(stripeInvoicePrefix ? { stripeInvoicePrefix } : {}) },
     })
   }
 
   let stripeInvoiceId = invoice.stripeInvoiceId ?? null
+  // True only when this call is what created the Stripe invoice — a repeat
+  // call is idempotent and shouldn't log a second audit event.
+  const pushed = !stripeInvoiceId
 
   if (!stripeInvoiceId) {
     // Create draft invoice + line items + finalize
@@ -123,6 +162,20 @@ export async function POST(req: Request, ctx: RouteContext) {
   const token = signInvoiceToken(stripeInvoiceId ?? String(invoice.id))
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   const brandedUrl = `${siteUrl}/invoice/${stripeInvoiceId ?? invoice.id}?token=${encodeURIComponent(token)}`
+
+  // Audit trail: who pushed which invoice to Stripe, and when. Matches the
+  // pattern in send-email / refund. Best-effort; never blocks the response.
+  if (pushed) {
+    await recordAudit(payload, {
+      action: 'invoice.pushed_to_stripe',
+      actor: auth.user.email ?? 'admin',
+      summary: `Pushed ${invoice.invoiceNumber} to Stripe (${stripeInvoiceId ?? 'no id'})`,
+      subjectType: 'invoice',
+      subjectId: invoice.id,
+      stripeId: stripeInvoiceId,
+      ipAddress: (req.headers.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || null,
+    })
+  }
 
   return NextResponse.json({
     ok: true,

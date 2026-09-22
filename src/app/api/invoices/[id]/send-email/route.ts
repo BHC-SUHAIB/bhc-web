@@ -3,6 +3,13 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
 import { sendBrandedInvoiceEmail } from '@/lib/billing-emails'
+import { carePlanBySlug } from '@/lib/care-plans'
+import {
+  effectiveHostingMode,
+  firstHostingChargeDate,
+  formatHostingChargeDate,
+} from '@/lib/invoice-hosting'
+import { clientHasLiveSubscription } from '@/lib/hosting-subscriptions'
 import { denyIfCrossOrigin } from '@/lib/api-guards'
 import { notifySlack } from '@/lib/slack'
 import { recordAudit } from '@/lib/audit'
@@ -48,7 +55,11 @@ export async function POST(req: Request, ctx: RouteContext) {
     id: string | number
     status: string
     stripeInvoiceId?: string | null
-    client?: { displayName?: string; email?: string; company?: string | null }
+    stripeSubscriptionId?: string | null
+    hostingMode?: string | null
+    allowCarePlanUpsell?: boolean
+    suggestedCarePlan?: string | null
+    client?: { id?: string | number; displayName?: string; email?: string; company?: string | null }
   }
 
   if (!inv.stripeInvoiceId) {
@@ -71,12 +82,30 @@ export async function POST(req: Request, ctx: RouteContext) {
   // when the invoice snapshot itself has no customer_address.
   const stripeInvoice = await stripe.invoices.retrieve(inv.stripeInvoiceId, { expand: ['customer'] })
 
+  // When hosting is part of this order, the email + PDF carry the extra
+  // sentence. Resolved the same way the invoice page resolves it, so the
+  // email and the page can never disagree.
+  const hostingMode = effectiveHostingMode({
+    hostingMode: inv.hostingMode,
+    allowCarePlanUpsell: inv.allowCarePlanUpsell,
+    isSubscriptionInvoice: Boolean(inv.stripeSubscriptionId),
+    clientHasLiveSubscription: await clientHasLiveSubscription(payload, inv.client?.id),
+  })
+  const hostingPlan = hostingMode === 'included' ? carePlanBySlug(inv.suggestedCarePlan ?? 'care') : null
+
   await sendBrandedInvoiceEmail({
     payload,
     to: inv.client.email,
     clientName: inv.client.displayName ?? 'Client',
     invoice: stripeInvoice,
     client: inv.client,
+    hosting: hostingPlan
+      ? {
+          planName: hostingPlan.name,
+          monthlyAmountCents: hostingPlan.monthlyAmountCents,
+          firstChargeLabel: formatHostingChargeDate(firstHostingChargeDate()),
+        }
+      : null,
   })
 
   // Slack: log the operator action so you have a paper trail of what

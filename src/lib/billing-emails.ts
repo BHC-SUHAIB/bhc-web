@@ -137,6 +137,18 @@ ${preheader}
 
 // ────────────────── public senders ──────────────────
 
+/**
+ * Set when the Payload invoice's hostingMode is 'included' — hosting is part
+ * of this order, so the email and the PDF both say so. Omitted for 'offer'
+ * and 'hidden', which keeps those emails identical to before.
+ */
+export type InvoiceHostingSummary = {
+  planName: string
+  monthlyAmountCents: number
+  /** Pre-formatted, e.g. "October 21, 2026". */
+  firstChargeLabel: string
+}
+
 export async function sendBrandedInvoiceEmail(args: {
   payload: Payload
   to: string
@@ -144,8 +156,9 @@ export async function sendBrandedInvoiceEmail(args: {
   invoice: Stripe.Invoice
   /** Payload client record; feeds the bill-to block on the PDF. Falls back to clientName + the Stripe customer fields. */
   client?: InvoicePdfClient | null
+  hosting?: InvoiceHostingSummary | null
 }): Promise<void> {
-  const { payload, to, clientName, invoice, client } = args
+  const { payload, to, clientName, invoice, client, hosting } = args
   if (!invoice.id) return
   const token = signInvoiceToken(invoice.id)
   const url = `${siteUrl()}/invoice/${invoice.id}?token=${encodeURIComponent(token)}`
@@ -163,11 +176,25 @@ export async function sendBrandedInvoiceEmail(args: {
   }))
   rows.push({ label: 'Total due', value: total, isTotal: true })
 
+  // One extra sentence + one extra row when hosting rides along with this
+  // payment. Same wording as the note on the PDF and the order summary on the
+  // invoice page, so nothing surprises the client at checkout.
+  const hostingSentence = hosting
+    ? ` Your ${escapeHtml(hosting.planName)} hosting plan starts with this payment: the first month is free, the first ` +
+      `<strong>${formatUSD(hosting.monthlyAmountCents)}</strong> charge runs on ${escapeHtml(hosting.firstChargeLabel)}, and you can cancel any time.`
+    : ''
+  if (hosting) {
+    rows.splice(rows.length - 1, 0, {
+      label: `${hosting.planName} hosting (starts with this payment)`,
+      value: `${formatUSD(hosting.monthlyAmountCents)} / month`,
+    })
+  }
+
   const html = renderEmailLayout({
     pageTitle: `Invoice ${number}`,
     preheader: `Invoice ${number} for ${total} from Black Hart Consulting`,
     title: 'Your invoice is ready',
-    bodyHtml: `Hi ${escapeHtml(clientName)}, your invoice <strong>${escapeHtml(number)}</strong> for <strong>${total}</strong> is ready to pay. ${escapeHtml(dueLine)}`,
+    bodyHtml: `Hi ${escapeHtml(clientName)}, your invoice <strong>${escapeHtml(number)}</strong> for <strong>${total}</strong> is ready to pay. ${escapeHtml(dueLine)}${hostingSentence}`,
     rows,
     cta: { label: 'Review & pay invoice', href: url },
     fineprintHtml: `${escapeHtml(formatPaymentMethodList(getPaymentMethodTypes()))} accepted. Receipt emailed once paid. Questions? Reply to this email.`,
@@ -191,6 +218,11 @@ export async function sendBrandedInvoiceEmail(args: {
       client: client ?? { displayName: clientName, email: to },
       settings,
       payUrl: url,
+      hostingNote: hosting
+        ? `${hosting.planName} hosting starts with this payment. The first month is free: the first ` +
+          `${formatUSD(hosting.monthlyAmountCents)} monthly charge runs on ${hosting.firstChargeLabel}, ` +
+          `then the same amount every month. Cancel any time.`
+        : null,
     })
     const bytes = await buildInvoicePdf(pdfData)
     attachments = [

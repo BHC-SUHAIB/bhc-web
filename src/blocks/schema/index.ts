@@ -209,7 +209,7 @@ export const Pricing: Block = {
       { name: 'checkoutHref', type: 'text', admin: { description: 'Stripe Payment Link for the buy path. When set, the primary button becomes "Buy now" and links here. Leave blank to fall back to the CTA above.' } },
       { name: 'subscribeHref', type: 'text', admin: { description: 'Stripe Payment Link for the subscribe path. Falls back to the CTA href when blank.' } },
       { name: 'badge', type: 'text', admin: { description: 'Small pill top-right of the card, e.g. "Most popular", "New".' } },
-      { name: 'footnote', type: 'text', admin: { description: 'Muted line below the feature list, e.g. "Overage $0.35 per minute".' } },
+      { name: 'footnote', type: 'text', admin: { description: 'Muted line below the feature list, e.g. "Overage $1 per call".' } },
       { name: 'highlighted', type: 'checkbox', defaultValue: false, admin: { description: 'Visually emphasize this tier' } },
       // Tags an "Enterprise"/"Custom" tier so it renders with a brass corner
       // badge and an inset tinted band around the card. Used to make the

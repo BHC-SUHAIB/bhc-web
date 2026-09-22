@@ -2008,7 +2008,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           ['p', 'The bigger issue is not price. A generalist operator reading a script cannot quote your services, does not know your service area, and usually ends the call with "someone will call you back." That is a message-taking service, not a front desk.'],
           ['h2', 'What AI answering costs, and where the money goes'],
           ['p', 'AI phone answering has crossed the line from novelty to boring utility. The recurring cost has three parts: the platform fee for the software, the per-minute cost of the calls themselves (telephony plus the AI models doing speech and reasoning), and the one-time setup work of teaching it your business.'],
-          ['p', 'Market pricing today puts a configured small-business AI receptionist in the one-to-four-hundred-dollars-a-month range for typical call volumes, with per-minute overages measured in cents rather than dollars. Setup, done properly, is where the real value hides. The software is a commodity; the script, the knowledge base, and the guardrails are not.'],
+          ['p', 'Market pricing today puts a configured small-business AI receptionist in the one-to-four-hundred-dollars-a-month range for typical call volumes, with overages billed by the minute or by the call. Setup, done properly, is where the real value hides. The software is a commodity; the script, the knowledge base, and the guardrails are not.'],
           ['h2', 'What to require before you sign anything'],
           ['ul', [
             'It answers from your existing number via forwarding. No porting, no new number on your truck wraps.',
@@ -2021,7 +2021,7 @@ export async function seedOnInit(payload: Payload): Promise<void> {
           ['h2', 'When not to use one'],
           ['p', 'Skip AI answering if your volume is a handful of calls a week and you genuinely answer them. Skip it if your jobs are won on long consultative calls where the first conversation is the sale. And skip any vendor who cannot let you call a live demo line before you pay; if they will not let you hear it, they know something you should.'],
           ['h2', 'What we run'],
-          ['p', 'Our AI Front Desk is the same system that answers our own line at (866) 434-9777, around the clock. Setup is $299: we write the script and knowledge base for your business, you approve the voice and greeting, we connect your calendar and test five real scenarios with you. Plans are $149 a month for 300 minutes, $249 for 750, and $399 for 1,500, month to month after the first 30 days, with overage at $0.35 a minute. Call our line first and try to stump it; that is the whole pitch.'],
+          ['p', 'Our AI Front Desk is the same system that answers our own line at (866) 434-9777, around the clock. Setup is $299: we write the script and knowledge base for your business, you approve the voice and greeting, we connect your calendar and test five real scenarios with you. Plans are $149 a month for 100 calls, $249 for 250, and $399 for 500, month to month after the first 30 days, with overage at $1 a call. Call our line first and try to stump it; that is the whole pitch.'],
           ['quote', 'The phone is the cheapest employee you will ever hire or the most expensive one you never noticed you fired.'],
         ]),
       },

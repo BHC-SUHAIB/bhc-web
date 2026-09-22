@@ -55,7 +55,7 @@ const openForBusinessBundle = {
       includes: [
         { label: 'Starter Site, live in 7 days' },
         { label: 'Google Business Profile set up' },
-        { label: 'AI Front Desk setup and Basic plan (300 minutes)' },
+        { label: 'AI Front Desk setup and Basic plan (100 calls a month)' },
         { label: 'Hosting included in the monthly' },
       ],
       note: 'Sold separately: $1,193 plus $208 a month.',

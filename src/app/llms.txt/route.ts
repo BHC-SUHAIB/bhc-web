@@ -21,14 +21,14 @@ Houston Heights, TX. Phone (866) 434-9777. Email hello@blackhartconsulting.com.
 
 - [Services](${SITE_URL}/services): Full price list. Launch Page $399 (3-day build), Starter Site $699 one-time or $119/mo for 12 months then owned (7-day build), Pro Site $1,795 one-time or $249/mo for 12 months then owned (14-day build), Custom Build from $5,000 (scoped proposal in 48 hours). Hosting plans: Host $59/mo, Care $129/mo, Growth $395/mo.
 - [Fix-it menu](${SITE_URL}/fix-it): Single-issue fixes at fixed prices, each with a before-and-after report and a 30-day guarantee: Site Health Sprint $249 (5 days, pick 3 fixes), Google Business Profile Setup $195 (3 days), Schema Markup Pack $195 (3 days), GA4 + Conversion Tracking $195 (3 days), Site Speed Sprint $395 (5 days), Mobile Audit + Fix $395 (5 days), 5-Page SEO Refresh $395 (7 days).
-- [AI Front Desk](${SITE_URL}/ai-front-desk): AI phone answering that books appointments and texts callers back. Setup $299 one-time, live in 5 days. Then Basic $149/mo (300 minutes), Plus $249/mo (750 minutes), or Pro $399/mo (1,500 minutes). Overage $0.35 per minute on all plans.
+- [AI Front Desk](${SITE_URL}/ai-front-desk): AI phone answering that books appointments and texts callers back. Setup $299 one-time, live in 5 days. Then Basic $149/mo (100 calls), Plus $249/mo (250 calls), or Pro $399/mo (500 calls). Overage $1 per call on all plans; calls under 15 seconds and calls your team answers do not count.
 - [Automation and internal tools](${SITE_URL}/automation): Automation Sprint $799 for one workflow (7-day delivery), Automation Run $79/mo per client to keep workflows running, Internal Tool from $2,500 (2 to 3 weeks) plus $99/mo hosting.
 - [Local SEO + AI Search](${SITE_URL}/services#seo): Local SEO + AI Search Sprint $449, 10-day delivery (Google Business Profile setup, 10 citations, schema, FAQ page, and llms.txt). Local SEO + AI Search Monthly $295/mo (weekly Google Business Profile post, 5 citations, 1 article a month).
 - [Free demo site](${SITE_URL}/free-demo-site): Free working mockup of a business's new site built from its public listing, delivered within 48 hours, no cost or obligation.
 
 ## Bundles
 
-- [Open for Business](${SITE_URL}/services#websites): $999 plus $149/mo. Starter Site, Google Business Profile setup, and AI Front Desk setup plus Basic plan (300 minutes).
+- [Open for Business](${SITE_URL}/services#websites): $999 plus $149/mo. Starter Site, Google Business Profile setup, and AI Front Desk setup plus Basic plan (100 calls a month).
 - [Booked Solid](${SITE_URL}/services#websites): $1,395 plus $149/mo. Everything in Open for Business, plus the Local SEO + AI Search Sprint and one Automation Sprint.
 
 ## Company

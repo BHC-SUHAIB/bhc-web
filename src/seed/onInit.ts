@@ -1643,6 +1643,175 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       payload.logger.info('[seed] project upserted: certo (FORCE_CERTO_UPSERT)')
     }
 
+    // --- Media uploads for the Grants Within Reach case study ---
+    // Light-theme captures of the live site at https://grantswithinreach.com,
+    // plus one capture of the Payload admin from a local development instance.
+    const gwrMediaHero = await ensureMedia(
+      'Grants Within Reach – homepage hero on the live site',
+      'public/seed-assets/grants-within-reach/hero.png',
+    )
+    const gwrMediaServices = await ensureMedia(
+      'Grants Within Reach – the three nonprofit service cards on the Services page',
+      'public/seed-assets/grants-within-reach/services.png',
+    )
+    const gwrMediaResources = await ensureMedia(
+      'Grants Within Reach – the resource library category menu with its cost filter',
+      'public/seed-assets/grants-within-reach/resources.png',
+    )
+    const gwrMediaAbout = await ensureMedia(
+      'Grants Within Reach – experience and credentials cards on the About page',
+      'public/seed-assets/grants-within-reach/about-credentials.png',
+    )
+    const gwrMediaForm = await ensureMedia(
+      'Grants Within Reach – the inquiry form on the Work With Us page',
+      'public/seed-assets/grants-within-reach/work-with-us.png',
+    )
+    const gwrMediaSpeaking = await ensureMedia(
+      'Grants Within Reach – recent speaking engagements on the Speaking & Training page',
+      'public/seed-assets/grants-within-reach/speaking.png',
+    )
+    const gwrMediaAdmin = await ensureMedia(
+      'Grants Within Reach – the owner dashboard in the Payload admin',
+      'public/seed-assets/grants-within-reach/admin-dashboard.png',
+    )
+
+    // --- Grants Within Reach project (real client case study) ---
+    // Seeded HIDDEN on purpose: Deja reads the write-up before it goes
+    // public. To publish it, open Content > Projects > Grants Within Reach
+    // in the admin and tick "Show on the public portfolio" in the sidebar.
+    // To change the seeded copy after the row exists, set
+    // FORCE_GRANTS_WITHIN_REACH_UPSERT=true for one deploy (that refresh
+    // leaves the visibility tick alone).
+    const grantsWithinReachProject: any = {
+      title: 'Grants Within Reach',
+      slug: 'grants-within-reach',
+      group: 'client',
+      summary:
+        'Six pages, a filterable resource library and an admin the owner runs herself. A Starter Site for a Houston grant strategist, built on our Next.js and Payload client template and live seven days after the deposit.',
+      client: 'Grants Within Reach',
+      industry: 'Nonprofit / Grant consulting',
+      projectType: 'website',
+      year: 2026,
+      duration: '7 days',
+      teamSize: 1,
+      liveUrl: 'https://grantswithinreach.com',
+      ...(gwrMediaHero?.id ? { heroImage: gwrMediaHero.id } : {}),
+      stack: [
+        { name: 'Next.js 16 (App Router)', category: 'framework' },
+        { name: 'TypeScript', category: 'language' },
+        { name: 'Payload CMS 3', category: 'cms' },
+        { name: 'PostgreSQL', category: 'db' },
+        { name: 'Docker + Caddy', category: 'hosting' },
+        { name: 'DigitalOcean (shared client droplet)', category: 'hosting' },
+        { name: 'Resend (transactional email)', category: 'tool' },
+        { name: 'GA4 via Google Tag Manager', category: 'tool' },
+        { name: 'Microsoft Clarity', category: 'tool' },
+        { name: 'ffmpeg (video compression)', category: 'tool' },
+      ],
+      challenge: rtDoc([
+        ['p', 'Deja Hasness is a grant strategist in Houston, with a second base in Palm Beach County, Florida. Nine years in grants and nonprofit consulting, Grant Professional Certified, Certified Nonprofit Professional, and a regular speaker at nonprofit conferences. She had no website at all.'],
+        ['p', 'She was not short of clients, so this was not a lead generation build. The job was credibility: somewhere for the nonprofits, foundations and event organisers who look her up after a referral or a conference talk to see what she actually does. Two audiences on one site, nonprofits and the foundations that fund them, plus a speaking and training practice, plus a resource library she wanted to keep adding to on her own.'],
+        ['p', 'The harder constraint was the review process. This was her first website and she had no background in technology, design or web development, so a normal design review, where we describe an option and she pictures it, was going to stall. All of it inside a fixed $699 Starter Site fee and about seven days from deposit to launch.'],
+      ]),
+      approach: rtDoc([
+        ['h3', 'Static mockups before a line of application code'],
+        ['p', 'We built the homepage as plain HTML first and published it password gated on our own site, so the first thing she reacted to was a real page in a browser rather than a description of one. Her notes on that draft, cut the hero copy, restyle the credential pills so they stop looking like buttons, add Resources to the nav, landed before the CMS existed and saved a rebuild later.'],
+        ['h3', 'Option for review strips, so she picked by clicking'],
+        ['p', 'Every visual decision went up as roughly six alternatives rendered in place, on a private development copy of her own site, under an "Option for review" strip. Hero clips, photography, section layouts. She clicked the one she wanted and we froze it into the real page. That removed the step where the client has to hold a layout in their head and guess, which is the step that was going to cost us days.'],
+        ['h3', 'Showing her which words were hers'],
+        ['p', 'Draft pages highlighted our connective copy in pink, so at a glance she could see what she had written and what we had written around it. Reviewing a page turned into reading the pink and either approving it or replacing it in her own voice.'],
+        ['h3', 'Build it now, show it later'],
+        ['p', 'Several things were true but not yet announceable. Her GPA Approved Trainer credential is one: the badge, the copy and the placement are fully built and sit behind a per item "Show on site" toggle until the approval lands. Rather than keeping a list of things to add after launch, we built them and handed her the switch.'],
+        ['h3', 'A resource library she can grow'],
+        ['p', 'The Resources page holds 18 resources across 9 categories, with a category menu, a free and paid cost filter, and pop up detail for each entry. Adding one is a single entry in the admin. That matters more than it sounds: the library is the part of the site she expects to keep working on, so it had to be the easiest part to edit.'],
+        ['h3', 'An admin built for the owner'],
+        ['p', 'Plain English labels everywhere, with no slug, meta, hero or CTA left in anything she can see. The dashboard opens on new inquiries, recently edited content, site health and a visitors tile fed by the GA4 Data API, so the numbers live where she already works instead of behind a separate Google login. Live Preview, a link back to the public site in the sidebar, and a tick box that switches the whole site to higher contrast colours. It ships with a 47 page branded admin guide and two branded checklists, one for the Approved Trainer go live and one for DKIM.'],
+        ['h3', 'Self hosting the media'],
+        ['p', 'The early build hotlinked stock video, which meant third party cookies on every page load and a payload nobody should send to a phone. We compressed the clips with ffmpeg and served them from her own site: 72 MB of video down to 7 MB, and the home page first load on a phone from 30 MB to 3 MB. It also took the third party video requests to zero, which is what let the privacy page describe cookies honestly.'],
+        ['h3', 'Email that arrives'],
+        ['p', 'Inquiries, password resets and notifications go out through Resend as branded multipart messages rather than plain text, and we set up SPF, DKIM and DMARC on her Google Workspace domain. Test sends to cold inboxes landed in the inbox rather than spam before we launched.'],
+      ]),
+      outcome: rtDoc([
+        ['p', 'Grants Within Reach went live on 21 September 2026, seven days after the deposit, on the fixed $699 Starter Site fee.'],
+        ['ul', [
+          'Six pages, Home, Services, Speaking & Training, About, Work With Us and Resources, plus a Privacy page, all block composed and editable by the owner.',
+          'A resource library of 18 resources across 9 categories, with a cost filter, pop up detail and a category menu that still works at phone widths.',
+          'An inquiry form that routes to her business mailbox with reply-to set to the sender, behind rate limiting, an origin check and a honeypot that flags rather than rejects.',
+          'Branded multipart transactional email through Resend, with SPF, DKIM and DMARC configured on her Google Workspace domain.',
+          'GA4 through Google Tag Manager, Microsoft Clarity and Search Console, plus a visitors tile inside her own admin fed by the GA4 Data API.',
+          'A 47 page branded admin guide, two branded checklists, and a walkthrough call where she drove and we watched.',
+        ]],
+        ['p', 'Lighthouse on mobile after launch: the home page scores 89 for performance and 100 for accessibility, best practices and SEO. The Resources page, the heaviest on the site, scores 80 / 100 / 100 / 100. Cumulative layout shift is 0 on both.'],
+        ['p', 'The site runs in its own container on our shared client droplet behind Caddy, with her Payload admin at grantswithinreach.com/admin and the code and content hers if she ever wants to take them elsewhere.'],
+      ]),
+      metrics: [
+        { value: '7 days', label: 'deposit to launch' },
+        { value: '3 MB', label: 'home page on a phone, down from 30 MB' },
+        { value: '100', label: 'mobile accessibility, best practices and SEO' },
+        { value: '18', label: 'resources across 9 categories' },
+      ],
+      gallery: [
+        ...(gwrMediaServices?.id ? [{
+          image: gwrMediaServices.id,
+          caption: 'Services splits into two pathways, nonprofits and foundations. Each card opens to show what the engagement covers.',
+        }] : []),
+        ...(gwrMediaResources?.id ? [{
+          image: gwrMediaResources.id,
+          caption: 'The resource library: 18 resources across 9 categories, with a free and paid filter and a category menu that survives phone widths.',
+        }] : []),
+        ...(gwrMediaAbout?.id ? [{
+          image: gwrMediaAbout.id,
+          caption: 'Credentials as plain cards rather than pill buttons, a change she asked for on the very first mockup.',
+        }] : []),
+        ...(gwrMediaSpeaking?.id ? [{
+          image: gwrMediaSpeaking.id,
+          caption: 'Speaking & Training lists her recent engagements, each one an entry she can add herself.',
+        }] : []),
+        ...(gwrMediaForm?.id ? [{
+          image: gwrMediaForm.id,
+          caption: 'The inquiry form on Work With Us: named validation errors, an optional budget range, and delivery to her business mailbox with reply-to set to the sender.',
+        }] : []),
+        ...(gwrMediaAdmin?.id ? [{
+          image: gwrMediaAdmin.id,
+          caption: 'The owner dashboard, captured on a local development instance: new inquiries, recently edited content, quick actions, site health and a visitors tile fed by the GA4 Data API.',
+        }] : []),
+      ],
+      testimonial: {
+        quote: 'He presented multiple options and showed me how each layout would actually look on my website, which made decisions so much easier. He took the time to learn about me, my business, and my goals. He was incredibly patient, explained everything thoroughly at every stage, and worked quickly without sacrificing quality. The final website exceeded my wildest expectation.',
+        author: 'Deja Hasness',
+        role: 'Founder, Grants Within Reach',
+      },
+      // Seeded hidden. `published: false` is what keeps it off /portfolio,
+      // off the home page and out of the sitemap until a human ticks
+      // "Show on the public portfolio" in the admin.
+      published: false,
+      featured: false,
+      // Stored as a published version like every other seeded project (PR #77);
+      // visibility is governed by `published` above, not by `_status`.
+      _status: 'published',
+      publishedAt: new Date().toISOString(),
+    }
+
+    const existingGWR = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: grantsWithinReachProject.slug } },
+      limit: 1,
+    })
+    if (existingGWR.totalDocs === 0) {
+      await payload.create({ collection: 'projects', data: grantsWithinReachProject })
+      payload.logger.info('[seed] project created (hidden, published=false): grants-within-reach')
+    } else if (process.env.FORCE_GRANTS_WITHIN_REACH_UPSERT === 'true') {
+      // Refresh the copy but never touch visibility: once someone has ticked
+      // "Show on the public portfolio", a re-seed must not undo that.
+      const { published: _gwrSeedPublished, ...grantsWithinReachUpdate } = grantsWithinReachProject
+      await payload.update({
+        collection: 'projects',
+        id: existingGWR.docs[0].id,
+        data: grantsWithinReachUpdate,
+      })
+      payload.logger.info('[seed] project upserted: grants-within-reach (FORCE_GRANTS_WITHIN_REACH_UPSERT)')
+    }
+
     // --- Article hero images (Unsplash, downloaded into public/seed-assets/articles/) ---
     const articleHeroNextjs = await ensureMedia(
       'Why Next.js over WordPress \u2014 laptop displaying source code on a dark background',

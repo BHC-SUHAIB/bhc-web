@@ -128,6 +128,11 @@ export const Projects: CollectionConfig = {
       ],
     },
 
+    // Public visibility switch. Read by every public projects query in
+    // src/lib/payload-cache.ts; untick and the case study 404s on the public
+    // site while staying editable in here. Rows written before this field
+    // existed read as NULL and are treated as published.
+    { name: 'published', type: 'checkbox', defaultValue: true, label: 'Show on the public portfolio', admin: { position: 'sidebar', description: 'Untick to keep this case study saved but hidden from the public portfolio' } },
     { name: 'featured', type: 'checkbox', defaultValue: false, admin: { position: 'sidebar', description: 'Show on the home page "featured projects" block' } },
     { name: 'publishedAt', type: 'date', admin: { position: 'sidebar' } },
 

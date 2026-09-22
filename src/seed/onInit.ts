@@ -353,9 +353,13 @@ export async function seedOnInit(payload: Payload): Promise<void> {
       resetContent.fixItPage, resetContent.aiFrontDeskPage, resetContent.automationPage,
       resetContent.freeDemoSitePage, resetContent.thanksPage,
     ]) {
-      const data: any = { ...build(), publishedAt: new Date().toISOString() }
-      const existing = await payload.find({ collection: 'pages', where: { slug: { equals: data.slug } }, limit: 1 })
+      const existing = await payload.find({ collection: 'pages', where: { slug: { equals: build().slug } }, limit: 1 })
       if (existing.totalDocs === 0) {
+        // The AI Front Desk page carries the web chat mockup image (uploaded here).
+        const webChatMedia = build === resetContent.aiFrontDeskPage
+          ? await ensureMedia(resetContent.WEB_CHAT_MEDIA_ALT, 'public/seed-assets/ai-front-desk/web-chat-demo.jpg')
+          : null
+        const data: any = { ...(build as (o?: { webChatMediaId?: string | number }) => any)({ webChatMediaId: webChatMedia?.id }), publishedAt: new Date().toISOString() }
         await payload.create({ collection: 'pages', data })
         payload.logger.info(`[seed] ${data.slug} page created`)
       }

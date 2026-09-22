@@ -101,7 +101,7 @@ export const TIER_BLOCKS = {
   },
   frontDeskSetup: {
     name: 'AI Front Desk Setup', price: '$299', priceNote: 'live in 5 days, one-time',
-    features: f(['Script and knowledge base written for your business', 'Voice and greeting you approve', 'Booking connected to your calendar', 'Missed-call text-back', 'Web chat with the same brain (coming soon)', 'Five test scenarios with you']),
+    features: f(['Script and knowledge base written for your business', 'Voice and greeting you approve', 'Booking connected to your calendar', 'Missed-call text-back', 'Five test scenarios with you']),
     cta: ask('front-desk-setup', 'Start setup'),
   },
   frontDeskBasic: {
@@ -119,7 +119,7 @@ export const TIER_BLOCKS = {
   frontDeskPro: {
     name: 'Front Desk Pro', price: '$399/mo',
     footnote: 'Overage $1 per call. Premium voice add-on $49 per month.',
-    features: f(['500 calls a month', 'Everything in Plus', 'Multi-line', 'Call summaries to Slack or SMS', 'Priority changes']),
+    features: f(['500 calls a month', 'Everything in Plus', 'Web chat on your website', 'Multi-line', 'Call summaries to Slack or SMS', 'Priority changes']),
     cta: ask('front-desk-pro', 'Get started'),
   },
   automationSprint: {
@@ -369,6 +369,31 @@ export const FAQ_FIXIT = faqItems([
   ['Can I buy more than one fix?', 'Yes, fixes combine. Three fixes together is the $249 Site Health Sprint, which is cheaper than buying them separately.'],
 ])
 
+// Web chat went live 2026-09-22 (Pro plan). Shared with the one-shot
+// /dev-web-chat-live route so live content and the seed stay identical.
+export const WEB_CHAT_FAQ_Q = 'Can it answer chats on my website?'
+export const WEB_CHAT_FAQ_A = 'Yes, on the Pro plan. The same trained assistant answers in a chat window on your site, by text or by voice, books appointments, and texts you anything it cannot answer. We add it with one line of code and nothing else on your site changes. Already on Basic or Plus? Move to Pro any time to add it.'
+export const WEB_CHAT_PRICING_NOTE = 'Month to month after the first 30 days. Annual prepay gets two months free. Web chat is included on Pro; already on Basic or Plus? Move to Pro any time to add it.'
+export const WEB_CHAT_MEDIA_ALT = 'Sample AI Front Desk web chat: a chat window on a business website answering a price question and booking an estimate'
+
+export const webChatTextBlock = {
+  blockType: 'richText',
+  eyebrow: 'Web chat on Pro',
+  maxWidth: 'medium',
+  variant: 'default',
+  content: rtDoc([
+    ['h2', 'The same front desk, in a chat window.'],
+    ['p', 'Visitors who would rather type than call get the same assistant: it knows your services, prices, and hours, answers questions, books into your calendar, and texts you anything it cannot answer. They can switch to talking out loud without leaving the page. It is included on Pro, goes on your site with one line of code, and nothing else on your site changes.'],
+  ]),
+}
+
+export const webChatMediaBlock = (mediaId: string | number) => ({
+  blockType: 'mediaBlock',
+  media: mediaId,
+  caption: 'Sample conversation. Your chat is trained on your own services, prices, and hours.',
+  fullBleed: false,
+})
+
 export const FAQ_FRONT_DESK = faqItems([
   ['Does it sound like a robot?', `The voices are the same natural voices used by large call centers, and most callers do not notice. You pick the voice and greeting during setup and approve them before it goes live. Call ${PHONE_DISPLAY} and hear it yourself.`],
   ['What happens when it cannot answer?', 'It says so, takes a message, and texts you the question immediately. It never guesses at prices or promises you did not approve. Emergencies transfer straight to your phone.'],
@@ -379,6 +404,7 @@ export const FAQ_FRONT_DESK = faqItems([
   ['Can I cancel?', 'Yes, month to month after the first 30 days. The $299 setup is one-time and the script and knowledge base are yours regardless.'],
   ['What is the premium voice add-on?', 'A $49 per month upgrade to the most natural voice tier available. The standard voices are good; premium is for businesses where the phone is the brand.'],
   ['Do you record calls?', 'Yes, for quality, and so you can read a transcript of every call. You can turn recording off any time.'],
+  [WEB_CHAT_FAQ_Q, WEB_CHAT_FAQ_A],
 ])
 
 export const FAQ_AUTOMATION = faqItems([
@@ -594,7 +620,7 @@ export const fixItPage = () => ({
   ],
 })
 
-export const aiFrontDeskPage = () => ({
+export const aiFrontDeskPage = (opts: { webChatMediaId?: string | number } = {}) => ({
   title: 'AI Front Desk',
   slug: 'ai-front-desk',
   _status: 'published',
@@ -629,10 +655,12 @@ export const aiFrontDeskPage = () => ({
         { title: 'Takes messages', icon: 'code', description: 'Captures the details and texts you the ones that matter, as they happen.' },
         { title: 'Transfers emergencies', icon: 'zap', description: 'Anything urgent rings through to you immediately, day or night.' },
         { title: 'Texts back missed calls', icon: 'smartphone', description: 'Every missed call gets a text within 60 seconds, before they dial a competitor.' },
-        { title: 'Web chat, coming soon', icon: 'globe', description: 'Next up: the same trained brain answering questions in a chat widget on your site.' },
+        { title: 'Chats on your website', icon: 'globe', description: 'On Pro, the same trained brain answers questions and books visitors in a chat window on your site, by text or voice.' },
         { title: 'Asks for reviews', icon: 'sparkles', description: 'After the job closes, it requests the Google review for you, when you want it to.' },
       ],
     },
+    webChatTextBlock,
+    ...(opts.webChatMediaId != null ? [webChatMediaBlock(opts.webChatMediaId)] : []),
     {
       blockType: 'processSteps',
       eyebrow: 'How it works',
@@ -648,7 +676,7 @@ export const aiFrontDeskPage = () => ({
       blockType: 'pricing',
       eyebrow: 'Plans',
       headline: 'Setup once, then pick a plan.',
-      description: 'Month to month after the first 30 days. Annual prepay gets two months free.',
+      description: WEB_CHAT_PRICING_NOTE,
       layoutVariant: 'grid',
       anchorId: 'plans',
       tiers: [

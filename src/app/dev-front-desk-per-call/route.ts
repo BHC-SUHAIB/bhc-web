@@ -10,6 +10,8 @@
  *   curl -X POST http://localhost:3001/dev-front-desk-per-call            (local)
  *   curl -X POST https://blackhartconsulting.com/dev-front-desk-per-call  (prod: needs ALLOW_DEV_SEED)
  *
+ * Also marks the not-yet-built web chat as coming soon.
+ *
  * Idempotent: a second run finds no old strings and reports zero changes.
  * Delete this route once it has run on prod.
  */
@@ -38,6 +40,10 @@ const REPLACEMENTS: Array<[string, string]> = [
     'Plans are $149 a month for 100 calls, $249 for 250, and $399 for 500, month to month after the first 30 days, with overage at $1 a call.',
   ],
   ['with per-minute overages measured in cents rather than dollars', 'with overages billed by the minute or by the call'],
+  // Web chat is not built yet; say so instead of promising it.
+  ['Web chat with the same brain', 'Web chat with the same brain (coming soon)'],
+  ['Runs your web chat', 'Web chat, coming soon'],
+  ['The same trained brain answers questions in a chat widget on your site.', 'Next up: the same trained brain answering questions in a chat widget on your site.'],
 ]
 
 type Collection = 'pages' | 'landingPages' | 'articles' | 'faqs'
@@ -52,7 +58,7 @@ function swap(value: unknown, hits: string[]): unknown {
   if (typeof value === 'string') {
     let out = value
     for (const [from, to] of REPLACEMENTS) {
-      if (out.includes(from)) {
+      if (out.includes(from) && !out.includes(to)) {
         out = out.split(from).join(to)
         hits.push(from.slice(0, 50))
       }

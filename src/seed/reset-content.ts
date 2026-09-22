@@ -101,7 +101,7 @@ export const TIER_BLOCKS = {
   },
   frontDeskSetup: {
     name: 'AI Front Desk Setup', price: '$299', priceNote: 'live in 5 days, one-time',
-    features: f(['Script and knowledge base written for your business', 'Voice and greeting you approve', 'Booking connected to your calendar', 'Missed-call text-back', 'Web chat with the same brain', 'Five test scenarios with you']),
+    features: f(['Script and knowledge base written for your business', 'Voice and greeting you approve', 'Booking connected to your calendar', 'Missed-call text-back', 'Web chat with the same brain (coming soon)', 'Five test scenarios with you']),
     cta: ask('front-desk-setup', 'Start setup'),
   },
   frontDeskBasic: {
@@ -629,7 +629,7 @@ export const aiFrontDeskPage = () => ({
         { title: 'Takes messages', icon: 'code', description: 'Captures the details and texts you the ones that matter, as they happen.' },
         { title: 'Transfers emergencies', icon: 'zap', description: 'Anything urgent rings through to you immediately, day or night.' },
         { title: 'Texts back missed calls', icon: 'smartphone', description: 'Every missed call gets a text within 60 seconds, before they dial a competitor.' },
-        { title: 'Runs your web chat', icon: 'globe', description: 'The same trained brain answers questions in a chat widget on your site.' },
+        { title: 'Web chat, coming soon', icon: 'globe', description: 'Next up: the same trained brain answering questions in a chat widget on your site.' },
         { title: 'Asks for reviews', icon: 'sparkles', description: 'After the job closes, it requests the Google review for you, when you want it to.' },
       ],
     },

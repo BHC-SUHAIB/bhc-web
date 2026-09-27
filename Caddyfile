@@ -134,6 +134,13 @@ jobhunt.blackhartconsulting.com {
 	}
 }
 
+# ---- Black Hart Health (health.blackhartconsulting.com) ----
+# Site block lives in the bhc-health repo. On the prod droplet an untracked
+# docker-compose.override.yml mounts it at /etc/caddy/health/health.caddy and
+# joins caddy to the bhc-health-edge network. A glob with no matches imports
+# nothing, so dev and any box without the mount are unaffected.
+import /etc/caddy/health/*.caddy
+
 # ---- IP-based fallback (plain HTTP, no TLS) ----
 :80 {
 	encode gzip zstd

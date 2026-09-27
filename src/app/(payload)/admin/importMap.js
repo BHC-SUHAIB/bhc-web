@@ -36,11 +36,14 @@ import { default as default_47861655001cbf48e6259b36cb95a68a } from '../../../co
 import { default as default_dfe4008080d895d460898c3a6155e9ba } from '../../../components/admin/Icon'
 import { default as default_91a09b539d3c86b0aebf520e7564ce08 } from '../../../components/admin/Logo'
 import { default as default_dc335a09432dbc426fa4f59ba0b40bbf } from '../../../components/admin/InitNavPrefs'
+import { default as default_1ed7a1472165075e568107c4b69af601 } from '../../../components/admin/HostingNavLink'
 import { default as default_381daeb6e8c5bc252c48a4ffd141b524 } from '../../../components/admin/DashboardQuickActions'
 import { default as default_ba16713fddebaadb3654ac7aa0ff68a6 } from '../../../components/admin/KpiStrip'
 import { default as default_f84864134840befdb3eec5272cd6cf84 } from '../../../components/admin/ActionQueue'
+import { default as default_5077ff8ffb471e0f513a6867f3db910f } from '../../../components/admin/HostingCapacityPanel'
 import { default as default_092ca7624daf393367df3f3149ae4ac2 } from '../../../components/admin/RecentActivityPanel'
 import { default as default_39f80b2eef0a78ee0bcfd35009fdad27 } from '../../../components/admin/RevenueByLpDashboard'
+import { default as default_3257e3c112cb057aa94c8fd4dc233596 } from '../../../components/admin/HostingMapView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -83,10 +86,13 @@ export const importMap = {
   "/components/admin/Icon#default": default_dfe4008080d895d460898c3a6155e9ba,
   "/components/admin/Logo#default": default_91a09b539d3c86b0aebf520e7564ce08,
   "/components/admin/InitNavPrefs#default": default_dc335a09432dbc426fa4f59ba0b40bbf,
+  "/components/admin/HostingNavLink#default": default_1ed7a1472165075e568107c4b69af601,
   "/components/admin/DashboardQuickActions#default": default_381daeb6e8c5bc252c48a4ffd141b524,
   "/components/admin/KpiStrip#default": default_ba16713fddebaadb3654ac7aa0ff68a6,
   "/components/admin/ActionQueue#default": default_f84864134840befdb3eec5272cd6cf84,
+  "/components/admin/HostingCapacityPanel#default": default_5077ff8ffb471e0f513a6867f3db910f,
   "/components/admin/RecentActivityPanel#default": default_092ca7624daf393367df3f3149ae4ac2,
   "/components/admin/RevenueByLpDashboard#default": default_39f80b2eef0a78ee0bcfd35009fdad27,
+  "/components/admin/HostingMapView#default": default_3257e3c112cb057aa94c8fd4dc233596,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

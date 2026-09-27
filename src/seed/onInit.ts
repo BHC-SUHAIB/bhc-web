@@ -4,6 +4,7 @@ import path from 'node:path'
 import type { Payload } from 'payload'
 import * as resetContent from './reset-content'
 import { pushDevSchema } from '@payloadcms/drizzle'
+import { seedHostingInventory } from './hosting-inventory'
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@blackhartconsulting.com'
 const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'changeme123!'
@@ -99,6 +100,15 @@ export async function seedOnInit(payload: Payload): Promise<void> {
     } catch (e) {
       payload.logger.warn({ err: e }, '[seed] schema push failed (may already be in sync)')
     }
+  }
+
+  // Infrastructure inventory (Servers + Hosted projects). Own try/catch so a
+  // failure here never blocks the content seed below, and vice versa. Seeds
+  // each collection only while it is empty; see ./hosting-inventory.ts.
+  try {
+    await seedHostingInventory(payload)
+  } catch (err) {
+    payload.logger.error({ err }, '[seed] hosting inventory failed')
   }
 
   try {

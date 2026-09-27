@@ -23,6 +23,8 @@ import { Invoices } from './collections/Invoices'
 import { Subscriptions } from './collections/Subscriptions'
 import { WebhookEvents } from './collections/WebhookEvents'
 import { AuditEvents } from './collections/AuditEvents'
+import { Servers } from './collections/Servers'
+import { HostedProjects } from './collections/HostedProjects'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { SiteSettings } from './globals/SiteSettings'
@@ -134,12 +136,24 @@ export default buildConfig({
         '/components/admin/DashboardQuickActions#default',
         '/components/admin/KpiStrip#default',
         '/components/admin/ActionQueue#default',
+        '/components/admin/HostingCapacityPanel#default',
         '/components/admin/RecentActivityPanel#default',
         '/components/admin/RevenueByLpDashboard#default',
       ],
       // Sidebar — runs a one-shot seed that default-collapses System + Site
       // groups for new users. After first run, the user's toggles persist.
-      afterNavLinks: ['/components/admin/InitNavPrefs#default'],
+      afterNavLinks: ['/components/admin/InitNavPrefs#default', '/components/admin/HostingNavLink#default'],
+      // Custom full-page views.
+      views: {
+        // /admin/hosting: which project lives on which server, costs, and
+        // shared-droplet capacity. Data: Servers + Hosted projects.
+        hostingMap: {
+          Component: '/components/admin/HostingMapView#default',
+          path: '/hosting',
+          exact: true,
+          meta: { title: 'Hosting map' },
+        },
+      },
     },
   },
 
@@ -169,6 +183,8 @@ export default buildConfig({
     Pages, LandingPages, Projects, Articles,
     // Library
     Media, Testimonials, Faqs,
+    // Infrastructure
+    Servers, HostedProjects,
     // System
     Users, WebhookEvents, AuditEvents,
   ],

@@ -170,6 +170,12 @@ log "web answers HTTP ($code)"
 log "Pruning old images"
 docker image prune -f >/dev/null
 
+# BuildKit never expires its own cache. Every on-box build leaves dead layers
+# behind (old node_modules, old .next outputs); by 2026-09-26 that was 84 GB and
+# the disk was 80% full. Keep the last week so incremental builds stay fast.
+log "Pruning build cache older than 7 days"
+docker builder prune -af --filter until=168h >/dev/null || true
+
 log "Deployment complete. Status:"
 docker compose ps
 echo

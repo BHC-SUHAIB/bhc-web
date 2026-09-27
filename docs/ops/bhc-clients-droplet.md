@@ -305,6 +305,11 @@ sudo /root/db-backups/backup.sh                     # final backup first
 bash scripts/remove-client.sh acme-plumbing          # or: acme-plumbing --purge
 ```
 
+**Then update the admin inventory.** After an add, create a Hosted Project row for the
+client (server = this droplet, kind = Client site). After a remove, set that row to Retired.
+The capacity meter at `/admin/hosting` counts these rows, 5 per droplet. When this droplet
+hits 5, provision `bhc-clients-N` (see [Hosting inventory](hosting-inventory.md)).
+
 ---
 
 ## 4. Backups and restore

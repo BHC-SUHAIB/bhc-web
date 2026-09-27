@@ -47,6 +47,9 @@ import RecentActivityPanel_0 from '@/components/admin/RecentActivityPanel'
 import ActionQueue_0 from '@/components/admin/ActionQueue'
 import DocActivityField_0 from '@/components/admin/DocActivityField'
 import UserAvatar_0 from '@/components/admin/UserAvatar'
+import HostingNavLink_0 from '@/components/admin/HostingNavLink'
+import HostingCapacityPanel_0 from '@/components/admin/HostingCapacityPanel'
+import HostingMapView_0 from '@/components/admin/HostingMapView'
 
 export const importMap = {
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_0,
@@ -93,4 +96,7 @@ export const importMap = {
   '/components/admin/ActionQueue#default': ActionQueue_0,
   '/components/admin/DocActivityField#default': DocActivityField_0,
   '/components/admin/UserAvatar#default': UserAvatar_0,
+  '/components/admin/HostingNavLink#default': HostingNavLink_0,
+  '/components/admin/HostingCapacityPanel#default': HostingCapacityPanel_0,
+  '/components/admin/HostingMapView#default': HostingMapView_0,
 }

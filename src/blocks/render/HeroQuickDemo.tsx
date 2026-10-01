@@ -141,8 +141,14 @@ export function HeroQuickDemo() {
       >
         {state === 'submitting' ? 'Sending...' : 'Send me my demo'}
       </button>
+      {/* Price anchor beside the ask (2026-10-01): the one engaged ad visitor
+          in Sep 21-27 skipped the form and read the pricing cards for a
+          minute. The prices were in the subheadline paragraph, unread. */}
       <p className="mt-2 text-[13px] text-white/85 [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]">
         Free. No call. Built from your public Google listing.
+      </p>
+      <p className="mt-1 text-[14px] text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]">
+        Like it? <strong className="font-semibold">From $399</strong> to go live, or <strong className="font-semibold">$119/mo</strong> with nothing up front.
       </p>
     </form>
   )

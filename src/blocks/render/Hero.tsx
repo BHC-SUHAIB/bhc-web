@@ -4,6 +4,7 @@ import { Placeholder } from '@/components/Placeholder'
 import { HeroCta } from './HeroCta'
 import { HeroPhoneCta } from './HeroPhoneCta'
 import { HeroQuickDemo } from './HeroQuickDemo'
+import { HeroProofStrip } from './HeroProofStrip'
 import { ParallaxBackground } from './ParallaxBackground'
 import { getCachedSiteSettings } from '@/lib/payload-cache'
 import { phoneHref } from '@/lib/contact'
@@ -81,53 +82,65 @@ export async function Hero(b: HeroBlock & { phoneOverride?: string; quickDemo?: 
               // primary CTA lands above the fold on a 667px-tall phone.
               // pt-20 on mobile ensures the eyebrow clears the absolutely-
               // positioned LP logo (40px tall + 24px top inset = 64px occupied).
-              'pt-20 pb-14 sm:py-28 md:py-40 max-w-3xl',
+              'pt-20 pb-14 sm:py-28',
+              // quickDemo (/free-demo-site): less vertical padding and, on
+              // large screens, a right-hand proof column, so the ask, the
+              // price, and the case studies all sit in the first screen.
+              b.quickDemo
+                ? 'md:py-20 lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-14 lg:items-center'
+                : 'md:py-40 max-w-3xl',
               align === 'center' && 'mx-auto text-center',
             )}
           >
-            {b.eyebrow ? (
-              <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-white/85 mb-3 sm:mb-5 [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]">
-                {b.eyebrow}
-              </p>
-            ) : null}
-            {/* Single, subtle drop-shadow on hero text — reads as legible-on-photo
-                without the layered "premium-studio designer" look. The heavy
-                gradient overlay does the heavy lifting for legibility. */}
-            <h1 className="font-serif font-semibold text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] sm:leading-[1.02] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.85)]">
-              {b.headline}
-            </h1>
-            {b.subheadline ? (
-              <p className="mt-4 sm:mt-6 text-[clamp(1rem,1.4vw,1.25rem)] leading-[1.5] sm:leading-[1.55] text-white max-w-2xl [text-shadow:0_1px_8px_rgba(0,0,0,0.7)]">
-                {b.subheadline}
-              </p>
-            ) : null}
-            {/* Code-only prop (like phoneOverride), set by RenderBlocks for
-                /free-demo-site: the two-field demo request lives in the first
-                screen instead of one scroll down. See HeroQuickDemo.tsx. */}
-            {b.quickDemo ? <HeroQuickDemo /> : null}
-            {(b.ctas && b.ctas.length > 0) || (phoneRaw && phoneHrefVal) ? (
-              <div
-                className={cn(
-                  // Mobile: stack CTAs full-width so the primary action is
-                  // unmissable. Desktop: revert to inline row.
-                  'mt-6 sm:mt-10 flex flex-col sm:flex-row sm:flex-wrap gap-3 [&>a]:w-full sm:[&>a]:w-auto',
-                  align === 'center' && 'sm:justify-center',
-                )}
-              >
-                {b.ctas?.map((c, i) => (
-                  <HeroCta key={i} href={c.href} label={c.label} variant={c.variant ?? null} position={i + 1} onPhoto />
-                ))}
-                {/* Phone button sits in the same row as the configured CTAs so
-                    they all align as one inline group instead of the phone
-                    being a stranded affordance below. Renders only when
-                    showPhoneCta is enabled on the Hero block + a contactPhone
-                    is set in SiteSettings. `onPhoto` swaps to white-on-photo
-                    styling so the button reads against the dark overlay. */}
-                {phoneRaw && phoneHrefVal ? (
-                  <HeroPhoneCta phone={phoneRaw} href={phoneHrefVal} onPhoto />
-                ) : null}
-              </div>
-            ) : null}
+            <div className={b.quickDemo ? 'max-w-3xl' : undefined}>
+              {b.eyebrow ? (
+                <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-white/85 mb-3 sm:mb-5 [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]">
+                  {b.eyebrow}
+                </p>
+              ) : null}
+              {/* Single, subtle drop-shadow on hero text — reads as legible-on-photo
+                  without the layered "premium-studio designer" look. The heavy
+                  gradient overlay does the heavy lifting for legibility. */}
+              <h1 className="font-serif font-semibold text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] sm:leading-[1.02] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.85)]">
+                {b.headline}
+              </h1>
+              {b.subheadline ? (
+                <p className="mt-4 sm:mt-6 text-[clamp(1rem,1.4vw,1.25rem)] leading-[1.5] sm:leading-[1.55] text-white max-w-2xl [text-shadow:0_1px_8px_rgba(0,0,0,0.7)]">
+                  {b.subheadline}
+                </p>
+              ) : null}
+              {/* Code-only prop (like phoneOverride), set by RenderBlocks for
+                  /free-demo-site: the two-field demo request lives in the first
+                  screen instead of one scroll down. See HeroQuickDemo.tsx. */}
+              {b.quickDemo ? <HeroQuickDemo /> : null}
+              {(b.ctas && b.ctas.length > 0) || (phoneRaw && phoneHrefVal) ? (
+                <div
+                  className={cn(
+                    // Mobile: stack CTAs full-width so the primary action is
+                    // unmissable. Desktop: revert to inline row.
+                    'flex flex-col sm:flex-row sm:flex-wrap gap-3 [&>a]:w-full sm:[&>a]:w-auto',
+                    b.quickDemo ? 'mt-5' : 'mt-6 sm:mt-10',
+                    align === 'center' && 'sm:justify-center',
+                  )}
+                >
+                  {b.ctas?.map((c, i) => (
+                    <HeroCta key={i} href={c.href} label={c.label} variant={c.variant ?? null} position={i + 1} onPhoto />
+                  ))}
+                  {/* Phone button sits in the same row as the configured CTAs so
+                      they all align as one inline group instead of the phone
+                      being a stranded affordance below. Renders only when
+                      showPhoneCta is enabled on the Hero block + a contactPhone
+                      is set in SiteSettings. `onPhoto` swaps to white-on-photo
+                      styling so the button reads against the dark overlay. */}
+                  {phoneRaw && phoneHrefVal ? (
+                    <HeroPhoneCta phone={phoneRaw} href={phoneHrefVal} onPhoto />
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+            {/* Same code-only switch: proof on the first screen, so ad
+                visitors don't leave via "Work" to find it. */}
+            {b.quickDemo ? <HeroProofStrip /> : null}
           </div>
         </Container>
       </section>

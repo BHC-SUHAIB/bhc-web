@@ -33,11 +33,20 @@ export function BuildTimeline({ gate = true }: AnimProps = {}) {
 }
 
 /** A website assembling itself in a browser frame (/free-demo-site hero). */
-export function WebsiteAssembly({ gate = false }: AnimProps = {}) {
+// `href` turns the whole diagram into a link. On /free-demo-site it points at
+// the request form: the browser-frame mockup reads as clickable, and Clarity
+// logged a dead click on it (Sep 21, 2026), so now the click goes somewhere.
+export function WebsiteAssembly({ gate = false, href }: AnimProps & { href?: string } = {}) {
   return (
     <section aria-label="A demo website assembling itself" className={gateCls(gate)} style={{ background: '#14120E' }}>
       <style dangerouslySetInnerHTML={{ __html: WA_CSS }} />
-      <div dangerouslySetInnerHTML={{ __html: WA_HTML }} />
+      {href ? (
+        <a href={href} aria-label="Get your free demo site" className="block cursor-pointer">
+          <div dangerouslySetInnerHTML={{ __html: WA_HTML }} />
+        </a>
+      ) : (
+        <div dangerouslySetInnerHTML={{ __html: WA_HTML }} />
+      )}
     </section>
   )
 }

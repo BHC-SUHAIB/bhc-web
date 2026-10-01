@@ -240,7 +240,7 @@ export async function RenderBlocks({
       case 'buildTimelineAnim' as never:
         return <BuildTimeline />
       case 'websiteAssemblyAnim' as never:
-        return <WebsiteAssembly />
+        return <WebsiteAssembly href={pageSlug === 'free-demo-site' ? '#demo-request' : undefined} />
       case 'processLoopAnim' as never:
         return <ProcessLoop />
       case 'brandAnimation' as never: {
@@ -248,7 +248,7 @@ export async function RenderBlocks({
         const gate = a.playOnArrival !== false
         switch (a.variant) {
           case 'buildTimeline': return <BuildTimeline gate={gate} />
-          case 'websiteAssembly': return <WebsiteAssembly gate={gate} />
+          case 'websiteAssembly': return <WebsiteAssembly gate={gate} href={pageSlug === 'free-demo-site' ? '#demo-request' : undefined} />
           case 'processLoop': return <ProcessLoop gate={gate} />
           default: return <FrontDeskHero gate={gate} />
         }

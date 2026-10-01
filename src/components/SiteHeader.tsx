@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import Link from 'next/link'
+import Link, { useLinkStatus } from 'next/link'
 import { Container } from './Container'
 import { Logo } from './Logo'
 import { Button } from './Button'
@@ -67,6 +67,7 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
                   ].join(' ')}
                 >
                   {item.label}
+                  <NavPendingBar />
                 </Link>
               )
             })}
@@ -148,5 +149,22 @@ export function SiteHeader({ header, siteSettings }: HeaderProps) {
         </div>
       ) : null}
     </>
+  )
+}
+
+// Fills the nav underline the moment a link is clicked, while the (dynamic,
+// force-dynamic) route renders. Clarity (2026-09-25) caught an ad visitor
+// clicking "Work" three times in a second because nothing visibly happened.
+// Always rendered at a fixed size and toggled by opacity, so no layout shift.
+function NavPendingBar() {
+  const { pending } = useLinkStatus()
+  return (
+    <span
+      aria-hidden
+      className={[
+        'pointer-events-none absolute left-0 right-0 -bottom-1.5 h-[1.5px] bg-[var(--color-accent)] transition-opacity duration-150',
+        pending ? 'opacity-100 animate-pulse' : 'opacity-0',
+      ].join(' ')}
+    />
   )
 }
